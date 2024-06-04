@@ -45,7 +45,7 @@ return [
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
             'database' => env('DB_DATABASE', 'novaDb'),
-            'username' => env('DB_USERNAME', 'root'),
+            'username' => env('DB_USERNAME', 'rootDb'),
             'password' => env('DB_PASSWORD', 'root'),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => env('DB_CHARSET', 'utf8mb4'),
