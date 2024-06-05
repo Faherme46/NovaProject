@@ -4,7 +4,7 @@
 
 @section('content')
 
-    <link rel="stylesheet" href="assets/css/registro.css">
+    <link rel="stylesheet" href="assets/scss/registro.scss">
     <h1>Registro</h1>
 
 
