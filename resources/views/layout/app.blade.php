@@ -1,3 +1,5 @@
+
+
 <!doctype html>
 <html>
 
@@ -5,10 +7,12 @@
     <meta charset='utf-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <title>Nova</title>
-    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet'>
+
+    <link href='{{asset('https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css')}}' rel='stylesheet'>
     <link href='https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css' rel='stylesheet'>
-    <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
-    <link rel="stylesheet" href="assets/scss/app.scss">
+    <script type='text/javascript' src='{{asset('https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js')}}'></script>
+
+    <link rel="stylesheet" href="{{ asset('assets/scss/app.scss') }}">
 </head>
 
 <body className='snippet-body'>
@@ -16,6 +20,7 @@
     <body id="body-pd">
         <header class="header mb-5" id="header">
             <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i> </div>
+            <div class="col ms-4"><h2 class="">{{$name_reunion}}</h2></div>
             <div class="header_img"> <img src="https://i.imgur.com/hczKIze.jpg" alt=""> </div>
         </header>
 
@@ -51,7 +56,7 @@
 
         <script type='text/javascript' src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js'>
         </script>
-        <script type="text/javascript" src="assets/js/app.js"></script>
+        <script type="text/javascript" src="{{asset('assets/js/app.js')}}"></script>
         <script type='text/javascript'>
             var myLink = document.querySelector('a[href="#"]');
             myLink.addEventListener('click', function(e) {

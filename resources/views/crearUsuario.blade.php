@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="asstes/scss/crearUsuario.scss">
+<link rel="stylesheet" href="{{asset('assets/scss/crearUsuario.scss')}}">
 
 @extends('layout.app')
 

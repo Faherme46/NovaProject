@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\adminController;
+use App\Http\Controllers\reunionController;
+use App\Http\Controllers\routeController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -24,3 +27,13 @@ Route::get('/preguntas',function(){
 Route::get('/resultados',function(){
     return view('resultados');
 });
+
+Route::get('admin/creaReunion',[ReunionController::class,'index']);
+
+Route::get('/alert', function(){
+    return view('welcome');
+});
+
+Route::resource('reuniones', ReunionController::class);
+
+
