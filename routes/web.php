@@ -1,7 +1,8 @@
 <?php
 
 use App\Http\Controllers\adminController;
-use App\Http\Controllers\reunionController;
+use App\Http\Controllers\AsambleaController;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\routeController;
 use Illuminate\Support\Facades\Route;
 
@@ -28,12 +29,12 @@ Route::get('/resultados',function(){
     return view('resultados');
 });
 
-Route::get('admin/creaReunion',[ReunionController::class,'index']);
+Route::get('admin/creaAsamblea',[AsambleaController::class,'index']);
 
 Route::get('/alert', function(){
     return view('welcome');
 });
 
-Route::resource('reuniones', ReunionController::class);
+Route::resource('asambleas', AsambleaController::class);
 
 

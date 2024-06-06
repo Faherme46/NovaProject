@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Reunion extends Model
+class Asamblea extends Model
 {
     use HasFactory;
 
-    protected $table = 'reuniones';
-    protected $primaryKey = 'id_reunion';
+    protected $table = 'asambleas';
+    protected $primaryKey = 'id_asamblea';
 
     protected $fillable = [
         'nombre',
@@ -20,7 +20,6 @@ class Reunion extends Model
         'estado',
         'registro',
         'h_inicio',
-        'h_cierre',
-        'nombreBd'
+        'h_cierre'
     ];
 }

@@ -14,7 +14,7 @@ class Session extends Model
 
     protected $fillable = [
         'id',
-        'id_reunion'
+        'id_asamblea'
     ];
 
     public function setManualData(array $data)

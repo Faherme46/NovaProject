@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Session;
 
 class sessionController extends Controller
@@ -11,11 +10,11 @@ class sessionController extends Controller
     public function destroyAll(){
         Session::destroy(1);
     }
-    public function setSession($id_reunion){
+    public function setSession($id_asamblea){
         $this->destroyAll();
         $data=[
             'id'=>1,
-            'id_reunion' =>  $id_reunion
+            'id_asamblea' =>  $id_asamblea
         ];
         $session=new Session();
         return $session->setManualData($data);
@@ -24,7 +23,7 @@ class sessionController extends Controller
     public function getSessionId(){
         $session=Session::all()->first();
         if ($session){
-            return $session->id_reunion;
+            return $session->id_asamblea;
         }else{
             return 0;
         }

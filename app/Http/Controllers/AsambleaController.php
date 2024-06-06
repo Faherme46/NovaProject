@@ -2,17 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Reunion;
+use App\Models\Asamblea;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use App\Models\Session;
 
-class ReunionController extends Controller
+class AsambleaController extends Controller
 {
     public function index()
     {
-        $reuniones = Reunion::on('principal')->get();
-        return view('admin.creaReunion', compact('reuniones'));
+        $asambleas = Asamblea::on('principal')->get();
+        return view('admin.creaAsamblea', compact('asambleas'));
     }
 
     public function store(Request $request)
@@ -36,24 +34,22 @@ class ReunionController extends Controller
             'hora' => 'required|date_format:H:i',
             'estado' => 'required|in:pendiente,en_progreso,finalizada',
             'registro'=> 'required|boolean',
-            'nombreBd' => 'required',
         ]);
 
 
-        $reunion=Reunion::create($request->all());
+        $asamblea=Asamblea::create($request->all());
 
 
 
         $sessionController = new sessionController();
-        $sessionController->setSession($reunion->id_reunion);
-        app()->instance('name_reunion', $this->getName($reunion->id_reunion));
-        return redirect()->route('reuniones.index')->with('success', 'Reunión creada con éxito.');
+        $sessionController->setSession($asamblea->id_asamblea);
+        return redirect()->route('asambleas.index')->with('success', 'Reunión creada con éxito.');
     }
 
     public function edit($id)
     {
-        $reunion = Reunion::findOrFail($id);
-        return view('admin.creaReunion', compact('reunion'));
+        $asamblea = Asamblea::findOrFail($id);
+        return view('admin.creaAsamblea', compact('asamblea'));
     }
 
     public function update(Request $request, $id)
@@ -65,32 +61,42 @@ class ReunionController extends Controller
             'fecha' => 'required|date',
             'hora' => 'required',
             'estado' => 'required|in:pendiente,en_progreso,finalizada,cancelada',
-            'nombreBd' => 'required',
         ]);
 
-        $reunion = Reunion::findOrFail($id);
-        $reunion->update($request->all());
-        return redirect()->route('reuniones.index')->with('success', 'Reunión actualizada con éxito.');
+        $asamblea = Asamblea::findOrFail($id);
+        $asamblea->update($request->all());
+        return redirect()->route('asambleas.index')->with('success', 'Reunión actualizada con éxito.');
     }
 
     public function destroy($id)
     {
 
-        $reunion = Reunion::findOrFail($id);
-        $reunion->delete();
+        $asamblea = Asamblea::findOrFail($id);
+        $asamblea->delete();
 
-        return redirect()->route('reuniones.index')->with('success', 'Reunión eliminada con éxito.');
+        return redirect()->route('asambleas.index')->with('success', 'Asamblea eliminada con éxito.');
     }
 
 
     public function getName($id){
 
         if ($id){
-            $reunion = Reunion::findOrFail($id);
-            return $reunion->nombre;
+            $asamblea = Asamblea::findOrFail($id);
+            return $asamblea->nombre;
         }else{
             return('-');
         }
 
     }
+
+    public function getOne($id){
+        if ($id){
+            $asamblea = Asamblea::findOrFail($id);
+            return $asamblea;
+        }else{
+            return(null);
+        }
+    }
+
+    //Metodos de manejo de archivos
 }

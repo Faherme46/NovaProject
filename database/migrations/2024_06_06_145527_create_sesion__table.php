@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('sesion', function (Blueprint $table) {
             $table->id();
 
-            $table->integer('id_reunion');
+            $table->integer('id_asamblea');
             $table->timestamps();
         });
     }

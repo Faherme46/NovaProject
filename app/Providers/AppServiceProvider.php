@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Http\Controllers\ReunionController;
+use App\Http\Controllers\AsambleaController;
 use App\Http\Controllers\sessionController;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
@@ -24,9 +24,10 @@ class AppServiceProvider extends ServiceProvider
     {
 
         View::composer('*', function ($view) {
-            $reunionController=new ReunionController();
+            $asambleaController=new AsambleaController();
             $sessionController=new sessionController();
-            $view->with('name_reunion', $reunionController->getName($sessionController->getSessionId()));
+            $id=$sessionController->getSessionId();
+            $view->with('name_asamblea', $asambleaController->getName($id))->with('asambleaOn',$asambleaController->getOne($id));
         });
     }
 }

@@ -124,6 +124,6 @@ return [
     ],
 
 
-    'name_reunion' => 'Hola'
+    
 
 ];
