@@ -4,11 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Session;
+use App\Models\Propiedad;
+use App\Models\Persona;
 
-class sessionController extends Controller
+class SessionController extends Controller
 {
     public function destroyAll(){
-        Session::destroy(1);
+
+        //se limpiaran las tablas: personas,propiedades, apoderados, votaciones,resultados,preguntas, votos
+        Session::truncate();
+        Persona::truncate();
+        Propiedad::truncate();
+        return redirect()->route('admin.crearAsamblea')->with('success','Sesion reestablecida');
     }
     public function setSession($id_asamblea){
         $this->destroyAll();

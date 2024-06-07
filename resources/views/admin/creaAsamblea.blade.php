@@ -91,14 +91,23 @@
                                 <h2 class="card-title">{{ $asambleaOn->nombre }}</h2>
                                 <h6>{{ $asambleaOn->fecha }} {{ $asambleaOn->hora }}</h6>
                             </div>
+                            <div class="card-footer">
+                                <form action="{{ route('session.destroy') }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger mt-3">
+                                        Eliminar
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                         <h2></h2>
                     </div>
                     <div class="col-md-8 card">
-                        <div class="card-header mt-3 ">
+                        <div class="card-header mt-3 row d-flex align-items-center">
 
-                            <form method="POST" action="{{ route('files.import') }}" enctype="multipart/form-data"
-                                class="d-flex align-items-center">
+                            <form method="POST" action="{{ route('propiedades.import') }}"
+                                enctype="multipart/form-data" class="d-flex align-items-center">
                                 @csrf
                                 <div class="form-group">
                                     <input type="file" name="file" id="file" class="form-control-file">
@@ -108,7 +117,43 @@
                                     <i class='bx bxs-download'></i>
                                 </button>
 
+                                <button type="button" class="btn btn-danger btn-lg ms-4" data-bs-toggle="modal"
+                                    data-bs-target="#deleteModal">
+                                    <i class='bx bxs-trash'></i>
+                                </button>
+
                             </form>
+                            <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true" >
+                                <div class="modal-dialog" >
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="deleteModalLabel">Confirmar Eliminación</h5>
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            ¿Estás seguro de que quieres eliminar el archivo y propiedades cargadas?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Cancelar</button>
+                                            <form action="{{ route('propiedades.destroyAll') }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger mt-3">
+                                                    Eliminar
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
                         </div>
                         <div class="card-body">
                             <table class="table table-bordered">
@@ -127,8 +172,9 @@
                                             <tr>
                                                 <td>{{ $p->id }}</td>
                                                 <td>{{ $p->cc_propietario }}</td>
-                                                <td>{{$p->descriptor1}} {{$p->numeral1}} {{$p->descriptor2}} {{$p->numeral2}}</td>
-                                                <td>{{$p->coeficiente}}</td>
+                                                <td>{{ $p->descriptor1 }} {{ $p->numeral1 }} {{ $p->descriptor2 }}
+                                                    {{ $p->numeral2 }}</td>
+                                                <td>{{ $p->coeficiente }}</td>
                                             </tr>
                                         @empty
                                             <tr>
@@ -188,11 +234,22 @@
                     </tbody>
                 </table>
             </div> --}}
+            <!-- Modals -->
+
+            <!-- Button trigger modal -->
+
+
+            <!-- Modal -->
+
         </div>
 
-        <!-- Tabla de asambleas -->
+
 
     </div>
+
+
+
+
 
 
     <script>
@@ -233,4 +290,7 @@
             });
         });
     </script>
+
+
+
 @endsection

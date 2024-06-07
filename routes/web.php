@@ -1,42 +1,44 @@
 <?php
 
-use App\Http\Controllers\adminController;
+use App\Http\Controllers\SessionController;
 use App\Http\Controllers\AsambleaController;
 use App\Http\Controllers\FileController;
-use App\Http\Controllers\routeController;
+use App\Http\Controllers\PropiedadesController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', function () {return view('welcome');})->name('home');
 
-Route::get('/registro',function(){
+Route::get('/registro', function () {
     return view('registro');
 });
-Route::get('/login',function(){
+Route::get('/login', function () {
     return view('login');
 });
-Route::get('/crearUsuarios',function(){
+Route::get('/crearUsuarios', function () {
     return view('crearUsuario');
 });
-Route::get('/votos',function(){
+Route::get('/votos', function () {
     return view('votos');
 });
-Route::get('/preguntas',function(){
+Route::get('/preguntas', function () {
     return view('preguntas');
 });
-Route::get('/resultados',function(){
+Route::get('/resultados', function () {
     return view('resultados');
 });
 
-Route::get('admin/creaAsamblea',[AsambleaController::class,'index']);
+Route::get('admin/creaAsamblea', [AsambleaController::class, 'index'])->name('admin.crearAsamblea');
 
-Route::get('/alert', function(){
+Route::get('/alert', function () {
     return view('welcome');
 });
 
 Route::resource('asambleas', AsambleaController::class);
+Route::delete('/session',[SessionController::class,'destroyAll'])->name('session.destroy');
 
-Route::get('/files/index', [FileController::class, 'index'])->name('files.index');
-Route::post('/files/import', [FileController::class, 'import'])->name('files.import');
+
 Route::get('/files/export', [FileController::class, 'export'])->name('files.export');
+
+Route::get('/propiedades/index', [PropiedadesController::class, 'index'])->name('propiedades.index');
+Route::post('/propiedades/import', [PropiedadesController::class, 'import'])->name('propiedades.import');
+Route::delete('propiedades/destroy', [PropiedadesController::class, 'destroyAll'])->name('propiedades.destroyAll');

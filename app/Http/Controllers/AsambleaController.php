@@ -41,7 +41,7 @@ class AsambleaController extends Controller
 
 
 
-        $sessionController = new sessionController();
+        $sessionController = new SessionController();
         $sessionController->setSession($asamblea->id_asamblea);
         return redirect()->route('asambleas.index')->with('success', 'Reunión creada con éxito.');
     }
