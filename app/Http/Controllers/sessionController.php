@@ -15,7 +15,7 @@ class SessionController extends Controller
         Session::truncate();
         Persona::truncate();
         Propiedad::truncate();
-        return redirect()->route('admin.crearAsamblea')->with('success','Sesion reestablecida');
+        return redirect()->route('admin.asambleas')->with('success','Sesion reestablecida');
     }
     public function setSession($id_asamblea){
         $this->destroyAll();

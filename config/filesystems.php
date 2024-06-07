@@ -36,6 +36,7 @@ return [
             'throw' => false,
         ],
 
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
@@ -43,6 +44,12 @@ return [
             'visibility' => 'public',
             'throw' => false,
         ],
+        'external' => [
+            'driver' => 'local',
+            'root' => 'C:/Asambleas/Clientes',
+            'throw' => false,
+        ],
+
 
         's3' => [
             'driver' => 's3',

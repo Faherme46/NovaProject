@@ -27,7 +27,7 @@ Route::get('/resultados', function () {
     return view('resultados');
 });
 
-Route::get('admin/creaAsamblea', [AsambleaController::class, 'index'])->name('admin.crearAsamblea');
+Route::get('admin/asambleas', [AsambleaController::class, 'index'])->name('admin.asambleas');
 
 Route::get('/alert', function () {
     return view('welcome');

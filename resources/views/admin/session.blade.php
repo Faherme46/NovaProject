@@ -2,11 +2,16 @@
 
 @extends('layout.app')
 
-
-
-
 @section('content')
-    @if ($errors->any())
+
+
+    <div class="container">
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+        @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
                 @foreach ($errors->all() as $error)
@@ -15,83 +20,21 @@
             </ul>
         </div>
     @endif
-    <div class="container">
-        @if (session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
+
         <div class="row">
-            @if ($name_asamblea === '-')
 
-
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h3 id="form-title">Crear Nueva asamblea</h3>
-                    </div>
-                    <div class="card-body">
-                        <form id="asamblea-form" action="{{ route('asambleas.store') }}" method="POST">
-                            @csrf
-                            <input type="hidden" id="form-method" name="_method" value="POST">
-                            <input type="hidden" id="asamblea-id" name="id_asamblea">
-                            <div class="form-group">
-                                <label for="nombre">Nombre</label>
-                                <input type="text" class="form-control" id="nombre" name="nombre" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="lugar">Lugar</label>
-                                <input type="text" class="form-control" id="lugar" name="lugar" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="fecha">Fecha</label>
-                                <input type="date" class="form-control" id="fecha" name="fecha" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="hora">Hora</label>
-                                <input type="time" class="form-control" id="hora" name="hora" required>
-                            </div>
-                            <div class="form-group" hidden>
-                                <label for="estado">Estado</label>
-                                <select class="form-control" id="estado" name="estado">
-                                    <option value="pendiente" selected>Pendiente</option>
-                                    <option value="en_progreso">En Progreso</option>
-                                    <option value="finalizada">Finalizada</option>
-                                </select>
-                            </div>
-                            <div class="form-group ">
-                                <div class="row">
-                                    <div class="form-check col ms-3">
-                                        <input class="form-check-input" type="radio" name="registro" id="registro"
-                                            value="true" checked>
-                                        <label class="form-check-label" for="registro">
-                                            Registro
-                                        </label>
-                                    </div>
-                                    <div class="form-check col">
-                                        <input class="form-check-input" type="radio" name="registro" id="registro"
-                                            value="false">
-                                        <label class="form-check-label" for="registro">
-                                            Solo votacion
-                                        </label>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <button type="submit" class="btn btn-primary" id="submit-button">Crear asamblea</button>
-                        </form>
-                    </div>
-                </div>
-            @else
                 <div class="row">
                     <div class="col-md-4">
                         <div class="card">
                             <div class="card-body">
 
-                                <h2 class="card-title">{{ $asambleaOn->nombre }}</h2>
+                                <h2 class="card-title">{{ $asambleaOn->folder }}</h2>
                                 <h6>{{ $asambleaOn->fecha }} {{ $asambleaOn->hora }}</h6>
                             </div>
                             <div class="card-footer">
+                                <button type="submit" class="btn btn-success mt-3">
+                                    iniciar
+                                </button>
                                 <form action="{{ route('session.destroy') }}" method="POST">
                                     @csrf
                                     @method('DELETE')
@@ -161,8 +104,8 @@
                                     <tr>
                                         <th>ID</th>
                                         <th>propietario</th>
+                                        <th>cedula</th>
                                         <th>Descriptor </th>
-
                                         <th>Coeficiente</th>
                                     </tr>
                                 </thead>
@@ -171,6 +114,7 @@
                                         @forelse ($propiedades as $p)
                                             <tr>
                                                 <td>{{ $p->id }}</td>
+                                                <td>nombre</td>
                                                 <td>{{ $p->cc_propietario }}</td>
                                                 <td>{{ $p->descriptor1 }} {{ $p->numeral1 }} {{ $p->descriptor2 }}
                                                     {{ $p->numeral2 }}</td>
@@ -196,7 +140,7 @@
                 <p>
 
                 </p>
-            @endif
+
 
 
             <!-- Historial de asambleas -->

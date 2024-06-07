@@ -4,13 +4,32 @@ namespace App\Http\Controllers;
 
 use App\Models\Asamblea;
 use Illuminate\Http\Request;
+use App\Http\Controllers\FileController;
 
 class AsambleaController extends Controller
 {
     public function index()
     {
-        $asambleas = Asamblea::on('principal')->get();
-        return view('admin.creaAsamblea', compact('asambleas'));
+
+
+        $sessionController=new SessionController;
+        $sessionId=$sessionController->getSessionId();
+
+        if ($sessionId) {
+            $asambleas = Asamblea::get();
+            return view('admin.session', compact('asambleas'));
+
+        } else {
+            $fileController= new FileController;
+            $folders=$fileController->getFolders();
+            return view('admin.asamblea', compact('folders'));
+            # code...
+        }
+
+
+
+
+
     }
 
     public function store(Request $request)
@@ -28,12 +47,14 @@ class AsambleaController extends Controller
         $request->merge($input);
 
         $request->validate([
-            'nombre' => 'required',
+            'folder' => 'required',
             'lugar' => 'required',
             'fecha' => 'required|date',
             'hora' => 'required|date_format:H:i',
             'estado' => 'required|in:pendiente,en_progreso,finalizada',
             'registro'=> 'required|boolean',
+        ],[
+            'folder.required' => 'Debe seleccionar un cliente.',
         ]);
 
 
@@ -82,7 +103,7 @@ class AsambleaController extends Controller
 
         if ($id){
             $asamblea = Asamblea::findOrFail($id);
-            return $asamblea->nombre;
+            return $asamblea->folder;
         }else{
             return('-');
         }

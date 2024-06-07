@@ -9,5 +9,5 @@
     <a href="preguntas">preguntas</a><br>
     <a href="resultados">resultados</a><br>
     <a href="votos">votos</a><br>
-    <a href="admin/creaAsamblea">Crear asamblea</a><br>
+    <a href="admin/asambleas">Crear asamblea</a><br>
 @endsection

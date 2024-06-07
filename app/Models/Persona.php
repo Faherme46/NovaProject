@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Propiedad extends Model
+class Persona extends Model
 {
     use HasFactory;
 
     protected $guarded=[];
 
-    public function persona()
+    public function propiedades()
     {
-        return $this->belongsTo(Persona::class, 'cc_propietario', 'cedula');
+        return $this->hasMany(Propiedad::class, 'cc_propietario', 'cedula');
     }
 }

@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('numeral2');
             $table->float('coeficiente');
             $table->timestamps();
+
+            // $table->foreign('cc_propietario')->references('cedula')->on('personas')->onDelete('cascade');
         });
     }
 
