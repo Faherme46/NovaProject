@@ -4,7 +4,17 @@
 
 
 
+
 @section('content')
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <div class="container">
         @if (session('success'))
             <div class="alert alert-success">
@@ -13,15 +23,7 @@
         @endif
         <div class="row">
             @if ($name_asamblea === '-')
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
+
 
                 <div class="card mb-4">
                     <div class="card-header">
@@ -93,22 +95,55 @@
                         <h2></h2>
                     </div>
                     <div class="col-md-8 card">
-                        <div class="card-header mt-3 d-flex align-items-center">
+                        <div class="card-header mt-3 ">
 
-                            <h5 class="mb-0">Seleccionar archivo</h5>
-                            <button type="button" class="btn btn-primary btn-lg ms-4"><i
-                                class='bx bxs-file-find bx-flashing' id="selectFileButton"></i></button>
-
-                            <form id="file-form" method="POST" action="{{ route('files.read') }}" enctype="multipart/form-data">
+                            <form method="POST" action="{{ route('files.import') }}" enctype="multipart/form-data"
+                                class="d-flex align-items-center">
                                 @csrf
                                 <div class="form-group">
-                                    <input type="file" name="archivo" id="archivo" class="form-control-file"
-                                        style="display: none;">
+                                    <input type="file" name="file" id="file" class="form-control-file">
                                 </div>
+
+                                <button type="submit" class="btn btn-primary btn-lg ms-4">
+                                    <i class='bx bxs-download'></i>
+                                </button>
 
                             </form>
                         </div>
                         <div class="card-body">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>propietario</th>
+                                        <th>Descriptor </th>
+
+                                        <th>Coeficiente</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (isset($propiedades))
+                                        @forelse ($propiedades as $p)
+                                            <tr>
+                                                <td>{{ $p->id }}</td>
+                                                <td>{{ $p->cc_propietario }}</td>
+                                                <td>{{$p->descriptor1}} {{$p->numeral1}} {{$p->descriptor2}} {{$p->numeral2}}</td>
+                                                <td>{{$p->coeficiente}}</td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="7">No hay entradas</td>
+                                            </tr>
+                                        @endforelse
+                                    @else
+                                        <tr>
+                                            <td colspan="7"> No se ha seleccionado archivo</td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                            </table>
+
+                        </div>
 
                     </div>
                 </div>
@@ -158,11 +193,7 @@
         <!-- Tabla de asambleas -->
 
     </div>
-    <script>
-        document.getElementById('selectFileButton').addEventListener('click', function() {
-            document.getElementById('archivo').click();
-        });
-    </script>
+
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {

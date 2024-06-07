@@ -21,6 +21,7 @@
         <header class="header mb-5" id="header">
             <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i> </div>
             <div class="col ms-4"><h2 class="">{{$name_asamblea}}</h2></div>
+            
             <div class="header_img"> <img src="https://i.imgur.com/hczKIze.jpg" alt=""> </div>
         </header>
 

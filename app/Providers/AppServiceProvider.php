@@ -7,6 +7,7 @@ use App\Http\Controllers\sessionController;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 
+use Maatwebsite\Excel\ExcelServiceProvider;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -14,7 +15,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->register(ExcelServiceProvider::class);
     }
 
     /**

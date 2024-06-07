@@ -37,4 +37,6 @@ Route::get('/alert', function(){
 
 Route::resource('asambleas', AsambleaController::class);
 
-
+Route::get('/files/index', [FileController::class, 'index'])->name('files.index');
+Route::post('/files/import', [FileController::class, 'import'])->name('files.import');
+Route::get('/files/export', [FileController::class, 'export'])->name('files.export');
