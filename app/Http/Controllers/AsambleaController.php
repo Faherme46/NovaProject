@@ -60,6 +60,7 @@ class AsambleaController extends Controller
         }else{
             $input['registro']=false;
         }
+        $input['name']=$input['folder'].'_'.$input['fecha'].'_'.$input['hora'];
 
         $request->merge($input);
 
@@ -74,9 +75,10 @@ class AsambleaController extends Controller
             'folder.required' => 'Debe seleccionar un cliente.',
         ]);
 
-        $asamblea=Asamblea::create($request->all());
-        $this->asambleaId=$asamblea->id_asamblea;
+
         try {
+            $asamblea=Asamblea::create($request->all());
+            $this->asambleaId=$asamblea->id_asamblea;
             $this->sessionController->setSession($asamblea->id_asamblea,$asamblea->folder);
             $this->propiedadesController->import($asamblea->folder);
             return redirect()->route('asambleas.index')->with('success', 'Reunión creada con éxito.');

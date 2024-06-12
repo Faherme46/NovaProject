@@ -13,6 +13,7 @@ class Asamblea extends Model
     protected $primaryKey = 'id_asamblea';
 
     protected $fillable = [
+        'name',
         'folder',
         'lugar',
         'fecha',

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('asambleas', function (Blueprint $table) {
             $table->id('id_asamblea');
+            $table->string('name')->unique();
             $table->string('folder');
             $table->string('lugar');
             $table->string('ciudad');

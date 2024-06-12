@@ -39,6 +39,7 @@
                                 @endforeach
                             </select>
                         </div>
+                        <input type="text" name="name" hidden>
                         <div class="form-group col-12">
                             <label for="lugar">Direccion</label>
                             <input type="text" class="form-control" placeholder="Direccion" id="lugar" name="lugar" required>
