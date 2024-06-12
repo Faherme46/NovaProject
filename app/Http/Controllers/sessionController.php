@@ -4,16 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Session;
-use App\Models\Propiedad;
+use App\Models\Predio;
 use App\Models\Persona;
 
 class SessionController extends Controller
 {
     public function destroyAll(){
 
-        //se limpiaran las tablas: personas,propiedades, apoderados, votaciones,resultados,preguntas, votos
+        //se limpiaran las tablas: personas,Predios, apoderados, votaciones,resultados,preguntas, votos
         Session::truncate();
-        Propiedad::truncate();
+        Predio::truncate();
         Persona::query()->delete();
 
         return redirect()->route('admin.asambleas')->with('success','Sesion reestablecida');
@@ -21,7 +21,7 @@ class SessionController extends Controller
 
     public function destroyOnError(){
         Session::truncate();
-        Propiedad::truncate();
+        Predio::truncate();
         Persona::query()->delete();
     }
     public function setSession($id_asamblea,$name_asamblea){

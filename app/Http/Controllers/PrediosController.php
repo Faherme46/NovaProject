@@ -6,14 +6,14 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Validators\ValidationException;
 
-use App\Models\Propiedad;
+use App\Models\Predio;
 use App\Models\Persona;
 
 use App\Imports\PersonasImport;
-use App\Imports\PropiedadesImport;
+use App\Imports\PrediosImport;
 
 use Maatwebsite\Excel\Facades\Excel;
-class PropiedadesController extends Controller
+class PrediosController extends Controller
 {
 
     protected $sessionController;
@@ -22,13 +22,13 @@ class PropiedadesController extends Controller
         $this->sessionController = new SessionController;;
     }
     public function index(){
-        $propiedades=Propiedad::all();
+        $propiedades=Predio::all();
         $personas=Persona::all();
         return view('admin.creaAsamblea',compact('propiedades'));
     }
     public function destroyAll(){
         Persona::truncate();
-        Propiedad::truncate();
+        Predio::truncate();
         return redirect()->route('admin.asamblea')->with('success', 'Todas las propiedades y archivos eliminados con éxito.');
     }
 
@@ -37,7 +37,7 @@ class PropiedadesController extends Controller
         try {
             $externalFilePath = 'C:/Asambleas/Clientes/'.$file.'/datos.xlsx';
             Excel::import(new PersonasImport,$externalFilePath);
-            Excel::import(new PropiedadesImport,$externalFilePath);
+            Excel::import(new PrediosImport,$externalFilePath);
 
             return redirect()->route('asambleas.index')->with('success','Carga de datos exitosa');
         } catch (ValidationException $e) {

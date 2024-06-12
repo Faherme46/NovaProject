@@ -3,7 +3,9 @@
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\AsambleaController;
 use App\Http\Controllers\FileController;
-use App\Http\Controllers\PropiedadesController;
+use App\Http\Controllers\PersonasController;
+use App\Http\Controllers\PrediosController;
+use App\Http\Controllers\RegistroController;
 use Illuminate\Support\Facades\Route;
 
 //rutas de redireccion
@@ -25,7 +27,12 @@ Route::post('admin/termina', [AsambleaController::class, 'terminarAsamblea'])->n
 
 Route::get('/files/export', [FileController::class, 'export'])->name('files.export');
 
-//rutas de las propiedades
-Route::get('/propiedades/index', [PropiedadesController::class, 'index'])->name('propiedades.index');
-Route::post('/propiedades/import', [PropiedadesController::class, 'import'])->name('propiedades.import');
-Route::delete('propiedades/destroy', [PropiedadesController::class, 'destroyAll'])->name('propiedades.destroyAll');
+//rutas de las predios
+Route::get('/predios/index', [PrediosController::class, 'index'])->name('predios.index');
+Route::post('/predios/import', [PrediosController::class, 'import'])->name('predios.import');
+Route::delete('predios/destroy', [PrediosController::class, 'destroyAll'])->name('predios.destroyAll');
+
+//rutas para registro
+Route::get('/registro/find', [PersonasController::class, 'find'])->name('personas.find');
+Route::post('/registro/asignaP', [RegistroController::class, 'asignaPredios'])->name('registro.asignaPredios');
+

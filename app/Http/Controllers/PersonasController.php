@@ -17,7 +17,7 @@ class PersonasController extends Controller
         try {
             $file=$request->file('file');
             Excel::import(new PersonasImport,$file);
-            return redirect()->route('propiedades.index')->with('success','Carga de datos exitosa');
+            return redirect()->route('predios.index')->with('success','Carga de datos exitosa');
             } catch (\Exception $e) {
                 //TODO majo de errores
             return back()->withErrors($e->getMessage());
@@ -28,5 +28,9 @@ class PersonasController extends Controller
         Persona::truncate();
         return back();
 
+    }
+
+    public function find(){
+        
     }
 }

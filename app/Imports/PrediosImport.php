@@ -2,11 +2,11 @@
 
 namespace App\Imports;
 
-use App\Models\Propiedad;
+use App\Models\Predio;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class PropiedadesImport implements ToModel,WithHeadingRow
+class PrediosImport implements ToModel,WithHeadingRow
 {
     /**
     * @param array $row
@@ -15,7 +15,7 @@ class PropiedadesImport implements ToModel,WithHeadingRow
     */
     public function model(array $row)
     {
-        return new Propiedad([
+        return new Predio([
             'cc_propietario'=>$row['cc_propietario'],
             'descriptor1'=>$row['descriptor1'],
             'numeral1'=>$row['numeral1'],

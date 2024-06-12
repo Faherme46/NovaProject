@@ -9,21 +9,20 @@ use DateTimeZone;
 
 use App\Http\Controllers\FileController;
 
-use App\Models\Propiedad;
+use App\Models\Predio;
 use App\Models\Persona;
-
-
+use Illuminate\Database\QueryException;
 
 class AsambleaController extends Controller
 {
 
-    protected $propiedadesController;
+    protected $prediosController;
     protected $sessionController;
     protected $fileController;
     protected $asambleaId=0;
 
     public function __construct() {
-        $this->propiedadesController= new PropiedadesController();
+        $this->prediosController= new PrediosController();
         $this->sessionController=new SessionController;
         $this->fileController= new FileController;
 
@@ -36,9 +35,9 @@ class AsambleaController extends Controller
 
         if ($sessionId) {
             $asambleas = Asamblea::get();
-            $propiedades=Propiedad::get();
+            $predios=Predio::get();
             $personas=Persona::get();
-            return view('lider.session', compact('asambleas','personas','propiedades'));
+            return view('lider.session', compact('asambleas','personas','predios'));
 
         } else {
 
@@ -80,10 +79,18 @@ class AsambleaController extends Controller
             $asamblea=Asamblea::create($request->all());
             $this->asambleaId=$asamblea->id_asamblea;
             $this->sessionController->setSession($asamblea->id_asamblea,$asamblea->folder);
-            $this->propiedadesController->import($asamblea->folder);
+            $this->prediosController->import($asamblea->folder);
             return redirect()->route('asambleas.index')->with('success', 'Reunión creada con éxito.');
-        } catch (\Exception $e) {
+        }catch(QueryException $qe){
+            if ($qe->errorInfo[1] == 1062) { // 1062 es el código de error para duplicados
+                return redirect()->route('asambleas.index')->withErrors('Ya existe una asamblea en la misma fecha.');
+            } else {
+                return redirect()->route('asambleas.index')->withErrors($qe->getMessage());
+            }
+        }catch (\Exception $e) {
+            dd('');
             $this->sessionController->destroyOnError();
+            $this->destroy($asamblea->id_asamblea);
             return redirect()->route('asambleas.index')->withErrors($e->getMessage());
         }
     }

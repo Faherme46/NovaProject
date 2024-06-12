@@ -85,8 +85,8 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @if (isset($propiedades))
-                                    @forelse ($propiedades as $p)
+                                @if (isset($predios))
+                                    @forelse ($predios as $p)
                                         <tr>
                                             <td>{{ $p->id }}</td>
                                             <td>{{ $p->persona->nombre }}</td>

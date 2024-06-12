@@ -11,10 +11,10 @@ class Persona extends Model
 
     protected $guarded=[];
 
-    public function propiedades()
+    public function predios()
     {
-        return $this->hasMany(Propiedad::class, 'cc_propietario', 'cedula');
+        return $this->hasMany(Predio::class, 'cc_propietario', 'cedula');
     }
 
-    
+
 }
