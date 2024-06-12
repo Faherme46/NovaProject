@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sesion', function (Blueprint $table) {
-            $table->id();
-
-            $table->integer('id_asamblea');
+        Schema::create('personas', function (Blueprint $table) {
+            $table->string('cedula')->primary(true);
+            $table->string('nombre');
+            $table->string('apellido');
+            $table->boolean('apoderado');
             $table->timestamps();
         });
     }
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sesion');
+        Schema::dropIfExists('personas');
     }
 };

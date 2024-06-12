@@ -15,8 +15,10 @@ return new class extends Migration
             $table->id('id_asamblea');
             $table->string('folder');
             $table->string('lugar');
+            $table->string('ciudad');
             $table->date('fecha');
             $table->time('hora');
+            $table->integer('controles');
             $table->enum('estado', ['pendiente', 'en_progreso', 'finalizada','cancelada']);
             $table->boolean('registro');
             $table->time('h_inicio')->nullable();

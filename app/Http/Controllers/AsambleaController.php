@@ -4,31 +4,48 @@ namespace App\Http\Controllers;
 
 use App\Models\Asamblea;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+use DateTimeZone;
+
 use App\Http\Controllers\FileController;
+
+use App\Models\Propiedad;
+use App\Models\Persona;
+
+
 
 class AsambleaController extends Controller
 {
+
+    protected $propiedadesController;
+    protected $sessionController;
+    protected $fileController;
+    protected $asambleaId=0;
+
+    public function __construct() {
+        $this->propiedadesController= new PropiedadesController();
+        $this->sessionController=new SessionController;
+        $this->fileController= new FileController;
+
+    }
     public function index()
     {
 
+        $sessionId=$this->sessionController->getSessionId();
 
-        $sessionController=new SessionController;
-        $sessionId=$sessionController->getSessionId();
 
         if ($sessionId) {
             $asambleas = Asamblea::get();
-            return view('admin.session', compact('asambleas'));
+            $propiedades=Propiedad::get();
+            $personas=Persona::get();
+            return view('lider.session', compact('asambleas','personas','propiedades'));
 
         } else {
-            $fileController= new FileController;
-            $folders=$fileController->getFolders();
+
+            $folders=$this->fileController->getFolders();
             return view('admin.asamblea', compact('folders'));
             # code...
         }
-
-
-
-
 
     }
 
@@ -51,27 +68,25 @@ class AsambleaController extends Controller
             'lugar' => 'required',
             'fecha' => 'required|date',
             'hora' => 'required|date_format:H:i',
-            'estado' => 'required|in:pendiente,en_progreso,finalizada',
+            'controles'=>'required',
             'registro'=> 'required|boolean',
         ],[
             'folder.required' => 'Debe seleccionar un cliente.',
         ]);
 
-
         $asamblea=Asamblea::create($request->all());
-
-
-
-        $sessionController = new SessionController();
-        $sessionController->setSession($asamblea->id_asamblea);
-        return redirect()->route('asambleas.index')->with('success', 'Reunión creada con éxito.');
+        $this->asambleaId=$asamblea->id_asamblea;
+        try {
+            $this->sessionController->setSession($asamblea->id_asamblea,$asamblea->folder);
+            $this->propiedadesController->import($asamblea->folder);
+            return redirect()->route('asambleas.index')->with('success', 'Reunión creada con éxito.');
+        } catch (\Exception $e) {
+            $this->sessionController->destroyOnError();
+            return redirect()->route('asambleas.index')->withErrors($e->getMessage());
+        }
     }
 
-    public function edit($id)
-    {
-        $asamblea = Asamblea::findOrFail($id);
-        return view('admin.creaAsamblea', compact('asamblea'));
-    }
+
 
     public function update(Request $request, $id)
     {
@@ -86,16 +101,14 @@ class AsambleaController extends Controller
 
         $asamblea = Asamblea::findOrFail($id);
         $asamblea->update($request->all());
-        return redirect()->route('asambleas.index')->with('success', 'Reunión actualizada con éxito.');
+        return redirect()->route('admin.asambleas')->with('success', 'Reunión actualizada con éxito.');
     }
 
     public function destroy($id)
     {
-
         $asamblea = Asamblea::findOrFail($id);
         $asamblea->delete();
-
-        return redirect()->route('asambleas.index')->with('success', 'Asamblea eliminada con éxito.');
+        return redirect()->route('admin.asambleas')->with('success', 'Asamblea eliminada con éxito.');
     }
 
 
@@ -118,6 +131,50 @@ class AsambleaController extends Controller
             return(null);
         }
     }
+
+
+    public function iniciarAsamblea(Request $request){
+            try {
+                $asamblea = Asamblea::findOrFail($request->id_asamblea);
+                $time=Carbon::now(new DateTimeZone('America/Bogota'));
+                if ($asamblea->h_inicio==null) {
+                    $asamblea->h_inicio= $time;
+                    $asamblea->save();
+                    return back()->with('info','Se ha iniciado la asamblea en: '.$time);
+                }else{
+                    return back()->with('warning','Ya se establecio el inicio en: '.$asamblea->h_inicio);
+                }
+            } catch (\Exception $e) {
+                //throw $th;
+                return back()->withErrors($e->getMessage());
+            }
+
+
+
+    }
+
+    public function terminarAsamblea(Request $request){
+        try {
+            $asamblea = Asamblea::findOrFail($request->id_asamblea);
+            $time=Carbon::now(new DateTimeZone('America/Bogota'));
+            if ($asamblea->h_cierre==null) {
+                $asamblea->h_cierre= $time;
+                $asamblea->save();
+                return back()->with('info','Se ha terminado la asamblea en: '.$time);
+            }else{
+                return back()->with('warning','Ya se establecio el cierre en: '.$asamblea->h_cierre);
+            }
+
+
+        } catch (\Exception $e) {
+            //throw $th;
+            return back()->withErrors($e->getMessage());
+        }
+
+
+}
+
+
 
     //Metodos de manejo de archivos
 }

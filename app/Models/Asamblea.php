@@ -19,6 +19,8 @@ class Asamblea extends Model
         'hora',
         'estado',
         'registro',
+        'ciudad',
+        'controles',
         'h_inicio',
         'h_cierre'
     ];

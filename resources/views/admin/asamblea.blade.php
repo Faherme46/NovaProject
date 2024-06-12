@@ -21,47 +21,63 @@
                 {{ session('success') }}
             </div>
         @endif
-        <div class="row">
 
-
-            <div class="card mb-4">
+        <div class="row d-flex">
+            <div class="card col-md-4">
                 <div class="card-header">
                     <h3 id="form-title">Crear Nueva asamblea</h3>
                 </div>
                 <div class="card-body">
-                    <form id="asamblea-form" action="{{ route('asambleas.store') }}" method="POST">
+                    <form class="row g-3" id="asamblea-form" action="{{ route('asambleas.store') }}" method="POST">
                         @csrf
-                        <input type="hidden" id="form-method" name="_method" value="POST">
-                        <input type="hidden" id="asamblea-id" name="id_asamblea">
-                        <div class="form-group">
+                        <div class="form-group col-12">
                             <label for="folder">Cliente</label>
-                            <select class="form-select" aria-label="Default select example" name="folder" required>
+                            <select class="form-select" aria-label="Default select example" name="folder" required >
                                 <option value="">Seleccionar un cliente</option>
                                 @foreach ($folders as $folder)
                                     <option value="{{ $folder }}">{{ $folder }}</option>
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label for="lugar">Lugar</label>
-                            <input type="text" class="form-control" id="lugar" name="lugar" required>
+                        <div class="form-group col-12">
+                            <label for="lugar">Direccion</label>
+                            <input type="text" class="form-control" placeholder="Direccion" id="lugar" name="lugar" required>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group col-md-6">
                             <label for="fecha">Fecha</label>
-                            <input type="date" class="form-control" id="fecha" name="fecha" required>
+                            <input type="date" class="form-control"  id="fecha" name="fecha" required >
                         </div>
-                        <div class="form-group">
+                        <div class="form-group col-md-6">
+                            <label for="ciudad">Ciudad</label>
+                            <select id="ciudad" class="form-select" name="ciudad">
+                                <option value='Bucaramanga' selected>Bucaramanga</option>
+                                <option value='Floridablanca' >Floridablanca</option>
+                                <option value='Giron' >Giron</option>
+                                <option value='Piedecuesta' >Piedecuesta</option>
+                                <option value='Lebrija' >Lebrija</option>
+                              </select>
+                        </div>
+
+                        <div class="form-group col-md-6">
                             <label for="hora">Hora</label>
                             <input type="time" class="form-control" id="hora" name="hora" required>
                         </div>
-                        <div class="form-group" hidden>
-                            <label for="estado">Estado</label>
-                            <select class="form-control" id="estado" name="estado">
-                                <option value="pendiente" selected>Pendiente</option>
-                                <option value="en_progreso">En Progreso</option>
-                                <option value="finalizada">Finalizada</option>
-                            </select>
+                        <div class="form-group col-md-6">
+                            <label for="controles">Numero de controles</label>
+                            <input type="number" class="form-control" id="controles" name="controles" required>
                         </div>
+                        <script>
+                            // Obtener la fecha y hora actual
+                            var fechaActual = new Date().toISOString().split('T')[0];
+                            var horaActual = new Date().toTimeString().slice(0, 5);
+
+                            // Establecer los valores por defecto en los campos de entrada
+                            $('#fecha').val(fechaActual);
+                            $('#hora').val(horaActual);
+                            $('#lugar').val('Un lugar bonito')
+                            $('#controles').val('100')
+                        </script>
+
                         <div class="form-group ">
                             <div class="row">
                                 <div class="form-check col ms-3">
@@ -87,49 +103,61 @@
                 </div>
             </div>
 
+            {{-- mostrar el archivo seleccionado --}}
+            {{-- <div class="col-md-7 card ms-4">
 
+                <div class="card-header mt-3 row d-flex align-items-center">
 
-            <!-- Historial de asambleas -->
-            {{-- <div class="col-md-8">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Nombre</th>
-                            <th>Lugar</th>
-                            <th>Fecha</th>
-                            <th>Hora</th>
-                            <th>Estado</th>
-                            <th>Registro</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($asambleas as $asamblea)
+                    <h2 class="card-title">Archivo importado</h2>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead>
                             <tr>
-                                <td>{{ $asamblea->id_asamblea }}</td>
-                                <td>{{ $asamblea->nombre }}</td>
-                                <td>{{ $asamblea->lugar }}</td>
-                                <td>{{ $asamblea->fecha }}</td>
-                                <td>{{ $asamblea->hora }}</td>
-                                @if ($asamblea->registro)
-                                    <td>Si</td>
-                                @else
-                                    <td>No</td>
-                                @endif
-
-                                <td>{{ $asamblea->nombreBd }}</td>
-
+                                <th>ID</th>
+                                <th>propietario</th>
+                                <th>cedula</th>
+                                <th>Ds 1 </th>
+                                <th>Nm 1 </th>
+                                <th>Ds 2 </th>
+                                <th>Nm 2 </th>
+                                <th>Coeficiente</th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @if (isset($propiedades))
+                                @forelse ($propiedades as $p)
+                                    <tr>
+                                        <td>{{ $p->id }}</td>
+                                        <td>{{ $p->persona->nombre }}</td>
+                                        <td>{{ $p->cc_propietario }}</td>
+                                        <td>{{ $p->descriptor1 }}</td>
+                                        <td> {{ $p->numeral1 }}</td>
+                                        <td> {{ $p->descriptor2 }}</td>
+                                        <td> {{ $p->numeral2 }}</td>
+                                        <td>{{ $p->coeficiente }}</td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="7">No hay entradas</td>
+                                    </tr>
+                                @endforelse
+                            @else
+                                <tr>
+                                    <td colspan="7"> No se ha seleccionado archivo</td>
+                                </tr>
+                            @endif
+                        </tbody>
+                    </table>
+
+                </div>
+
+
             </div> --}}
-            <!-- Modals -->
-
-            <!-- Button trigger modal -->
 
 
-            <!-- Modal -->
+
+
 
         </div>
 

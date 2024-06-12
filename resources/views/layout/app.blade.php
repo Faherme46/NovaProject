@@ -28,16 +28,18 @@
                 <h2 class="">{{ $name_asamblea }}</h2>
             </div>
 
+
+
             <div class="header_img"> <img src="https://i.imgur.com/hczKIze.jpg" alt=""> </div>
         </header>
 
         <div class="l-navbar" id="nav-bar">
             <nav class="nav">
                 <div>
-                    <a href="#" class="nav_logo"> <i class='bx bx-layer nav_logo-icon'></i> <span
+                    <a href="{{ route('home') }}" class="nav_logo"> <i class='bx bx-layer nav_logo-icon'></i> <span
                             class="nav_logo-name">BBBootstrap</span> </a>
                     <div class="nav_list">
-                        <a href="{{ route('home') }}" class="nav_link active"> <i class='bx bx-grid-alt nav_icon'></i>
+                        <a href="" class="nav_link active"> <i class='bx bx-grid-alt nav_icon'></i>
                             <span class="nav_name">Dashboard</span> </a>
                         <a href="#" class="nav_link"> <i class='bx bx-user nav_icon'></i> <span
                                 class="nav_name">Users</span> </a>
@@ -68,7 +70,7 @@
             This is my footer
         </footer>
 
-        
+
 
 
 

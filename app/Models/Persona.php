@@ -15,4 +15,6 @@ class Persona extends Model
     {
         return $this->hasMany(Propiedad::class, 'cc_propietario', 'cedula');
     }
+
+    
 }

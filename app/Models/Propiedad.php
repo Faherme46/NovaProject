@@ -15,4 +15,5 @@ class Propiedad extends Model
     {
         return $this->belongsTo(Persona::class, 'cc_propietario', 'cedula');
     }
+
 }

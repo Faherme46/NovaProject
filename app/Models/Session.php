@@ -9,12 +9,13 @@ class Session extends Model
 {
     use HasFactory;
 
-    protected $table = 'sesion';
+    protected $table = 'session';
     protected $primaryKey = 'id';
 
     protected $fillable = [
         'id',
-        'id_asamblea'
+        'id_asamblea',
+        'name_asamblea'
     ];
 
     public function setManualData(array $data)

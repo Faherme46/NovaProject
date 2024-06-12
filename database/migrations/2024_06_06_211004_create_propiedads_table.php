@@ -21,7 +21,7 @@ return new class extends Migration
             $table->float('coeficiente');
             $table->timestamps();
 
-            // $table->foreign('cc_propietario')->references('cedula')->on('personas')->onDelete('cascade');
+            $table->foreign('cc_propietario')->references('cedula')->on('personas')->onDelete('cascade');
         });
     }
 
@@ -32,4 +32,7 @@ return new class extends Migration
     {
         Schema::dropIfExists('propiedads');
     }
+
 };
+
+$table->after('2024_06_07_141154_create_personas_table');
