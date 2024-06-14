@@ -3,26 +3,35 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Asignacion;
+use App\Models\AsignacionPredio;
 use App\Models\Session;
 use App\Models\Predio;
 use App\Models\Persona;
+
+use Illuminate\Support\Facades\Session as MySession;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
 class SessionController extends Controller
 {
     public function destroyAll(){
 
         //se limpiaran las tablas: personas,Predios, apoderados, votaciones,resultados,preguntas, votos
-        Session::truncate();
-        Predio::truncate();
-        Persona::query()->delete();
-
+        $this->destroyOnError();
         return redirect()->route('admin.asambleas')->with('success','Sesion reestablecida');
     }
 
     public function destroyOnError(){
         Session::truncate();
+        MySession::flush();
+        Cache::flush();
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        AsignacionPredio::truncate();
+        Asignacion::truncate();
         Predio::truncate();
-        Persona::query()->delete();
+        Persona::truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
     public function setSession($id_asamblea,$name_asamblea){
         $data=[

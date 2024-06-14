@@ -21,16 +21,7 @@ class PrediosController extends Controller
     public function __construct() {
         $this->sessionController = new SessionController;;
     }
-    public function index(){
-        $propiedades=Predio::all();
-        $personas=Persona::all();
-        return view('admin.creaAsamblea',compact('propiedades'));
-    }
-    public function destroyAll(){
-        Persona::truncate();
-        Predio::truncate();
-        return redirect()->route('admin.asamblea')->with('success', 'Todas las propiedades y archivos eliminados con éxito.');
-    }
+
 
     public function import(String $file){
 
@@ -41,7 +32,6 @@ class PrediosController extends Controller
 
             return redirect()->route('asambleas.index')->with('success','Carga de datos exitosa');
         } catch (ValidationException $e) {
-
             // Manejar excepciones específicas de validación de Excel
             $failures = $e->failures();
             throw new \Exception('Error: '.$failures[1]);

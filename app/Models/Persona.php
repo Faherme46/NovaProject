@@ -13,7 +13,12 @@ class Persona extends Model
 
     public function predios()
     {
-        return $this->hasMany(Predio::class, 'cc_propietario', 'cedula');
+        return $this->hasMany(Predio::class, 'cc_propietario', 'id');
+    }
+
+    public function asignaciones()
+    {
+        return $this->hasMany(Predio::class, 'cc_asistemte', 'id');
     }
 
 

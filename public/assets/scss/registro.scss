@@ -1,1 +1,15 @@
 @import url('./_variables.scss');
+
+.bx-b{
+    font-size: 25px !important;
+    cursor: pointer !important;
+    text-decoration: none;
+    color: var(--black-color);
+}
+
+.bx-w{
+    font-size: 20px !important;
+    color: var(--white-color-txt);
+}
+
+

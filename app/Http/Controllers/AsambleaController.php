@@ -12,6 +12,7 @@ use App\Http\Controllers\FileController;
 use App\Models\Predio;
 use App\Models\Persona;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Cache;
 
 class AsambleaController extends Controller
 {
@@ -80,7 +81,10 @@ class AsambleaController extends Controller
             $this->asambleaId=$asamblea->id_asamblea;
             $this->sessionController->setSession($asamblea->id_asamblea,$asamblea->folder);
             $this->prediosController->import($asamblea->folder);
-            return redirect()->route('asambleas.index')->with('success', 'Reunión creada con éxito.');
+            Cache::put('controles',range(1,$asamblea->controles));
+            Cache::put('id_asamblea',$asamblea->id_asamblea);
+            Cache::put('name_asamblea',$asamblea->folder);
+            return redirect()->route('asambleas.index')->with('success', 'Asamblea creada con éxito.');
         }catch(QueryException $qe){
             if ($qe->errorInfo[1] == 1062) { // 1062 es el código de error para duplicados
                 return redirect()->route('asambleas.index')->withErrors('Ya existe una asamblea en la misma fecha.');
@@ -88,7 +92,6 @@ class AsambleaController extends Controller
                 return redirect()->route('asambleas.index')->withErrors($qe->getMessage());
             }
         }catch (\Exception $e) {
-            dd('');
             $this->sessionController->destroyOnError();
             $this->destroy($asamblea->id_asamblea);
             return redirect()->route('asambleas.index')->withErrors($e->getMessage());
@@ -117,7 +120,7 @@ class AsambleaController extends Controller
     {
         $asamblea = Asamblea::findOrFail($id);
         $asamblea->delete();
-        return redirect()->route('admin.asambleas')->with('success', 'Asamblea eliminada con éxito.');
+        return redirect()->route('admin.asambleas');
     }
 
 

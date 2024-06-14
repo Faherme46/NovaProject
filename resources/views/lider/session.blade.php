@@ -38,7 +38,6 @@
                 <div class="col-md-4">
                     <div class="card">
                         <div class="card-body">
-
                             <h2 class="card-title">{{ $asambleaOn->folder }}</h2>
                             <h6>{{ $asambleaOn->fecha }} {{ $asambleaOn->hora }}</h6>
                             <h6>Controles: {{ $asambleaOn->controles }}</h6>

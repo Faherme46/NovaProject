@@ -11,12 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('personas', function (Blueprint $table) {
+        Schema::create('asignacions', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre');
-            $table->string('apellido');
-            $table->boolean('apoderado');
+            $table->string('id_control')->unique();
+            $table->unsignedBigInteger('cc_asistente');
+            $table->string('estado');
+            $table->decimal('sum_coef', 8, 2);
             $table->timestamps();
+
+            $table->foreign('cc_asistente')->references('id')->on('personas');
         });
     }
 
@@ -25,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('personas');
+        Schema::dropIfExists('asignacions');
     }
 };

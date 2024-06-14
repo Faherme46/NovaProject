@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="asstes/scss/login.scss">
+<link rel="stylesheet" href="assets/scss/login.scss">
 
 @extends('layout.app')
 

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('predios', function (Blueprint $table) {
             $table->id();
-            $table->string('cc_propietario');
+            $table->unsignedBigInteger('cc_propietario');
             $table->string('descriptor1');
             $table->string('numeral1');
             $table->string('descriptor2');
@@ -21,7 +21,8 @@ return new class extends Migration
             $table->float('coeficiente');
             $table->timestamps();
 
-            $table->foreign('cc_propietario')->references('cedula')->on('personas')->onDelete('cascade');
+            $table->foreign('cc_propietario')->references('id')->on('personas');
+
         });
     }
 

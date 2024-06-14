@@ -3,7 +3,7 @@
 @extends('layout.app')
 
 @section('content')
-    <a href="registro">Registro</a><br>
+    <a href="{{route('asistentes.index')}}">Registro</a><br>
     <a href="login">login</a> <br>
     <a href="crearUsuarios">crearusuarios</a> <br>
     <a href="preguntas">preguntas</a><br>

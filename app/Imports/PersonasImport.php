@@ -16,7 +16,7 @@ class PersonasImport implements ToModel,WithHeadingRow
     public function model(array $row)
     {
         return new Persona([
-            'cedula'=>$row['cc_propietario'],
+            'id'=>$row['cc_propietario'],
             'nombre'=>$row['nombre_p'],
             'apellido'=>$row['apellido_p'],
             'apoderado'=>false
