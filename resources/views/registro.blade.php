@@ -1,6 +1,17 @@
 @extends('layout.app')
 
 @section('content')
+
+    <script>
+        // Verificar si jQuery está definido
+        if (typeof jQuery != 'undefined') {
+            // jQuery está cargado
+            console.log('jQuery está instalado y disponible.');
+        } else {
+            // jQuery no está cargado
+            console.log('jQuery no está instalado o no está disponible.');
+        }
+    </script>
     <link rel="stylesheet" href="{{ asset('assets/scss/registro.scss') }}">
     <div class="container">
         @if (session('success'))
@@ -39,13 +50,10 @@
                             <form class="" action="{{ route('asistentes.buscar') }}" method="GET">
                                 <label for="cedula" class="form-label">Cédula</label>
                                 <div class="mb-3 d-flex align-items-center ">
-                                    @isset($persona)
+
                                         <input class="me-2 form-control" type="text" class="form-control" id="cedula"
-                                        name="cedula" value="{{$persona->id}}"  readonly >
-                                    @else
-                                        <input class="me-2 form-control" type="text" class="form-control" id="cedula"
-                                        name="cedula" required >
-                                    @endisset
+                                            name="cedula" value="{{isset($persona)?$persona->id:''}}" required>
+
 
                                     <button type="submit" class="btn btn-primary">Buscar</button>
                                 </div>
@@ -68,63 +76,109 @@
                     <!-- Mostrar el nombre de la persona encontrada aquí -->
                 </div>
 
-                <!-- Columna para la tabla de predios -->
+                <!-- Columna para la tabla de asignación de predios a control -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <form  id="formPredios" action="asistentes/asignar" method="post">
+                            @csrf
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Asignación</h5>
+                            </div>
+                            <div class="card-body">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Predios</th>
+                                            <th>Coeficiente</th>
+                                            <th>
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                    id="checkAll">
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @isset($prediosAvailable)
+                                            @forelse ($prediosAvailable as $predio)
+                                                <tr>
+                                                    <td >{{ $predio->descriptor1 }} {{ $predio->numeral1 }}
+                                                        {{ $predio->descriptor2 }} {{ $predio->numeral2 }} </td>
+                                                    <td>{{ $predio->coeficiente }}</td>
+                                                    <td>
+                                                        <input class="form-check-input checkbox-item" type="checkbox" name="predios[]" data-coeficiente="{{ $predio->coeficiente }}" value="{{ $predio->id }}" id="flexCheckDefault">
+                                                    </td>
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="3"></td>
+                                                </tr>
+                                            @endforelse
+                                        @endisset
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="card-footer">
+                                <div class="row g-3">
+                                    <input type="hidden" name="cc_asistente"
+                                        value="{{ isset($persona) ? $persona->id : '' }}">
+                                    <div class="mb-3 col-md-4 ">
+                                        <select name="control" id="id_control" class="form-control  " required>
+                                            @foreach ($controlIds as $control)
+                                                <option value="{{ $control }}"@if($control==$controlTurn)@selected(true) @endif>{{ $control }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button type="submit" class="btn btn-primary" @isset($prediosAvailable) {{$prediosAvailable->isEmpty()?'disabled':''}} @endisset> Asignar</button>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="sumCoef">Coeficiente</label>
+                                        <input class="form-control" name="sum_coef" id="sumCoef" readonly></input>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </form>
+
+                    </div>
+
+
+                </div>
+
+                <!-- Columna para las Asignaiciones existentes -->
                 <div class="col-md-4">
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="card-title mb-0">Predios</h5>
+                            <h5 class="card-title mb-0">Asignaciones</h5>
                         </div>
                         <div class="card-body">
-                            <table class="table table-hover">
+                            <table class="table table-hover table-striped">
                                 <thead>
                                     <tr>
-                                        <th scope="col">Predio</th>
-                                        <th scope="col">Coef.</th>
-                                        <th scope="col">
-                                            @if ($selectedAll)
-                                                <a href="asistentes/allPrediosUncheck">
-                                                    <i class='bx bx-checkbox-checked bx-b'></i>
-                                                </a>
-                                            @else
-                                                <a href="asistentes/allPrediosCheck">
-                                                    <i class='bx bx-checkbox bx-b '></i>
-                                                </a>
-                                            @endif
-                                        </th>
+                                        <th>Predio</th>
+                                        <th>Coef.</th>
+                                        <th>Control </th>
 
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @isset($persona)
-                                        @forelse ($persona->predios as $predio)
-                                            <tr>
-
-                                                <td scope="row">{{ $predio->descriptor1 }} {{ $predio->numeral1 }}
-                                                    {{ $predio->descriptor2 }} {{ $predio->numeral2 }} </td>
-                                                <td>{{ $predio->coeficiente }}</td>
+                                        @forelse ($persona->asignaciones as $asignacion)
+                                            <tr onclick="">
                                                 <td>
-                                                    <form id="formSelectPredio" action="asistentes/anadir" method="get">
-                                                        <input name="predioId" value="{{ $predio->id }}" hidden>
-
-                                                        @if ($predios->contains($predio))
-                                                            <i class='bx bx-checkbox-checked bx-b' onclick="submitForm()"></i>
-                                                        @else
-                                                            <i class='bx bx-checkbox bx-b' onclick="submitForm()"></i>
-                                                        @endif
-
-
-                                                    </form>
-                                                    <script>
-                                                        function submitForm() {
-                                                            document.getElementById('formSelectPredio').submit();
-                                                        }
-                                                    </script>
+                                                    @foreach ($asignacion->predios as $predio)
+                                                        {{ $predio->descriptor1 }} {{ $predio->numeral1 }}
+                                                        {{ $predio->descriptor2 }} {{ $predio->numeral2 }}
+                                                        <br>
+                                                    @endforeach
                                                 </td>
+                                                <td>{{ $asignacion->sum_coef }}</td>
+                                                <td>{{ $asignacion->control_id }} </td>
 
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td>Sin predios</td>
+                                                <td colspan="3">-</td>
                                             </tr>
                                         @endforelse
                                     @else
@@ -139,98 +193,7 @@
 
                 </div>
 
-                <!-- Columna para la tabla de asignación de predios a control -->
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-title mb-0">Asignación</h5>
-                        </div>
-                        <div class="card-body">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Descripción</th>
-                                        <th>Coeficiente</th>
-                                        <th scope="col">
-                                            @if ($selectedAll)
-                                                <a href="asistentes/allPrediosUncheck">
-                                                    <i class='bx bx-checkbox-checked bx-b'></i>
-                                                </a>
-                                            @else
-                                                <a href="asistentes/allPrediosCheck">
-                                                    <i class='bx bx-checkbox bx-b'> </i>
-                                                </a>
-                                            @endif
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
 
-                                    @forelse ($predios as $predio)
-                                        <tr>
-                                            <td scope="row">{{ $predio->descriptor1 }} {{ $predio->numeral1 }}
-                                                {{ $predio->descriptor2 }} {{ $predio->numeral2 }} </td>
-                                            <td>{{ $predio->coeficiente }}</td>
-                                            <td>
-                                                <form id="formSelectPredio" action="asistentes/anadir" method="get">
-                                                    <input type="ext" name="id_predio" value="{{ $predio }}"
-                                                        hidden>
-
-                                                    @if ($predios->contains($predio))
-                                                        <i class='bx bx-checkbox-checked bx-b' onclick="submitForm()"></i>
-                                                    @else
-                                                        <i class='bx bx-checkbox bx-b' onclick="submitForm()"></i>
-                                                    @endif
-
-                                                </form>
-                                                <script>
-                                                    function submitForm() {
-                                                        document.getElementById('formSelectPredio').submit();
-                                                    }
-                                                </script>
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="3"></td>
-                                        </tr>
-                                    @endforelse
-
-
-
-
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="card-footer">
-                            <form class="row g-3" action="{{ route('asistentes.asignar') }}" method="POST">
-                                @csrf
-                                <input type="hidden" name="cc_asistente"
-                                    value="{{ isset($persona) ? $persona->id : '' }}">
-                                <div id="selectedPredios"></div>
-                                <div class="mb-3 col-md-4 ">
-                                    <select name="control" id="id_control" class="form-control  " required>
-                                        <option value="{{$controlTurn}}" selected>{{$controlTurn}}</option>
-                                        @foreach($availableControls as $control)
-                                            <option value="{{ $control }}">{{ $control }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-md-4">
-                                    <button type="submit" class="btn btn-primary">Asignar</button>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="sumCoef">Coeficiente</label>
-                                    <input value="{{ $predios ? $predios->sum('coeficiente') : 0 }}" class="form-control"
-                                        name="sum_coef" id="sumCoef" cols="4" rows="1" readonly></input>
-                                </div>
-                            </form>
-
-                        </div>
-                    </div>
-
-
-                </div>
             </div>
             <div class="row">
                 <div class="col-md-8">
@@ -246,17 +209,18 @@
                         </thead>
                         <tbody>
 
-                            @forelse ($asignaciones as $asignacion)
+                            @forelse ($asignacionesAll as $asignacion)
                                 <tr>
-                                    <td>{{ $asignacion->id_control }}</td>
+                                    <td>{{ $asignacion->control_id }}</td>
                                     <td>{{ $asignacion->persona->nombre }} {{ $asignacion->persona->apellido }}</td>
                                     <td>
                                         @foreach ($asignacion->predios as $predio)
-                                            {{$predio->descriptor1}} {{$predio->numeral1}} {{$predio->descriptor2}} {{$predio->numeral2}}
+                                            {{ $predio->descriptor1 }} {{ $predio->numeral1 }} {{ $predio->descriptor2 }}
+                                            {{ $predio->numeral2 }} <br>
                                         @endforeach
                                     </td>
                                     <td>{{ $asignacion->sum_coef }}</td>
-                                    <td>{{$asignacion->estado}}</td>
+                                    <td>{{ $asignacion->estado }}</td>
                                 </tr>
                             @empty
                                 <tr>
@@ -271,5 +235,77 @@
         @endif
 
     </div>
+    <script>
+        $(document).ready(function() {
+            $('#checkAll').prop('checked',true);
+            $('.checkbox-item').prop('checked',true);
+            sumarCoeficiente();
+
+            // Manejar el cambio del checkbox global
+            $('#checkAll').change(function() {
+                $('.checkbox-item').prop('checked', $(this).prop('checked'));
+                sumarCoeficiente();
+            });
+
+
+            // Manejar el cambio de los checkboxes individuales
+            $('.checkbox-item').change(function() {
+                var allChecked = true;
+                var allUnchecked = true;
+
+                // Verificar el estado de todos los checkboxes individuales
+                $('.checkbox-item').each(function() {
+                    if ($(this).prop('checked')) {
+                        allUnchecked = false;
+                    } else {
+                        allChecked = false;
+
+                    }
+                });
+
+                // Actualizar el estado del checkbox global
+                $('#checkAll').prop('checked', allChecked);
+
+                // Establecer el estado indeterminado si no todos están seleccionados o deseleccionados
+                if (!allChecked && !allUnchecked) {
+                    $('#checkAll').prop('indeterminate', true);
+                } else {
+                    $('#checkAll').prop('indeterminate', false);
+                }
+                sumarCoeficiente();
+            });
+            function sumarCoeficiente(){
+                var sumaCoeficiente=0;
+                $('.checkbox-item').each(function() {
+                    if ($(this).prop('checked')) {
+                        sumaCoeficiente=sumaCoeficiente+$(this).data('coeficiente');
+                    }
+                });
+
+                $('#sumCoef').val(sumaCoeficiente);
+            }
+            // Manejar el envío del formulario
+            $('#formPredios').submit(function(event) {
+                event.preventDefault(); // Evitar el envío por defecto del formulario
+
+                // Obtener los IDs de los checkboxes marcados
+                var prediosSeleccionados = $('.checkbox-item:checked').map(function() {
+                    return $(this).val();
+                }).get();
+
+                // Crear un campo oculto con los IDs seleccionados
+                var inputPredios = $('<input>')
+                    .attr('type', 'hidden')
+                    .attr('name', 'prediosSelect')
+                    .val(prediosSeleccionados); // Convertir array a cadena de texto separada por comas
+
+                // Adjuntar el campo oculto al formulario
+                $(this).append(inputPredios);
+
+                // Enviar el formulario
+                this.submit();
+            });
+        });
+    </script>
     <script src="{{ asset('assets/js/registro.js') }}"></script>
 @endsection

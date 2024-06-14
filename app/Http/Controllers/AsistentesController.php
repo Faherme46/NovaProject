@@ -11,6 +11,9 @@ use Illuminate\Database\QueryException;
 use App\Models\Persona;
 use App\Models\Predio;
 use App\Models\Asignacion;
+use App\Models\Control;
+
+use function PHPSTORM_META\type;
 
 class AsistentesController extends Controller
 {
@@ -18,19 +21,30 @@ class AsistentesController extends Controller
 
     public function index()
     {
-        $persona = session('persona',null);
-        $prediosId = session('predios',[]);//array con ids de los predios seleccionados
-        $predios=($prediosId)?Predio::find($prediosId):collect(); //predios Seleccionados
-        $selectedAll=($persona)?$predios==$persona->predios:false; //variable que indica si estan o no seleccionados todos
-        $asignaciones=Asignacion::all();//aisgnaciones existentes en la BD //todo quitar esto de las variables
-        $assignedControls = Asignacion::pluck('id_control')->toArray();//array con los controles que ya fueron asignados
-        $availableControls=array_diff(Cache::get('controles',[]),$assignedControls); //controles disponibles
-        $controlTurn=session('lastControl',0)+1;//control que deberia ser el siguiente
-        if(!in_array($controlTurn,$availableControls)){
-            $control=current($availableControls);//si el control ya fue asignado devuelve el siguiente en la lista
+        if(Cache::get('asambleaOn',false)){
+            $persona = session('persona',null);
+            $asignacionesAll=Asignacion::all();
+            $availableControls=Control::whereDoesntHave('asignacion')->get();
+            $controlTurn=session('lastControl',0)+1;//control que deberia ser el siguiente
+            $controlIds=$availableControls->pluck('id')->toArray();
+            if(!in_array($controlTurn,$controlIds)){
+                $control=current($availableControls);//si el control ya fue asignado devuelve el siguiente en la lista
+            }
+            if($persona){
+                $asignaciones=$persona->asignaciones;
+                $prediosAvailable=$persona->predios()->whereDoesntHave('asignacion')->get();
+                return view('registro', compact('persona', 'prediosAvailable','asignaciones','asignacionesAll','controlIds','controlTurn'));
+            }
+
+
+            return view('registro', compact('persona','asignacionesAll','controlIds','controlTurn'));
+        }else{
+            return view('registro');
         }
-        return view('registro', compact('persona', 'predios','selectedAll','asignaciones','availableControls','controlTurn'));
+
     }
+
+    //metodo que se ejecuta si el usuario ya tiene una asignacion
 
 
     public function anadirPredio(Request $request)
@@ -60,7 +74,7 @@ class AsistentesController extends Controller
             return redirect()->route('asistentes.index')->withErrors('No se encontro');
         }
         session(['persona' => $persona]);
-
+        $this->allPrediosCheck();
 
         return redirect()->route('asistentes.index');
 
@@ -85,17 +99,19 @@ class AsistentesController extends Controller
 
     public function asignar(Request $request)
     {
-
         $cc_asistente = $request->input('cc_asistente');
-        $predios = session('predios',[]);
+        $idPredios=$request->input('prediosSelect');
         $controlId = $request->input('control');
-        if($predios==[]){
+
+        if(is_null($idPredios)){
            return back()->withErrors('No se han seleccionado predios');
         }
+        $predios=explode(",", $idPredios);
+
+        $control=Control::find($controlId);
         try{
-            $asignacion=Asignacion::create([
+            $asignacion=$control->asignacion()->create([
             'cc_asistente' => $cc_asistente,
-            'id_control' => $controlId,
             'sum_coef' =>$request->sum_coef,
             'estado' => 'activo'
             ]);
@@ -103,21 +119,31 @@ class AsistentesController extends Controller
             if ($e->errorInfo[1] == 1062) {
                 // Manejar la excepción específica de "Duplicate entry"
                 return redirect()->route('asistentes.index')->withErrors('El número de control ya está asignado. Por favor, elige otro.');
+            }else{
+                return redirect()->route('asistentes.index')->withErrors($e->getMessage());
             }
         }catch(\Exception $e){
+            dd($e->getMessage());
             return redirect()->route('asistentes.index')->withErrors($e->getMessage());
         }
 
         $asignacion->predios()->attach($predios);
-
-        session()->forget(['persona', 'predios']);
         session(['lastControl'=>$controlId]);
-        return redirect()->route('asistentes.index');
-        // return redirect()->route('asistentes.index')->with('success', 'Predios asignados con éxito');
+        session()->forget(['persona']);
+        $persona=Persona::find($cc_asistente);
+        $personaPredios=$persona->predios->pluck('id')->toArray();
+
+        if($personaPredios==$predios){
+            return redirect()->route('asistentes.index')->with('success', 'Predios asignados con éxito');
+        }else{
+            return redirect()->route('asistentes.index')->with('success', 'Predios asignados con éxito')->with('persona',$persona);
+        };
+
+
     }
 
     public function limpiar(){
-        session()->forget(['persona', 'predios']);
+        session()->forget(['persona']);
         return redirect()->route('asistentes.index');
     }
 }

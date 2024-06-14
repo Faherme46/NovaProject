@@ -18,7 +18,7 @@ class Persona extends Model
 
     public function asignaciones()
     {
-        return $this->hasMany(Predio::class, 'cc_asistemte', 'id');
+        return $this->hasMany(Asignacion::class, 'cc_asistente', 'id');
     }
 
 

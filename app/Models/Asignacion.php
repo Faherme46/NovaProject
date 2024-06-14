@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Asignacion extends Model
 {
@@ -14,6 +16,11 @@ class Asignacion extends Model
     {
         return $this->belongsTo(Persona::class, 'cc_asistente', 'id');
     }
+    public function control()
+    {
+        return $this->belongsTo(Control::class, 'id', 'id_control');
+    }
+
 
     public function predios()
     {

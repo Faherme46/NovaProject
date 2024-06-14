@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="public/assets/scss/welcome.scss">
+
 
 @extends('layout.app')
 

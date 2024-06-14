@@ -1,5 +1,5 @@
 <?php
-
+//TODO validar que no puedan crearse predios dos veces
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;

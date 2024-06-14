@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('asignacions', function (Blueprint $table) {
             $table->id();
-            $table->string('id_control')->unique();
+            $table->foreignId('control_id')->constrained()->cascadeOnDelete();
             $table->unsignedBigInteger('cc_asistente');
             $table->string('estado');
             $table->decimal('sum_coef', 8, 2);
             $table->timestamps();
 
-            $table->foreign('cc_asistente')->references('id')->on('personas');
+            $table->foreign('cc_asistente')->references('id')->on('personas')->onDelete('cascade');
         });
     }
 

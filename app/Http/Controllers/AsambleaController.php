@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Models\Asamblea;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
+
 use Carbon\Carbon;
 use DateTimeZone;
 
@@ -11,8 +12,9 @@ use App\Http\Controllers\FileController;
 
 use App\Models\Predio;
 use App\Models\Persona;
-use Illuminate\Database\QueryException;
-use Illuminate\Support\Facades\Cache;
+use App\Models\Asamblea;
+use App\Models\Control;
+
 
 class AsambleaController extends Controller
 {
@@ -20,7 +22,6 @@ class AsambleaController extends Controller
     protected $prediosController;
     protected $sessionController;
     protected $fileController;
-    protected $asambleaId=0;
 
     public function __construct() {
         $this->prediosController= new PrediosController();
@@ -78,12 +79,11 @@ class AsambleaController extends Controller
 
         try {
             $asamblea=Asamblea::create($request->all());
-            $this->asambleaId=$asamblea->id_asamblea;
             $this->sessionController->setSession($asamblea->id_asamblea,$asamblea->folder);
             $this->prediosController->import($asamblea->folder);
-            Cache::put('controles',range(1,$asamblea->controles));
             Cache::put('id_asamblea',$asamblea->id_asamblea);
-            Cache::put('name_asamblea',$asamblea->folder);
+            Cache::put('asambleaOn',true);
+            Control::factory()->count($asamblea->controles)->create();
             return redirect()->route('asambleas.index')->with('success', 'Asamblea creada con éxito.');
         }catch(QueryException $qe){
             if ($qe->errorInfo[1] == 1062) { // 1062 es el código de error para duplicados

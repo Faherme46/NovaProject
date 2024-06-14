@@ -8,6 +8,7 @@ use App\Models\AsignacionPredio;
 use App\Models\Session;
 use App\Models\Predio;
 use App\Models\Persona;
+use App\Models\Control;
 
 use Illuminate\Support\Facades\Session as MySession;
 use Illuminate\Support\Facades\DB;
@@ -30,6 +31,7 @@ class SessionController extends Controller
         AsignacionPredio::truncate();
         Asignacion::truncate();
         Predio::truncate();
+        Control::truncate();
         Persona::truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }

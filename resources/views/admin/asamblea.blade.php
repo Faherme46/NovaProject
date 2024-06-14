@@ -33,7 +33,7 @@
                         @csrf
                         <div class="form-group col-12">
                             <label for="folder">Cliente</label>
-                            <select class="form-select" aria-label="Default select example" name="folder" required >
+                            <select id="folder" class="form-select" aria-label="Default select example" name="folder" required >
                                 <option value="">Seleccionar un cliente</option>
                                 @foreach ($folders as $folder)
                                     <option value="{{ $folder }}">{{ $folder }}</option>
@@ -172,44 +172,7 @@
 
 
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('asamblea-form');
-            const formTitle = document.getElementById('form-title');
-            const submitButton = document.getElementById('submit-button');
-
-            document.querySelectorAll('.btn-edit').forEach(button => {
-                button.addEventListener('click', function() {
-                    const id = this.dataset.id;
-                    const nombre = this.dataset.nombre;
-                    const lugar = this.dataset.lugar;
-                    const fecha = this.dataset.fecha;
-                    const hora = this.dataset.hora;
-                    const estado = this.dataset.estado;
-                    const nombreBd = this.dataset.nombrebd;
-
-                    form.action = `asambleas/${id}`; // Correcto
-                    form.method = 'POST';
-
-                    document.getElementById('asamblea-id').value = id;
-                    document.getElementById('nombre').value = nombre;
-                    document.getElementById('lugar').value = lugar;
-                    document.getElementById('fecha').value = fecha;
-                    document.getElementById('hora').value = hora;
-                    document.getElementById('estado').value = estado;
-
-                    formTitle.textContent = 'Editar asamblea';
-                    submitButton.textContent = 'Actualizar asamblea';
-
-                    const hiddenMethodInput = document.createElement('input');
-                    hiddenMethodInput.type = 'hidden';
-                    hiddenMethodInput.name = '_method';
-                    hiddenMethodInput.value = 'PUT';
-                    form.appendChild(hiddenMethodInput);
-                });
-            });
-        });
-    </script>
+    
 
 
 

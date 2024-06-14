@@ -26,9 +26,10 @@ class PrediosController extends Controller
     public function import(String $file){
 
         try {
-            $externalFilePath = 'C:/Asambleas/Clientes/'.$file.'/datos.xlsx';
-            Excel::import(new PersonasImport,$externalFilePath);
-            Excel::import(new PrediosImport,$externalFilePath);
+            $externalFilePathPredios = 'C:/Asambleas/Clientes/'.$file.'/predios.xlsx';
+            $externalFilePathPersonas= 'C:/Asambleas/Clientes/'.$file.'/personas.xlsx';
+            Excel::import(new PersonasImport,$externalFilePathPersonas);
+            Excel::import(new PrediosImport,$externalFilePathPredios);
 
             return redirect()->route('asambleas.index')->with('success','Carga de datos exitosa');
         } catch (ValidationException $e) {
