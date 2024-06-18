@@ -14,13 +14,13 @@ return new class extends Migration
         Schema::create('predios', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('cc_propietario');
+            $table->unsignedBigInteger('cc_apoderado')->nullable();
             $table->string('descriptor1');
             $table->string('numeral1');
             $table->string('descriptor2');
             $table->string('numeral2');
             $table->float('coeficiente');
             $table->timestamps();
-
             $table->foreign('cc_propietario')->references('id')->on('personas');
 
         });

@@ -34,12 +34,19 @@ Route::post('/predios/import', [PrediosController::class, 'import'])->name('pred
 Route::delete('predios/destroy', [PrediosController::class, 'destroyAll'])->name('predios.destroyAll');
 
 //rutas para registro
-Route::get('/asistentes', [AsistentesController::class, 'index'])->name('asistentes.index');
-Route::get('/asistentesAssigned', [AsistentesController::class, 'indexAssigned'])->name('asistentes.index2');
-Route::get('/asistentes/buscar', [AsistentesController::class, 'buscar'])->name('asistentes.buscar');
-Route::get('/asistentes/anadir', [AsistentesController::class, 'anadirPredio'])->name('asistentes.addPredio');
-Route::get('/asistentes/limpiar', [AsistentesController::class, 'limpiar'])->name('asistentes.limpiar');
-Route::get('/asistentes/allPrediosCheck', [AsistentesController::class, 'allPrediosCheck'])->name('asistentes.allPrediosCheck');
-Route::get('/asistentes/allPrediosUncheck', [AsistentesController::class, 'allPrediosUncheck'])->name('asistentes.allPrediosUncheck');
-Route::post('/asistentes/asignar', [AsistentesController::class, 'asignar'])->name('asistentes.asignar');
+Route::get('/asistencia', [AsistentesController::class, 'routing'])->name('asistencia');
+Route::get('/asistencia/registrar', [AsistentesController::class, 'index'])->name('asistencia.index');
+Route::get('/asistencia/buscar', [AsistentesController::class, 'buscar'])->name('asistencia.buscar');
+Route::get('/asistencia/limpiar', [AsistentesController::class, 'limpiar'])->name('asistencia.limpiar');
+Route::get('/asistencia/getPredios', [AsistentesController::class, 'getPredios'])->name('asistencia.getPredios');
+Route::get('/asistencia/dropPoderdante', [AsistentesController::class, 'dropPoderdante'])->name('asistencia.dropPoderdante');
+Route::get('/asistencia/dropAllPoderdantes', [AsistentesController::class, 'dropAllPoderdantes'])->name('asistencia.dropAllPoderdante');
+Route::get('/asistencia/changeAsignacion', [AsistentesController::class, 'changeAsignacion'])->name('asistencia.changeAsignacion');
+Route::get('/asistencia/creaPersona', [AsistentesController::class, 'creaPersona'])->name('asistencia.creaPersona');
+Route::post('/asistencia/asignar', [AsistentesController::class, 'asignar'])->name('asistencia.asignar');
+Route::post('/asistencia/editAsignacion', [AsistentesController::class, 'editAsignacion'])->name('asistencia.editAsignacion');
 
+
+
+//rutas de prueba
+Route::get('/asistenciaa', [AsistentesController::class, 'asistencia'])->name('asistenciaa');

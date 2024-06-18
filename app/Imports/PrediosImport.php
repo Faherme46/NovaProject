@@ -21,6 +21,7 @@ class PrediosImport implements ToModel,WithHeadingRow
             'numeral1'=>$row['numeral1'],
             'descriptor2'=>$row['descriptor2'],
             'numeral2'=>$row['numeral2'],
+            'cc_apoderado'=>$row['apoderado'],
             'coeficiente'=>$row['coeficiente']
         ]);
     }

@@ -88,7 +88,7 @@
                                     @forelse ($predios as $p)
                                         <tr>
                                             <td>{{ $p->id }}</td>
-                                            <td>{{ $p->persona->nombre }}</td>
+                                            <td>{{ $p->persona->nombre }} {{$p->persona->apellido}}</td>
                                             <td>{{ $p->cc_propietario }}</td>
                                             <td>{{ $p->descriptor1 }} {{ $p->numeral1 }} {{ $p->descriptor2 }}
                                                 {{ $p->numeral2 }}</td>

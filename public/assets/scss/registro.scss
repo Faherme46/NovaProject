@@ -1,15 +1,17 @@
 @import url('./_variables.scss');
 
 .bx-b{
-    font-size: 25px !important;
-    cursor: pointer !important;
-    text-decoration: none;
     color: var(--black-color);
 }
 
 .bx-w{
-    font-size: 20px !important;
+
     color: var(--white-color-txt);
+}
+
+.bx{
+    font-size: 20px !important;
+    cursor: pointer !important;
 }
 
 .width-5{
@@ -18,4 +20,33 @@
 
 .fit-content{
     width: 40%;
+}
+
+.table-responsive {
+    padding: 0;
+    padding-inline:0.5rem;
+    position: relative;
+    height: 17rem; /* Ajusta según sea necesario */
+    overflow: auto;
+}
+.table-fixed-header thead th {
+    position: sticky;
+    top: 0;
+    background-color: #fff; /* Fondo del thead */
+    z-index: 1; /* Para asegurarse de que el encabezado se superponga */
+}
+
+.table-fixed-header tbody td {
+
+    top: 4rem;
+    background-color: #fff; /* Fondo del thead */
+    z-index: 1; /* Para asegurarse de que el encabezado se superponga */
+}
+
+.custom-alert {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1050;
+    display: none;
 }

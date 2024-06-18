@@ -21,5 +21,9 @@ class Persona extends Model
         return $this->hasMany(Asignacion::class, 'cc_asistente', 'id');
     }
 
+    public function prediosEnPoder(){
+        return $this->hasMany(Predio::class, 'cc_apoderado', 'id');
+    }
+
 
 }
