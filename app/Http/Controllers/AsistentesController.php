@@ -186,14 +186,14 @@ class AsistentesController extends Controller
         }));
 
         $poderdantes=Persona::find($arrayPropietarios);
-        
+
         session(['poderdantes'=>$poderdantes]);
         return redirect()->route('asistencia.index');
     }
 
     public function dropAllPoderdantes(){
         session()->forget(['poderdantesIds','poderdantes']);
-
+        //comentario
         return redirect()->route('asistencia.index');
     }
 
