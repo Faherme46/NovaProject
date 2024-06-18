@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('tipo_id');
             $table->string('nombre');
-            $table->string( 'apellido');
+            $table->string( 'apellido')->nullable();
             $table->boolean('apoderado');
             $table->timestamps();
         });

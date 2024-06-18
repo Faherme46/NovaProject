@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="{{ asset('assets/scss/app.scss') }}">
 </head>
 
-<body className='snippet-body'>
+
 
     <body id="body-pd">
         <header class="header mb-5" id="header">
@@ -39,21 +39,21 @@
         <div class="l-navbar" id="nav-bar">
             <nav class="nav">
                 <div>
-                    <a href="{{ route('home') }}" class="nav_logo"> <i class='bx bx-layer nav_logo-icon'></i> <span
-                            class="nav_logo-name">BBBootstrap</span> </a>
+                    <a href="{{ route('home') }}" class="nav_logo"> <i class='bx bx-home nav_logo-icon'></i> <span
+                            class="nav_logo-name">Home</span> </a>
                     <div class="nav_list">
-                        <a href="" class="nav_link active"> <i class='bx bx-grid-alt nav_icon'></i>
-                            <span class="nav_name">Dashboard</span> </a>
-                        <a href="#" class="nav_link"> <i class='bx bx-user nav_icon'></i> <span
-                                class="nav_name">Users</span> </a>
-                        <a href="#" class="nav_link"> <i class='bx bx-message-square-detail nav_icon'></i> <span
-                                class="nav_name">Messages</span></a>
+                        <a href="{{route('asistencia.index')}}" class="nav_link active"> <i class='bx bx-user-check nav_icon'></i>
+                            <span class="nav_name">Registro</span> </a>
+                        <a href="{{route('admin.asambleas')}}" class="nav_link"> <i class='bx bx-cog nav_icon'></i> <span
+                                class="nav_name">Asamblea</span> </a>
+                        <a href="{{route('asistenciaa')}}" class="nav_link"> <i class='bx bx-grid-alt nav_icon'></i> <span
+                                class="nav_name">Asignaciones</span></a>
                         <a href="#" class="nav_link"> <i class='bx bx-bookmark nav_icon'></i> <span
-                                class="nav_name">Bookmark</span> </a>
+                                class="nav_name">Votos</span> </a>
                         <a href="#" class="nav_link"> <i class='bx bx-folder nav_icon'></i> <span
-                                class="nav_name">Files</span> </a>
+                                class="nav_name">Resultados</span> </a>
                         <a href="#" class="nav_link"> <i class='bx bx-bar-chart-alt-2 nav_icon'></i> <span
-                                class="nav_name">Stats</span> </a>
+                                class="nav_name">Asistencia</span> </a>
                     </div>
                 </div>
                 <a href="#" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span

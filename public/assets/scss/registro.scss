@@ -29,6 +29,11 @@
     height: 17rem; /* Ajusta según sea necesario */
     overflow: auto;
 }
+
+.table-h100{
+    height: 81vh !important;
+}
+
 .table-fixed-header thead th {
     position: sticky;
     top: 0;

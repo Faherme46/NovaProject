@@ -119,9 +119,9 @@ a {
     left: 0
 }
 
-.body-pd {
-    padding-left: calc(var(--nav-width) + 1rem)
-}
+// .body-pd {
+//     padding-left: calc(var(--nav-width) + 1rem)
+// }
 
 .active {
     color: var(--white-color-txt)
@@ -144,7 +144,7 @@ a {
 @media screen and (min-width: 768px) {
     body {
         margin: calc(var(--header-height) + 1rem) 0 0 0;
-        padding-left: calc(var(--nav-width) + 2rem)
+        padding-left: calc(var(--nav-width) + 1rem)
     }
 
     .header {
@@ -166,7 +166,7 @@ a {
         padding: 1rem 1rem 0 0
     }
 
-    .show {
+    .show.l-navbar {
         width: calc(var(--nav-width) + 156px)
     }
 

@@ -25,6 +25,8 @@ class AsistentesController extends Controller
         $asistente = session('asistente',null);
         $poderdantes=session('poderdantes',collect());
         $controlIds=session('availableControls',[]);
+        $prediosToAdd=session('prediosToAdd',collect());
+        $allPredios=Predio::all();
 
         if(!$poderdantes->isEmpty()){
             $prediosPoderdantes= $poderdantes->flatMap(function ($persona) {
@@ -35,62 +37,56 @@ class AsistentesController extends Controller
         }
 
         $asignacion=0;
-        $prediosAvailable=collect();
+        $prediosAvailable=$prediosToAdd;
+
         $controlTurn=session('lastControl',0)+1;//control que deberia ser el siguiente
 
         if($asistente){
             $asignaciones=$asistente->asignaciones;
             if(!$asignaciones->isEmpty()){
-                $asignacion=$asignaciones->first();
+                    if(session('asignacion')){
+                        $asignacion=Asignacion::find(session('asignacion'));
+                    }else{
+                        $asignacion=$asignaciones->first();
+                    }
             }
 
-            $prediosAvailable=$asistente->predios()->whereDoesntHave('asignacion')->get();
+            $prediosAvailable=$prediosAvailable->concat($asistente->predios()->whereDoesntHave('asignacion')->get());
             $prediosAvailable=$prediosAvailable->concat($prediosPoderdantes);
             $variables= compact('asistente','asignaciones', 'controlIds','poderdantes','controlTurn');
         }else{
             $variables=[];
         }
 
-        return view('registro', compact('asistente','prediosAvailable','asignacion','controlIds','controlTurn')+$variables);
+
+        return view('registro', compact('allPredios','asistente','prediosAvailable','asignacion','controlIds','controlTurn')+$variables);
 
     }
 
-    public function routing(){
-        if(Cache::get('asambleaOn',false)){
-            return redirect()->route('asistencia.index');
-        }else{
-            return redirect()->back()->withErrors('No hay asamblea en sesion');
-        }
-     }
 
-    //metodo que se ejecuta si el usuario ya tiene una asignacion
 
 
 
 
     public function buscar(Request $request)
     {
+
         $this->limpiar();
         $asistente = Persona::find($request->cedula);
-
+        $this->getAvailableControls();
         if(!$asistente){
-            $newPersona=Persona::create([
-                'id'=>$request->cedula,
-                'tipo_id'=>'cc',
-                'nombre'=>'Pepito andres',
-                'apellido'=>'Perez de la cruz',
-                'apoderado'=>true
-            ]);
-            return redirect()->route('asistencia.index')->with('asistente',$newPersona);
+            $cedula=$request->cedula;
+            return back(302)->with('showModal', true)->with('cedula',$cedula);
         }
         session(['asistente'=>$asistente]);
-        $this->getAvailableControls();
+
         return redirect()->route('asistencia.index');
 
     }
 
     public function getAvailableControls(){
         $availableControls=Control::whereDoesntHave('asignacion')->get();
+
         $controlIds=$availableControls->pluck('id')->toArray();
         session(['availableControls'=>$controlIds]);
     }
@@ -132,17 +128,18 @@ class AsistentesController extends Controller
         $asistente=Persona::find($cc_asistente);
         $personaPredios=$asistente->predios->pluck('id')->toArray();
 
-        if($personaPredios==$predios){
+        if($personaPredios==$predios||empty($personaPredios)){
             return redirect()->route('asistencia.index')->with('success', 'Predios asignados con éxito');
         }else{
-            return redirect()->route('asistencia.index')->with('success', 'Predios asignados con éxito')->with('asistente',$asistente);
+            session(['asistente'=>$asistente]);
+            return redirect()->route('asistencia.index')->with('success', 'Predios asignados con éxito');
         };
 
 
     }
 
     public function limpiar(){
-        session()->forget(['asistente','poderdantesIds','poderdantes','prediosAvailable']);
+        session()->forget(['asistente','poderdantesIds','poderdantes','prediosAvailable','asignacion','prediosToAdd']);
         return redirect()->route('asistencia.index');
     }
 
@@ -152,7 +149,7 @@ class AsistentesController extends Controller
         $actual=session('asistente',null);
 
         if(!$actual){
-            return back()->with('errorPropietarios','No hay asistente registrado');
+            return back()->with('errorPropietarios','Debe ingresar un asistente');
         }else if($actual->id==$cedula){
             return back()->with('errorPropietarios','El poderante no puede ser igual al asistente');
         }
@@ -174,7 +171,7 @@ class AsistentesController extends Controller
             session(['poderdantesIds'=>$arrayPropietarios]);
             session(['poderdantes'=>$poderdantes]);
 
-            return back(302,compact('poderdantes'));
+            return redirect()->route('asistencia.index');
         }else{
             return back()->with('errorPropietarios','No se encontro');
         }
@@ -182,7 +179,6 @@ class AsistentesController extends Controller
     }
 
     public function dropPoderdante(Request $request){
-         // session()->forget('propietarios');
         $arrayPropietarios=session('poderdantesIds',[]);
         $cedula=$request->cedula;
         $arrayPropietarios = array_values(array_filter($arrayPropietarios, function($valor) use ($cedula) {
@@ -190,15 +186,15 @@ class AsistentesController extends Controller
         }));
 
         $poderdantes=Persona::find($arrayPropietarios);
-        session(['poderdantesIds'=>$arrayPropietarios]);
+        
         session(['poderdantes'=>$poderdantes]);
-        return back(302,compact('poderdantes'));
+        return redirect()->route('asistencia.index');
     }
 
     public function dropAllPoderdantes(){
         session()->forget(['poderdantesIds','poderdantes']);
-        $poderdantes=collect();
-        return back(302,compact('poderdantes'));
+
+        return redirect()->route('asistencia.index');
     }
 
 
@@ -226,7 +222,6 @@ class AsistentesController extends Controller
                 return redirect()->route('asistencia.index')->withErrors($e->getMessage());
             }
         }catch(\Exception $e){
-            dd($e->getMessage());
             return redirect()->route('asistencia.index')->withErrors($e->getMessage());
         }
 
@@ -239,20 +234,59 @@ class AsistentesController extends Controller
 
 
     public function changeAsignacion(Request $request){
-        $asignacion=Asignacion::findOrFail($request->id_asignacion);
 
+        $control=Control::findOrFail($request->control);
 
-
-        return back(302,compact('asignacion'));
+        $asignacion=$control->asignacion;
+        session(['asignacion'=>$asignacion->id]);
+        return redirect()->route('asistencia.index');
     }
 
-    public function creaPersona(){
-    // Lógica para determinar si se debe mostrar el modal
-    // Aquí puedes agregar cualquier lógica necesaria
+    public function dropAsignacion(){
+        session(['asignacion'=>0]);
+        return redirect()->route('asistencia.index');
+    }
 
-    // Redirigir a la vista con una variable de sesión para mostrar el modal
-    return redirect()->route('asistencia.index')->with('showModal', true);
-}
+    public function creaPersona(Request $request){
+
+        $validatedData = $request->validate([
+            'cedula' => 'required|max:12',
+            'nombre' => 'required',
+        ]);
+        try {
+            $asistente=Persona::create([
+                'tipo_id'=>$request->tipo_id,
+                'id'=>$request->cedula,
+                'nombre'=>$request->nombre,
+                'apellido'=>$request->apellido,
+                'apoderado'=>true
+            ]);
+            session(['asistente'=>$asistente]);
+            return redirect()->route('asistencia.index');
+        } catch (\Exception $e) {
+            return back()->withErrors($e->getMessage());
+        }
+    }
+
+    public function addPredio(Request $request){
+        if (session('asistente',false)){
+            $listPredios=session('prediosToAdd',collect());
+            try {
+                $predio=Predio::findOrFail($request->predio_id);
+                if($predio){
+                    $listPredios->push($predio);
+                    session(['prediosToAdd'=>$listPredios]);
+                    return redirect()->route('asistencia.index');
+                }else{
+                    throw new \Exception('Problema para obtener el predio');
+                }
+            } catch (\Exception $e) {
+                return back()->withErrors($e->getMessage());
+            }
+        }else{
+            return back()->withErrors('No hay asistente seleccionado');
+        }
+    }
 }
 
 
