@@ -6,6 +6,8 @@ use App\Http\Controllers\FileController;
 use App\Http\Controllers\PersonasController;
 use App\Http\Controllers\PrediosController;
 use App\Http\Controllers\AsistentesController;
+
+use Livewire\Livewire;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
@@ -46,7 +48,8 @@ Route::get('/asistencia', [AsistentesController::class, 'index'])->name('asisten
 Route::get('/asistencia/registrar', [AsistentesController::class, 'index'])->name('asistencia.index');
 Route::get('/asistencia/buscar', [AsistentesController::class, 'buscar'])->name('asistencia.buscar');
 Route::get('/asistencia/limpiar', [AsistentesController::class, 'limpiar'])->name('asistencia.limpiar');
-Route::get('/asistencia/getPredios', [AsistentesController::class, 'getPredios'])->name('asistencia.getPredios');
+Route::get('/asistencia/addPoderdante', [AsistentesController::class, 'addPoderdante'])->name('asistencia.addPoderdante');
+Route::get('/asistencia/addPoderdante/{id}', [AsistentesController::class, 'addPoderdanteId'])->name('asistencia.addPoderdanteId');
 Route::get('/asistencia/dropPoderdante', [AsistentesController::class, 'dropPoderdante'])->name('asistencia.dropPoderdante');
 Route::get('/asistencia/dropAllPoderdantes', [AsistentesController::class, 'dropAllPoderdantes'])->name('asistencia.dropAllPoderdante');
 Route::get('/asistencia/dropAsignacion', [AsistentesController::class, 'dropAsignacion'])->name('asistencia.dropAsignacion');

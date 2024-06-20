@@ -105,57 +105,7 @@
                 </div>
             </div>
 
-            {{-- mostrar el archivo seleccionado --}}
-            {{-- <div class="col-md-7 card ms-4">
 
-                <div class="card-header mt-3 row d-flex align-items-center">
-
-                    <h2 class="card-title">Archivo importado</h2>
-                </div>
-                <div class="card-body">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>propietario</th>
-                                <th>cedula</th>
-                                <th>Ds 1 </th>
-                                <th>Nm 1 </th>
-                                <th>Ds 2 </th>
-                                <th>Nm 2 </th>
-                                <th>Coeficiente</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (isset($predios))
-                                @forelse ($predios as $p)
-                                    <tr>
-                                        <td>{{ $p->id }}</td>
-                                        <td>{{ $p->persona->nombre }}</td>
-                                        <td>{{ $p->cc_propietario }}</td>
-                                        <td>{{ $p->descriptor1 }}</td>
-                                        <td> {{ $p->numeral1 }}</td>
-                                        <td> {{ $p->descriptor2 }}</td>
-                                        <td> {{ $p->numeral2 }}</td>
-                                        <td>{{ $p->coeficiente }}</td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="7">No hay entradas</td>
-                                    </tr>
-                                @endforelse
-                            @else
-                                <tr>
-                                    <td colspan="7"> No se ha seleccionado archivo</td>
-                                </tr>
-                            @endif
-                        </tbody>
-                    </table>
-
-                </div>
-
-
-            </div> --}}
 
 
 
@@ -172,7 +122,7 @@
 
 
 
-    
+
 
 
 

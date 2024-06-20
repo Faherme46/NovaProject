@@ -31,7 +31,18 @@
 }
 
 .table-h100{
-    height: 81vh !important;
+    @media (min-width:1000px) {
+        height: 38.5rem;
+    }
+    @media (min-width:1200px) {
+        height: 38.5rem;
+    }
+    @media (min-width:1400px) {
+        height: 37rem;
+    }
+
+
+
 }
 
 .table-fixed-header thead th {
