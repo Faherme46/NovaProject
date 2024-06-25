@@ -25,7 +25,6 @@ class SessionController extends Controller
 
     public function destroyOnError(){
         Session::truncate();
-        MySession::flush();
         Cache::flush();
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         AsignacionPredio::truncate();

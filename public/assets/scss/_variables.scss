@@ -5,6 +5,7 @@
     --header-height: 3rem;
     --nav-width: 68px;
     --first-color: #4723D9;
+    --primary:#4723D9;
     --first-color-light: #AFA5D9;
     --white-color-txt: #F7F6FB;
     --white-color:#c8beef;
@@ -12,3 +13,13 @@
     --body-font: 'Nunito', sans-serif;
     --z-fixed: 100
 }
+$theme-colors-text: (
+  "primary": #4723D9,
+  "secondary": $secondary-text-emphasis,
+  "success": $success-text-emphasis,
+  "info": $info-text-emphasis,
+  "warning": $warning-text-emphasis,
+  "danger": $danger-text-emphasis,
+  "light": $light-text-emphasis,
+  "dark": $dark-text-emphasis,
+);

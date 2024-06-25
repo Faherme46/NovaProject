@@ -6,74 +6,54 @@
 
 
     <div class="container">
-        @if (session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-        @if (session('warning'))
-            <div class="alert alert-warning">
-                {{ session('warning') }}
-            </div>
-        @endif
-
-        @if (session('info'))
-            <div class="alert alert-info">
-                {{ session('info') }}
-            </div>
-        @endif
-
+        
         <div class="row">
 
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h2 class="card-title">{{ $asambleaOn->folder }}</h2>
-                            <h6>{{ $asambleaOn->fecha }} {{ $asambleaOn->hora }}</h6>
-                            <h6>Controles: {{ $asambleaOn->controles }}</h6>
-                        </div>
-                        <div class="card-footer d-flex align-items-center">
-                            <form action="{{ route('asambleas.inicia') }}" method="POST">
-                                @csrf
-                                <input type="hidden" name="id_asamblea" value="{{ $asambleaOn->id_asamblea }}">
-                                <button type="submit" class="btn btn-danger mt-3 me-3">
-                                    Iniciar
-                                </button>
-                            </form>
-                            <form action="{{ route('asambleas.termina') }}" method="POST">
-                                @csrf
-                                <input type="hidden" name="id_asamblea" value="{{ $asambleaOn->id_asamblea }}">
-                                <button type="submit" class="btn btn-warning mt-3 me-3">
-                                    Terminar
-                                </button>
-                            </form>
-                            <form action="{{ route('session.destroy') }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger mt-3">
-                                    Eliminar sesion
-                                </button>
-                            </form>
-                        </div>
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">{{ $asambleaOn->folder }}</h2>
+                        <h6>{{ $asambleaOn->fecha }} {{ $asambleaOn->hora }}</h6>
+                        <h6>Controles: {{ $asambleaOn->controles }}</h6>
                     </div>
-                    <h2></h2>
+                    <div class="card-footer d-flex align-items-center">
+                        <form action="{{ route('asambleas.inicia') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="id_asamblea" value="{{ $asambleaOn->id_asamblea }}">
+                            <button type="submit" class="btn btn-danger mt-3 me-3">
+                                Iniciar
+                            </button>
+                        </form>
+                        <form action="{{ route('asambleas.termina') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="id_asamblea" value="{{ $asambleaOn->id_asamblea }}">
+                            <button type="submit" class="btn btn-warning mt-3 me-3">
+                                Terminar
+                            </button>
+                        </form>
+                        <form action="{{ route('session.destroy') }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger mt-3">
+                                Eliminar sesion
+                            </button>
+                        </form>
+                    </div>
                 </div>
-                <div class="col-md-8 card">
-                    <div class="card-header mt-3 row d-flex align-items-center">
+
+                <div class="mt-3">
+                    <livewire:list-users />
+                </div>
+
+            </div>
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header d-flex align-items-center">
                         <h2 class="card-title">Archivo importado</h2>
                     </div>
-                    <div class="card-body">
-                        <table class="table table-bordered">
+                    <div class="card-body table-responsive table-fixed-header table-h100">
+                        <table class="table table-bordered mt-3 mb3">
                             <thead>
                                 <tr>
                                     <th>ID</th>
@@ -89,9 +69,9 @@
                                     @forelse ($predios as $p)
                                         <tr>
                                             <td>{{ $p->id }}</td>
-                                            <td>{{ $p->persona->nombre }} {{$p->persona->apellido}}</td>
+                                            <td>{{ $p->persona->nombre }} {{ $p->persona->apellido }}</td>
                                             <td>{{ $p->cc_propietario }}</td>
-                                            <td>{{$p->cc_apoderado}}</td>
+                                            <td>{{ $p->cc_apoderado }}</td>
                                             <td>{{ $p->descriptor1 }} {{ $p->numeral1 }} {{ $p->descriptor2 }}
                                                 {{ $p->numeral2 }}</td>
                                             <td>{{ $p->coeficiente }}</td>
@@ -110,56 +90,11 @@
                         </table>
 
                     </div>
-
                 </div>
             </div>
-            <p>
-
-            </p>
 
 
 
-            <!-- Historial de asambleas -->
-            {{-- <div class="col-md-8">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Nombre</th>
-                            <th>Lugar</th>
-                            <th>Fecha</th>
-                            <th>Hora</th>
-                            <th>Estado</th>
-                            <th>Registro</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($asambleas as $asamblea)
-                            <tr>
-                                <td>{{ $asamblea->id_asamblea }}</td>
-                                <td>{{ $asamblea->nombre }}</td>
-                                <td>{{ $asamblea->lugar }}</td>
-                                <td>{{ $asamblea->fecha }}</td>
-                                <td>{{ $asamblea->hora }}</td>
-                                @if ($asamblea->registro)
-                                    <td>Si</td>
-                                @else
-                                    <td>No</td>
-                                @endif
-
-                                <td>{{ $asamblea->nombreBd }}</td>
-
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div> --}}
-            <!-- Modals -->
-
-            <!-- Button trigger modal -->
-
-
-            <!-- Modal -->
 
         </div>
 

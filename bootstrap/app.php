@@ -14,8 +14,9 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->web(append: [
-            // ValidateLogin::class,
-            EnsureAsambleaOn::class
+
+            EnsureAsambleaOn::class,
+            ValidateLogin::class
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

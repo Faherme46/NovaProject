@@ -4,7 +4,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
 
@@ -22,6 +21,8 @@ class AsistentesController extends Controller
 
     public function index()
     {
+
+
         $asistente = session('asistente', null);
         $poderdantes = session('poderdantes', collect());
         $controlIds = session('availableControls', []);
@@ -156,6 +157,7 @@ class AsistentesController extends Controller
         }
 
         $arrayPropietarios = session('poderdantesIds', []);
+        $listPredios = session('prediosToAdd', collect());
         // dd($arrayPropietarios);
         $cedula = $request->cedulaPropietario;
         $persona = Persona::find($cedula);
@@ -164,6 +166,8 @@ class AsistentesController extends Controller
             if (in_array($cedula, $arrayPropietarios)) {
                 return  back()->with('errorPropietarios', 'Ya fue añadido');
             }
+
+            
             $arrayPropietarios[] = $cedula;
 
             $poderdantes = Persona::find($arrayPropietarios);

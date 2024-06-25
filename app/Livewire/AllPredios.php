@@ -3,45 +3,68 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-
 use App\Models\Predio;
+
 class AllPredios extends Component
 {
-    public $searchId='';
     public $distincts;
-    public $allPredios;
-    public function mount(){
+    public $searchId = '';
+    public $prediosAll;
 
-        $this->distincts=[
-            'descriptor1'=>Predio::distinct()->pluck('descriptor1'),
-            'descriptor2'=>Predio::distinct()->pluck('descriptor2'),
-            'numeral1'=>Predio::distinct()->pluck('numeral1'),
-            'numeral2'=>Predio::distinct()->pluck('numeral2')
+    public $descriptor1 = '';
+    public $descriptor2 = '';
+    public $numeral1 = '';
+    public $numeral2 = '';
+
+    public function mount()
+    {
+
+        $this->distincts = [
+            'descriptor1' => Predio::distinct()->pluck('descriptor1'),
+            'numeral1' => Predio::distinct()->pluck('numeral1'),
+            'descriptor2' => Predio::distinct()->pluck('descriptor2'),
+            'numeral2' => Predio::distinct()->pluck('numeral2'),
         ];
+        $this->prediosAll = Predio::all();
     }
 
-    public function flash(){
-        dd('hello');
-        session()->flash('status', 'Post successfully updated.');
+    public function clean()
+    {
+        // Restablece las variables de búsqueda
+        $this->searchId = null;
+        $this->descriptor1 = null;
+        $this->descriptor2 = null;
+        $this->numeral1 = null;
+        $this->numeral2 = null;
 
+        // Actualiza la colección de predios para mostrar todos los disponibles
+        $this->prediosAll = Predio::all();
     }
-
     public function render()
     {
+        // Inicializa la consulta base
         $query = Predio::query();
 
+        // Aplica los filtros condicionalmente
         if ($this->searchId) {
-            $query->where('cc_propietario', 'like', '%' . $this->cc_propietario . '%');
+            $query->where('cc_propietario', 'like', '%' . $this->searchId . '%');
         }
-        $this->allPredios = $query->get();
+        if ($this->descriptor1) {
+            $query->where('descriptor1', 'like', '%' . $this->descriptor1 . '%');
+        }
+        if ($this->descriptor2) {
+            $query->where('descriptor2', 'like', '%' . $this->descriptor2 . '%');
+        }
+        if ($this->numeral1) {
+            $query->where('numeral1', 'like', '%' . $this->numeral1 . '%');
+        }
+        if ($this->numeral2) {
+            $query->where('numeral2', 'like', '%' . $this->numeral2 . '%');
+        }
 
+        // Ejecuta la consulta y obtiene los resultados
+        $this->prediosAll = $query->get();
 
-        return view('livewire.all-predios')->with([
-            'allPredios'=>$this->allPredios,
-            'distincts'=>$this->distincts]);
-
+        return view('livewire.all-predios');
     }
-
-
-
 }

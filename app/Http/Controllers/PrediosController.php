@@ -3,14 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Maatwebsite\Excel\Validators\ValidationException;
 
-use App\Models\Predio;
-use App\Models\Persona;
+
 
 use App\Imports\PersonasImport;
 use App\Imports\PrediosImport;
+use App\Imports\UsersImport;
 
 use Maatwebsite\Excel\Facades\Excel;
 class PrediosController extends Controller
@@ -30,6 +29,7 @@ class PrediosController extends Controller
             $externalFilePathPersonas= 'C:/Asambleas/Clientes/'.$file.'/personas.xlsx';
             Excel::import(new PersonasImport,$externalFilePathPersonas);
             Excel::import(new PrediosImport,$externalFilePathPredios);
+            Excel::import(new UsersImport, 'C:/Asambleas/usuarios.xlsx');
 
             return redirect()->route('asambleas.index')->with('success','Carga de datos exitosa');
         } catch (ValidationException $e) {

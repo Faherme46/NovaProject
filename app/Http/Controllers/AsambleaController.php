@@ -81,6 +81,7 @@ class AsambleaController extends Controller
             $asamblea=Asamblea::create($request->all());
             $this->sessionController->setSession($asamblea->id_asamblea,$asamblea->folder);
             $this->prediosController->import($asamblea->folder);
+
             Cache::put('id_asamblea',$asamblea->id_asamblea);
             Cache::put('asambleaOn',true);
             Control::factory()->count($asamblea->controles)->create();

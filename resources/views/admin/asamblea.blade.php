@@ -8,22 +8,9 @@
 @section('content')
 
     <div class="container">
-        @if (session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+        
 
-        <div class="row d-flex">
+        <div class=" d-flex">
             <div class="card col-md-4">
                 <div class="card-header">
                     <h3 id="form-title">Crear Nueva asamblea</h3>
@@ -33,7 +20,8 @@
                         @csrf
                         <div class="form-group col-12">
                             <label for="folder">Cliente</label>
-                            <select id="folder" class="form-select" aria-label="Default select example" name="folder" required >
+                            <select id="folder" class="form-select" aria-label="Default select example" name="folder"
+                                required>
                                 <option value="">Seleccionar un cliente</option>
                                 @foreach ($folders as $folder)
                                     <option value="{{ $folder }}">{{ $folder }}</option>
@@ -43,21 +31,22 @@
                         <input type="text" name="name" hidden>
                         <div class="form-group col-12">
                             <label for="lugar">Direccion</label>
-                            <input type="text" class="form-control" placeholder="Direccion" id="lugar" name="lugar" required>
+                            <input type="text" class="form-control" placeholder="Direccion" id="lugar" name="lugar"
+                                required>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="fecha">Fecha</label>
-                            <input type="date" class="form-control"  id="fecha" name="fecha" required >
+                            <input type="date" class="form-control" id="fecha" name="fecha" required>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="ciudad">Ciudad</label>
                             <select id="ciudad" class="form-select" name="ciudad">
                                 <option value='Bucaramanga' selected>Bucaramanga</option>
-                                <option value='Floridablanca' >Floridablanca</option>
-                                <option value='Giron' >Giron</option>
-                                <option value='Piedecuesta' >Piedecuesta</option>
-                                <option value='Lebrija' >Lebrija</option>
-                              </select>
+                                <option value='Floridablanca'>Floridablanca</option>
+                                <option value='Giron'>Giron</option>
+                                <option value='Piedecuesta'>Piedecuesta</option>
+                                <option value='Lebrija'>Lebrija</option>
+                            </select>
                         </div>
 
                         <div class="form-group col-md-6">
