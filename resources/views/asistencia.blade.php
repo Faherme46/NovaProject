@@ -1,7 +1,6 @@
 @extends('layout.app')
 
 @section('content')
-    <div class="container">
         <div class="row">
             <div class="col-md-8">
                 <table class="table table-striped">
@@ -38,5 +37,4 @@
                     </tbody>
                 </table>
             </div>
-        </div>
 @endsection

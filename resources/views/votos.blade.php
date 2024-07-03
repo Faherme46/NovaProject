@@ -4,7 +4,5 @@
 
 
 @section('content')
-    <div class="content">
         <h1>votos</h1>
-    </div>
 @endsection

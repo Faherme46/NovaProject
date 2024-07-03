@@ -4,7 +4,6 @@
 
 
 @section('content')
-    <div class="content">
         <table>
             <colgroup span="2"></colgroup>
             <colgroup span="1"></colgroup>
@@ -23,5 +22,4 @@
               <td>Madrid</td>
             </tr>
           </table>
-    </div>
 @endsection

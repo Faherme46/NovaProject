@@ -4,8 +4,8 @@
 
 
 @section('content')
-    
-    <div class="container mt-5  ">
+
+    <div class="mt-5">
 
         <div class="row d-flex justify-content-center align-items-center ">
             <div class="col-10">

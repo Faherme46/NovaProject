@@ -2,307 +2,296 @@
 
 @section('content')
     <link rel="stylesheet" href="{{ asset('assets/scss/registro.scss') }}">
-    <div class="container">
-        @if (session('showModal'))
-            <script type="text/javascript">
-                $(document).ready(function() {
-                    $('#myModal').modal('show');
-                });
-            </script>
-        @endif
-        @if (session('success'))
-            <div class="alert alert-success alert-dimissible" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-        @if ($errors->any())
-            <div class="alert alert-danger alert-dimissible fade" role="alert">
-                <div class="row justify-content-between">
-                    <div class="col-6">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
 
-                    </div>
-                    <div class="col-1 offset-md-5">
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
+    @if (session('showModal'))
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('#myModal').modal('show');
+            });
+        </script>
+    @endif
+    @if (session('success'))
+        <div class="alert alert-success alert-dimissible" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+    @if ($errors->any())
+        <div class="alert alert-danger alert-dimissible fade" role="alert">
+            <div class="row justify-content-between">
+                <div class="col-6">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
 
+                </div>
+                <div class="col-1 offset-md-5">
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
 
             </div>
-        @endif
 
-        <div class="row g-3">
-            <div class="col-7">
-                <div class="row mb-3">
-                    {{-- buscar --}}
-                    <div class="col-4 ">
-                        <div class="card">
-                            <div class="card-header d-flex align-items-center justify-content-between">
-                                <h5 class="card-title mb-0 ">Asistente</h5>
-                                <form class="me-0" action="{{ route('asistencia.limpiar') }}" method="get">
-                                    <button class="btn btn-danger">
-                                        <i class='bi bi-trash-fill '></i>
-                                    </button>
-                                </form>
-                            </div>
-                            <div class="card-body table-responsive pt-3">
-                                <form class="" action="{{ route('asistencia.buscar') }}" method="GET">
-                                    <label for="cedula" class="form-label">Cédula</label>
-                                    <div class="mb-3 d-flex align-items-center ">
+        </div>
+    @endif
 
-                                        <input class="me-2 form-control" type="text" class="form-control"
-                                            onkeypress="return onlyNumbers(event)" maxlength="12" name="cedula"
-                                            value="{{ isset($asistente) ? $asistente->id : '' }}" required>
-                                        <button type="submit" class="btn btn-primary">Buscar</button>
-                                    </div>
+    <div class="row g-3">
+        <div class="col-7">
+            <div class="row mb-3">
+                {{-- buscar --}}
+                <div class="col-4 ">
+                    <div class="card">
+                        <div class="card-header d-flex align-items-center justify-content-between">
+                            <h5 class="card-title mb-0 ">Asistente</h5>
+                            <form class="me-0" action="{{ route('asistencia.limpiar') }}" method="get">
+                                <button class="btn btn-danger">
+                                    <i class='bi bi-trash-fill '></i>
+                                </button>
+                            </form>
+                        </div>
+                        <div class="card-body table-responsive pt-3">
+                            <form class="" action="{{ route('asistencia.buscar') }}" method="GET">
+                                <label for="cedula" class="form-label">Cédula</label>
+                                <div class="mb-3 d-flex align-items-center ">
 
-                                </form>
-                                <div class="mb-3 ">
-                                    <input name="nombre" id="txtName" rows="1" cols="12" class="form-control"
-                                        value="{{ isset($asistente) ? $asistente->nombre : '' }}" disabled></input>
-                                    <small class="">Nombre</small>
+                                    <input class="me-2 form-control" type="text" class="form-control"
+                                        onkeypress="return onlyNumbers(event)" maxlength="12" name="cedula"
+                                        value="{{ isset($asistente) ? $asistente->id : '' }}" required>
+                                    <button type="submit" class="btn btn-primary">Buscar</button>
                                 </div>
-                                <div class="mb-3">
-                                    <input name="nombre" id="txtName" rows="1" cols="12" class="form-control"
-                                        value="{{ isset($asistente) ? $asistente->apellido : '' }}" disabled></input>
-                                    <small class="">Apellido</small>
-                                </div>
-                            </div>
 
+                            </form>
+                            <div class="mb-3 ">
+                                <input name="nombre" id="txtName" rows="1" cols="12" class="form-control"
+                                    value="{{ isset($asistente) ? $asistente->nombre : '' }}" disabled></input>
+                                <small class="">Nombre</small>
+                            </div>
+                            <div class="mb-3">
+                                <input name="nombre" id="txtName" rows="1" cols="12" class="form-control"
+                                    value="{{ isset($asistente) ? $asistente->apellido : '' }}" disabled></input>
+                                <small class="">Apellido</small>
+                            </div>
                         </div>
 
-                        <!-- Mostrar el nombre de la persona encontrada aquí -->
                     </div>
 
-                    {{-- poderdantes --}}
-                    <div class="col-8">
-                        @if (session('errorPropietarios'))
-                            <div class="alert alert-danger position-absolute alert-dismissible z-3 " role="alert">
-                                {{ session('errorPropietarios') }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                    aria-label="Close"></button>
-                            </div>
-                        @endif
-                        <div class="card ">
-                            <div class="card-header  d-flex align-items-center justify-content-between">
-                                <h5 class="card-title me-5">Poderdantes</h5>
+                    <!-- Mostrar el nombre de la persona encontrada aquí -->
+                </div>
+
+                {{-- poderdantes --}}
+                <div class="col-8">
+                    @if (session('errorPropietarios'))
+                        <div class="alert alert-danger position-absolute alert-dismissible z-3 " role="alert">
+                            {{ session('errorPropietarios') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+                    <div class="card ">
+                        <div class="card-header  d-flex align-items-center justify-content-between">
+                            <h5 class="card-title me-5">Poderdantes</h5>
 
 
-                                <form action="{{ route('asistencia.addPoderdante') }}" method="get">
-                                    <div class="d-flex align-items-baseline ">
+                            <form action="{{ route('asistencia.addPoderdante') }}" method="get">
+                                <div class="d-flex align-items-baseline ">
 
-                                        <input placeholder="cedula" type="text" name="cedulaPropietario" id="cc"
-                                            class="form-control" placeholder="" aria-describedby="helpId" />
-                                        <button type="submit" class="btn ms-1 btn-primary">
-                                            <i class='bi bi-arrow-right-circle-fill '></i>
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
+                                    <input placeholder="cedula" type="text" name="cedulaPropietario" id="cc"
+                                        class="form-control" placeholder="" aria-describedby="helpId" />
+                                    <button type="submit" class="btn ms-1 btn-primary">
+                                        <i class='bi bi-arrow-right-circle-fill '></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
 
 
-                            <div class="card-body table-responsive table-fixed-header">
+                        <div class="card-body table-responsive table-fixed-header">
 
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>Nombre</th>
-                                            <th>Cedula</th>
-                                            <th><a class="btn p-0" href="{{ route('asistencia.dropAllPoderdante') }}">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Cedula</th>
+                                        <th><a class="btn p-0" href="{{ route('asistencia.dropAllPoderdante') }}">
                                                 <i class='bi bi-x-square-fill '></i></a></th>
 
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @isset($poderdantes)
-                                            @foreach ($poderdantes as $p)
-                                                <tr>
-                                                    <td>{{ $p->nombre }} {{ $p->apellido }} </td>
-                                                    <td>{{ $p->id }}</td>
-                                                    <td>
-                                                        <form action="{{ route('asistencia.dropPoderdante') }}" method="get">
-                                                            <input type="text" name="cedula" value="{{ $p->id }}"
-                                                                hidden>
-                                                            <button class="btn p-0" type="submit"><i
-                                                                    class='bi bi-x-square-fill'></i></button>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @isset($poderdantes)
+                                        @foreach ($poderdantes as $p)
+                                            <tr>
+                                                <td>{{ $p->nombre }} {{ $p->apellido }} </td>
+                                                <td>{{ $p->id }}</td>
+                                                <td>
+                                                    <form action="{{ route('asistencia.dropPoderdante') }}" method="get">
+                                                        <input type="text" name="cedula" value="{{ $p->id }}"
+                                                            hidden>
+                                                        <button class="btn p-0" type="submit"><i
+                                                                class='bi bi-x-square-fill'></i></button>
 
-                                                    </td>
-                                                    </form>
-                                                </tr>
-                                            @endforeach
-                                        @endisset
-
-
-
-
-                                    </tbody>
-
-
-                                </table>
+                                                </td>
+                                                </form>
+                                            </tr>
+                                        @endforeach
+                                    @endisset
 
 
 
-                            </div>
+
+                                </tbody>
+
+
+                            </table>
+
+
+
                         </div>
                     </div>
                 </div>
-                <div class="row mt-0">
-                    {{-- asignar --}}
-                    <div class="col-12 ">
-                        <div class="card ">
-                            @isset($asignacion)
-                                <form id="formPredios" action="{{ route('asistencia.editAsignacion') }}" method="post">
-                                    <input type="text" name="asignacion_id" value="{{ $asignacion->id }}" hidden>
-                                </form>
-                            @else
-                                <form id="formPredios" action="{{ route('asistencia.asignar') }}" method="post">
+            </div>
+            <div class="row mt-0">
+                {{-- asignar --}}
+                <div class="col-12 ">
+                    <div class="card ">
+                        @isset($asignacion)
+                            <form id="formPredios" action="{{ route('asistencia.editAsignacion') }}" method="post">
+                                <input type="text" name="asignacion_id" value="{{ $asignacion->id }}" hidden>
+                            </form>
+                        @else
+                            <form id="formPredios" action="{{ route('asistencia.asignar') }}" method="post">
 
-                                    @csrf
-                                    <div class="card-header">
-                                        <div class="row g-3">
+                                @csrf
+                                <div class="card-header">
+                                    <div class="row g-3">
 
-                                            <input type="hidden" name="cc_asistente"
-                                                value="{{ isset($asistente) ? $asistente->id : '' }}">
-                                            <div class="mb-3 col-2 ">
-                                                @isset($asignacion)
-                                                    <select name="control" id="id_control_selected" class="form-control  "
-                                                        required>
-                                                        @foreach ($asistente->asignaciones as $a)
-                                                            <option value="{{ $a->control_id }}" @selected($a->control_id == $asignacion->control_id)>
-                                                                {{ $a->control_id }} </option>
-                                                        @endforeach
-                                                    </select>
-                                                    <script>
-                                                        $(document).ready(function() {
-                                                            $('#id_control_selected').change(function() {
-                                                                var selectedControlId = parseInt($(this).val());
-                                                                window.location.href = 'changeAsignacion?control=' + selectedControlId;
-                                                            })
+                                        <input type="hidden" name="cc_asistente"
+                                            value="{{ isset($asistente) ? $asistente->id : '' }}">
+                                        <div class="mb-3 col-2 ">
+                                            @isset($asignacion)
+                                                <select name="control" id="id_control_selected" class="form-control  " required>
+                                                    @foreach ($asistente->asignaciones as $a)
+                                                        <option value="{{ $a->control_id }}" @selected($a->control_id == $asignacion->control_id)>
+                                                            {{ $a->control_id }} </option>
+                                                    @endforeach
+                                                </select>
+                                                <script>
+                                                    $(document).ready(function() {
+                                                        $('#id_control_selected').change(function() {
+                                                            var selectedControlId = parseInt($(this).val());
+                                                            window.location.href = 'changeAsignacion?control=' + selectedControlId;
                                                         })
-                                                    </script>
-                                                @else
-                                                    <select name="control" id="id_control" class="form-control  " required>
+                                                    })
+                                                </script>
+                                            @else
+                                                <select name="control" id="id_control" class="form-control  " required>
 
-                                                        @foreach ($controlIds as $control)
-                                                            <option value="{{ $control }}" @selected($control == $controlTurn)>
-                                                                {{ $control }} </option>
-                                                        @endforeach
-                                                    </select>
-                                                @endisset
+                                                    @foreach ($controlIds as $control)
+                                                        <option value="{{ $control }}" @selected($control == $controlTurn)>
+                                                            {{ $control }} </option>
+                                                    @endforeach
+                                                </select>
+                                            @endisset
 
-                                            </div>
-                                            <div class="col-2">
-                                                <button type="submit" class="btn btn-primary" @disabled(isset($asistente) ? $prediosAvailable->isEmpty() : true)>
-                                                    @isset($asignacion)
-                                                        Agregar
-                                                    @else
-                                                        Asignar
-                                                    @endisset
-                                                </button>
-                                            </div>
-
-
-                                            <div class="col-1">
+                                        </div>
+                                        <div class="col-2">
+                                            <button type="submit" class="btn btn-primary" @disabled(isset($asistente) ? $prediosAvailable->isEmpty() : true)>
                                                 @isset($asignacion)
-                                                    <a href="{{ route('asistencia.dropAsignacion') }}" class="btn btn-primary">
-                                                        <i class='bi bi-plus-circle-fill '></i></a>
+                                                    Agregar
+                                                @else
+                                                    Asignar
                                                 @endisset
-                                            </div>
+                                            </button>
+                                        </div>
 
-                                            <div class="col-2 offset-md-5 text-right">
-                                                <input class="form-control" name="sum_coef" id="sumCoef" readonly></input>
-                                                <small id="helpId" class="text-muted">Coeficiente total</small>
-                                            </div>
+
+                                        <div class="col-1">
+                                            @isset($asignacion)
+                                                <a href="{{ route('asistencia.dropAsignacion') }}" class="btn btn-primary">
+                                                    <i class='bi bi-plus-circle-fill '></i></a>
+                                            @endisset
+                                        </div>
+
+                                        <div class="col-2 offset-md-5 text-right">
+                                            <input class="form-control" name="sum_coef" id="sumCoef" readonly></input>
+                                            <small id="helpId" class="text-muted">Coeficiente total</small>
                                         </div>
                                     </div>
-                                    <div class="card-body table-responsive table-fixed-header">
-                                        <table class="table">
-                                            <thead>
-                                                <tr>
-                                                    <th>Cc Propietario</th>
-                                                    <th>Propietario</th>
-                                                    <th>Predio</th>
-                                                    <th>Coef.</th>
-                                                    <th>
-                                                        <input class="form-check-input" type="checkbox" value=""
-                                                            id="checkAll">
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @isset($prediosPersona)
-                                                    {{ $prediosAvailable = $prediosAvailable->concat($prediosPersona) }}
-                                                @endisset
+                                </div>
+                                <div class="card-body table-responsive table-fixed-header">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Cc Propietario</th>
+                                                <th>Propietario</th>
+                                                <th>Predio</th>
+                                                <th>Coef.</th>
+                                                <th>
+                                                    <input class="form-check-input" type="checkbox" value=""
+                                                        id="checkAll">
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @isset($prediosPersona)
+                                                {{ $prediosAvailable = $prediosAvailable->concat($prediosPersona) }}
+                                            @endisset
 
 
 
-                                                @isset($prediosAvailable)
-                                                    @forelse ($prediosAvailable as $predio)
-                                                        <tr>
-                                                            <td>{{ $predio->persona->id }}</td>
-                                                            <td>{{ $predio->persona->nombre }}
-                                                                {{ $predio->persona->apellido }} </td>
-                                                            <td>{{ $predio->descriptor1 }} {{ $predio->numeral1 }}
-                                                                {{ $predio->descriptor2 }} {{ $predio->numeral2 }} </td>
-                                                            <td>{{ $predio->coeficiente }}</td>
-                                                            <td>
-                                                                <input class="form-check-input checkbox-item" type="checkbox"
-                                                                    name="predios[]"
-                                                                    data-coeficiente="{{ $predio->coeficiente }}"
-                                                                    value="{{ $predio->id }}" id="flexCheckDefault">
-                                                            </td>
-                                                        </tr>
-                                                    @empty
-                                                        <tr>
-                                                            <td colspan="5">No hay predios para asignar</td>
-                                                        </tr>
-                                                    @endforelse
-                                                @else
-                                                    <tr class="table-active">
-                                                        <td colspan="5"></td>
+                                            @isset($prediosAvailable)
+                                                @forelse ($prediosAvailable as $predio)
+                                                    <tr>
+                                                        <td>{{ $predio->persona->id }}</td>
+                                                        <td>{{ $predio->persona->nombre }}
+                                                            {{ $predio->persona->apellido }} </td>
+                                                        <td>{{ $predio->descriptor1 }} {{ $predio->numeral1 }}
+                                                            {{ $predio->descriptor2 }} {{ $predio->numeral2 }} </td>
+                                                        <td>{{ $predio->coeficiente }}</td>
+                                                        <td>
+                                                            <input class="form-check-input checkbox-item" type="checkbox"
+                                                                name="predios[]" data-coeficiente="{{ $predio->coeficiente }}"
+                                                                value="{{ $predio->id }}" id="flexCheckDefault">
+                                                        </td>
                                                     </tr>
-                                                @endisset
-                                                @isset($asignacion)
-                                                    @foreach ($asignacion->predios as $predio)
-                                                        <tr class="table-active">
-                                                            <td>{{ $predio->persona->id }}</td>
-                                                            <td>{{ $predio->persona->nombre }}
-                                                                {{ $predio->persona->apellido }}
-                                                            </td>
-                                                            <td>{{ $predio->descriptor1 }} {{ $predio->numeral1 }}
-                                                                {{ $predio->descriptor2 }} {{ $predio->numeral2 }} </td>
-                                                            <td colspan="2">{{ $predio->coeficiente }}</td>
+                                                @empty
+                                                    <tr>
+                                                        <td colspan="5">No hay predios para asignar</td>
+                                                    </tr>
+                                                @endforelse
+                                            @else
+                                                <tr class="table-active">
+                                                    <td colspan="5"></td>
+                                                </tr>
+                                            @endisset
+                                            @isset($asignacion)
+                                                @foreach ($asignacion->predios as $predio)
+                                                    <tr class="table-active">
+                                                        <td>{{ $predio->persona->id }}</td>
+                                                        <td>{{ $predio->persona->nombre }}
+                                                            {{ $predio->persona->apellido }}
+                                                        </td>
+                                                        <td>{{ $predio->descriptor1 }} {{ $predio->numeral1 }}
+                                                            {{ $predio->descriptor2 }} {{ $predio->numeral2 }} </td>
+                                                        <td colspan="2">{{ $predio->coeficiente }}</td>
 
-                                                        </tr>
-                                                    @endforeach
-                                                @endisset
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </form>
-                            @endisset
-                        </div>
+                                                    </tr>
+                                                @endforeach
+                                            @endisset
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </form>
+                        @endisset
                     </div>
                 </div>
+            </div>
 
-            </div>
-            <div class="col-5">
-                <livewire:all-predios/>
-            </div>
         </div>
-
+        <div class="col-5">
+            <livewire:all-predios />
+        </div>
     </div>
-
-    </div>
-
-
-
-
     <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">

@@ -4,105 +4,96 @@
 
 @section('content')
 
-
-    <div class="container">
-        
-        <div class="row">
+    <div class="row">
 
 
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h2 class="card-title">{{ $asambleaOn->folder }}</h2>
-                        <h6>{{ $asambleaOn->fecha }} {{ $asambleaOn->hora }}</h6>
-                        <h6>Controles: {{ $asambleaOn->controles }}</h6>
-                    </div>
-                    <div class="card-footer d-flex align-items-center">
-                        <form action="{{ route('asambleas.inicia') }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="id_asamblea" value="{{ $asambleaOn->id_asamblea }}">
-                            <button type="submit" class="btn btn-danger mt-3 me-3">
-                                Iniciar
-                            </button>
-                        </form>
-                        <form action="{{ route('asambleas.termina') }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="id_asamblea" value="{{ $asambleaOn->id_asamblea }}">
-                            <button type="submit" class="btn btn-warning mt-3 me-3">
-                                Terminar
-                            </button>
-                        </form>
-                        <form action="{{ route('session.destroy') }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger mt-3">
-                                Eliminar sesion
-                            </button>
-                        </form>
-                    </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">{{ $asambleaOn->folder }}</h2>
+                    <h6>{{ $asambleaOn->fecha }} {{ $asambleaOn->hora }}</h6>
+                    <h6>Controles: {{ $asambleaOn->controles }}</h6>
                 </div>
-
-                <div class="mt-3">
-                    <livewire:list-users />
+                <div class="card-footer d-flex align-items-center">
+                    <form action="{{ route('asambleas.inicia') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="id_asamblea" value="{{ $asambleaOn->id_asamblea }}">
+                        <button type="submit" class="btn btn-danger mt-3 me-3">
+                            Iniciar
+                        </button>
+                    </form>
+                    <form action="{{ route('asambleas.termina') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="id_asamblea" value="{{ $asambleaOn->id_asamblea }}">
+                        <button type="submit" class="btn btn-warning mt-3 me-3">
+                            Terminar
+                        </button>
+                    </form>
+                    <form action="{{ route('session.destroy') }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger mt-3">
+                            Eliminar sesion
+                        </button>
+                    </form>
                 </div>
-
             </div>
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header d-flex align-items-center">
-                        <h2 class="card-title">Archivo importado</h2>
-                    </div>
-                    <div class="card-body table-responsive table-fixed-header table-h100">
-                        <table class="table table-bordered mt-3 mb3">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>propietario</th>
-                                    <th>cedula</th>
-                                    <th>Apoderado</th>
-                                    <th>Descriptor </th>
-                                    <th>Coeficiente</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if (isset($predios))
-                                    @forelse ($predios as $p)
-                                        <tr>
-                                            <td>{{ $p->id }}</td>
-                                            <td>{{ $p->persona->nombre }} {{ $p->persona->apellido }}</td>
-                                            <td>{{ $p->cc_propietario }}</td>
-                                            <td>{{ $p->cc_apoderado }}</td>
-                                            <td>{{ $p->descriptor1 }} {{ $p->numeral1 }} {{ $p->descriptor2 }}
-                                                {{ $p->numeral2 }}</td>
-                                            <td>{{ $p->coeficiente }}</td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="7">No hay entradas</td>
-                                        </tr>
-                                    @endforelse
-                                @else
+
+            <div class="mt-3">
+                <livewire:list-users />
+            </div>
+
+        </div>
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header d-flex align-items-center">
+                    <h2 class="card-title">Archivo importado</h2>
+                </div>
+                <div class="card-body table-responsive table-fixed-header table-h100">
+                    <table class="table table-bordered mt-3 mb3">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>propietario</th>
+                                <th>cedula</th>
+                                <th>Apoderado</th>
+                                <th>Descriptor </th>
+                                <th>Coeficiente</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (isset($predios))
+                                @forelse ($predios as $p)
                                     <tr>
-                                        <td colspan="7"> No se ha seleccionado archivo</td>
+                                        <td>{{ $p->id }}</td>
+                                        <td>{{ $p->persona->nombre }} {{ $p->persona->apellido }}</td>
+                                        <td>{{ $p->cc_propietario }}</td>
+                                        <td>{{ $p->cc_apoderado }}</td>
+                                        <td>{{ $p->descriptor1 }} {{ $p->numeral1 }} {{ $p->descriptor2 }}
+                                            {{ $p->numeral2 }}</td>
+                                        <td>{{ $p->coeficiente }}</td>
                                     </tr>
-                                @endif
-                            </tbody>
-                        </table>
+                                @empty
+                                    <tr>
+                                        <td colspan="7">No hay entradas</td>
+                                    </tr>
+                                @endforelse
+                            @else
+                                <tr>
+                                    <td colspan="7"> No se ha seleccionado archivo</td>
+                                </tr>
+                            @endif
+                        </tbody>
+                    </table>
 
-                    </div>
                 </div>
             </div>
-
-
-
-
         </div>
 
 
 
+
     </div>
-
-
 
 
 

@@ -7,9 +7,6 @@
 
 @section('content')
 
-    <div class="container">
-        
-
         <div class=" d-flex">
             <div class="card col-md-4">
                 <div class="card-header">
@@ -101,18 +98,4 @@
 
 
         </div>
-
-
-
-    </div>
-
-
-
-
-
-
-
-
-
-
 @endsection
