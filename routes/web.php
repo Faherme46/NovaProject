@@ -7,6 +7,7 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\PrediosController;
 use App\Http\Controllers\AsistentesController;
 use App\Http\Controllers\LoginController;
+use App\Livewire\Registrar;
 use Illuminate\Support\Facades\Route;
 
 
@@ -62,7 +63,8 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
 });
 
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Admin|Lider|Operario')]], function () {
-    Route::get('/asistencia/registrar', [AsistentesController::class, 'index'])->name('asistencia.index');
+    Route::get('/asistencia/registro', [AsistentesController::class, 'index'])->name('asistencia.index');
+    Route::get('/asistencia/registrar', Registrar::class)->name('asistencia.registrar');
     Route::get('/asistencia/buscar', [AsistentesController::class, 'buscar'])->name('asistencia.buscar');
     Route::get('/asistencia/limpiar', [AsistentesController::class, 'limpiar'])->name('asistencia.limpiar');
     Route::get('/asistencia/addPoderdante', [AsistentesController::class, 'addPoderdante'])->name('asistencia.addPoderdante');

@@ -58,7 +58,7 @@
                         <i class='bi bi-ui-checks-grid nav_icon'></i> <span class="nav_name">Asignaciones</span></a>
                     <a href="{{ route('users.index') }}" class="nav_link">
                         <i class='bi bi-people-fill nav_icon'></i> <span class="nav_name">Usuarios</span> </a>
-                    <a href="#" class="nav_link">
+                    <a href="{{route('asistencia.registrar')}}" class="nav_link">
                         <i class='bx bx-folder nav_icon'></i> <span class="nav_name">Resultados</span> </a>
                     <a href="#" class="nav_link">
                         <i class='bx bx-bar-chart-alt-2 nav_icon'></i> <span class="nav_name">Asistencia</span> </a>
@@ -128,9 +128,7 @@
         @endif
 
         @yield('content')
-        @isset($slot)
-            {{ $slot }}
-        @endisset
+        
     </div>
 
 

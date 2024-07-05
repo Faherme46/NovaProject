@@ -47,7 +47,7 @@
             </select>
         </div>
         <div class="col-1 fpr">
-            <button wire:click='clean' class=" btn btn-dark"><i class='bi bi-x-circle-fill ' ></i></button>
+            <button wire:click='clean' class=" btn btn-danger"><i class='bi bi-x-circle-fill ' ></i></button>
         </div>
 
 

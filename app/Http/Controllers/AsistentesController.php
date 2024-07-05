@@ -19,10 +19,7 @@ class AsistentesController extends Controller
 {
     protected $selectedAll;
 
-    public function index()
-    {
-
-
+    public function index(){
         $asistente = session('asistente', null);
         $poderdantes = session('poderdantes', collect());
         $controlIds = session('availableControls', []);
@@ -144,8 +141,7 @@ class AsistentesController extends Controller
         return redirect()->route('asistencia.index');
     }
 
-    public function addPoderdante(Request $request)
-    {
+    public function addPoderdante(Request $request){
         // session()->forget('propietarios');
         $cedula = $request->cedulaPropietario;
         $actual = session('asistente', null);
@@ -167,7 +163,7 @@ class AsistentesController extends Controller
                 return  back()->with('errorPropietarios', 'Ya fue añadido');
             }
 
-            
+
             $arrayPropietarios[] = $cedula;
 
             $poderdantes = Persona::find($arrayPropietarios);

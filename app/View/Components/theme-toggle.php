@@ -6,8 +6,7 @@ use Closure;
 use Illuminate\View\Component;
 use Illuminate\Contracts\View\View;
 
-class theme-toggle extends Component
-{
+class themeToggle extends Component{
     /**
      * Create a new component instance.
      */

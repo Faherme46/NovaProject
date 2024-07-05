@@ -3,7 +3,7 @@
 <nav class="navbar navbar-expand-lg bg-primary header" id="header">
     <div class="container-fluid">
 
-        <div class="header_toggle" data-bs-theme-value="light">
+        <div class="header_toggle" >
             <i class='bi bi-list bx-w' id="header-toggle"></i>
         </div>
         <h2 class="mb-0 ms-2 text-light" >{{ $name_asamblea }}</h2>

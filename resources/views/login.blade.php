@@ -4,7 +4,6 @@
 
 
 @section('content')
-
     <div class="mt-5">
 
         <div class="row d-flex justify-content-center align-items-center ">
@@ -13,11 +12,17 @@
                     <div class="row g-0">
                         <div class="col-lg-6">
                             <div class="card-body  mx-5 px-5">
-
+                                <style>
+                                    /* Ejemplo de estilo personalizado */
+                                    .card-title {
+                                        color: red;
+                                        /* Cambia el color para ver si se aplica correctamente */
+                                    }
+                                </style>
                                 <div class="text-center">
                                     <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/lotus.webp"
                                         style="width: 185px;" alt="logo">
-                                    <h4 class="mt-1 mb-5 pb-1">Bienvenido al equipo Tecnovis</h4>
+                                    <h4 class="mt-1 mb-5 pb-1 card-title">Bienvenido al equipo Tecnovis</h4>
                                 </div>
 
                                 <form action="{{ route('users.authenticate') }}" method="POST">
@@ -60,6 +65,4 @@
             </div>
         </div>
     </div>
-
-
 @endsection
