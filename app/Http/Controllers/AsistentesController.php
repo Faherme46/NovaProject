@@ -215,32 +215,7 @@ class AsistentesController extends Controller
     }
 
 
-    public function editAsignacion(Request $request)
-    {
-        Log::info('Método update ejecutado'); // Registro para debugging
-
-        $idPredios = $request->input('prediosSelect');
-        $asignacion = Asignacion::findOrFail($request->asignacion_id);
-        if (is_null($idPredios)) {
-            return back()->withErrors('No se han seleccionado predios');
-        }
-        $newPredios = explode(",", $idPredios);
-
-        try {
-            $asignacion->predios()->syncWithoutDetaching($newPredios);
-        } catch (QueryException $e) {
-            if ($e->errorInfo[1] == 1062) {
-                return redirect()->route('asistencia.index')->withErrors($e->getMessage());
-            }
-        } catch (\Exception $e) {
-            return redirect()->route('asistencia.index')->withErrors($e->getMessage());
-        }
-
-
-        $this->limpiar();
-
-        return back();
-    }
+     
 
 
     public function changeAsignacion(Request $request)

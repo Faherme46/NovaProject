@@ -63,20 +63,10 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
 });
 
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Admin|Lider|Operario')]], function () {
-    Route::get('/asistencia/registro', [AsistentesController::class, 'index'])->name('asistencia.index');
+
     Route::get('/asistencia/registrar', Registrar::class)->name('asistencia.registrar');
-    Route::get('/asistencia/buscar', [AsistentesController::class, 'buscar'])->name('asistencia.buscar');
-    Route::get('/asistencia/limpiar', [AsistentesController::class, 'limpiar'])->name('asistencia.limpiar');
-    Route::get('/asistencia/addPoderdante', [AsistentesController::class, 'addPoderdante'])->name('asistencia.addPoderdante');
-    Route::get('/asistencia/addPoderdante/{id}', [AsistentesController::class, 'addPoderdanteId'])->name('asistencia.addPoderdanteId');
-    Route::get('/asistencia/dropPoderdante', [AsistentesController::class, 'dropPoderdante'])->name('asistencia.dropPoderdante');
-    Route::get('/asistencia/dropAllPoderdantes', [AsistentesController::class, 'dropAllPoderdantes'])->name('asistencia.dropAllPoderdante');
-    Route::get('/asistencia/dropAsignacion', [AsistentesController::class, 'dropAsignacion'])->name('asistencia.dropAsignacion');
-    Route::get('/asistencia/changeAsignacion', [AsistentesController::class, 'changeAsignacion'])->name('asistencia.changeAsignacion');
-    Route::get('/asistencia/addPredio', [AsistentesController::class, 'addPredio'])->name('asistencia.addPredio');
-    Route::post('/asistencia/creaPersona', [AsistentesController::class, 'creaPersona'])->name('asistencia.creaPersona');
-    Route::post('/asistencia/asignar', [AsistentesController::class, 'asignar'])->name('asistencia.asignar');
-    Route::post('/asistencia/editAsignacion', [AsistentesController::class, 'editAsignacion'])->name('asistencia.editAsignacion');
+
+
 });
 //rutas para registro
 

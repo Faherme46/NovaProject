@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('asignacions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('control_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('control_id')->unique()->constrained()->cascadeOnDelete();
             $table->unsignedBigInteger('cc_asistente');
             $table->string('estado');
             $table->decimal('sum_coef', 8, 6);

@@ -12,8 +12,11 @@
             aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse me-3" id="navbarSupportedContent">
 
+        <div class="collapse navbar-collapse me-3" id="navbarSupportedContent">
+            <div class="ms-auto">
+                <livewire:quorum-state/>
+            </div>
             <ul class="ms-auto navbar-nav mb-0 ">
                 <li class="dropdown nav-item">
                     <button class="btn header_img nav-link py-2 dropdown-toggle d-flex align-items-center bx-w"

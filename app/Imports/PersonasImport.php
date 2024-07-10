@@ -19,8 +19,7 @@ class PersonasImport implements ToModel,WithHeadingRow
             'id'=>$row['cc_propietario'],
             'tipo_id'=>$row['tipo_id'],
             'nombre'=>$row['nombre_p'],
-            'apellido'=>$row['apellido_p'],
-            'apoderado'=>false
+            'apellido'=>$row['apellido_p']
         ]);
     }
 }

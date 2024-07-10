@@ -59,7 +59,7 @@
                     <a href="{{ route('users.index') }}" class="nav_link">
                         <i class='bi bi-people-fill nav_icon'></i> <span class="nav_name">Usuarios</span> </a>
                     <a href="{{route('asistencia.registrar')}}" class="nav_link">
-                        <i class='bx bx-folder nav_icon'></i> <span class="nav_name">Resultados</span> </a>
+                        <i class='bi bi-building-check nav_icon'></i> <span class="nav_name">Resultados</span> </a>
                     <a href="#" class="nav_link">
                         <i class='bx bx-bar-chart-alt-2 nav_icon'></i> <span class="nav_name">Asistencia</span> </a>
                 </div>
@@ -84,51 +84,53 @@
 
 
     <div class="height-100 container">
+
         @if (session('success'))
-            <div class="alert alert-success alert-dismissible" role="alert">
-                {{ session('success') }}
+        <div class="alert alert-success alert-dismissible" role="alert">
+            {{ session('success') }}
 
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
 
-        @if ($errors->any())
-            <div class="alert alert-danger alert-dimissible" role="alert">
-                <div class="row justify-content-between">
-                    <div class="col-6">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
+    @if ($errors->any())
+        <div class="alert alert-danger alert-dimissible" role="alert">
+            <div class="row justify-content-between">
+                <div class="col-6">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
 
-                    </div>
-                    <div class="col-1 offset-md-5">
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"
-                            aria-label="Close"></button>
-                    </div>
-
+                </div>
+                <div class="col-1 offset-md-5">
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
 
             </div>
-        @endif
 
-        @if (session('warning'))
-            <div class="alert alert-warning alert-dismissible" role="alert">
-                {{ session('warning') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
+        </div>
+    @endif
 
-        @if (session('info'))
-            <div class="alert alert-info alert-dismissible" role="alert">
-                {{ session('info') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
+    @if (session('warning'))
+        <div class="alert alert-warning alert-dismissible" role="alert">
+            {{ session('warning') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
 
-        @yield('content')
-        
+    @if (session('info'))
+        <div class="alert alert-info alert-dismissible" role="alert">
+            {{ session('info') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+        <div class="z-2">
+            @yield('content')
+        </div>
+
+
     </div>
 
 

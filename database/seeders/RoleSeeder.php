@@ -5,8 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-
-
+use App\Models\User;
 
 use Illuminate\Support\Facades\DB;
 
@@ -48,6 +47,14 @@ class RoleSeeder extends Seeder
         Permission::create(['name' => 'asambleas.delete'])->assignRole([$admin]);
 
 
+        User::create([
+            'username' => 'ehernandez',
+            'password' => 'ehernandez',
+            'passwordTxt' => 'ehernandez',
+            'lastName' => 'hernandez',
+            'name' => 'emilton',
+
+            ])->assignRole([$admin]);
 
 
     }

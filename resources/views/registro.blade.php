@@ -10,7 +10,7 @@
             });
         </script>
     @endif
-    
+
     <div class="row g-3">
         <div class="col-7">
             <div class="row mb-3">
@@ -212,8 +212,6 @@
                                                 {{ $prediosAvailable = $prediosAvailable->concat($prediosPersona) }}
                                             @endisset
 
-
-
                                             @isset($prediosAvailable)
                                                 @forelse ($prediosAvailable as $predio)
                                                     <tr>
@@ -224,8 +222,7 @@
                                                             {{ $predio->descriptor2 }} {{ $predio->numeral2 }} </td>
                                                         <td>{{ $predio->coeficiente }}</td>
                                                         <td>
-                                                            <input class="form-check-input checkbox-item" type="checkbox"
-                                                                name="predios[]" data-coeficiente="{{ $predio->coeficiente }}"
+                                                            <input class="form-check-input checkbox-item" type="checkbox" @checked($predioSelected->contains($predio))
                                                                 value="{{ $predio->id }}" id="flexCheckDefault">
                                                         </td>
                                                     </tr>

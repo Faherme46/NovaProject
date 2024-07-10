@@ -20,6 +20,7 @@ class SessionController extends Controller
 
         //se limpiaran las tablas: personas,Predios, apoderados, votaciones,resultados,preguntas, votos
         $this->destroyOnError();
+        session()->flush();
         return redirect()->route('admin.asambleas')->with('success','Sesion reestablecida');
     }
 

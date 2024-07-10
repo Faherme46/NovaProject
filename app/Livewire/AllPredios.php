@@ -31,11 +31,7 @@ class AllPredios extends Component
     public function clean()
     {
         // Restablece las variables de búsqueda
-        $this->searchId = null;
-        $this->descriptor1 = null;
-        $this->descriptor2 = null;
-        $this->numeral1 = null;
-        $this->numeral2 = null;
+        $this->reset(['descriptor1','descriptor2','numeral2','numeral1','searchId']);
 
         // Actualiza la colección de predios para mostrar todos los disponibles
         $this->prediosAll = Predio::all();
@@ -67,4 +63,19 @@ class AllPredios extends Component
 
         return view('livewire.all-predios');
     }
+
+
+    public function dispatchPredio($id){
+
+        $this->dispatch('add-predio', predioId: $id);
+    }
+    public function dispatchPersona($id){
+
+        $this->dispatch('search-persona', personaId: $id);
+    }
+    public function dispatchPoderdante($id){
+
+        $this->dispatch('add-poderdante', poderdanteId: $id);
+    }
+
 }
