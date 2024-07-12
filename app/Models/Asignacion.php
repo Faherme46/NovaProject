@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Asignacion extends Model
 {
     use HasFactory;
-    protected $guarded=[];
+    protected $guarded = [];
 
     public function persona()
     {
@@ -26,5 +26,17 @@ class Asignacion extends Model
     {
         return $this->belongsToMany(Predio::class, 'asignacion_predios');
     }
-}
 
+    public function retirarPredios()
+    {
+
+        $this->predios()->detach();
+        return $this->setCoef();
+    }
+
+    public function setCoef()
+    {
+        $this->sum_coef = $this->predios->sum('coeficiente');
+        return $this->save();
+    }
+}

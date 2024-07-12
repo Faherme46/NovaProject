@@ -8,7 +8,7 @@
                     <thead>
                         <tr>
                             <th>Control</th>
-                            <th>Nombre</th>
+                            {{-- <th>Nombre</th> --}}
                             <th>Predios</th>
                             <th>Coeficiente</th>
                             <th>Estado</th>
@@ -19,7 +19,7 @@
                         @forelse ($asignacionesAll as $asignacion)
                             <tr>
                                 <td>{{ $asignacion->control_id }}</td>
-                                <td>{{ $asignacion->persona->nombre }} {{ $asignacion->persona->apellido }}</td>
+                                {{-- <td>{{ $asignacion->persona->nombre }} {{ $asignacion->persona->apellido }}</td> --}}
                                 <td>
                                     @foreach ($asignacion->predios as $predio)
                                         {{ $predio->descriptor1 }} {{ $predio->numeral1 }} {{ $predio->descriptor2 }}

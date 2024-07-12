@@ -33,9 +33,10 @@ class AppServiceProvider extends ServiceProvider
             $sessionController=new sessionController();
             $id=$sessionController->getSessionId();
             $sessionUser=Auth::user();
+            $asamblea=$asambleaController->getOne($id);
             $view->with(
-                ['name_asamblea'=> $asambleaController->getName($id),
-                'asambleaOn'=>$asambleaController->getOne($id),
+                ['name_asamblea'=> $asamblea->name,
+                'asambleaOn'=>$asamblea,
                 'currentUser'=>($sessionUser)?$sessionUser:null
             ]);
         });

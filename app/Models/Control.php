@@ -15,4 +15,11 @@ class Control extends Model
     public function asignacion(){
         return $this->hasOne(Asignacion::class);
     }
+    public function retirar(){
+        $asignacion= $this->asignacion;
+        $asignacion->estado='retirado';
+        return $asignacion->save();
+    }
+
+    
 }

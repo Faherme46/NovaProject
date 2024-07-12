@@ -4,6 +4,8 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Predio;
+use App\Models\Persona;
+use App\Models\Control;
 
 class AllPredios extends Component
 {
@@ -15,6 +17,12 @@ class AllPredios extends Component
     public $descriptor2 = '';
     public $numeral1 = '';
     public $numeral2 = '';
+
+    public $Predio;
+    public $Persona;
+
+    public $Control;
+
 
     public function mount()
     {
@@ -81,6 +89,21 @@ class AllPredios extends Component
     public function dispatchControl($id){
 
         $this->dispatch('set-control', controlId: $id);
+    }
+
+    public function showPersona($id){
+        $this->Persona=Persona::find($id);
+        $this->dispatch('showModalPersona');
+    }
+
+    public function showPredio($id){
+        $this->Predio=Predio::find($id);
+        $this->dispatch('showModalPredio');
+    }
+
+    public function showControl($id){
+        $this->Control=Control::find($id);
+        $this->dispatch('showModalControl');
     }
 
 }

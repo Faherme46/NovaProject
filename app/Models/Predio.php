@@ -21,6 +21,7 @@ class Predio extends Model
         return $this->belongsTo(Persona::class, 'cc_propietario', 'id');
     }
 
+    
     public function asignacion()
     {
         return $this->belongsToMany(Asignacion::class, 'asignacion_predios');

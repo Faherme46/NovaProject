@@ -121,6 +121,7 @@ class Asignacion extends Component
     public function updatedControlId($value)
     {
 
+
         if ($value>$this->maxControls) {
             $this->addError('controlId', 'El control no es valido');
             return;
@@ -152,7 +153,8 @@ class Asignacion extends Component
     }
 
     public function proof(){
-        dd($this->prediosAsigned);
+        $persona=Persona::find('294962');
+        dd($persona->prediosAsignados());
     }
 
     public function toDropList($predioId){
@@ -231,8 +233,8 @@ class Asignacion extends Component
 
         session(['controlTurn'=>$this->controlId+1]);
         $this->cleanData();
-        return session()->flash('success1', 'Predios Asignados con exito');
-
+         session()->flash('success1', 'Predios Asignados con exito');
+        return redirect()->route('asistencia.asignacion');
 
 
     }

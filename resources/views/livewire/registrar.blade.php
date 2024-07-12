@@ -280,21 +280,7 @@
 
 
 <script>
-    function noNumbers(event) {
-        var charCode = event.charCode;
-        if (charCode >= 48 && charCode <= 57) {
-            return false; // Bloquear el input si es un número
-        }
-        return true; // Permitir el input si no es un número
-    }
-
-    function onlyNumbers(event) {
-        var charCode = event.charCode;
-        if (charCode < 48 || charCode > 57) {
-            return false; // Bloquear el input si no es un número
-        }
-        return true; // Permitir el input si es un número
-    }
+    
     document.addEventListener('livewire:init', () => {
         Livewire.on('showModal', (event) => {
             $('#myModal').modal('show');

@@ -134,6 +134,7 @@
             </div>
         @endif
         <div class="z-2">
+            
             @yield('content')
         </div>
 

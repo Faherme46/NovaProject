@@ -37,10 +37,10 @@
                                 </div>
                             </div>
                             <div class="card-body table-responsive table-fixed-header">
-                                <table class="w-100 table mb-0 " >
+                                <table class="w-100 table mb-0 ">
 
-                                    <tbody >
-                                        @foreach ($predioSelected as $predio)
+                                    <tbody>
+                                        @forelse($predioSelected as $predio)
                                             <tr scope="row" style="width: 85%">
                                                 <td>{{ $predio->descriptor1 }} {{ $predio->numeral1 }}
                                                     {{ $predio->descriptor2 }} {{ $predio->numeral2 }}</td>
@@ -51,7 +51,13 @@
                                                     </button>
                                                 </td>
                                             </tr>
-                                        @endforeach
+                                        @empty
+                                            @if ($controlId)
+                                                <tr>
+                                                    <td colspan="2">Sin predios para asignar</td>
+                                                </tr>
+                                            @endif
+                                        @endforelse
                                         @if ($asignacion)
                                             @foreach ($prediosAsigned as $predio)
                                                 <tr scope="row" class="table-active">
@@ -74,7 +80,8 @@
                         <div class="card">
                             <div class="card-header">
                                 <div class="d-flex justify-content-center">
-                                    <input type="text" class="form-control bg-success-subtle w-50 @error('controlId') is-invalid @enderror"
+                                    <input type="text"
+                                        class="form-control bg-success-subtle w-50 @error('controlId') is-invalid @enderror"
                                         wire:model.live='controlId' placeholder="Control"
                                         onkeypress="return onlyNumbers(event)" maxlength="3">
                                     <button class="btn btn-primary ms-2 " wire:click='asignar'>
@@ -92,8 +99,8 @@
 
                                     <div class="col-5 ">
                                         <input class="form-control "
-                                            value="{{ count($predioSelected) + count($prediosAsigned) }}" id="votos"
-                                            readonly>
+                                            value="{{ count($predioSelected) + count($prediosAsigned) }}"
+                                            id="votos" readonly>
                                         <small id="helpId" class="text-muted ms-3">Registros</small>
                                     </div>
                                 </div>

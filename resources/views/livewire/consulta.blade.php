@@ -12,10 +12,12 @@
                     </div>
 
                     <div class="col-auto d-flex">
-                        <button class="btn btn-primary @if ($inChange) btn-info @endif ms-2" wire:click='setInChange(true)'>
+                        <button class="btn btn-primary @if ($inChange) btn-info @endif ms-2"
+                            wire:click='setInChange(true)'>
                             Cambiar
                         </button>
-                        <button class="btn btn-primary @if (!$inChange) btn-info @endif ms-2" wire:click='setInChange(false)'>
+                        <button class="btn btn-primary @if (!$inChange) btn-info @endif ms-2"
+                            wire:click='setInChange(false)'>
                             Retirar
                         </button>
                     </div>
@@ -41,29 +43,40 @@
                                     @endif
                                 </div>
                                 <div class=" col-4">
-                                    <input type="text" class="form-control bg-success-subtle  @error('controlId') is-invalid @enderror"
-                                    wire:model.live='controlIdL' placeholder="Control"
-                                    onkeypress="return onlyNumbers(event)" maxlength="3">
+                                    <input type="text"
+                                        class="form-control bg-success-subtle  @error('controlIdL') is-invalid @enderror  @error('controlId') is-invalid @enderror"
+                                        wire:model.live='controlIdL' placeholder="Control"
+                                        onkeypress="return onlyNumbers(event)" maxlength="3">
                                 </div>
                             </div>
-                            <div class="card-body table-responsive table-fixed-header">
+                            <div class="card-body table-responsive table-fixed-header px-0">
                                 <table class="w-100 table mb-0 ">
-
                                     <tbody>
-                                        @foreach ($prediosL as $predio)
+                                        @forelse ($prediosL as $predio)
                                             <tr scope="row">
                                                 <td style="width: 85%">{{ $predio->descriptor1 }}
                                                     {{ $predio->numeral1 }}
                                                     {{ $predio->descriptor2 }} {{ $predio->numeral2 }}</td>
 
                                                 <td>
-                                                    <button class="btn p-0"
-                                                        wire:click="toRight({{ $predio->id }})">
+
+                                                    <button class="btn p-0" wire:click="toRight({{ $predio->id }})">
                                                         <i class='bi bi-arrow-right-square-fill'></i>
                                                     </button>
+
+
                                                 </td>
                                             </tr>
-                                        @endforeach
+                                        @empty
+                                            @if ($controlIdL)
+                                                <tr class="table-active">
+                                                    <td colspan="2">
+
+                                                        {{ $messageL ? $messageL : 'Sin predios' }}
+                                                    </td>
+                                                </tr>
+                                            @endif
+                                        @endforelse
 
                                     </tbody>
                                 </table>
@@ -75,19 +88,23 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-1 align-items-center my-auto mx-auto">
-                        <div class="card p-2 mb-2">
-                            <button class="btn btn-warning ps-2 mb-4 py-0" wire:click='undo'> <i
-                                class="bi bi-arrow-counterclockwise fs-4 "></i> </button>
-                            <button class="btn btn-primary ps-2 mb-2 py-0" wire:click='toLeftAll'> <i
-                                    class="bi bi-box-arrow-in-left fs-4 "></i> </button>
-                            <button class="btn btn-primary ps-0 mb-2 py-0" wire:click='exchange'>
-                                <i class="bi bi-arrow-repeat ms-2 fs-4 "></i> </button>
-                            <button class="btn btn-primary ps-1 py-0" wire:click='toRightAll'> <i
-                                    class="bi bi-box-arrow-in-right fs-4 "></i> </button>
+                    <div class="col-1 align-items-center mb-auto  mx-auto">
+                        <span class="btn-dark bx-w w-100 py-0 mb-4 ps-2 text-center ">
+                            <i class="bi bi-shuffle fs-1 "></i>
+                        </span>
+                        <div class="card p-2 mt-5 ">
+                            <button class="btn btn-warning ps-2 mb-4 py-0" wire:click='undo'>
+                                <i class="bi bi-arrow-counterclockwise fs-4 "></i>
+                            </button>
+
+                            <button class="btn btn-primary ps-1 mb-0 py-0" wire:click='toRightAll'>
+                                <i class="bi bi-box-arrow-in-right fs-4 "></i>
+                            </button>
                         </div>
-                        <button class="btn btn-success bx-w w-100 py-0" wire:click=''> <i
-                            class="bi bi-floppy-fill fs-4 "></i> </button>
+                        <button class="btn btn-success bx-w w-100 pb-0  mt-5"
+                            wire:click='@if ($inChange) storeInChange  @else storeDetach @endif'>
+                            <i class="bi bi-floppy-fill fs-4 "></i>
+                        </button>
 
                     </div>
                     <div class="col-5">
@@ -97,34 +114,46 @@
                                     @if ($inChange)
                                         Control B
                                     @else
-                                        Predios a Retirar
+                                        <p class="mb-0 py-2">Predios a Retirar</p>
                                     @endif
                                 </div>
-                                    <div class=" col-4">
-                                        <input type="text" class="form-control bg-success-subtle  @error('controlId') is-invalid @enderror"
-                                        wire:model.live='controlIdR' @if ($inChange)  placeholder="Control"  @endif @disabled(!$inChange)
+                                <div class=" col-4">
+                                    <input type="text"
+                                        class="form-control bg-success-subtle  @error('controlIdR') is-invalid @enderror  @error('controlId') is-invalid @enderror"
+                                        wire:model.live='controlIdR' placeholder="Control"
+                                        @if (!$inChange) hidden @endif
                                         onkeypress="return onlyNumbers(event)" maxlength="3">
-                                    </div>
+                                </div>
                             </div>
-                            <div class="card-body table-responsive table-fixed-header">
+                            <div class="card-body table-responsive table-fixed-header px-0">
 
 
                                 <table class="w-100 table mb-0 ">
 
                                     <tbody>
-                                        @foreach ($prediosR as $predio)
-                                            <tr scope="row" style="width: 85%">
+                                        @forelse ($prediosR as $predio)
+                                            <tr scope="row">
                                                 <td>{{ $predio->descriptor1 }} {{ $predio->numeral1 }}
                                                     {{ $predio->descriptor2 }} {{ $predio->numeral2 }}</td>
 
                                                 <td>
-                                                    <button class="btn p-0"
-                                                        wire:click="toLeft({{ $predio->id }})">
-                                                        <i class='bi bi-x-square-fill'></i>
-                                                    </button>
+                                                    @if (!$inChange)
+                                                        <button class="btn p-0"
+                                                            wire:click="toLeft({{ $predio->id }})">
+                                                            <i class='bi bi-arrow-left-square-fill'></i>
+                                                        </button>
+                                                    @endif
                                                 </td>
                                             </tr>
-                                        @endforeach
+                                        @empty
+                                            @if ($controlIdR)
+                                                <tr class="table-active">
+                                                    <td colspan="2">
+                                                        {{ $messageR ? $messageR : 'Sin predios' }}
+                                                    </td>
+                                                </tr>
+                                            @endif
+                                        @endforelse
 
                                     </tbody>
                                 </table>
