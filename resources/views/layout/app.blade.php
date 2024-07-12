@@ -45,30 +45,45 @@
                 <a href="{{ route('home') }}" class="nav_logo"> <i class='bi bi-house-fill nav_logo-icon'></i> <span
                         class="nav_logo-name">Home</span> </a>
                 <div class="nav_list">
-                    <a href="{{ route('asistencia.registrar') }}" class="nav_link ">
-                        <i class='bi bi-person-check-fill nav_icon'></i>
-                        <span class="nav_name">Registro</span> </a>
-                    @hasanyrole('Admin|Lider')
+
+
+
+                    @if ($asambleaOn->registro)
+                        <a href="{{ route('asistencia.registrar') }}" class="nav_link ">
+                            <i class='bi bi-person-check-fill nav_icon'></i> <span class="nav_name">Registro</span>
+                        </a>
+                    @else
+                        <a href="{{ route('asistencia.asignacion') }}" class="nav_link">
+                            <i class='bi bi-building-check nav_icon'></i> <span class="nav_name">Asignar</span>
+                        </a>
+                    @endif
+
+                    <a href="{{ route('asistenciaa') }}" class="nav_link">
+                        <i class='bi bi-ui-checks-grid nav_icon'></i> <span class="nav_name">Asignaciones</span>
+                    </a>
+
+
+                    <a href="{{ route('consulta') }}" class="nav_link">
+                        <i class='bi bi-patch-question-fill nav_icon'></i> <span class="nav_name">Consulta</span>
+                    </a>
+
+                    @hasanyrole('Admin')
                         <a href="{{ route('admin.asambleas') }}" class="nav_link">
                             <i class='bi bi-gear-wide-connected nav_icon'></i> <span class="nav_name">Asamblea</span>
                         </a>
                     @endhasanyrole
 
-                    <a href="{{ route('asistenciaa') }}" class="nav_link">
-                        <i class='bi bi-ui-checks-grid nav_icon'></i> <span class="nav_name">Asignaciones</span>
-                    </a>
-                    <a href="{{ route('users.index') }}" class="nav_link">
-                        <i class='bi bi-people-fill nav_icon'></i> <span class="nav_name">Usuarios</span>
-                    </a>
-                    <a href="{{ route('asistencia.asignacion') }}" class="nav_link">
-                        <i class='bi bi-building-check nav_icon'></i> <span class="nav_name">Solo Votacion</span>
-                    </a>
-                    <a href="{{ route('consulta') }}" class="nav_link">
-                        <i class='bi bi-patch-question-fill nav_icon'></i> <span class="nav_name">Consulta</span>
-                    </a>
-                    <a href="{{ route('entregar') }}" class="nav_link">
-                        <i class='bi bi-door-closed-fill nav_icon'></i> <span class="nav_name">Entregar</span>
-                    </a>
+                    @hasanyrole('Admin|Lider')
+                        <a href="{{ route('users.index') }}" class="nav_link">
+                            <i class='bi bi-people-fill nav_icon'></i> <span class="nav_name">Usuarios</span>
+                        </a>
+                        <a href="{{ route('entregar') }}" class="nav_link">
+                            <i class='bi bi-door-closed-fill nav_icon'></i> <span class="nav_name">Entregar</span>
+                        </a>
+                    @endhasanyrole
+
+
+
                 </div>
             </div>
             @auth
@@ -134,7 +149,7 @@
             </div>
         @endif
         <div class="z-2">
-            
+
             @yield('content')
         </div>
 

@@ -28,28 +28,33 @@ class Consulta extends Component
 
     public $asignacion;
     public $maxControls;
-    public $inChange=true;
+    public $inChange = true;
 
-    public $messageL='Sin Predios';
-    public $messageR='Sin Predios';
+    public $messageL = 'Sin Predios';
+    public $messageR = 'Sin Predios';
 
     public $proof1;
 
-    public $controlRInvalid=false;
-    public $controlLInvalid=false;
+    public $controlRInvalid = false;
+    public $controlLInvalid = false;
 
-    public $changes=false;
+    public $changes = false;
+
+    public $cedulaSearch;
+    public $controlIdSearch;
+
 
     public function cleanData($value)
     {
-        if($value){
+        if ($value) {
             $this->reset('controlIdR', 'controlIdL');
         }
-        $this->reset([ 'messageL','changes','messageR','asignacion', 'prediosR', 'prediosL', 'sumCoefR', 'sumCoefL','controlRInvalid','controlLInvalid']);
+        $this->reset(['messageL', 'changes', 'messageR', 'asignacion', 'prediosR', 'prediosL', 'sumCoefR', 'sumCoefL', 'controlRInvalid', 'controlLInvalid']);
         $this->mount();
     }
-    public function mount() {
-        $this->maxControls= Cache::get('controles');
+    public function mount()
+    {
+        $this->maxControls = Cache::get('controles');
     }
 
     #[Layout('layout.asistencia')]
@@ -87,18 +92,21 @@ class Consulta extends Component
 
 
 
-    public function dropAllSelected(){
+    public function dropAllSelected()
+    {
         $this->reset('predioSelected');
     }
 
 
-    public function setControlR($controlId){
-        $this->controlIdR=$controlId;
+    public function setControlR($controlId)
+    {
+        $this->controlIdR = $controlId;
         $this->updatedControlIdR($controlId);
     }
     #[On('set-control')]
-    public function setControlL($controlId){
-        $this->controlIdL=$controlId;
+    public function setControlL($controlId)
+    {
+        $this->controlIdL = $controlId;
         $this->updatedControlIdL($controlId);
     }
 
@@ -114,109 +122,118 @@ class Consulta extends Component
 
     public function dropAllPredios()
     {
-        $this->reset('prediosR','prediosL');
+        $this->reset('prediosR', 'prediosL');
     }
 
-    public function updatedControlIdR($value) {
-        $this->reset('messageR','controlRInvalid');
-        if(!$value){$this->reset('prediosR');return;}
-        if ($value>$this->maxControls) {
+    public function updatedControlIdR($value)
+    {
+        $this->reset('messageR', 'controlRInvalid','prediosR');
+        if (!$value) {
+            $this->reset('prediosR');
+            return;
+        }
+        if ($value > $this->maxControls) {
             $this->addError('controlIdR', 'El control no es valido');
             return;
         }
-        if ($value==$this->controlIdL){
+        if ($value == $this->controlIdL) {
             $this->addError('controlId', 'Los controles No pueden ser iguales');
             $this->reset('controlIdR');
             return;
         }
-            $this->reset('prediosR');
-            $control=Control::find($value);
-            $asignacion=$control->asignacion;
-            if($asignacion){
-                if($asignacion->estado!='retirado'){
-                    $predios=$asignacion->predios;
-                    $this->messageR=(!$predios->isEmpty())?'':'Sin Predios';
-                    foreach ($predios as $predio) {
-                        $this->prediosR[$predio->id]=$predio;
-                    }
-                    $this->controlRInvalid=false;
-                }else{
-                    $this->messageR='Control Retirado';
-                    $this->controlRInvalid=true;
+        $control = Control::find($value);
+        $asignacion = $control->asignacion;
+        if ($asignacion) {
+            if ($asignacion->estado != 3) {
+                $predios = $asignacion->predios;
+                $this->messageR = (!$predios->isEmpty()) ? '' : 'Sin Predios';
+                foreach ($predios as $predio) {
+                    $this->prediosR[$predio->id] = $predio;
                 }
+                $this->controlRInvalid = false;
+            } else {
+                $this->messageR = 'Control Retirado';
+                $this->controlRInvalid = true;
             }
-
+        }
     }
 
-    public function updatedControlIdL($value) {
-        $this->reset('messageL','controlLInvalid');
-        if(!$value){$this->reset('prediosL'); return;}
-        if ($value>$this->maxControls) {
+    public function updatedControlIdL($value)
+    {
+        $this->reset('messageL', 'controlLInvalid');
+        if (!$value) {
+            $this->reset('prediosL');
+            return;
+        }
+        if ($value > $this->maxControls) {
             $this->addError('controlIdL', 'El control no es valido');
             return;
         }
-        if ($value==$this->controlIdR){
+        if ($value == $this->controlIdR) {
             $this->addError('controlId', 'Los controles No pueden ser iguales');
             $this->reset('controlIdL');
             return;
         }
 
         $this->reset('prediosL');
-        $control=Control::find($value);
-        $asignacion=$control->asignacion;
-        if($asignacion){
-            if($asignacion->estado!='retirado'){
-                $predios=$asignacion->predios;
-                $this->messageL=(!$predios->isEmpty())?'':'Sin Predios';
-                $this->controlRInvalid=false;
+        $control = Control::find($value);
+        $asignacion = $control->asignacion;
+        if ($asignacion) {
+            if ($asignacion->estado != 3) {
+                $predios = $asignacion->predios;
+                $this->messageL = (!$predios->isEmpty()) ? '' : 'Sin Predios';
+                $this->controlRInvalid = false;
                 foreach ($predios as $predio) {
-                    $this->prediosL[$predio->id]=$predio;
+                    $this->prediosL[$predio->id] = $predio;
                 }
-            }else{
-                $this->messageL='Control Retirado';
-                $this->controlRInvalid=true;
+            } else {
+                $this->messageL = 'Control Retirado';
+                $this->controlRInvalid = true;
             }
         }
-
     }
 
-    public function proof(){
+    public function proof()
+    {
         dd($this->proof1);
     }
 
-    public function toLeft($predioId){
-        $this->changes=true;
+    public function toLeft($predioId)
+    {
+        $this->changes = true;
         try {
-            $this->prediosL[$predioId]=$this->prediosR[$predioId];
+            $this->prediosL[$predioId] = $this->prediosR[$predioId];
             unset($this->prediosR[$predioId]);
         } catch (\Throwable $th) {
-            if($th->getCode()!=0){
+            if ($th->getCode() != 0) {
                 $this->addError('error', $th->getCode());
             }
         }
     }
 
-    public function toRight($predioId){
-        $this->changes=true;
+    public function toRight($predioId)
+    {
+        $this->changes = true;
         if ($this->controlRInvalid) {
-            $this->addError('error','El control B esta retirado');
+            $this->addError('error', 'El control B esta retirado');
             return;
         }
         try {
-            $this->prediosR[$predioId]=$this->prediosL[$predioId];
+            $this->prediosR[$predioId] = $this->prediosL[$predioId];
             unset($this->prediosL[$predioId]);
         } catch (\Throwable $th) {
-            if($th->getCode()!=0){
+            if ($th->getCode() != 0) {
                 $this->addError('error', $th->getCode());
             }
         }
     }
 
-    public function toLeftAll(){
-        $this->changes=true;
+    public function toLeftAll()
+    {
+        $this->changes = true;
         try {
             foreach ($this->prediosR as $key => $predio) {
-                $this->prediosL[$key]=$predio;
+                $this->prediosL[$key] = $predio;
             }
             $this->reset('prediosR');
         } catch (\Throwable $th) {
@@ -224,16 +241,17 @@ class Consulta extends Component
         }
     }
 
-    public function toRightAll(){
-        $this->changes=true;
+    public function toRightAll()
+    {
+        $this->changes = true;
         if ($this->controlRInvalid) {
-            $this->addError('error','El control B esta retirado');
+            $this->addError('error', 'El control B esta retirado');
             return;
         }
 
         try {
             foreach ($this->prediosL as $key => $predio) {
-                $this->prediosR[$key]=$predio;
+                $this->prediosR[$key] = $predio;
             }
             $this->reset('prediosL');
         } catch (\Throwable $th) {
@@ -242,109 +260,119 @@ class Consulta extends Component
     }
 
 
-    public function undo(){
-        $this->changes=false;
+    public function undo()
+    {
+        $this->changes = false;
         $this->cleanData(0);
         $this->updatedControlIdL($this->controlIdL);
 
         $this->updatedControlIdR($this->controlIdR);
     }
 
-    public function setInChange($value){
+    public function setInChange($value)
+    {
         $this->cleanData(1);
-        $this->inChange=$value;
-
+        $this->inChange = $value;
     }
 
 
-    public function storeInChange(){
-        $this->validate(['controlIdR'=>'required','controlIdL'=>'required'],
-        ['controlIdR.required'=>'Control B requerido','controlIdL.required'=>'Control A requerido']);
-        if(!$this->changes){
-            session()->flash('warning1','No hay cambios para guardar');
+    public function storeInChange()
+    {
+        $this->validate(
+            ['controlIdR' => 'required', 'controlIdL' => 'required'],
+            ['controlIdR.required' => 'Control B requerido', 'controlIdL.required' => 'Control A requerido']
+        );
+        if (!$this->changes) {
+            session()->flash('warning1', 'No hay cambios para guardar');
             return;
         }
-        try{
-            $controlR=Control::find($this->controlIdR);
-            $controlL=Control::find($this->controlIdL);
-            $asignacionR=$controlR->asignacion;
-            $asignacionL=$controlL->asignacion;
+        try {
+            $controlR = Control::find($this->controlIdR);
+            $controlL = Control::find($this->controlIdL);
+            $asignacionR = $controlR->asignacion;
+            $asignacionL = $controlL->asignacion;
 
             if ($this->controlRInvalid) {
-                $this->addError('error','El control B esta retirado');
+                $this->addError('error', 'El control B esta retirado');
                 return;
             }
 
-            if( !$asignacionL){
-                $this->addError('Error','El Control A no ha sido asignado');
+            if (!$asignacionL) {
+                $this->addError('Error', 'El Control A no ha sido asignado');
                 return;
             }
-            if(!$this->prediosR){
-                $this->addError('Error','No hay predios para asignar');
+            if (!$this->prediosR) {
+                $this->addError('Error', 'No hay predios para asignar');
                 return;
             }
 
             if (!$asignacionR) {
-                $asignacionR=$controlR->asignacion()->create([
-                    'cc_asistente'=>($controlL->asignacion->cc_asistente)?$controlL->asignacion->cc_asistente:null,
+                $asignacionR = $controlR->asignacion()->create([
+                    'cc_asistente' => ($controlL->asignacion->cc_asistente) ? $controlL->asignacion->cc_asistente : null,
                     'sum_coef' => $this->sumCoefR,
-                    'estado' => 'activo'
+                    'estado' => 1
                 ]);
             }
 
             $asignacionR->predios()->sync(array_keys($this->prediosR));
-            $asignacionR->sum_coef=$this->sumCoefR;
+            $asignacionR->sum_coef = $this->sumCoefR;
             $asignacionR->save();
-           if($this->prediosL){
+            if ($this->prediosL) {
                 $asignacionL->predios()->sync(array_keys($this->prediosL));
                 $asignacionL->setCoef();
                 $asignacionL->save();
-           }else{
+            } else {
                 $controlL->retirar();
                 $controlL->asignacion->retirarPredios();
-           }
+            }
 
-           session()->flash('success1','Guardado');
-           $this->cleanData(1);
-           return redirect()->route('consulta');
-
-        }catch(\Throwable $th){
-            $this->addError('error',$th->getMessage());
+            session()->flash('success1', 'Guardado');
+            $this->cleanData(1);
+            return redirect()->route('consulta');
+        } catch (\Throwable $th) {
+            $this->addError('error', $th->getMessage());
         }
     }
 
-    public function storeDetach(){
-        $controlL=Control::find($this->controlIdL);
+    public function storeDetach()
+    {
+        $controlL = Control::find($this->controlIdL);
         if (!$this->prediosR) {
-            $this->addError('error','Nada para retirar');
+            $this->addError('error', 'Nada para retirar');
             return;
         }
 
         if (!$controlL->asignacion) {
-            $this->addError('error','El control no fue Asignado');
+            $this->addError('error', 'El control no fue Asignado');
             return;
         }
 
         if ($this->controlLInvalid) {
-            $this->addError('error','El control esta retirado');
+            $this->addError('error', 'El control esta retirado');
             return;
         }
         try {
-            if($this->prediosL){
+            if ($this->prediosL) {
                 $controlL->asignacion->predios()->sync(array_keys($this->prediosL));
                 $controlL->asignacion->setCoef();
-            }else{
+            } else {
                 $controlL->asignacion->predios()->detach();
                 $controlL->asignacion->setCoef();
                 $controlL->retirar();
             }
 
-            session()->flash('success1','Guardado');
-           $this->cleanData(1);
-           return redirect()->route('consulta');
+            session()->flash('success1', 'Guardado');
+            $this->cleanData(1);
+            return redirect()->route('consulta');
         } catch (\Throwable $th) {
-            $this->addError('error',$th->getMessage());
+            $this->addError('error', $th->getMessage());
         }
+    }
 
+    public function searchPersona(){
+        $this->dispatch('find-persona', id:$this->cedulaSearch);
+    }
+    public function searchControl(){
+        $this->dispatch('find-control', id:$this->controlIdSearch);
     }
 }

@@ -58,7 +58,7 @@
                     @if (!$predio->asignacion->isEmpty())
                         <tr class="table-active">
                             <td>
-                                <button class="btn pt-0 pb-0 mb-0"
+                                <button class="btn pt-0 pb-0 mb-0" wire:dblclick='showControl({{$predio->asignacion[0]->control_id }})'
                                     wire:click="dispatchControl({{ $predio->asignacion[0]->control_id }})">
                                     {{ $predio->asignacion[0]->control_id }}
                                 </button>
@@ -198,9 +198,6 @@
                             @endif
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    </div>
                 @endisset
 
             </div>
@@ -229,7 +226,7 @@
                                     <div class="d-flex">
                                         <p class="ms-3 mb-0">{{ $Predio->persona->nombre }}
                                             {{ $Predio->persona->apellido }}</p>
-                                        <p class="ms-3 mb-0"> {{ $predio->persona->tipo_id }}: {{ $Predio->persona->id }}
+                                        <p class="ms-3 mb-0"> {{ $Predio->persona->tipo_id }}: {{ $Predio->persona->id }}
                                         </p>
                                     </div>
                                 </div>
@@ -264,9 +261,6 @@
                                 </h6>
                             </li>
                         </ul>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                     </div>
                 @endisset
 
@@ -275,63 +269,95 @@
     </div>
 
     {{-- Modal Control --}}
-    <div class="modal fade" id="modalPredio" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="modalControl" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 @isset($Control)
                     <div class="modal-header">
-                        <h4 class="mb-0">Control {{$Control->id}}</h4>
+                        <h4 class="mb-0">Control {{ $Control->id }}</h4>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-
                     </div>
-                    <div class="modal-body">
-                        <ul class="list-group">
-                            
-                            <li class="list-group-item d-flex">
+                    <div class="modal-body row">
+                        <div class="col-6">
+                            <ul class="list-group">
 
-                                <div class="ms-0 me-auto ">
-                                    <div class="fw-bold">Propietario: </div>
-                                    <div class="d-flex">
-                                        <p class="ms-3 mb-0">{{ $Predio->persona->nombre }}
-                                            {{ $Predio->persona->apellido }}</p>
-                                        <p class="ms-3 mb-0"> {{ $predio->persona->tipo_id }}: {{ $Predio->persona->id }}
-                                        </p>
-                                    </div>
+                                @if ($Control->asignacion)
+                                    <li class="list-group-item">
+                                        <h6 class="mb-0">Asignacion:{{ $Control->asignacion->id }}
+                                        </h6>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <h6>Estado: {{ $states[$Control->state] }}</h6>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <h6>Coeficiente: {{ $Control->asignacion->sum_coef }}</h6>
+                                    </li>
+                                @else
+                                    <li class="list-group-item">Sin asignar</li>
+
+                                @endif
+
+                                @if ($asambleaOn->registro && $Control->asignacion)
+                                    <li class="list-group-item d-flex">
+                                        <div class="ms-0 me-auto ">
+
+                                            <div class="fw-bold">Asistente: </div>
+                                            <div class="d-flex">
+                                                <p class="ms-3 mb-0">{{ $Control->asignacion->persona->nombre }}
+                                                    {{ $Control->asignacion->persona->apellido }}</p>
+                                                <p class="ms-3 mb-0"> {{ $Control->asignacion->persona->tipo_id }}:
+                                                    {{ $Control->asignacion->persona->id }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <span class="badge btn text-bg-primary rounded-pill pt-2"
+                                            wire:click='showPersona({{ $Control->asignacion->persona->id }})'>
+                                            <i class="bi bi-eye fs-2"></i>
+                                        </span>
+                                    </li>
+                                @endif
+                            </ul>
+                        </div>
+                        <div class="col-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="card-title"> Predios Asignados </h6>
                                 </div>
-                                <span class="badge btn text-bg-primary rounded-pill pt-2"
-                                    wire:click='showPersona({{ $Predio->persona->id }})'>
-                                    <i class="bi bi-eye fs-2"></i>
-                                </span>
+                                <div class="card-body table-responsive table-fixed-header px-0">
+                                    <table class="w-100 table mb-0 ">
+                                        <tbody>
+                                            @if ($Control->asignacion)
+                                                @forelse ($Control->asignacion->predios as $predio)
+                                                    <tr scope="row">
+                                                        <td>
+                                                            <span class="btn p-0"
+                                                                wire:click='showPredio({{ $predio->id }})'>
+                                                                {{ $predio->descriptor1 }} {{ $predio->numeral1 }}
+                                                                {{ $predio->descriptor2 }} {{ $predio->numeral2 }}
+                                                            </span>
+                                                        </td>
 
-                            </li>
-                            @if ($asambleaOn->registro)
-                                <li class="list-group-item">
-                                    <h6>Apoderado: </h6>
-                                    @if ($Predio->apoderado)
-                                        <p class="ms-3 mb-0">{{ $Predio->apoderado->nombre }}
-                                            {{ $Predio->apoderado->apellido }}</p>
-                                    @else
-                                        <p class="text-muted mb-0">Sin Apoderado</p>
-                                    @endif
-                                </li>
-                            @endif
-                            <li class="list-group-item">
-                                <h6>Coeficiente: </h6> {{ $Predio->coeficiente }}
-                            </li>
-                            <li class="list-group-item">
-                                <h6>Control:
+                                                    </tr>
+                                                @empty
+                                                    <tr class="table-active">
+                                                        <td colspan="2">
+                                                            Sin predios Asignados
+                                                        </td>
+                                                    </tr>
+                                                @endforelse
+                                            @else
+                                                <tr class="table-active">
+                                                    <td colspan="2">
+                                                        Sin predios Asignados
+                                                    </td>
+                                                </tr>
+                                            @endif
 
-                                    @if ($Predio->asignacion->isEmpty())
-                                        Sin Asignar
-                                    @else
-                                        {{ $Predio->asignacion[0]->control_id }}
-                                    @endif
-                                </h6>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 @endisset
 
@@ -345,18 +371,21 @@
         Livewire.on('showModalPersona', (event) => {
             $('#modalPredio').modal('hide');
             $('#modalControl').modal('hide');
+            $('#modalPersona').modal('hide');
             $('#modalPersona').modal('show');
         });
 
         Livewire.on('showModalPredio', (event) => {
             $('#modalControl').modal('hide');
             $('#modalPersona').modal('hide');
+            $('#modalPredio').modal('hide');
             $('#modalPredio').modal('show');
         });
 
         Livewire.on('showModalControl', (event) => {
             $('#modalPredio').modal('hide');
             $('#modalPersona').modal('hide');
+            $('#modalControl').modal('hide');
             $('#modalControl').modal('show');
         });
 

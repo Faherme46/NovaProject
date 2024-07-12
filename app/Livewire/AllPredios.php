@@ -93,18 +93,41 @@ class AllPredios extends Component
     }
     #[On('find-persona')]
     public function showPersona($id){
+        if(!$id){
+            return;
+        }
         $this->Persona=Persona::find($id);
-        $this->dispatch('showModalPersona');
+        if($this->Persona){
+            $this->dispatch('showModalPersona');
+        }else{
+            session()->flash('error1','No fue encontrado');
+        }
     }
 
     public function showPredio($id){
+        if(!$id){
+            return;
+        }
         $this->Predio=Predio::find($id);
-        $this->dispatch('showModalPredio');
+        if($this->Predio){
+            $this->dispatch('showModalPredio');
+        }else{
+            session()->flash('error1','No fue encontrado');
+        }
+
     }
     #[On('find-control')]
     public function showControl($id){
+        if(!$id){
+            return;
+        }
         $this->Control=Control::find($id);
-        $this->dispatch('showModalControl');
+        if($this->Control){
+            $this->dispatch('showModalControl');
+        }else{
+            session()->flash('error1','No fue encontrado');
+        }
+
     }
 
 }

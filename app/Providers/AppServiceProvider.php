@@ -11,6 +11,7 @@ use Maatwebsite\Excel\ExcelServiceProvider;
 use App\Models\State;
 
 use Illuminate\Support\Facades\Auth;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -28,18 +29,27 @@ class AppServiceProvider extends ServiceProvider
     {
 
 
+
         View::composer('*', function ($view) {
-            $asambleaController=new AsambleaController();
-            $sessionController=new sessionController();
-            $id=$sessionController->getSessionId();
-            $sessionUser=Auth::user();
-            $asamblea=$asambleaController->getOne($id);
+            $statesCollect = State::all();
+            $states = [];
+            foreach ($statesCollect as $item) {
+                $states[$item->id] = $item->value;
+                # code...
+            }
+            $asambleaController = new AsambleaController();
+            $sessionController = new sessionController();
+            $id = $sessionController->getSessionId();
+            $sessionUser = Auth::user();
+            $asamblea = $asambleaController->getOne($id);
             $view->with(
-                ['name_asamblea'=> ($asamblea)?$asamblea->folder:'-',
-                'asambleaOn'=>$asamblea,
-                'currentUser'=>($sessionUser)?$sessionUser:null,
-                'states'=>State::all()
-            ]);
+                [
+                    'name_asamblea' => ($asamblea) ? $asamblea->folder : '-',
+                    'asambleaOn' => $asamblea,
+                    'currentUser' => ($sessionUser) ? $sessionUser : null,
+                    'states' => $states
+                ]
+            );
         });
     }
 }
