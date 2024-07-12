@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('control_id')->unique()->constrained()->cascadeOnDelete();
             $table->unsignedBigInteger('cc_asistente')->nullable();
-            $table->string('estado');
+            $table->unsignedBigInteger('estado')->default(0)->constrained()->cascadeOnDelete();;
             $table->decimal('sum_coef', 8, 6);
             $table->timestamps();
             $table->foreign('cc_asistente')->references('id')->on('personas')->onDelete('cascade');

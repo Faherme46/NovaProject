@@ -17,9 +17,19 @@ class Control extends Model
     }
     public function retirar(){
         $asignacion= $this->asignacion;
-        $asignacion->estado='retirado';
-        return $asignacion->save();
+        $asignacion->estado=3;
+        $this->state=3;
+        $asignacion->save();
+        $this->save();
     }
 
-    
+    public function ausentar(){
+        $asignacion= $this->asignacion;
+        $asignacion->estado=2;
+        $this->state=2;
+        $asignacion->save();
+        $this->save();
+    }
+
+
 }

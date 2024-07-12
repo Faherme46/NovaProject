@@ -248,7 +248,7 @@ class Registrar extends Component
             $asignacion = $control->asignacion()->create([
                 'cc_asistente' => $this->cedula,
                 'sum_coef' => $this->sumCoef,
-                'estado' => 'activo'
+                'estado' => 1
             ]);
         } catch (QueryException $e) {
             if ($e->errorInfo[1] == 1062) {

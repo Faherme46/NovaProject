@@ -223,7 +223,7 @@ class Asignacion extends Component
             try {
                 $asignacion = $control->asignacion()->create([
                     'sum_coef' => $this->sumCoef,
-                    'estado' => 'activo'
+                    'estado' => 1
                 ]);
                 $asignacion->predios()->attach(array_keys($this->predioSelected));
             } catch (\Exception $e) {

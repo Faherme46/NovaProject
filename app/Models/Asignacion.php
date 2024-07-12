@@ -27,9 +27,7 @@ class Asignacion extends Model
         return $this->belongsToMany(Predio::class, 'asignacion_predios');
     }
 
-    public function retirarPredios()
-    {
-
+    public function retirarPredios(){
         $this->predios()->detach();
         return $this->setCoef();
     }

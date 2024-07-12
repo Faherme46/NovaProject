@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Livewire;
+use Livewire\Attributes\On;
 
 use Livewire\Component;
 use App\Models\Predio;
@@ -90,7 +91,7 @@ class AllPredios extends Component
 
         $this->dispatch('set-control', controlId: $id);
     }
-
+    #[On('find-persona')]
     public function showPersona($id){
         $this->Persona=Persona::find($id);
         $this->dispatch('showModalPersona');
@@ -100,7 +101,7 @@ class AllPredios extends Component
         $this->Predio=Predio::find($id);
         $this->dispatch('showModalPredio');
     }
-
+    #[On('find-control')]
     public function showControl($id){
         $this->Control=Control::find($id);
         $this->dispatch('showModalControl');

@@ -14,7 +14,7 @@ class QuorumState extends Component
     }
     public function render()
     {
-        $this->quorum=Asignacion::where('estado','activo')->sum('sum_coef');
+        $this->quorum=Asignacion::where('estado',1)->sum('sum_coef');
         return view('livewire.quorum-state');
     }
 

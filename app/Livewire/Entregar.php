@@ -25,7 +25,7 @@ class Entregar extends Component
     public function entregar($controlId){
         $control=Control::find($controlId);
         $asignacion=$control->asignacion;
-        $asignacion->estado='retirado';
+        $asignacion->estado=3;
         $asignacion->save();
     }
 }

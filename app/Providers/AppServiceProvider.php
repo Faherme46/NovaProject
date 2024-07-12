@@ -8,7 +8,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Maatwebsite\Excel\ExcelServiceProvider;
 
-
+use App\Models\State;
 
 use Illuminate\Support\Facades\Auth;
 class AppServiceProvider extends ServiceProvider
@@ -35,9 +35,10 @@ class AppServiceProvider extends ServiceProvider
             $sessionUser=Auth::user();
             $asamblea=$asambleaController->getOne($id);
             $view->with(
-                ['name_asamblea'=> $asamblea->name,
+                ['name_asamblea'=> ($asamblea)?$asamblea->folder:'-',
                 'asambleaOn'=>$asamblea,
-                'currentUser'=>($sessionUser)?$sessionUser:null
+                'currentUser'=>($sessionUser)?$sessionUser:null,
+                'states'=>State::all()
             ]);
         });
     }
