@@ -5,15 +5,18 @@ use App\Http\Controllers\AsambleaController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\PrediosController;
-use App\Http\Controllers\AsistentesController;
 use App\Http\Controllers\LoginController;
+
+use App\Livewire\Consulta;
 use App\Livewire\Registrar;
+use App\Livewire\Asignacion;
+
 use Illuminate\Support\Facades\Route;
 
 
 use App\Http\Middleware\ValidateLogin;
 use App\Http\Middleware\EnsureAsambleaOn;
-use App\View\Components\AllPredios;
+
 
 //rutas de redireccion
 
@@ -63,9 +66,10 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
 });
 
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Admin|Lider|Operario')]], function () {
-
+    Route::get('/asistencia/asignacion', Asignacion::class)->name('asistencia.asignacion');
     Route::get('/asistencia/registrar', Registrar::class)->name('asistencia.registrar');
-
+    Route::get('/consulta', Consulta::class)->name('consulta');
+    Route::get('/entregar', [SessionController::class,'entregar'])->name('entregar');
 
 });
 //rutas para registro
@@ -77,4 +81,4 @@ Route::post('/login', [LoginController::class, 'authenticate'])->name('users.aut
 Route::get('/logout', [LoginController::class, 'logout'])->name('users.logout')->withoutMiddleware(EnsureAsambleaOn::class);
 
 //rutas de prueba
-Route::get('/asistenciaa', [AsistentesController::class, 'asistencia'])->name('asistenciaa');
+Route::get('/asistenciaa', [AsambleaController::class, 'asistencia'])->name('asistenciaa');

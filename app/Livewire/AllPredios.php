@@ -78,4 +78,9 @@ class AllPredios extends Component
         $this->dispatch('add-poderdante', poderdanteId: $id);
     }
 
+    public function dispatchControl($id){
+
+        $this->dispatch('set-control', controlId: $id);
+    }
+
 }

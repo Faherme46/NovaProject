@@ -72,6 +72,8 @@ a {
     color: var(--white-color-txt);
 }
 
+
+
 .bx{
     font-size: 20px !important;
     cursor: pointer !important;
@@ -176,6 +178,7 @@ a {
 .table-responsive {
     padding: 0;
     padding-inline:0.5rem;
+    padding-bottom: 0.5rem;
     position: relative;
     height: 17rem; /* Ajusta según sea necesario */
     overflow: auto;
@@ -189,7 +192,7 @@ a {
 }
 
 .table-fixed-header tbody td {
-
+    
     top: 4rem;
 }
 
@@ -206,3 +209,8 @@ a {
     }
 
 }
+
+.highlight{
+    background-color: rgba(150,150,150,.3);
+}
+

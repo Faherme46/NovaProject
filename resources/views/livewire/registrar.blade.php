@@ -79,7 +79,8 @@
                             <tr>
                                 <th>Nombre</th>
                                 <th>Cedula</th>
-                                <th><a class="btn p-0" wire:click='dropAllPoderdantes'>
+                                <th>
+                                    <a class="btn p-0" wire:click='dropAllPoderdantes'>
                                         <i class='bi bi-x-square-fill'></i>
                                     </a>
                                 </th>
@@ -93,7 +94,6 @@
                                         <td>{{ $p->nombre }} {{ $p->apellido }} </td>
                                         <td>{{ $p->id }}</td>
                                         <td>
-                                            <input type="text" name="cedula" value="{{ $p->id }}" hidden>
                                             <button class="btn p-0"
                                                 wire:click="dropPoderdante({{ $p->id }},{{ $p->predios }})">
                                                 <i class='bi bi-x-square-fill'></i>

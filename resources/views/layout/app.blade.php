@@ -36,8 +36,8 @@
 
 <body id="body-pd">
 
-    <x-theme-toggle/>
-    <x-navbar/>
+    <x-theme-toggle />
+    <x-navbar />
 
     <div class="l-navbar" id="nav-bar">
         <nav class="nav">
@@ -45,7 +45,7 @@
                 <a href="{{ route('home') }}" class="nav_logo"> <i class='bi bi-house-fill nav_logo-icon'></i> <span
                         class="nav_logo-name">Home</span> </a>
                 <div class="nav_list">
-                    <a href="{{ route('asistencia.index') }}" class="nav_link ">
+                    <a href="{{ route('asistencia.registrar') }}" class="nav_link ">
                         <i class='bi bi-person-check-fill nav_icon'></i>
                         <span class="nav_name">Registro</span> </a>
                     @hasanyrole('Admin|Lider')
@@ -55,13 +55,20 @@
                     @endhasanyrole
 
                     <a href="{{ route('asistenciaa') }}" class="nav_link">
-                        <i class='bi bi-ui-checks-grid nav_icon'></i> <span class="nav_name">Asignaciones</span></a>
+                        <i class='bi bi-ui-checks-grid nav_icon'></i> <span class="nav_name">Asignaciones</span>
+                    </a>
                     <a href="{{ route('users.index') }}" class="nav_link">
-                        <i class='bi bi-people-fill nav_icon'></i> <span class="nav_name">Usuarios</span> </a>
-                    <a href="{{route('asistencia.registrar')}}" class="nav_link">
-                        <i class='bi bi-building-check nav_icon'></i> <span class="nav_name">Resultados</span> </a>
-                    <a href="#" class="nav_link">
-                        <i class='bx bx-bar-chart-alt-2 nav_icon'></i> <span class="nav_name">Asistencia</span> </a>
+                        <i class='bi bi-people-fill nav_icon'></i> <span class="nav_name">Usuarios</span>
+                    </a>
+                    <a href="{{ route('asistencia.asignacion') }}" class="nav_link">
+                        <i class='bi bi-building-check nav_icon'></i> <span class="nav_name">Solo Votacion</span>
+                    </a>
+                    <a href="{{ route('consulta') }}" class="nav_link">
+                        <i class='bi bi-patch-question-fill nav_icon'></i> <span class="nav_name">Consulta</span>
+                    </a>
+                    <a href="{{ route('entregar') }}" class="nav_link">
+                        <i class='bi bi-door-closed-fill nav_icon'></i> <span class="nav_name">Entregar</span>
+                    </a>
                 </div>
             </div>
             @auth
@@ -86,46 +93,46 @@
     <div class="height-100 container">
 
         @if (session('success'))
-        <div class="alert alert-success alert-dismissible" role="alert">
-            {{ session('success') }}
+            <div class="alert alert-success alert-dismissible" role="alert">
+                {{ session('success') }}
 
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
 
-    @if ($errors->any())
-        <div class="alert alert-danger alert-dimissible" role="alert">
-            <div class="row justify-content-between">
-                <div class="col-6">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
+        @if ($errors->any())
+            <div class="alert alert-danger alert-dimissible" role="alert">
+                <div class="row justify-content-between">
+                    <div class="col-6">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
 
-                </div>
-                <div class="col-1 offset-md-5">
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <div class="col-1 offset-md-5">
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+
                 </div>
 
             </div>
+        @endif
 
-        </div>
-    @endif
+        @if (session('warning'))
+            <div class="alert alert-warning alert-dismissible" role="alert">
+                {{ session('warning') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
 
-    @if (session('warning'))
-        <div class="alert alert-warning alert-dismissible" role="alert">
-            {{ session('warning') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
-
-    @if (session('info'))
-        <div class="alert alert-info alert-dismissible" role="alert">
-            {{ session('info') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
+        @if (session('info'))
+            <div class="alert alert-info alert-dismissible" role="alert">
+                {{ session('info') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
         <div class="z-2">
             @yield('content')
         </div>

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
@@ -15,6 +16,8 @@ use App\Models\Persona;
 use App\Models\Asamblea;
 use App\Models\Control;
 
+use App\Models\Asignacion;
+
 
 class AsambleaController extends Controller
 {
@@ -23,31 +26,29 @@ class AsambleaController extends Controller
     protected $sessionController;
     protected $fileController;
 
-    public function __construct() {
-        $this->prediosController= new PrediosController();
-        $this->sessionController=new SessionController;
-        $this->fileController= new FileController;
-
+    public function __construct()
+    {
+        $this->prediosController = new PrediosController();
+        $this->sessionController = new SessionController;
+        $this->fileController = new FileController;
     }
     public function index()
     {
 
-        $sessionId=$this->sessionController->getSessionId();
+        $sessionId = $this->sessionController->getSessionId();
 
 
         if ($sessionId) {
             $asambleas = Asamblea::get();
-            $predios=Predio::get();
-            $personas=Persona::get();
-            return view('lider.session', compact('asambleas','personas','predios'));
-
+            $predios = Predio::get();
+            $personas = Persona::get();
+            return view('lider.session', compact('asambleas', 'personas', 'predios'));
         } else {
 
-            $folders=$this->fileController->getFolders();
+            $folders = $this->fileController->getFolders();
             return view('admin.asamblea', compact('folders'));
             # code...
         }
-
     }
 
     public function store(Request $request)
@@ -56,12 +57,12 @@ class AsambleaController extends Controller
         $input = $request->all();
 
         // Modificar los datos del request
-        if ($input['registro']=== 'true') {
-            $input['registro']=true;
-        }else{
-            $input['registro']=false;
+        if ($input['registro'] === 'true') {
+            $input['registro'] = true;
+        } else {
+            $input['registro'] = false;
         }
-        $input['name']=$input['folder'].'_'.$input['fecha'].'_'.$input['hora'];
+        $input['name'] = $input['folder'] . '_' . $input['fecha'] . '_' . $input['hora'];
 
         $request->merge($input);
 
@@ -70,29 +71,30 @@ class AsambleaController extends Controller
             'lugar' => 'required',
             'fecha' => 'required|date',
             'hora' => 'required|date_format:H:i',
-            'controles'=>'required',
-            'registro'=> 'required|boolean',
-        ],[
+            'controles' => 'required',
+            'registro' => 'required|boolean',
+        ], [
             'folder.required' => 'Debe seleccionar un cliente.',
         ]);
 
 
         try {
-            $asamblea=Asamblea::create($request->all());
-            $this->sessionController->setSession($asamblea->id_asamblea,$asamblea->folder);
+            $asamblea = Asamblea::create($request->all());
+            $this->sessionController->setSession($asamblea->id_asamblea, $asamblea->folder);
             $this->prediosController->import($asamblea->folder);
 
-            Cache::put('id_asamblea',$asamblea->id_asamblea);
-            Cache::put('asambleaOn',true);
+            Cache::put('id_asamblea', $asamblea->id_asamblea);
+            Cache::put('asambleaOn', true);
+            Cache::put('controles', $asamblea->controles);
             Control::factory()->count($asamblea->controles)->create();
             return redirect()->route('asambleas.index')->with('success', 'Asamblea creada con éxito.');
-        }catch(QueryException $qe){
+        } catch (QueryException $qe) {
             if ($qe->errorInfo[1] == 1062) { // 1062 es el código de error para duplicados
                 return redirect()->route('asambleas.index')->withErrors('Ya existe una asamblea en la misma fecha.');
             } else {
                 return redirect()->route('asambleas.index')->withErrors($qe->getMessage());
             }
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             $this->sessionController->destroyOnError();
             $this->destroy($asamblea->id_asamblea);
             return redirect()->route('asambleas.index')->withErrors($e->getMessage());
@@ -125,68 +127,68 @@ class AsambleaController extends Controller
     }
 
 
-    public function getName($id){
+    public function getName($id)
+    {
 
-        if ($id){
+        if ($id) {
             $asamblea = Asamblea::findOrFail($id);
             return $asamblea->folder;
-        }else{
-            return('-');
+        } else {
+            return ('-');
         }
-
     }
 
-    public function getOne($id){
-        if ($id){
+    public function getOne($id)
+    {
+        if ($id) {
             $asamblea = Asamblea::findOrFail($id);
             return $asamblea;
-        }else{
-            return(null);
+        } else {
+            return (null);
         }
     }
 
 
-    public function iniciarAsamblea(Request $request){
-            try {
-                $asamblea = Asamblea::findOrFail($request->id_asamblea);
-                $time=Carbon::now(new DateTimeZone('America/Bogota'));
-                if ($asamblea->h_inicio==null) {
-                    $asamblea->h_inicio= $time;
-                    $asamblea->save();
-                    return back()->with('info','Se ha iniciado la asamblea en: '.$time);
-                }else{
-                    return back()->with('warning','Ya se establecio el inicio en: '.$asamblea->h_inicio);
-                }
-            } catch (\Exception $e) {
-                //throw $th;
-                return back()->withErrors($e->getMessage());
-            }
-
-
-
-    }
-
-    public function terminarAsamblea(Request $request){
+    public function iniciarAsamblea(Request $request)
+    {
         try {
             $asamblea = Asamblea::findOrFail($request->id_asamblea);
-            $time=Carbon::now(new DateTimeZone('America/Bogota'));
-            if ($asamblea->h_cierre==null) {
-                $asamblea->h_cierre= $time;
+            $time = Carbon::now(new DateTimeZone('America/Bogota'));
+            if ($asamblea->h_inicio == null) {
+                $asamblea->h_inicio = $time;
                 $asamblea->save();
-                return back()->with('info','Se ha terminado la asamblea en: '.$time);
-            }else{
-                return back()->with('warning','Ya se establecio el cierre en: '.$asamblea->h_cierre);
+                return back()->with('info', 'Se ha iniciado la asamblea en: ' . $time);
+            } else {
+                return back()->with('warning', 'Ya se establecio el inicio en: ' . $asamblea->h_inicio);
             }
-
-
         } catch (\Exception $e) {
             //throw $th;
             return back()->withErrors($e->getMessage());
         }
+    }
 
-
-}
-
+    public function terminarAsamblea(Request $request)
+    {
+        try {
+            $asamblea = Asamblea::findOrFail($request->id_asamblea);
+            $time = Carbon::now(new DateTimeZone('America/Bogota'));
+            if ($asamblea->h_cierre == null) {
+                $asamblea->h_cierre = $time;
+                $asamblea->save();
+                return back()->with('info', 'Se ha terminado la asamblea en: ' . $time);
+            } else {
+                return back()->with('warning', 'Ya se establecio el cierre en: ' . $asamblea->h_cierre);
+            }
+        } catch (\Exception $e) {
+            //throw $th;
+            return back()->withErrors($e->getMessage());
+        }
+    }
+    public function asistencia()
+    {
+        $asignacionesAll = Asignacion::all();
+        return view('asistencia', compact('asignacionesAll'));
+    }
 
 
     //Metodos de manejo de archivos

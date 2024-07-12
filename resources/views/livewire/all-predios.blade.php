@@ -55,16 +55,18 @@
                 <th>Añadir</th>
                 <th>Propietario</th>
                 <th>Predio</th>
-                <th>Coef</th>
+                {{-- <th>Coef</th> --}}
             </thead>
             <tbody>
                 @forelse ($prediosAll as $predio)
                     @if (!$predio->asignacion->isEmpty())
                         <tr class="table-active">
                             <td>
-                                <h2 class="btn pt-0 pb-0 mb-0">{{ $predio->asignacion[0]->control_id }}</h2>
+                                <button class="btn pt-0 pb-0 mb-0" wire:click="dispatchControl({{ $predio->asignacion[0]->control_id }})">
+                                    {{ $predio->asignacion[0]->control_id }}
+                                </button>
                             </td>
-                        @else
+                    @else
                         <tr>
                             <td>
                                 <button wire:click="dispatchPredio({{ $predio->id }})" class="btn pt-0 pb-0 mb-0">
@@ -73,9 +75,10 @@
                             </td>
                     @endif
                     <td>
-                        <button type="button" class="btn p-0"  wire:click='dispatchPersona({{ $predio->cc_propietario }})'
+                        <button type="button" class="btn p-0"
+                            wire:click='dispatchPersona({{ $predio->cc_propietario }})'
                             wire:confirm='¿Deseas cambiar el poderdante?'>
-                            <i class="bi bi-copy"  ></i>
+                            <i class="bi bi-copy"></i>
                         </button>
                         <button class="btn pt-0 pb-0 mb-0"
                             wire:click='dispatchPoderdante({{ $predio->cc_propietario }})'>
@@ -85,7 +88,7 @@
                     <td>{{ $predio->descriptor1 }} {{ $predio->numeral1 }}
                         {{ $predio->descriptor2 }} {{ $predio->numeral2 }}
                     </td>
-                    <td>{{ $predio->coeficiente }}</td>
+                    {{-- <td>{{ $predio->coeficiente }}</td> --}}
                     </tr>
                 @empty
                     <tr>
@@ -112,8 +115,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-primary"
-                    data-bs-dismiss="modal">Cambiar</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cambiar</button>
                 </div>
             </div>
         </div>

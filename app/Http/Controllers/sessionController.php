@@ -70,6 +70,7 @@ class SessionController extends Controller
         $sessionOn->update($session);
     }
 
+    
 
 
 

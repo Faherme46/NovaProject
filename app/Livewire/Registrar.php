@@ -20,7 +20,8 @@ class Registrar extends Component
     public $controlIds;
 
     #asistente
-    #[Validate('required',null,null,'Cedula requerida')]
+    #[Validate('required',message:'Cedula requerida')]
+
     public $cedula = '';
     public $asistente = null;
     public $name;
@@ -166,7 +167,6 @@ class Registrar extends Component
 
     public function dropAllPoderdantes()
     {
-        dd($this->asignacion);
         $this->reset(['ccPoderdante', 'poderdantes', 'poderdantesIDs']);
         $this->mount();
         $this->reset(['prediosAvailable', 'predioSelected']);
