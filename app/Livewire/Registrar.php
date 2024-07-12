@@ -20,7 +20,7 @@ class Registrar extends Component
     public $controlIds;
 
     #asistente
-    #[Validate('required',message:'Cedula requerida')]
+    #[Validate('required', message: 'Cedula requerida')]
 
     public $cedula = '';
     public $asistente = null;
@@ -75,7 +75,7 @@ class Registrar extends Component
     public function cleanData($cedula)
     {
         $this->reset([
-            'asistente', 'name', 'lastName', 'ccPoderdante', 'sumCoef', 'controlId','asignacion',
+            'asistente', 'name', 'lastName', 'ccPoderdante', 'sumCoef', 'controlId', 'asignacion',
             'poderdantes', 'poderdantesIDs', 'prediosAvailable', 'predioSelected', 'selectAll', 'asignaciones'
         ]);
         if ($cedula) {
@@ -262,6 +262,8 @@ class Registrar extends Component
         }
 
         $asignacion->predios()->attach($this->predioSelected);
+        $control->state = 1;
+        $control->save();
 
         if (count($this->prediosAvailable) == count($this->predioSelected)) {
             $this->cleanData(1);
@@ -307,31 +309,35 @@ class Registrar extends Component
     }
 
 
-    public function resetAsignacion(){
-        $this->reset(['asignacion','asignaciones']);
+    public function resetAsignacion()
+    {
+        $this->reset(['asignacion', 'asignaciones']);
     }
 
     #[On('add-predio')]
-    public function addPredioToList($predioId){
+    public function addPredioToList($predioId)
+    {
         $this->validate();
-        $predio=Predio::find($predioId);
-        if($predio){
-            $this->prediosAvailable[$predioId]=$predio;
-            $this->predioSelected[]=$predioId;
+        $predio = Predio::find($predioId);
+        if ($predio) {
+            $this->prediosAvailable[$predioId] = $predio;
+            $this->predioSelected[] = $predioId;
         }
     }
 
     #[On('add-poderdante')]
-    public function addPoderdanteToList($poderdanteId){
+    public function addPoderdanteToList($poderdanteId)
+    {
 
-        $this->ccPoderdante=$poderdanteId;
+        $this->ccPoderdante = $poderdanteId;
         $this->addPoderdante();
     }
 
     #[On('search-persona')]
-    public function addPersonaToList($personaId){
+    public function addPersonaToList($personaId)
+    {
         $this->cleanData(0);
-        $this->cedula=$personaId;
+        $this->cedula = $personaId;
         $this->search();
     }
 

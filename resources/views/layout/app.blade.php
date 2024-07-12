@@ -47,25 +47,28 @@
                 <div class="nav_list">
 
 
-
-                    @if ($asambleaOn->registro)
-                        <a href="{{ route('asistencia.registrar') }}" class="nav_link ">
-                            <i class='bi bi-person-check-fill nav_icon'></i> <span class="nav_name">Registro</span>
+                    @if ($asambleaOn)
+                        @if ($asambleaOn->registro)
+                            <a href="{{ route('asistencia.registrar') }}" class="nav_link ">
+                                <i class='bi bi-person-check-fill nav_icon'></i> <span class="nav_name">Registro</span>
+                            </a>
+                        @else
+                            <a href="{{ route('asistencia.asignacion') }}" class="nav_link">
+                                <i class='bi bi-building-check nav_icon'></i> <span class="nav_name">Asignar</span>
+                            </a>
+                        @endif
+                        <a href="{{ route('asistenciaa') }}" class="nav_link">
+                            <i class='bi bi-ui-checks-grid nav_icon'></i> <span class="nav_name">Asignaciones</span>
                         </a>
-                    @else
-                        <a href="{{ route('asistencia.asignacion') }}" class="nav_link">
-                            <i class='bi bi-building-check nav_icon'></i> <span class="nav_name">Asignar</span>
+
+
+                        <a href="{{ route('consulta') }}" class="nav_link">
+                            <i class='bi bi-patch-question-fill nav_icon'></i> <span class="nav_name">Consulta</span>
                         </a>
                     @endif
 
-                    <a href="{{ route('asistenciaa') }}" class="nav_link">
-                        <i class='bi bi-ui-checks-grid nav_icon'></i> <span class="nav_name">Asignaciones</span>
-                    </a>
 
 
-                    <a href="{{ route('consulta') }}" class="nav_link">
-                        <i class='bi bi-patch-question-fill nav_icon'></i> <span class="nav_name">Consulta</span>
-                    </a>
 
                     @hasanyrole('Admin')
                         <a href="{{ route('admin.asambleas') }}" class="nav_link">

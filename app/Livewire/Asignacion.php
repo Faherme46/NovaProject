@@ -225,6 +225,8 @@ class Asignacion extends Component
                     'sum_coef' => $this->sumCoef,
                     'estado' => 1
                 ]);
+                $control->state=1;
+                $control->save();
                 $asignacion->predios()->attach(array_keys($this->predioSelected));
             } catch (\Exception $e) {
                 return  session()->flash('warning1', $e->getMessage());

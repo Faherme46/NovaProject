@@ -23,6 +23,14 @@ class Control extends Model
         $this->save();
     }
 
+    public function changeState($value){
+        $asignacion= $this->asignacion;
+        $asignacion->estado=$value;
+        $this->state=$value;
+        $asignacion->save();
+        $this->save();
+    }
+
     public function ausentar(){
         $asignacion= $this->asignacion;
         $asignacion->estado=2;
