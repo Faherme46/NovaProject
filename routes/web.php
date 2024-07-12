@@ -10,6 +10,7 @@ use App\Http\Controllers\LoginController;
 use App\Livewire\Consulta;
 use App\Livewire\Registrar;
 use App\Livewire\Asignacion;
+use App\Livewire\Entregar;
 
 use Illuminate\Support\Facades\Route;
 
@@ -69,7 +70,7 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::get('/asistencia/asignacion', Asignacion::class)->name('asistencia.asignacion');
     Route::get('/asistencia/registrar', Registrar::class)->name('asistencia.registrar');
     Route::get('/consulta', Consulta::class)->name('consulta');
-    Route::get('/entregar', [SessionController::class,'entregar'])->name('entregar');
+    Route::get('/entregar', Entregar::class)->name('entregar');
 
 });
 //rutas para registro
