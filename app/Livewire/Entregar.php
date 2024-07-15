@@ -17,7 +17,8 @@ class Entregar extends Component
         1=>'btn-primary',
         2=>'btn-info',
         3=>'btn-warning',
-        4=>'btn-black'
+        4=>'btn-black',
+        5=>'btn-danger'
     ];
 
     public function mount(){

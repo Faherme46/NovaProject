@@ -61,7 +61,8 @@
 
                                                     <td>
 
-                                                        <button class="btn p-0" wire:click="toRight({{ $predio->id }})">
+                                                        <button class="btn p-0"
+                                                            wire:click="toRight({{ $predio->id }})">
                                                             <i class='bi bi-arrow-right-square-fill'></i>
                                                         </button>
 
@@ -72,7 +73,6 @@
                                                 @if ($controlIdL)
                                                     <tr class="table-active">
                                                         <td colspan="2">
-
                                                             {{ $messageL ? $messageL : 'Sin predios' }}
                                                         </td>
                                                     </tr>
@@ -83,9 +83,17 @@
                                     </table>
                                 </div>
 
-                                <div class="card-footer text-end">
-                                    <input class="form-control d-inline-block w-50" name="sum_coef"
-                                        value="{{ $sumCoefL }}" id="sumCoef" readonly>
+                                <div class="card-footer justify-content-between d-flex">
+                                    <div class="col-7 align-content-center">
+                                            @if ($asambleaOn->registro && $nameL)
+                                                <p class="mb-0">{{$nameL}}</p>
+                                            @endif
+                                    </div>
+                                    <div class="col-5">
+                                        <input class="form-control d-inline-block " name="sum_coef"
+                                            value="{{ $sumCoefL }}" id="sumCoef" readonly>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -159,9 +167,17 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="card-footer text-end">
-                                    <input class="form-control d-inline-block w-50" name="sum_coef"
-                                        value="{{ $sumCoefR }}" id="sumCoef" readonly>
+                                <div class="card-footer justify-content-between d-flex">
+                                    <div class="col-7 align-content-center">
+                                            @if ($asambleaOn->registro && $nameR)
+                                               <p class="mb-0">{{$nameR}}</p>
+                                            @endif
+                                    </div>
+                                    <div class="col-5">
+                                        <input class="form-control d-inline-block " name="sum_coef"
+                                            value="{{ $sumCoefR}}" id="sumCoef" readonly>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -183,13 +199,15 @@
                         <div class="mb-3 d-flex ">
                             <div class="col-8 me-1 ">
                                 <input class="me-2 form-control @error('cedula') is-invalid @enderror" type="text"
-                                 onkeypress="return onlyNumbers(event)" maxlength="12" wire:model='cedulaSearch' placeholder="Cedula" >
+                                    onkeypress="return onlyNumbers(event)" maxlength="12" wire:model='cedulaSearch'
+                                    placeholder="Cedula">
                                 @error('noFound')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="col">
-                                <button class="btn btn-primary" wire:click='searchPersona'><i class="bi bi-search"></i></button>
+                                <button class="btn btn-primary" wire:click='searchPersona'><i
+                                        class="bi bi-search"></i></button>
                             </div>
                         </div>
                     </div>
@@ -207,10 +225,12 @@
                         <div class="mb-3 d-flex ">
                             <div class="col-8 me-1 ">
                                 <input class="me-2 form-control @error('control') is-invalid @enderror" type="text"
-                                 onkeypress="return onlyNumbers(event)" maxlength="3" wire:model='controlIdSearch' placeholder="#" >
+                                    onkeypress="return onlyNumbers(event)" maxlength="3"
+                                    wire:model='controlIdSearch' placeholder="#">
                             </div>
                             <div class="col">
-                                <button class="btn btn-primary" wire:click='searchControl'><i class="bi bi-search"></i></button>
+                                <button class="btn btn-primary" wire:click='searchControl'><i
+                                        class="bi bi-search"></i></button>
                             </div>
                         </div>
                     </div>

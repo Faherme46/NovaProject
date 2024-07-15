@@ -60,10 +60,11 @@
                         <a href="{{ route('asistenciaa') }}" class="nav_link">
                             <i class='bi bi-ui-checks-grid nav_icon'></i> <span class="nav_name">Asignaciones</span>
                         </a>
-
-
                         <a href="{{ route('consulta') }}" class="nav_link">
                             <i class='bi bi-patch-question-fill nav_icon'></i> <span class="nav_name">Consulta</span>
+                        </a>
+                        <a href="{{ route('entregar') }}" class="nav_link">
+                            <i class='bi bi-door-closed-fill nav_icon'></i> <span class="nav_name">Entregar</span>
                         </a>
                     @endif
 
@@ -80,9 +81,7 @@
                         <a href="{{ route('users.index') }}" class="nav_link">
                             <i class='bi bi-people-fill nav_icon'></i> <span class="nav_name">Usuarios</span>
                         </a>
-                        <a href="{{ route('entregar') }}" class="nav_link">
-                            <i class='bi bi-door-closed-fill nav_icon'></i> <span class="nav_name">Entregar</span>
-                        </a>
+
                     @endhasanyrole
 
 

@@ -21,7 +21,7 @@
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" wire:click='close'>Cancelar</button>
               <button type="button" wire:click='change(2)' class="btn btn-info">Ausente</button>
-              <button type="button" wire:click='change(3)' class="btn btn-warning">Retirado</button>
+              <button type="button" wire:click='change(5)' class="btn btn-danger">Entregado</button>
               <button type="button" wire:click='change(1)' class="btn btn-primary">Activo</button>
             </div>
           </div>

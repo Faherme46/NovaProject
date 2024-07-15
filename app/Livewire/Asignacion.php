@@ -35,7 +35,7 @@ class Asignacion extends Component
         $this->mount();
     }
     public function mount() {
-        $this->controlId=session('controlTurn',0);
+        $this->controlId=session('controlTurn');
         $this->maxControls= Cache::get('controles');
     }
 
@@ -120,7 +120,10 @@ class Asignacion extends Component
 
     public function updatedControlId($value)
     {
-
+        $this->reset('prediosAsigned','asignacion');
+        if(!$value){
+            return;
+        }
 
         if ($value>$this->maxControls) {
             $this->addError('controlId', 'El control no es valido');

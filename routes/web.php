@@ -27,7 +27,7 @@ use App\Http\Middleware\EnsureAsambleaOn;
 
 Route::get('/', function () {
     return view('welcome');
-})->name('home')->withoutMiddleware([EnsureAsambleaOn::class, ValidateLogin::class]);
+})->name('home')->withoutMiddleware([EnsureAsambleaOn::class]);
 Route::get('/votos', function () {
     return view('votos');
 });
@@ -59,7 +59,7 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Admin|Lider')]], function () {
     Route::get('admin/asambleas', [AsambleaController::class, 'index'])->name('admin.asambleas')->withoutMiddleware(EnsureAsambleaOn::class);
     Route::resource('asambleas', AsambleaController::class)->withoutMiddleware(EnsureAsambleaOn::class);
-    Route::get('/users', [UsersController::class, 'index'])->name('users.index');
+    Route::get('/users', [UsersController::class, 'index'])->name('users.index')->withoutMiddleware([EnsureAsambleaOn::class]);;
     Route::post('users/create', [UsersController::class, 'createUser'])->name('users.create');
     Route::get('users/import', [UsersController::class, 'importUsers'])->name('users.import');
     Route::post('admin/inicio', [AsambleaController::class, 'iniciarAsamblea'])->name('asambleas.inicia');

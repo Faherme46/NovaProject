@@ -7,7 +7,7 @@
         <div class="col-3">
 
             <input wire:model.live='searchId' type="text" id="searchId" name="cc_propietario" class="form-control"
-                placeholder="Propietario" onkeypress="return onlyNumbers(event)">
+                placeholder="Propietario" onkeypress="return onlyNumbers(event)" onclick="this.select()" >
 
         </div>
         <div class="col-2">
@@ -35,7 +35,7 @@
         </div>
         <div class="col-2">
             <input wire:model.live='numeral2' type="text" class="form-control" placeholder="#"
-                onkeypress="return onlyNumbers(event)" maxlength="5">
+                onkeypress="return onlyNumbers(event)" maxlength="5" onclick="this.select()" >
         </div>
         <div class="col-1 fpr">
             <button wire:click='clean' class=" btn btn-danger"><i class='bi bi-x-circle-fill '></i></button>

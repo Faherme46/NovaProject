@@ -26,12 +26,14 @@ class Consulta extends Component
     public $sumCoefR;
     public $sumCoefL;
 
-    public $asignacion;
     public $maxControls;
     public $inChange = true;
 
     public $messageL = 'Sin Predios';
     public $messageR = 'Sin Predios';
+
+    public $nameL;
+    public $nameR;
 
     public $proof1;
 
@@ -49,7 +51,8 @@ class Consulta extends Component
         if ($value) {
             $this->reset('controlIdR', 'controlIdL');
         }
-        $this->reset(['messageL', 'changes', 'messageR', 'asignacion', 'prediosR', 'prediosL', 'sumCoefR', 'sumCoefL', 'controlRInvalid', 'controlLInvalid']);
+        $this->reset(['messageL', 'changes', 'messageR', 'prediosR', 'prediosL', 'sumCoefR',
+        'sumCoefL', 'controlRInvalid', 'controlLInvalid','nameR','nameL']);
         $this->mount();
     }
     public function mount()
@@ -144,7 +147,8 @@ class Consulta extends Component
         $control = Control::find($value);
         $asignacion = $control->asignacion;
         if ($asignacion) {
-            if ($asignacion->estado != 3) {
+            if ($asignacion->estado != 3 && $asignacion->estado != 5) {
+                $this->nameR=$asignacion->persona->nombre;
                 $predios = $asignacion->predios;
                 $this->messageR = (!$predios->isEmpty()) ? '' : 'Sin Predios';
                 foreach ($predios as $predio) {
@@ -152,7 +156,7 @@ class Consulta extends Component
                 }
                 $this->controlRInvalid = false;
             } else {
-                $this->messageR = 'Control Retirado';
+                $this->messageR =($asignacion->estado == 5)?'Control Entregado': 'Control Retirado';
                 $this->controlRInvalid = true;
             }
         }
@@ -179,15 +183,16 @@ class Consulta extends Component
         $control = Control::find($value);
         $asignacion = $control->asignacion;
         if ($asignacion) {
-            if ($asignacion->estado != 3) {
+            if ($asignacion->estado != 3 && $asignacion->estado != 5) {
                 $predios = $asignacion->predios;
+                $this->nameL=$asignacion->persona->nombre;
                 $this->messageL = (!$predios->isEmpty()) ? '' : 'Sin Predios';
                 $this->controlRInvalid = false;
                 foreach ($predios as $predio) {
                     $this->prediosL[$predio->id] = $predio;
                 }
             } else {
-                $this->messageL = 'Control Retirado';
+                $this->messageL = ($asignacion->estado == 5)?'Control Entregado': 'Control Retirado';
                 $this->controlRInvalid = true;
             }
         }

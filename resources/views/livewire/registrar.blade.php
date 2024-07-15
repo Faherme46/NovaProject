@@ -21,7 +21,7 @@
                             <input class="me-2 form-control @error('cedula') is-invalid @enderror" type="text"
                                 class="form-control" onkeypress="return onlyNumbers(event)" maxlength="12"
                                 name="cedula" value="{{ $cedula ? $cedula : '' }}" wire:model='cedula'
-                                @disabled($asistente)>
+                                @disabled($asistente) onclick="this.select()" >
                             @error('cedula')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -66,7 +66,7 @@
 
                         <input placeholder="cedula" onkeypress="return onlyNumbers(event)" type="text"
                             name="cedulaPropietario" id="cc" class="form-control" placeholder=""
-                            aria-describedby="helpId" wire:model='ccPoderdante' />
+                            aria-describedby="helpId" wire:model='ccPoderdante' onclick="this.select()" />
                         <button type="submit" class="btn ms-1 btn-primary" wire:click='addPoderdante'>
                             <i class='bi bi-arrow-right-circle-fill'></i>
                         </button>
@@ -242,7 +242,7 @@
                                 </select>
                             </div>
                             <div class="col-5">
-                                <input type="text" name="cedula" class="form-control"
+                                <input type="text" name="cedula" class="form-control" onclick="this.select()"
                                     value="{{ $cedula }}" onkeypress="return onlyNumbers(event)"
                                     maxlength="12" wire:model='cedula' required />
                                 <small id="helpId" class="text-muted">Cedula</small>
@@ -250,7 +250,7 @@
 
                         </div>
                         <div class="mb-3">
-                            <input type="text" name="nombre" id="" class="form-control"
+                            <input type="text" name="nombre" id="" class="form-control" onclick="this.select()"
                                 onkeypress="return noNumbers(event)" wire:model='name' />
                             <div>
                                 @error('name')
@@ -260,7 +260,7 @@
                             <small id="helpId" class="text-muted">Nombre</small>
                         </div>
                         <div class="mb-3">
-                            <input type="text" name="apellido" id="" class="form-control"
+                            <input type="text" name="apellido" id="" class="form-control" onclick="this.select()"
                                 value="{{ old('apelldio') }}" wire:model='lastName' placeholder="" />
                             <small id="helpId" class="text-muted">Apellido</small>
                         </div>
@@ -280,7 +280,7 @@
 
 
 <script>
-    
+
     document.addEventListener('livewire:init', () => {
         Livewire.on('showModal', (event) => {
             $('#myModal').modal('show');

@@ -82,7 +82,7 @@
                                 <div class="d-flex justify-content-center">
                                     <input type="text"
                                         class="form-control bg-success-subtle w-50 @error('controlId') is-invalid @enderror"
-                                        wire:model.live='controlId' placeholder="Control"
+                                        wire:model.live='controlId' placeholder="Control" onclick="this.select()" 
                                         onkeypress="return onlyNumbers(event)" maxlength="3">
                                     <button class="btn btn-primary ms-2 " wire:click='asignar'>
                                         Asignar
