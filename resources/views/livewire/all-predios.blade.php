@@ -55,12 +55,12 @@
             </thead>
             <tbody>
                 @forelse ($prediosAll as $predio)
-                    @if (!$predio->asignacion->isEmpty())
+                    @if (!$predio->control->isEmpty())
                         <tr class="table-active">
                             <td>
-                                <button class="btn pt-0 pb-0 mb-0" wire:dblclick='showControl({{$predio->asignacion[0]->control_id }})'
-                                    wire:click="dispatchControl({{ $predio->asignacion[0]->control_id }})">
-                                    {{ $predio->asignacion[0]->control_id }}
+                                <button class="btn pt-0 pb-0 mb-0" wire:dblclick='showControl({{$predio->control[0]->control_id }})'
+                                    wire:click="dispatchControl({{ $predio->control[0]->control_id }})">
+                                    {{ $predio->control[0]->control_id }}
                                 </button>
                             </td>
                         @else
@@ -253,10 +253,10 @@
                             <li class="list-group-item">
                                 <h6>Control:
 
-                                    @if ($Predio->asignacion->isEmpty())
+                                    @if ($Predio->contol->isEmpty())
                                         Sin Asignar
                                     @else
-                                        {{ $Predio->asignacion[0]->control_id }}
+                                        {{ $Predio->control[0]->control_id }}
                                     @endif
                                 </h6>
                             </li>
@@ -281,37 +281,34 @@
                         <div class="col-6">
                             <ul class="list-group">
 
-                                @if ($Control->asignacion)
-                                    <li class="list-group-item">
-                                        <h6 class="mb-0">Asignacion:{{ $Control->asignacion->id }}
-                                        </h6>
-                                    </li>
+                                @if ($Control->asignacion())
+
                                     <li class="list-group-item">
                                         <h6>Estado: {{ $states[$Control->state] }}</h6>
                                     </li>
                                     <li class="list-group-item">
-                                        <h6>Coeficiente: {{ $Control->asignacion->sum_coef }}</h6>
+                                        <h6>Coeficiente: {{ $Control->sum_coef }}</h6>
                                     </li>
                                 @else
                                     <li class="list-group-item">Sin asignar</li>
 
                                 @endif
 
-                                @if ($asambleaOn->registro && $Control->asignacion)
+                                @if ($asambleaOn->registro && $Control->asignacion())
                                     <li class="list-group-item d-flex">
                                         <div class="ms-0 me-auto ">
 
                                             <div class="fw-bold">Asistente: </div>
                                             <div class="d-flex">
-                                                <p class="ms-3 mb-0">{{ $Control->asignacion->persona->nombre }}
-                                                    {{ $Control->asignacion->persona->apellido }}</p>
-                                                <p class="ms-3 mb-0"> {{ $Control->asignacion->persona->tipo_id }}:
-                                                    {{ $Control->asignacion->persona->id }}
+                                                <p class="ms-3 mb-0">{{ $Control->persona->nombre }}
+                                                    {{ $Control->persona->apellido }}</p>
+                                                <p class="ms-3 mb-0"> {{ $Control->persona->tipo_id }}:
+                                                    {{ $Control->persona->id }}
                                                 </p>
                                             </div>
                                         </div>
                                         <span class="badge btn text-bg-primary rounded-pill pt-2"
-                                            wire:click='showPersona({{ $Control->asignacion->persona->id }})'>
+                                            wire:click='showPersona({{ $Control->persona->id }})'>
                                             <i class="bi bi-eye fs-2"></i>
                                         </span>
                                     </li>
@@ -326,8 +323,8 @@
                                 <div class="card-body table-responsive table-fixed-header px-0">
                                     <table class="w-100 table mb-0 ">
                                         <tbody>
-                                            @if ($Control->asignacion)
-                                                @forelse ($Control->asignacion->predios as $predio)
+                                            @if ($Control->asignacion())
+                                                @forelse ($Control->predios as $predio)
                                                     <tr scope="row">
                                                         <td>
                                                             <span class="btn p-0"

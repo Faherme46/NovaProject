@@ -12,32 +12,43 @@ class Control extends Model
 {
     use HasFactory;
 
+    protected $guarded=[];
     public function asignacion(){
-        return $this->hasOne(Asignacion::class);
+
+        return ($this->state==4);
     }
+    
+    public function predios()
+    {
+        return $this->belongsToMany(Predio::class, 'asignacion_predios');
+    }
+    public function persona()
+    {
+        return $this->belongsTo(Persona::class, 'cc_asistente', 'id');
+    }
+
+
     public function retirar(){
-        $asignacion= $this->asignacion;
-        $asignacion->estado=3;
         $this->state=3;
-        $asignacion->save();
+        $this->setCoef();
+        $this->predios()->detach();
         $this->save();
     }
 
+
     public function changeState($value){
-        $asignacion= $this->asignacion;
-        $asignacion->estado=$value;
         $this->state=$value;
-        $asignacion->save();
         $this->save();
     }
 
     public function ausentar(){
-        $asignacion= $this->asignacion;
-        $asignacion->estado=2;
         $this->state=2;
-        $asignacion->save();
         $this->save();
     }
 
-
+    public function setCoef()
+    {
+        $this->sum_coef = $this->predios->sum('coeficiente');
+        return $this->save();
+    }
 }

@@ -16,18 +16,18 @@
                     </thead>
                     <tbody>
 
-                        @forelse ($asignacionesAll as $asignacion)
+                        @forelse ($allControls as $control)
                             <tr>
-                                <td>{{ $asignacion->control_id }}</td>
-                                {{-- <td>{{ $asignacion->persona->nombre }} {{ $asignacion->persona->apellido }}</td> --}}
+                                <td>{{ $control->id }}</td>
+                                {{-- <td>{{ $control->persona->nombre }} {{ $control->persona->apellido }}</td> --}}
                                 <td>
-                                    @foreach ($asignacion->predios as $predio)
+                                    @foreach ($control->predios as $predio)
                                         {{ $predio->descriptor1 }} {{ $predio->numeral1 }} {{ $predio->descriptor2 }}
                                         {{ $predio->numeral2 }} <br>
                                     @endforeach
                                 </td>
-                                <td>{{ $asignacion->sum_coef }}</td>
-                                <td>{{ $asignacion->estado }}</td>
+                                <td>{{ $control->sum_coef }}</td>
+                                <td>{{ $control->estado }}</td>
                             </tr>
                         @empty
                             <tr>

@@ -14,7 +14,11 @@ return new class extends Migration
         Schema::create('controls', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('state')->default(1);
+            $table->unsignedBigInteger('cc_asistente')->nullable();
+            $table->decimal('sum_coef', 8, 6);
             $table->timestamps();
+            $table->foreign('cc_asistente')->references('id')->on('personas')->onDelete('cascade');
+            $table->foreign('state')->references('id')->on('states')->onDelete('cascade');
         });
     }
 

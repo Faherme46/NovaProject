@@ -2,7 +2,7 @@
 
 namespace App\Livewire;
 
-use App\Models\Asignacion;
+use App\Models\Control;
 use Livewire\Component;
 
 class QuorumState extends Component
@@ -14,7 +14,7 @@ class QuorumState extends Component
     }
     public function render()
     {
-        $this->quorum=Asignacion::where('estado',1)->sum('sum_coef');
+        $this->quorum=Control::where('state',1)->sum('sum_coef');
         return view('livewire.quorum-state');
     }
 

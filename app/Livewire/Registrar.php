@@ -40,10 +40,11 @@ class Registrar extends Component
     public $predioSelected = [];
     public $selectAll = false;
 
+    public $controles;
+    public $controlH;
+
 
     #asignacion
-    public $asignaciones;
-    public $asignacion;
     public $controlId;
     public $sumCoef = 0;
 
@@ -62,7 +63,7 @@ class Registrar extends Component
 
     public function getAvailableControls()
     {
-        $availableControls = Control::whereDoesntHave('asignacion')->get();
+        $availableControls = Control::where('state', 4);
         $this->controlIds = $availableControls->pluck('id')->toArray();
         $controlTurn = session('controlTurn', 0);
         if ($controlTurn) {
@@ -75,8 +76,8 @@ class Registrar extends Component
     public function cleanData($cedula)
     {
         $this->reset([
-            'asistente', 'name', 'lastName', 'ccPoderdante', 'sumCoef', 'controlId', 'asignacion',
-            'poderdantes', 'poderdantesIDs', 'prediosAvailable', 'predioSelected', 'selectAll', 'asignaciones'
+            'asistente', 'name', 'lastName', 'ccPoderdante', 'sumCoef', 'controlId',
+            'poderdantes', 'poderdantesIDs', 'prediosAvailable', 'predioSelected', 'selectAll'
         ]);
         if ($cedula) {
             $this->reset(['cedula']);
@@ -91,12 +92,12 @@ class Registrar extends Component
         $this->asistente = Persona::find($this->cedula);
 
         if ($this->asistente) {
-            if (!$this->asistente->asignaciones->isEmpty()) {
-                foreach ($this->asistente->asignaciones as $asignacion) {
-                    $this->asignaciones[$asignacion->control_id] = $asignacion;
+            if (!$this->asistente->controles->isEmpty()) {
+                foreach ($this->asistente->controles as $control) {
+                    $this->controles[$control->id] = $control;
                 }
-                $keys = array_keys($this->asignaciones);
-                $this->asignacion = $keys[0];
+                $keys = array_keys($this->controles);
+                $this->controlH = $keys[0];
             }
 
             $this->name = $this->asistente->nombre;
@@ -156,7 +157,7 @@ class Registrar extends Component
     public function addPredios($predios)
     {
         foreach ($predios as $predio) {
-            if (!array_key_exists($predio->id, $this->prediosAvailable) && $predio->asignacion->isEmpty()) {
+            if (!array_key_exists($predio->id, $this->prediosAvailable) && $predio->control->isEmpty()) {
                 $this->prediosAvailable[$predio->id] = $predio;
                 $this->predioSelected[] = $predio->id;
             }
@@ -206,9 +207,6 @@ class Registrar extends Component
         $this->selectAll = count($this->predioSelected) === count($this->prediosAvailable);
     }
 
-    public function updatedAsignacion($value)
-    {
-    }
 
     public function setSumCoef()
     {
@@ -223,9 +221,9 @@ class Registrar extends Component
     }
 
 
-    public function asignar()
+    public function asignar($option)
     {
-
+        #option 0 to asign 1 to edit
         $this->validate();
 
         if (!$this->prediosAvailable || !$this->predioSelected) {
@@ -238,18 +236,26 @@ class Registrar extends Component
         $control = Control::find($this->controlId);
         session(['controlTurn' => strval($this->controlId + 1)]);
         //control Uso
-        if ($control->asignacion) {
-            $this->getAvailableControls();
-            $this->controlId = reset($this->controlIds);
-            return session()->flash('warning1', 'El control ya esta en uso');
-        };
+
 
         try {
-            $asignacion = $control->asignacion()->create([
-                'cc_asistente' => $this->cedula,
-                'sum_coef' => $this->sumCoef,
-                'estado' => 1
-            ]);
+            if ($option){
+                $idPredios = $this->predioSelected;
+                $controlH = $this->controles[$this->controlH];
+                $controlH->predios()->syncWithoutDetaching($idPredios);
+            }else{
+                if ($control->asignacion()) {
+                    $this->getAvailableControls();
+                    $this->controlId = reset($this->controlIds);
+                    return session()->flash('warning1', 'El control ya esta en uso');
+                };
+                $control->cc_asistente = $this->cedula;
+                $control->sum_coef = $this->sumCoef;
+                $control->predios()->attach($this->predioSelected);
+                $control->state = 1;
+                $control->save();
+            }
+
         } catch (QueryException $e) {
             if ($e->errorInfo[1] == 1062) {
                 // Manejar la excepción específica de "Duplicate entry"
@@ -261,9 +267,7 @@ class Registrar extends Component
             return  session()->flash('warning1', $e->getMessage());
         }
 
-        $asignacion->predios()->attach($this->predioSelected);
-        $control->state = 1;
-        $control->save();
+
 
         if (count($this->prediosAvailable) == count($this->predioSelected)) {
             $this->cleanData(1);
@@ -273,45 +277,9 @@ class Registrar extends Component
     }
 
 
-    public function editAsignacion()
+    public function resetControls()
     {
-        $this->validate();
-
-        if (!$this->prediosAvailable || !$this->predioSelected) {
-            return session()->flash('warning1', 'No hay predios para asignar2');
-        }
-        if (!$this->controlId) {
-            return session()->flash('warning1', 'No hay Control Seleccionado');
-        }
-
-        $idPredios = $this->predioSelected;
-        $asignacion = $this->asignaciones[$this->asignacion];
-
-        try {
-            $asignacion->predios()->syncWithoutDetaching($idPredios);
-        } catch (QueryException $e) {
-            if ($e->errorInfo[1] == 1062) {
-                // Manejar la excepción específica de "Duplicate entry"
-                return  session()->flash('warning1', 'El número de control ya está asignado. Por favor, elige otro.');
-            } else {
-                return  session()->flash('warning1', $e->getMessage());
-            }
-        } catch (\Exception $e) {
-            return  session()->flash('warning1', $e->getMessage());
-        }
-
-        if (count($this->prediosAvailable) == count($this->predioSelected)) {
-
-            $this->cleanData(1);
-        }
-        session()->flash('success1', 'Predios Asignados con exito');
-        return redirect()->route('asistencia.registrar');
-    }
-
-
-    public function resetAsignacion()
-    {
-        $this->reset(['asignacion', 'asignaciones']);
+        $this->reset(['controlH', 'controles']);
     }
 
     #[On('add-predio')]

@@ -21,22 +21,23 @@ class Asignacion extends Component
     public $prediosAsigned = [];
     public $prediosToDrop = [];
 
-    #[Validate('required',message:'Control Requerido')]
+    #[Validate('required', message: 'Control Requerido')]
     public $controlId;
     public $sumCoefA;
     public $sumCoef;
+    public $control;
 
-    public $asignacion;
     public $maxControls;
 
     public function cleanData()
     {
-        $this->reset([ 'controlId','asignacion', 'predioSelected', 'prediosAsigned', 'prediosToDrop', 'sumCoefA', 'sumCoef']);
+        $this->reset(['controlId', 'control', 'predioSelected', 'prediosAsigned', 'prediosToDrop', 'sumCoefA', 'sumCoef']);
         $this->mount();
     }
-    public function mount() {
-        $this->controlId=session('controlTurn');
-        $this->maxControls= Cache::get('controles');
+    public function mount()
+    {
+        $this->controlId = session('controlTurn');
+        $this->maxControls = Cache::get('controles');
     }
 
     #[Layout('layout.asistencia')]
@@ -61,7 +62,6 @@ class Asignacion extends Component
         }
         $this->sumCoefA = $suma;
         $suma = 0;
-
     }
 
     #[On('add-predio')]
@@ -73,22 +73,24 @@ class Asignacion extends Component
         }
     }
 
-    public function dropAllSelected(){
+    public function dropAllSelected()
+    {
         $this->reset('predioSelected');
     }
 
     #[On('set-control')]
-    public function setControl($controlId){
-        $this->controlId=$controlId;
+    public function setControl($controlId)
+    {
+        $this->controlId = $controlId;
         $this->updatedControlId($controlId);
     }
 
     public function addPredioToList($predio)
     {
 
-        if (!$predio->asignacion->isEmpty()) {
-            $this->asignacion = $predio->asignacion[0];
-            $this->updatedAsignacion();
+        if (!$predio->control->isEmpty()) {
+            $this->control = $predio->control[0];
+            $this->updatedControl();
         } else {
             $this->predioSelected[$predio->id] = $predio;
         }
@@ -120,12 +122,12 @@ class Asignacion extends Component
 
     public function updatedControlId($value)
     {
-        $this->reset('prediosAsigned','asignacion');
-        if(!$value){
+        $this->reset('prediosAsigned', 'control');
+        if (!$value) {
             return;
         }
 
-        if ($value>$this->maxControls) {
+        if ($value > $this->maxControls) {
             $this->addError('controlId', 'El control no es valido');
             return;
         }
@@ -134,74 +136,75 @@ class Asignacion extends Component
         if ($value) {
             // Obtener el control por su ID
             $control = Control::find($value);
-            if($control){
+            if ($control) {
                 // Obtener la asignación del control
-                $this->asignacion = $control->asignacion;
-                $this->updatedAsignacion();
+                $this->control = $control;
+                $this->updatedControl();
             }
         }
     }
-    public function updatedAsignacion()
+    public function updatedControl()
     {
         $this->reset('prediosAsigned');
-        if($this->asignacion){
-            if (!$this->asignacion->predios->isEmpty()) {
-                // Obtener el control por su ID
-                foreach ($this->asignacion->predios as $predio) {
-                    # code...
-                    $this->prediosAsigned[$predio->id]=$predio;
-                }
+
+        if (!$this->cotrol->predios->isEmpty()) {
+            // Obtener el control por su ID
+            foreach ($this->cotrol->predios as $predio) {
+                # code...
+                $this->prediosAsigned[$predio->id] = $predio;
             }
         }
     }
 
-    public function proof(){
-        $persona=Persona::find('294962');
+    public function proof()
+    {
+        $persona = Persona::find('294962');
         dd($persona->prediosAsignados());
     }
 
-    public function toDropList($predioId){
+    public function toDropList($predioId)
+    {
         try {
-            $this->prediosToDrop[$predioId]=$this->prediosAsigned[$predioId];
+            $this->prediosToDrop[$predioId] = $this->prediosAsigned[$predioId];
             unset($this->prediosAsigned[$predioId]);
         } catch (\Throwable $th) {
             //throw $th;
         }
-
     }
-    public function toDropListAll(){
+    public function toDropListAll()
+    {
         try {
             foreach ($this->prediosAsigned as $key => $predio) {
-                $this->prediosToDrop[$key]=$predio;
+                $this->prediosToDrop[$key] = $predio;
             }
 
             $this->reset('prediosAsigned');
         } catch (\Throwable $th) {
             //throw $th;
         }
-
     }
 
-    public function toAsignList($predioId){
+    public function toAsignList($predioId)
+    {
         try {
-            $this->prediosAsigned[$predioId]=$this->prediosToDrop[$predioId];
+            $this->prediosAsigned[$predioId] = $this->prediosToDrop[$predioId];
             unset($this->prediosToDrop[$predioId]);
         } catch (\Throwable $th) {
             //throw $th;
         }
     }
 
-    public function toAsignListAll(){
+    public function toAsignListAll()
+    {
         try {
             foreach ($this->prediosToDrop as $key => $predio) {
-                $this->prediosAsigned[$key]=$predio;
+                $this->prediosAsigned[$key] = $predio;
             }
 
             $this->reset('prediosToDrop');
         } catch (\Throwable $th) {
             //throw $th;
         }
-
     }
 
 
@@ -214,36 +217,20 @@ class Asignacion extends Component
         }
 
         $control = Control::find($this->controlId);
-
-        //control Uso
-        if ($control->asignacion) {
-            try {
-                $control->asignacion->predios()->attach(array_keys($this->predioSelected));
-            } catch (\Throwable $th) {
-                return  session()->flash('warning1', $th->getMessage());
+        try {
+            if (!$control->asignacion()) {
+                $control->sum_coef = $this->sumCoef;
+                $control->state = 1;
             }
-        }else{
-            try {
-                $asignacion = $control->asignacion()->create([
-                    'sum_coef' => $this->sumCoef,
-                    'estado' => 1
-                ]);
-                $control->state=1;
-                $control->save();
-                $asignacion->predios()->attach(array_keys($this->predioSelected));
-            } catch (\Exception $e) {
-                return  session()->flash('warning1', $e->getMessage());
-            }
+            $control->predios()->attach(array_keys($this->predioSelected));
+            $control->save();
+        } catch (\Exception $e) {
+            return  session()->flash('warning1', $e->getMessage());
         }
 
-        session(['controlTurn'=>$this->controlId+1]);
+        session(['controlTurn' => $this->controlId + 1]);
         $this->cleanData();
-         session()->flash('success1', 'Predios Asignados con exito');
+        session()->flash('success1', 'Predios Asignados con exito');
         return redirect()->route('asistencia.asignacion');
-
-
     }
-
-
-
 }

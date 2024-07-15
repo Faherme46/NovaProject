@@ -16,8 +16,6 @@ use App\Models\Persona;
 use App\Models\Asamblea;
 use App\Models\Control;
 
-use App\Models\Asignacion;
-
 
 class AsambleaController extends Controller
 {
@@ -186,8 +184,8 @@ class AsambleaController extends Controller
     }
     public function asistencia()
     {
-        $asignacionesAll = Asignacion::all();
-        return view('asistencia', compact('asignacionesAll'));
+        $allControls = Control::all();
+        return view('asistencia', compact('allControls'));
     }
 
 

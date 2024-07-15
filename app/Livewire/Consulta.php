@@ -8,14 +8,22 @@ use Livewire\Attributes\On;
 use Livewire\Component;
 
 use Illuminate\Support\Facades\Cache;
+use Exception;
 
 use App\Models\Control;
 use App\Models\Asignacion;
+use PhpParser\Error;
 
 
 class Consulta extends Component
 {
 
+    private $errorCode = [
+        1000 => 'error',
+        1001 => 'controlId',
+        1002 => 'controlIdR',
+        1003 => 'controlIdL',
+    ];
 
     public $prediosR = [];
     public $prediosL = [];
@@ -51,8 +59,10 @@ class Consulta extends Component
         if ($value) {
             $this->reset('controlIdR', 'controlIdL');
         }
-        $this->reset(['messageL', 'changes', 'messageR', 'prediosR', 'prediosL', 'sumCoefR',
-        'sumCoefL', 'controlRInvalid', 'controlLInvalid','nameR','nameL']);
+        $this->reset([
+            'messageL', 'changes', 'messageR', 'prediosR', 'prediosL', 'sumCoefR',
+            'sumCoefL', 'controlRInvalid', 'controlLInvalid', 'nameR', 'nameL'
+        ]);
         $this->mount();
     }
     public function mount()
@@ -130,72 +140,66 @@ class Consulta extends Component
 
     public function updatedControlIdR($value)
     {
-        $this->reset('messageR', 'controlRInvalid','prediosR');
-        if (!$value) {
-            $this->reset('prediosR');
-            return;
+        try {
+            $control = $this->handleUpdate($value, false);
+        } catch (\Throwable $th) {
+            $this->addError($this->errorCode[$th->getCode()], $th->getMessage());
         }
-        if ($value > $this->maxControls) {
-            $this->addError('controlIdR', 'El control no es valido');
-            return;
-        }
-        if ($value == $this->controlIdL) {
-            $this->addError('controlId', 'Los controles No pueden ser iguales');
-            $this->reset('controlIdR');
-            return;
-        }
-        $control = Control::find($value);
-        $asignacion = $control->asignacion;
-        if ($asignacion) {
-            if ($asignacion->estado != 3 && $asignacion->estado != 5) {
-                $this->nameR=$asignacion->persona->nombre;
-                $predios = $asignacion->predios;
-                $this->messageR = (!$predios->isEmpty()) ? '' : 'Sin Predios';
-                foreach ($predios as $predio) {
-                    $this->prediosR[$predio->id] = $predio;
-                }
-                $this->controlRInvalid = false;
-            } else {
-                $this->messageR =($asignacion->estado == 5)?'Control Entregado': 'Control Retirado';
-                $this->controlRInvalid = true;
+
+        if ($control->state != 3 && $control->state != 5) {
+            $this->nameR = $control->persona->nombre;
+            $predios = $control->predios;
+            $this->messageR = (!$predios->isEmpty()) ? '' : 'Sin Predios';
+            foreach ($predios as $predio) {
+                $this->prediosR[$predio->id] = $predio;
             }
+            $this->controlRInvalid = false;
+        } else {
+            $this->messageR = ($control->state == 5) ? 'Control Entregado' : 'Control Retirado';
+            $this->controlRInvalid = true;
+        }
+    }
+    public function updatedControlIdL($value)
+    {
+        try {
+            $control = $this->handleUpdate($value, false);
+        } catch (\Throwable $th) {
+            $this->addError($this->errorCode[$th->getCode()], $th->getMessage());
+        }
+
+        $control = $this->handleUpdate($value, false);
+        if ($control->state != 3 && $control->state != 5) {
+            $this->nameL = $control->persona->nombre;
+            $predios = $control->predios;
+            $this->messageL = (!$predios->isEmpty()) ? '' : 'Sin Predios';
+            foreach ($predios as $predio) {
+                $this->prediosL[$predio->id] = $predio;
+            }
+            $this->controlLInvalid = false;
+        } else {
+            $this->messageL = ($control->state == 5) ? 'Control Entregado' : 'Control Retirado';
+            $this->controlLInvalid = true;
         }
     }
 
-    public function updatedControlIdL($value)
+    public function handleUpdate($value, $left)
     {
-        $this->reset('messageL', 'controlLInvalid');
+        $this->reset('messageR', 'controlRInvalid', 'prediosR');
         if (!$value) {
-            $this->reset('prediosL');
-            return;
+            throw new Exception('', 1000);
         }
         if ($value > $this->maxControls) {
-            $this->addError('controlIdL', 'El control no es valido');
-            return;
+            throw new Exception('El control no es valido', ($left) ? 1003 : 1002);
         }
-        if ($value == $this->controlIdR) {
-            $this->addError('controlId', 'Los controles No pueden ser iguales');
-            $this->reset('controlIdL');
-            return;
+        if ($value == $this->controlIdL || $value == $this->controlIdR) {
+            $this->reset(($left) ? 'controlIdL' : 'controlIdR');
+            throw new Exception('Los controles No pueden ser iguales', 1001);
         }
-
-        $this->reset('prediosL');
         $control = Control::find($value);
-        $asignacion = $control->asignacion;
-        if ($asignacion) {
-            if ($asignacion->estado != 3 && $asignacion->estado != 5) {
-                $predios = $asignacion->predios;
-                $this->nameL=$asignacion->persona->nombre;
-                $this->messageL = (!$predios->isEmpty()) ? '' : 'Sin Predios';
-                $this->controlRInvalid = false;
-                foreach ($predios as $predio) {
-                    $this->prediosL[$predio->id] = $predio;
-                }
-            } else {
-                $this->messageL = ($asignacion->estado == 5)?'Control Entregado': 'Control Retirado';
-                $this->controlRInvalid = true;
-            }
+        if (!$control) {
+            throw new Exception('El control No fue encontrado', 1000);
         }
+        return $control;
     }
 
     public function proof()
@@ -294,15 +298,13 @@ class Consulta extends Component
         try {
             $controlR = Control::find($this->controlIdR);
             $controlL = Control::find($this->controlIdL);
-            $asignacionR = $controlR->asignacion;
-            $asignacionL = $controlL->asignacion;
 
             if ($this->controlRInvalid) {
                 $this->addError('error', 'El control B esta retirado');
                 return;
             }
 
-            if (!$asignacionL) {
+            if (!$controlL->asignacion()) {
                 $this->addError('Error', 'El Control A no ha sido asignado');
                 return;
             }
@@ -311,28 +313,23 @@ class Consulta extends Component
                 return;
             }
 
-            if (!$asignacionR) {
-                $asignacionR = $controlR->asignacion()->create([
-                    'cc_asistente' => ($controlL->asignacion->cc_asistente) ? $controlL->asignacion->cc_asistente : null,
-                    'sum_coef' => $this->sumCoefR,
-                    'estado' => 1
-                ]);
+            if (!$controlR->asignacion()) {
+                $controlR->cc_asistente = ($controlL->cc_asistente) ? $controlL->cc_asistente : null;
+                $controlR->state = 1;
             }
 
-            $asignacionR->predios()->sync(array_keys($this->prediosR));
-            $asignacionR->sum_coef = $this->sumCoefR;
-            $asignacionR->save();
+            $controlR->predios()->sync(array_keys($this->prediosR));
+            $controlR->setCoef();
+            $controlR->save();
             if ($this->prediosL) {
-                $asignacionL->predios()->sync(array_keys($this->prediosL));
-                $asignacionL->setCoef();
-                $asignacionL->save();
+                $controlL->predios()->sync(array_keys($this->prediosL));
+                $controlL->setCoef();
+
+                $controlL->save();
             } else {
                 $controlL->retirar();
-                $controlL->asignacion->retirarPredios();
             }
-
             session()->flash('success1', 'Guardado');
-            $this->cleanData(1);
             return redirect()->route('consulta');
         } catch (\Throwable $th) {
             $this->addError('error', $th->getMessage());
@@ -347,22 +344,20 @@ class Consulta extends Component
             return;
         }
 
-        if (!$controlL->asignacion) {
+        if (!$controlL->asignacion()) {
             $this->addError('error', 'El control no fue Asignado');
             return;
         }
 
         if ($this->controlLInvalid) {
-            $this->addError('error', 'El control esta retirado');
+            $this->addError('error', 'El control esta retirado/entregado');
             return;
         }
         try {
             if ($this->prediosL) {
-                $controlL->asignacion->predios()->sync(array_keys($this->prediosL));
-                $controlL->asignacion->setCoef();
+                $controlL->predios()->sync(array_keys($this->prediosL));
+                $controlL->setCoef();
             } else {
-                $controlL->asignacion->predios()->detach();
-                $controlL->asignacion->setCoef();
                 $controlL->retirar();
             }
 
@@ -374,10 +369,12 @@ class Consulta extends Component
         }
     }
 
-    public function searchPersona(){
-        $this->dispatch('find-persona', id:$this->cedulaSearch);
+    public function searchPersona()
+    {
+        $this->dispatch('find-persona', id: $this->cedulaSearch);
     }
-    public function searchControl(){
-        $this->dispatch('find-control', id:$this->controlIdSearch);
+    public function searchControl()
+    {
+        $this->dispatch('find-control', id: $this->controlIdSearch);
     }
 }

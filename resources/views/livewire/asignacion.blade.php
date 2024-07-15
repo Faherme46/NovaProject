@@ -58,7 +58,7 @@
                                                 </tr>
                                             @endif
                                         @endforelse
-                                        @if ($asignacion)
+                                        @if ($controlH)
                                             @foreach ($prediosAsigned as $predio)
                                                 <tr scope="row" class="table-active">
                                                     <td colspan="2">{{ $predio->descriptor1 }}
@@ -82,7 +82,7 @@
                                 <div class="d-flex justify-content-center">
                                     <input type="text"
                                         class="form-control bg-success-subtle w-50 @error('controlId') is-invalid @enderror"
-                                        wire:model.live='controlId' placeholder="Control" onclick="this.select()" 
+                                        wire:model.live='controlId' placeholder="Control" onclick="this.select()"
                                         onkeypress="return onlyNumbers(event)" maxlength="3">
                                     <button class="btn btn-primary ms-2 " wire:click='asignar'>
                                         Asignar

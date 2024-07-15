@@ -17,7 +17,8 @@ class ControlFactory extends Factory
     public function definition(): array
     {
         return [
-            'state'=> 4
+            'state'=> 4,
+            'sum_coef'=>0
         ];
     }
 }

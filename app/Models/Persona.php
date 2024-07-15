@@ -16,15 +16,15 @@ class Persona extends Model
         return $this->hasMany(Predio::class, 'cc_propietario', 'id');
     }
 
-    public function asignaciones()
+    public function controles()
     {
-        return $this->hasMany(Asignacion::class, 'cc_asistente', 'id');
+        return $this->hasMany(Control::class, 'cc_asistente', 'id');
     }
 
     public function prediosAsignados()
     {
         $cedula=$this->id;
-        $predios =Predio::whereHas('asignacion', function ($query) use ($cedula) {
+        $predios=Predio::whereHas('asignacion', function ($query) use ($cedula) {
             $query->where('cc_asistente', $cedula);
         })->get();
 

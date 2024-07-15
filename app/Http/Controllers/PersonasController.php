@@ -31,6 +31,6 @@ class PersonasController extends Controller
     }
 
     public function find(){
-        
+
     }
 }

@@ -115,15 +115,15 @@
                 <div class="card-header">
                     <div class="row g-3">
                         <div class="col-10">
-                            @if ($asignaciones)
-                                <form id="formPredios" class="row g-3" wire:submit='editAsignacion' method="GET">
+                            @if ($controles)
+                                <form id="formPredios" class="row g-3" wire:submit='asignar(1)' method="GET">
                                     <div class="mb-3 col-2 ">
 
-                                        <select name="control" id="id_control_selected" wire:model="asignacion"
+                                        <select name="control" id="id_control_selected" wire:model="control"
                                             wire:change='ver' class="form-control" required>
-                                            @foreach ($asignaciones as $a)
-                                                <option value="{{ $a->control_id }}">
-                                                    {{ $a->control_id }} </option>
+                                            @foreach ($control as $control)
+                                                <option value="{{ $control->id }}">
+                                                    {{ $control->id }} </option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -133,13 +133,13 @@
                                         </button>
                                     </div>
                                     <div class="col-1">
-                                        <button type="button" class="btn btn-primary" wire:click="resetAsignacion">
+                                        <button type="button" class="btn btn-primary" wire:click="resetControl">
                                             <i class='bi bi-plus-circle-fill '></i>
                                         </button>
                                     </div>
                                 </form>
                             @else
-                                <form id="formPredios" class="row g-3" wire:submit='asignar' method="GET">
+                                <form id="formPredios" class="row g-3" wire:submit='asignar(0)' method="GET">
                                     <div class="mb-3 col-2 ">
                                         <select name="control" id="id_control" class="form-control" required
                                             wire:model="controlId">
@@ -199,8 +199,8 @@
                                 </tr>
                             @endforelse
 
-                            @if ($asignacion)
-                                @foreach ($asignaciones[$asignacion]->predios as $predio)
+                            @if ($controlH)
+                                @foreach ($controles[$controlH]->predios as $predio)
                                     <tr class="table-active">
                                         <td>{{ $predio->persona->id }}</td>
                                         <td>{{ $predio->persona->nombre }}
