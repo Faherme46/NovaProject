@@ -17,8 +17,6 @@ return new class extends Migration
             $table->unsignedBigInteger('cc_asistente')->nullable();
             $table->decimal('sum_coef', 8, 6);
             $table->timestamps();
-            $table->foreign('cc_asistente')->references('id')->on('personas')->onDelete('cascade');
-            $table->foreign('state')->references('id')->on('states')->onDelete('cascade');
         });
     }
 

@@ -19,7 +19,6 @@ class Asignacion extends Component
 {
     public $predioSelected = [];
     public $prediosAsigned = [];
-    public $prediosToDrop = [];
 
     #[Validate('required', message: 'Control Requerido')]
     public $controlId;
@@ -31,7 +30,7 @@ class Asignacion extends Component
 
     public function cleanData()
     {
-        $this->reset(['controlId', 'control', 'predioSelected', 'prediosAsigned', 'prediosToDrop', 'sumCoefA', 'sumCoef']);
+        $this->reset(['controlId', 'control', 'predioSelected', 'prediosAsigned', 'sumCoefA', 'sumCoef']);
         $this->mount();
     }
     public function mount()
@@ -147,9 +146,9 @@ class Asignacion extends Component
     {
         $this->reset('prediosAsigned');
 
-        if (!$this->cotrol->predios->isEmpty()) {
+        if (!$this->control->predios->isEmpty()) {
             // Obtener el control por su ID
-            foreach ($this->cotrol->predios as $predio) {
+            foreach ($this->control->predios as $predio) {
                 # code...
                 $this->prediosAsigned[$predio->id] = $predio;
             }
@@ -162,50 +161,12 @@ class Asignacion extends Component
         dd($persona->prediosAsignados());
     }
 
-    public function toDropList($predioId)
-    {
-        try {
-            $this->prediosToDrop[$predioId] = $this->prediosAsigned[$predioId];
-            unset($this->prediosAsigned[$predioId]);
-        } catch (\Throwable $th) {
-            //throw $th;
-        }
-    }
-    public function toDropListAll()
-    {
-        try {
-            foreach ($this->prediosAsigned as $key => $predio) {
-                $this->prediosToDrop[$key] = $predio;
-            }
 
-            $this->reset('prediosAsigned');
-        } catch (\Throwable $th) {
-            //throw $th;
-        }
-    }
 
-    public function toAsignList($predioId)
-    {
-        try {
-            $this->prediosAsigned[$predioId] = $this->prediosToDrop[$predioId];
-            unset($this->prediosToDrop[$predioId]);
-        } catch (\Throwable $th) {
-            //throw $th;
-        }
-    }
 
-    public function toAsignListAll()
-    {
-        try {
-            foreach ($this->prediosToDrop as $key => $predio) {
-                $this->prediosAsigned[$key] = $predio;
-            }
 
-            $this->reset('prediosToDrop');
-        } catch (\Throwable $th) {
-            //throw $th;
-        }
-    }
+
+
 
 
     public function asignar()
@@ -218,10 +179,8 @@ class Asignacion extends Component
 
         $control = Control::find($this->controlId);
         try {
-            if (!$control->asignacion()) {
-                $control->sum_coef = $this->sumCoef;
-                $control->state = 1;
-            }
+            $control->setCoef();
+            $control->state = 1;
             $control->predios()->attach(array_keys($this->predioSelected));
             $control->save();
         } catch (\Exception $e) {

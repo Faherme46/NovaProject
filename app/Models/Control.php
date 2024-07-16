@@ -14,13 +14,12 @@ class Control extends Model
 
     protected $guarded=[];
     public function asignacion(){
-
-        return ($this->state==4);
+        return ($this->state==1);
     }
-    
+
     public function predios()
     {
-        return $this->belongsToMany(Predio::class, 'asignacion_predios');
+        return $this->belongsToMany(Predio::class, 'control_predios');
     }
     public function persona()
     {

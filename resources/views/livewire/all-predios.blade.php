@@ -58,9 +58,10 @@
                     @if (!$predio->control->isEmpty())
                         <tr class="table-active">
                             <td>
-                                <button class="btn pt-0 pb-0 mb-0" wire:dblclick='showControl({{$predio->control[0]->control_id }})'
-                                    wire:click="dispatchControl({{ $predio->control[0]->control_id }})">
-                                    {{ $predio->control[0]->control_id }}
+                                <button class="btn pt-0 pb-0 mb-0" wire:dblclick='showControl({{$predio->control[0]->id }})'
+                                    wire:click="dispatchControl({{ $predio->control[0]->id }})">
+                                    {{ $predio->control[0]->id}}
+
                                 </button>
                             </td>
                         @else
@@ -253,15 +254,16 @@
                             <li class="list-group-item">
                                 <h6>Control:
 
-                                    @if ($Predio->contol->isEmpty())
+                                    @if ($Predio->control->isEmpty())
                                         Sin Asignar
                                     @else
-                                        {{ $Predio->control[0]->control_id }}
+                                        {{ $Predio->control[0]->id }}
                                     @endif
                                 </h6>
                             </li>
                         </ul>
                     </div>
+
                 @endisset
 
             </div>

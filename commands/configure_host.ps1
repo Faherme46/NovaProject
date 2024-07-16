@@ -39,4 +39,3 @@ $apachePath = "C:\xampp\apache\bin\httpd.exe"
 Start-Process -NoNewWindow -Wait -FilePath $apachePath -ArgumentList "-k restart"
 Write-Host "Apache reiniciado"
 
-Read-Host -Prompt "Presiona Enter para salir..."

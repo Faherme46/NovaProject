@@ -58,7 +58,7 @@
                                                 </tr>
                                             @endif
                                         @endforelse
-                                        @if ($controlH)
+                                        @if ($control)
                                             @foreach ($prediosAsigned as $predio)
                                                 <tr scope="row" class="table-active">
                                                     <td colspan="2">{{ $predio->descriptor1 }}

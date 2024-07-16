@@ -64,6 +64,8 @@ class Registrar extends Component
     public function getAvailableControls()
     {
         $availableControls = Control::where('state', 4);
+
+        dd($availableControls->first());
         $this->controlIds = $availableControls->pluck('id')->toArray();
         $controlTurn = session('controlTurn', 0);
         if ($controlTurn) {

@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-use App\Models\Asignacion;
 class Predio extends Model
 {
     use HasFactory;
@@ -24,7 +23,7 @@ class Predio extends Model
 
     public function control()
     {
-        return $this->belongsToMany(Control::class, 'asignacion_predios');
+        return $this->belongsToMany(Control::class, 'control_predios');
     }
 
     public function apoderado(){

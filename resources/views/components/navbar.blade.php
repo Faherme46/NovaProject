@@ -6,15 +6,12 @@
         <div class="header_toggle" >
             <i class='bi bi-list bx-w' id="header-toggle"></i>
         </div>
-        <h2 class="mb-0 ms-2 text-light" >{{ $name_asamblea }}</h2>
-        <button button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-            aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+
+
 
         <div class="collapse navbar-collapse me-3" id="navbarSupportedContent">
-            <div class="ms-auto">
+            <h2 class="mb-0 ms-2 text-light " >{{ $name_asamblea }}</h2>
+            <div class="mx-auto">
                 <livewire:quorum-state/>
             </div>
             <ul class="ms-auto navbar-nav mb-0 ">
@@ -54,6 +51,11 @@
             </ul>
 
         </div>
+        <button button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
     </div>
 </nav>
 

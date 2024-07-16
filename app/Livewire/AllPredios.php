@@ -75,7 +75,6 @@ class AllPredios extends Component
 
 
     public function dispatchPredio($id){
-
         $this->dispatch('add-predio', predioId: $id);
     }
     public function dispatchPersona($id){

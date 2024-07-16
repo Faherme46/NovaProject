@@ -3,12 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Asignacion;
-use App\Models\AsignacionPredio;
 use App\Models\Session;
 use App\Models\Predio;
 use App\Models\Persona;
 use App\Models\Control;
+use App\Models\ControlPredio;
 
 use Illuminate\Support\Facades\Session as MySession;
 use Illuminate\Support\Facades\DB;
@@ -28,8 +27,7 @@ class SessionController extends Controller
         Session::truncate();
         Cache::flush();
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-        AsignacionPredio::truncate();
-        Asignacion::truncate();
+        ControlPredio::truncate();
         Predio::truncate();
         Control::truncate();
         Persona::truncate();
@@ -70,7 +68,7 @@ class SessionController extends Controller
         $sessionOn->update($session);
     }
 
-    
+
 
 
 
