@@ -7,7 +7,7 @@
         <div class="col-3">
 
             <input wire:model.live='searchId' type="text" id="searchId" name="cc_propietario" class="form-control"
-                placeholder="Propietario" onkeypress="return onlyNumbers(event)" onclick="this.select()" >
+                placeholder="Propietario" onkeypress="return onlyNumbers(event)" onclick="this.select()">
 
         </div>
         <div class="col-2">
@@ -35,7 +35,7 @@
         </div>
         <div class="col-2">
             <input wire:model.live='numeral2' type="text" class="form-control" placeholder="#"
-                onkeypress="return onlyNumbers(event)" maxlength="5" onclick="this.select()" >
+                onkeypress="return onlyNumbers(event)" maxlength="5" onclick="this.select()">
         </div>
         <div class="col-1 fpr">
             <button wire:click='clean' class=" btn btn-danger"><i class='bi bi-x-circle-fill '></i></button>
@@ -49,18 +49,23 @@
 
             <thead>
                 <th>Añadir</th>
-                <th>Propietario</th>
-                <th>Predio</th>
-                {{-- <th>Coef</th> --}}
+                <th class="ps-4">Predio</th>
+                @if ($asambleaOn->registro)
+                    <th>Propietario</th>
+                @else
+                    <th>Coef</th>
+                @endif
+
             </thead>
             <tbody>
                 @forelse ($prediosAll as $predio)
                     @if (!$predio->control->isEmpty())
                         <tr class="table-active">
                             <td>
-                                <button class="btn pt-0 pb-0 mb-0" wire:dblclick='showControl({{$predio->control[0]->id }})'
+                                <button class="btn pt-0 pb-0 mb-0"
+                                    wire:dblclick='showControl({{ $predio->control[0]->id }})'
                                     wire:click="dispatchControl({{ $predio->control[0]->id }})">
-                                    {{ $predio->control[0]->id}}
+                                    {{ $predio->control[0]->id }}
 
                                 </button>
                             </td>
@@ -73,25 +78,31 @@
                             </td>
                     @endif
                     <td>
-                        @if ($asambleaOn->registro)
-                            <button type="button" class="btn p-0"
-                                wire:click='dispatchPersona({{ $predio->cc_propietario }})'
-                                wire:confirm='¿Deseas cambiar el Asistente?'>
-                                <i class="bi bi-copy"></i>
-                            </button>
-                        @endif
-                        <button class="btn pt-0 pb-0 mb-0" wire:dblclick='showPersona({{ $predio->cc_propietario }})'
-                            wire:click='dispatchPoderdante({{ $predio->cc_propietario }})'>
-                            {{ $predio->cc_propietario }}
-                        </button>
-                    </td>
-                    <td><span class="btn py-0" wire:dblclick='showPredio({{ $predio->id }})'>
+                        <span class="btn py-0 " wire:dblclick='showPredio({{ $predio->id }})'>
                             {{ $predio->descriptor1 }} {{ $predio->numeral1 }}
                             {{ $predio->descriptor2 }} {{ $predio->numeral2 }}
                         </span>
                     </td>
-                    {{-- <td>{{ $predio->coeficiente }}</td> --}}
-                    </tr>
+
+
+                    @if ($asambleaOn->registro)
+                        <td>
+                            <button type="button" class="btn p-0"
+                                wire:click='dispatchPersona({{ $predio->cc_propietario }})'
+                                wire:confirm='¿Deseas cambiar el Asistente?'>
+                                <i class="bi bi-person-fill"></i>
+                            </button>
+
+                            <button class="btn pt-0 pb-0 mb-0"
+                                wire:dblclick='showPersona({{ $predio->cc_propietario }})'
+                                wire:click='dispatchPoderdante({{ $predio->cc_propietario }})'>
+                                {{ $predio->cc_propietario }}
+                            </button>
+                        </td>
+                    @else
+                        <td>{{ $predio->coeficiente }}</td>
+                    @endif
+
                 @empty
                     <tr>
                         <td colspan="4">No se hallaron Predios</td>
@@ -199,6 +210,17 @@
                             @endif
                         </div>
                     </div>
+                    <div class="modal-body pt-0 d-flex align-items-center">
+                        <span class="me-2">
+                            Controles:
+                        </span>
+
+                        @foreach ($Persona->controls as $control)
+                            <button type="button" class="btn btn-success me-2">
+                                <span>{{ $control->id }}</span>
+                            </button>
+                        @endforeach
+                    </div>
                 @endisset
 
             </div>
@@ -220,6 +242,8 @@
                             <li class="list-group-item">
                                 <h6 class="mb-0">Id: {{ $Predio->id }}</h6>
                             </li>
+
+                            @if ($asambleaOn->registro)
                             <li class="list-group-item d-flex">
 
                                 <div class="ms-0 me-auto ">
@@ -237,7 +261,6 @@
                                 </span>
 
                             </li>
-                            @if ($asambleaOn->registro)
                                 <li class="list-group-item">
                                     <h6>Apoderado: </h6>
                                     @if ($Predio->apoderado)
@@ -271,7 +294,8 @@
     </div>
 
     {{-- Modal Control --}}
-    <div class="modal fade" id="modalControl" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="modalControl" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 @isset($Control)
@@ -284,7 +308,6 @@
                             <ul class="list-group">
 
                                 @if ($Control->asignacion())
-
                                     <li class="list-group-item">
                                         <h6>Estado: {{ $states[$Control->state] }}</h6>
                                     </li>
@@ -293,7 +316,6 @@
                                     </li>
                                 @else
                                     <li class="list-group-item">Sin asignar</li>
-
                                 @endif
 
                                 @if ($asambleaOn->registro && $Control->asignacion())

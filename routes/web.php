@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Middleware\ValidateLogin;
 use App\Http\Middleware\EnsureAsambleaOn;
-
+use App\Livewire\Votacion;
 
 //rutas de redireccion
 
@@ -30,9 +30,6 @@ Route::get('/', function () {
 })->name('home')->withoutMiddleware([EnsureAsambleaOn::class]);
 Route::get('/votos', function () {
     return view('votos');
-});
-Route::get('/preguntas', function () {
-    return view('preguntas');
 });
 Route::get('/resultados', function () {
     return view('resultados');
@@ -62,6 +59,7 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::get('/users', [UsersController::class, 'index'])->name('users.index')->withoutMiddleware([EnsureAsambleaOn::class]);;
     Route::post('users/create', [UsersController::class, 'createUser'])->name('users.create');
     Route::get('users/import', [UsersController::class, 'importUsers'])->name('users.import');
+    Route::get('votacion', Votacion::class)->name('votacion');
     Route::post('admin/inicio', [AsambleaController::class, 'iniciarAsamblea'])->name('asambleas.inicia');
     Route::post('admin/termina', [AsambleaController::class, 'terminarAsamblea'])->name('asambleas.termina');
 });

@@ -85,9 +85,9 @@
 
                                 <div class="card-footer justify-content-between d-flex">
                                     <div class="col-7 align-content-center">
-                                            @if ($asambleaOn->registro && $nameL)
-                                                <p class="mb-0">{{$nameL}}</p>
-                                            @endif
+                                        @if ($asambleaOn->registro && $nameL)
+                                            <p class="mb-0">{{ $nameL }}</p>
+                                        @endif
                                     </div>
                                     <div class="col-5">
                                         <input class="form-control d-inline-block " name="sum_coef"
@@ -169,13 +169,13 @@
                                 </div>
                                 <div class="card-footer justify-content-between d-flex">
                                     <div class="col-7 align-content-center">
-                                            @if ($asambleaOn->registro && $nameR)
-                                               <p class="mb-0">{{$nameR}}</p>
-                                            @endif
+                                        @if ($asambleaOn->registro && $nameR)
+                                            <p class="mb-0">{{ $nameR }}</p>
+                                        @endif
                                     </div>
                                     <div class="col-5">
                                         <input class="form-control d-inline-block " name="sum_coef"
-                                            value="{{ $sumCoefR}}" id="sumCoef" readonly>
+                                            value="{{ $sumCoefR }}" id="sumCoef" readonly>
                                     </div>
 
                                 </div>
@@ -189,31 +189,34 @@
 
         </div>
         <div class="row mt-2 g-3">
-            <div class="col-4 ms-auto px-0">
-                <div class="card">
-                    <div class="card-header d-flex align-items-center justify-content-between">
-                        <h5 class="card-title mb-0 ">Persona</h5>
+            @if ($asambleaOn->registro)
+                <div class="col-4 ms-auto px-0">
+                    <div class="card">
+                        <div class="card-header d-flex align-items-center justify-content-between">
+                            <h5 class="card-title mb-0 ">Persona</h5>
 
-                    </div>
-                    <div class="card-body pt-3 px-2">
-                        <div class="mb-3 d-flex ">
-                            <div class="col-8 me-1 ">
-                                <input class="me-2 form-control @error('cedula') is-invalid @enderror" type="text"
-                                    onkeypress="return onlyNumbers(event)" maxlength="12" wire:model='cedulaSearch'
-                                    placeholder="Cedula">
-                                @error('noFound')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="col">
-                                <button class="btn btn-primary" wire:click='searchPersona'><i
-                                        class="bi bi-search"></i></button>
+                        </div>
+                        <div class="card-body pt-3 px-2">
+                            <div class="mb-3 d-flex ">
+                                <div class="col-8 me-1 ">
+                                    <input class="me-2 form-control @error('cedula') is-invalid @enderror"
+                                        type="text" onkeypress="return onlyNumbers(event)" maxlength="12"
+                                        wire:model='cedulaSearch' placeholder="Cedula">
+                                    @error('noFound')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col">
+                                    <button class="btn btn-primary" wire:click='searchPersona'><i
+                                            class="bi bi-search"></i></button>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
+                    </div>
                 </div>
-            </div>
+            @endif
+
             <div class="col-1"></div>
             <div class="col-4 px-0 me-auto">
                 <div class="card">

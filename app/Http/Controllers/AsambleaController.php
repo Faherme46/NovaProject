@@ -83,6 +83,7 @@ class AsambleaController extends Controller
 
             Cache::put('id_asamblea', $asamblea->id_asamblea);
             Cache::put('asambleaOn', true);
+            Cache::put('inRegistro', $asamblea->registro);
             Cache::put('controles', $asamblea->controles);
             Control::factory()->count($asamblea->controles)->create();
             return redirect()->route('asambleas.index')->with('success', 'Asamblea creada con éxito.');
@@ -184,7 +185,8 @@ class AsambleaController extends Controller
     }
     public function asistencia()
     {
-        $allControls = Control::all();
+        $allControls = Control::where('state',4)->get();
+        dd($allControls);
         return view('asistencia', compact('allControls'));
     }
 

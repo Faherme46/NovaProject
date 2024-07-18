@@ -16,7 +16,7 @@ use Illuminate\Database\QueryException;
 
 class Registrar extends Component
 {
-    #controles
+    #controls
     public $controlIds;
 
     #asistente
@@ -40,7 +40,7 @@ class Registrar extends Component
     public $predioSelected = [];
     public $selectAll = false;
 
-    public $controles;
+    public $controls;
     public $controlH;
 
 
@@ -65,7 +65,6 @@ class Registrar extends Component
     {
         $availableControls = Control::where('state', 4);
 
-        dd($availableControls->first());
         $this->controlIds = $availableControls->pluck('id')->toArray();
         $controlTurn = session('controlTurn', 0);
         if ($controlTurn) {
@@ -78,7 +77,7 @@ class Registrar extends Component
     public function cleanData($cedula)
     {
         $this->reset([
-            'asistente', 'name', 'lastName', 'ccPoderdante', 'sumCoef', 'controlId',
+            'asistente', 'name', 'lastName', 'ccPoderdante', 'sumCoef', 'controlId','controls','controlH',
             'poderdantes', 'poderdantesIDs', 'prediosAvailable', 'predioSelected', 'selectAll'
         ]);
         if ($cedula) {
@@ -90,21 +89,25 @@ class Registrar extends Component
     public function search()
     {
         $this->validate();
+
         $this->cleanData(0);
+
         $this->asistente = Persona::find($this->cedula);
 
         if ($this->asistente) {
-            if (!$this->asistente->controles->isEmpty()) {
-                foreach ($this->asistente->controles as $control) {
-                    $this->controles[$control->id] = $control;
+            if (!$this->asistente->controls->isEmpty()) {
+                foreach ($this->asistente->controls as $control) {
+                    $this->controls[$control->id] = $control;
                 }
-                $keys = array_keys($this->controles);
+                $keys = array_keys($this->controls);
                 $this->controlH = $keys[0];
             }
 
             $this->name = $this->asistente->nombre;
             $this->lastName = $this->asistente->apellido;
+
             $this->addPredios($this->asistente->predios);
+
             $this->selectAll = true;
         } else {
             $this->dispatch('showModal');
@@ -243,7 +246,7 @@ class Registrar extends Component
         try {
             if ($option){
                 $idPredios = $this->predioSelected;
-                $controlH = $this->controles[$this->controlH];
+                $controlH = $this->controls[$this->controlH];
                 $controlH->predios()->syncWithoutDetaching($idPredios);
             }else{
                 if ($control->asignacion()) {
@@ -279,9 +282,9 @@ class Registrar extends Component
     }
 
 
-    public function resetControls()
+    public function resetControl()
     {
-        $this->reset(['controlH', 'controles']);
+        $this->reset(['controlH', 'controls']);
     }
 
     #[On('add-predio')]
@@ -307,13 +310,11 @@ class Registrar extends Component
     public function addPersonaToList($personaId)
     {
         $this->cleanData(0);
+
         $this->cedula = $personaId;
+
         $this->search();
     }
-
-
-
-
     public function ver()
     {
     }

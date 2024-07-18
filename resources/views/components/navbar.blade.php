@@ -1,6 +1,6 @@
 
 
-<nav class="navbar navbar-expand-lg bg-primary header" id="header">
+<nav class="navbar navbar-expand-lg bg-primary header " id="header">
     <div class="container-fluid">
 
         <div class="header_toggle" >

@@ -7,7 +7,7 @@
     <div class="row">
 
 
-        <div class="col-md-4">
+        <div class="col-4">
             <div class="card">
                 <div class="card-body">
                     <h2 class="card-title">{{ $asambleaOn->folder }}</h2>
@@ -44,7 +44,7 @@
             </div>
 
         </div>
-        <div class="col-md-8">
+        <div class="col-8">
             <div class="card">
                 <div class="card-header d-flex align-items-center">
                     <h2 class="card-title">Archivo importado</h2>
@@ -58,7 +58,7 @@
                                 <th>cedula</th>
                                 <th>Apoderado</th>
                                 <th>Descriptor </th>
-                                <th>Coeficiente</th>
+                                <th>Coef...</th>
                             </tr>
                         </thead>
                         <tbody>

@@ -31,6 +31,7 @@ class Control extends Model
         $this->state=3;
         $this->setCoef();
         $this->predios()->detach();
+        $this->cc_asistente=null;
         $this->save();
     }
 
@@ -47,7 +48,7 @@ class Control extends Model
 
     public function setCoef()
     {
-        $this->sum_coef = $this->predios->sum('coeficiente');
+        $this->sum_coef = $this->predios()->sum('coeficiente');
         return $this->save();
     }
 }

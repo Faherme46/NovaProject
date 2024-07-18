@@ -179,9 +179,10 @@ class Asignacion extends Component
 
         $control = Control::find($this->controlId);
         try {
-            $control->setCoef();
+
             $control->state = 1;
             $control->predios()->attach(array_keys($this->predioSelected));
+            $control->setCoef();
             $control->save();
         } catch (\Exception $e) {
             return  session()->flash('warning1', $e->getMessage());

@@ -21,7 +21,7 @@
                             <input class="me-2 form-control @error('cedula') is-invalid @enderror" type="text"
                                 class="form-control" onkeypress="return onlyNumbers(event)" maxlength="12"
                                 name="cedula" value="{{ $cedula ? $cedula : '' }}" wire:model='cedula'
-                                @disabled($asistente) onclick="this.select()" >
+                                @disabled($asistente) onclick="this.select()">
                             @error('cedula')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -115,13 +115,13 @@
                 <div class="card-header">
                     <div class="row g-3">
                         <div class="col-10">
-                            @if ($controles)
+                            @if ($controls)
                                 <form id="formPredios" class="row g-3" wire:submit='asignar(1)' method="GET">
                                     <div class="mb-3 col-2 ">
 
                                         <select name="control" id="id_control_selected" wire:model="control"
                                             wire:change='ver' class="form-control" required>
-                                            @foreach ($control as $control)
+                                            @foreach ($controls as $control)
                                                 <option value="{{ $control->id }}">
                                                     {{ $control->id }} </option>
                                             @endforeach
@@ -199,8 +199,8 @@
                                 </tr>
                             @endforelse
 
-                            @if ($controlH)
-                                @foreach ($controles[$controlH]->predios as $predio)
+                            @if ($controls)
+                                @foreach ($controls[$controlH]->predios as $predio)
                                     <tr class="table-active">
                                         <td>{{ $predio->persona->id }}</td>
                                         <td>{{ $predio->persona->nombre }}
@@ -250,8 +250,8 @@
 
                         </div>
                         <div class="mb-3">
-                            <input type="text" name="nombre" id="" class="form-control" onclick="this.select()"
-                                onkeypress="return noNumbers(event)" wire:model='name' />
+                            <input type="text" name="nombre" id="" class="form-control"
+                                onclick="this.select()" onkeypress="return noNumbers(event)" wire:model='name' />
                             <div>
                                 @error('name')
                                     <span class="error">{{ $message }}</span>
@@ -260,8 +260,9 @@
                             <small id="helpId" class="text-muted">Nombre</small>
                         </div>
                         <div class="mb-3">
-                            <input type="text" name="apellido" id="" class="form-control" onclick="this.select()"
-                                value="{{ old('apelldio') }}" wire:model='lastName' placeholder="" />
+                            <input type="text" name="apellido" id="" class="form-control"
+                                onclick="this.select()" value="{{ old('apelldio') }}" wire:model='lastName'
+                                placeholder="" />
                             <small id="helpId" class="text-muted">Apellido</small>
                         </div>
 
@@ -275,16 +276,17 @@
             </div>
         </div>
     </div>
+
+
 </div>
 
 
-
 <script>
-
     document.addEventListener('livewire:init', () => {
         Livewire.on('showModal', (event) => {
             $('#myModal').modal('show');
         });
+
 
         Livewire.on('hideModal', (event) => {
             $('#myModal').modal('hide');

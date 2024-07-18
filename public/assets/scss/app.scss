@@ -144,7 +144,7 @@ a {
 }
 
 @media screen and (min-width: 768px) {
-    body {
+    #body-pd {
         padding-left: calc(var(--nav-width))
     }
 
@@ -192,7 +192,7 @@ a {
 }
 
 .table-fixed-header tbody td {
-    
+
     top: 4rem;
 }
 

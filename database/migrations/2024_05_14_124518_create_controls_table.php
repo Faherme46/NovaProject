@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('controls', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('state')->default(1);
+            $table->unsignedBigInteger('state')->default(4);
             $table->unsignedBigInteger('cc_asistente')->nullable();
+            $table->decimal('sum_coef_can', 8, 6);
             $table->decimal('sum_coef', 8, 6);
             $table->timestamps();
         });

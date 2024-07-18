@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('descriptor2');
             $table->string('numeral2');
             $table->float('coeficiente');
+            $table->boolean('vota');
             $table->timestamps();
             $table->foreign('cc_propietario')->references('id')->on('personas');
 

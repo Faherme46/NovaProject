@@ -19,6 +19,6 @@ class QuorumState extends Component
     }
 
     public function ver(){
-
+        dd( $this->quorum);
     }
 }
