@@ -3,47 +3,45 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Maatwebsite\Excel\Validators\ValidationException;
 
-
-
-use App\Imports\PersonasImport;
-use App\Imports\PrediosImport;
-use App\Imports\UsersImport;
-
-use Maatwebsite\Excel\Facades\Excel;
+use App\Models\Predio;
+use Illuminate\Http\Request;
 class PrediosController extends Controller
 {
 
     protected $sessionController;
 
-    public function __construct() {
-        $this->sessionController = new SessionController;;
-    }
+
+    public function updatePredio(Request $request){
+        $messages = [
+            'coef.required' => 'El campo coeficiente es obligatorio.',
+            'id.required' => 'El campo id es obligatorio.',
+        ];
+
+        $request->validate([
+            'coef' => ['required'],
+            'id' => ['required'],
+        ], $messages);
 
 
-    public function import(String $file){
-
-        try {
-            $externalFilePathPredios = 'C:/Asambleas/Clientes/'.$file.'/predios.xlsx';
-            $externalFilePathPersonas= 'C:/Asambleas/Clientes/'.$file.'/personas.xlsx';
-            Excel::import(new PersonasImport,$externalFilePathPersonas);
-            Excel::import(new PrediosImport,$externalFilePathPredios);
-            Excel::import(new UsersImport, 'C:/Asambleas/usuarios.xlsx');
-
-            return redirect()->route('asambleas.index')->with('success','Carga de datos exitosa');
-        } catch (ValidationException $e) {
-            // Manejar excepciones específicas de validación de Excel
-            $failures = $e->failures();
-            throw new \Exception('Error: '.$failures[1]);
-            //Excepcion por archivo inexistente
-        } catch (\Illuminate\Contracts\Filesystem\FileNotFoundException $e) {
-            throw new \Exception('Error: No se encontró la hoja de cálculo: datos.xlsx');
-        } catch (\Exception $e) {
-
-            // Manejar cualquier otra excepción
-             throw new \Exception($e->getMessage());
+        $predio=Predio::find($request->id);
+        if ($predio) {
+            try {
+                $predio->update([
+                    'coeficiente'=>$request->coef,
+                    'vota'=>$request->boolean('voto')
+                ]);
+                $predio->control[0]->setCoef();
+                return redirect()->route('consulta')->with('success1','Se ha actualizado el predio');
+            } catch (\Throwable $th) {
+                return redirect()->route('consulta')->withErrors($th->getMessage());
+            }
+        }else{
+            session('warning1','El predio no fue encontrado');
+            return redirect()->route('consulta');
         }
     }
+
+
 
 }

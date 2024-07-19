@@ -11,8 +11,9 @@ use Illuminate\Support\Facades\Cache;
 use Exception;
 
 use App\Models\Control;
-use App\Models\Asignacion;
-use PhpParser\Error;
+use App\Models\Persona;
+use App\Models\Predio;
+use Livewire\Features\SupportLegacyModels\EloquentCollectionSynth;
 
 
 class Consulta extends Component
@@ -28,7 +29,20 @@ class Consulta extends Component
     public $sumCoefL;
 
     public $maxControls;
-    public $inChange = true;
+    public $tab = 4;
+    public $tabNames = [
+        1 => 'Cambiar',
+        2 => 'Retirar',
+        3 => 'Predio',
+        4 => 'Personas'
+    ];
+
+    public $tiposId=[];
+
+
+    public $previousTab;
+    public $Predio = null;
+    public $Persona = null;
 
     public $messageL = 'Sin Predios';
     public $messageR = 'Sin Predios';
@@ -47,19 +61,38 @@ class Consulta extends Component
     public $controlIdSearch;
 
 
+    protected $listeners = [
+        'showModalPredio' => 'searchPredio',
+        'add-predio' => 'searchPredio',
+        'add-poderdante' => 'searchPersona',
+        'showModalPersona' => 'searchPersona',
+        'set-control' => 'setControlL'
+    ];
+    protected $messages = [
+        6 => 'Sin predios',
+        5 => 'Control Entregado',
+        4 => 'Control no asignado',
+        3 => 'Control retirado'
+    ];
+
+
     public function cleanData($value)
     {
+
         if ($value) {
             $this->reset('controlIdR', 'controlIdL');
         }
         $this->reset([
-            'messageL', 'changes', 'messageR', 'prediosR', 'prediosL', 'sumCoefR',
-            'sumCoefL', 'controlRInvalid', 'controlLInvalid', 'nameR', 'nameL'
+            'messageL', 'changes', 'messageR', 'prediosR', 'prediosL', 'sumCoefR', 'previousTab',
+            'sumCoefL', 'controlRInvalid', 'controlLInvalid', 'nameR', 'nameL', 'Predio', 'Persona'
         ]);
         $this->mount();
+        $this->dispatch('$refresh');
     }
     public function mount()
     {
+        $this->Predio = Predio::find(3);
+        $this->tiposId=Persona::distinct()->pluck('tipo_id');
         $this->maxControls = Cache::get('controles');
     }
 
@@ -108,12 +141,16 @@ class Consulta extends Component
     {
         $this->controlIdR = $controlId;
         $this->updatedControlIdR($controlId);
+        $this->dispatch('$refresh');
     }
-    #[On('set-control')]
+
     public function setControlL($controlId)
     {
         $this->controlIdL = $controlId;
+        $this->updatedTab(1);
+
         $this->updatedControlIdL($controlId);
+        $this->dispatch('$refresh');
     }
 
 
@@ -133,59 +170,21 @@ class Consulta extends Component
 
     public function updatedControlIdR($value)
     {
-        $control = $this->handleUpdate($value, false);
-        if (!$control) {
-            return null;
-        }
-
-        $this->controlRInvalid = false;
-        $predios = collect();
-        if ($control->state == 1) {
-
-            if (Cache::get('inRegistro')) {
-                $this->nameR = $control->persona->nombre;
-            }
-            $predios = $control->predios;
-            foreach ($predios as $predio) {
-                $this->prediosR[$predio->id] = $predio;
-            }
-        } else {
-
-            $this->messageR = (!$predios->isEmpty()) ? '' : 'Sin Predios';
-        }
+        return $this->handleUpdate($value, false);
     }
     public function updatedControlIdL($value)
     {
 
-        $control = $this->handleUpdate($value, true);
-        if (!$control) {
-            return;
-        }
-
-        $this->controlLInvalid = false;
-        $predios = collect();
-        if ($control->state == 1) {
-
-            if (Cache::get('inRegistro')) {
-                $this->nameL = $control->persona->nombre;
-            }
-            $predios = $control->predios;
-            foreach ($predios as $predio) {
-                $this->prediosL[$predio->id] = $predio;
-            }
-        } else {
-
-            $this->messageL = (!$predios->isEmpty()) ? '' : 'Sin Predios';
-        }
+        return $this->handleUpdate($value, true);
     }
 
 
     public function handleUpdate($value, $left)
     {
         $this->resetValidation();
-        if($left){
+        if ($left) {
             $this->reset('messageL', 'controlLInvalid', 'prediosL');
-        }else{
+        } else {
             $this->reset('messageR', 'controlRInvalid', 'prediosR');
         }
 
@@ -202,13 +201,32 @@ class Consulta extends Component
             return null;
         }
         $control = Control::find($value);
-        if ($control->state != 3 && $control->state != 5) {
+        if (!$control) {
+            return null;
+        }
+        if ($control->state == 1 || $control->state == 2) {
+            $this->controlLInvalid = false;
+            $predios = $control->predios;
+            if ($left) {
+                $this->nameL = (Cache::get('inRegistro')) ? $control->persona->nombre : '';
+                $this->messageL = (!$predios->isEmpty()) ? '' : $this->messages[6];
+                foreach ($predios as $predio) {
+                    $this->prediosL[$predio->id] = $predio;
+                }
+            } else {
+                $this->nameR = (Cache::get('inRegistro')) ? $control->persona->nombre : '';
+                $this->messageL = (!$predios->isEmpty()) ? '' : $this->messages[6];
+                $this->nameL = (Cache::get('inRegistro')) ? $control->persona->nombre : '';
+                foreach ($predios as $predio) {
+                    $this->prediosR[$predio->id] = $predio;
+                }
+            }
             return $control;
         } else {
             if ($left) {
-                $this->messageL = ($control->state == 5) ? 'Control Entregado' : 'Control Retirado';
+                $this->messageL = $this->messages[$control->state];
             } else {
-                $this->messageR = ($control->state == 5) ? 'Control Entregado' : 'Control Retirado';
+                $this->messageR =  $this->messages[$control->state];
             }
             $this->controlLInvalid = true;
             return null;
@@ -296,13 +314,14 @@ class Consulta extends Component
         $this->updatedControlIdR($this->controlIdR);
     }
 
-    public function validation(){
-        if($this->inChange){
+    public function validation()
+    {
+        if ($this->tab == 1) {
             $this->validate(
                 ['controlIdR' => 'required', 'controlIdL' => 'required'],
                 ['controlIdR.required' => 'Control B requerido', 'controlIdL.required' => 'Control A requerido']
             );
-        }else{
+        } elseif ($this->tab == 2) {
             $this->validate(
                 ['controlIdL' => 'required'],
                 ['controlIdL.required' => 'Control A requerido']
@@ -310,12 +329,22 @@ class Consulta extends Component
         }
     }
 
-    public function setInChange($value)
+    public function updatedTab($value)
     {
-        $this->resetValidation();
-        $this->cleanData(1);
-        $this->inChange = $value;
+        if ($this->changes) {
+            session()->flash('warning1', 'No se han guardado los cambios');
+            $this->tab = $this->previousTab;
+            return;
+        } else {
+            $this->resetValidation();
+            $this->cleanData(1);
+            $this->tab = $value;
+            $this->previousTab = $value;
+        }
     }
+
+
+
 
 
     public function storeInChange()
@@ -358,12 +387,18 @@ class Consulta extends Component
             } else {
                 $controlL->retirar();
             }
-            session()->flash('success1', 'Guardado');
-            return redirect()->route('consulta');
+            $this->success();
         } catch (\Throwable $th) {
             $this->addError('error', $th->getMessage());
         }
     }
+    public function success()
+    {
+        session()->flash('success1', 'Guardado');
+        $this->cleanData(1);
+        $this->dispatch('refresh-predios');
+    }
+
 
     public function storeDetach()
     {
@@ -392,17 +427,68 @@ class Consulta extends Component
                 $controlL->retirar();
             }
 
-            session()->flash('success1', 'Guardado');
-            $this->cleanData(1);
-            return redirect()->route('consulta');
+
+            $this->success();
         } catch (\Throwable $th) {
             $this->addError('error', $th->getMessage());
         }
     }
-
-    public function searchPersona()
+    public function searchPredio($predioId)
     {
-        $this->dispatch('find-persona', id: $this->cedulaSearch);
+        $this->updatedTab(3);
+        if (!$predioId) {
+            return;
+        }
+        $this->Predio = Predio::find($predioId);
+    }
+
+
+    public function exchange()
+    {
+        $auxL = $this->controlIdL;
+
+        $auxR = $this->controlIdR;
+        $this->setControlL($auxR);
+        $this->setControlR($auxL);
+    }
+
+
+
+    public function undoPredioChanges($id)
+    {
+        $this->searchPredio($id);
+        $this->changes = false;
+        $this->dispatch('$refresh');
+    }
+
+    public function undoPersonaChanges($id)
+    {
+        $this->changes = false;
+    }
+
+    public function searchPersona($personaId)
+    {
+
+        $this->updatedTab(4);
+        if (!$personaId) {
+            return;
+        }
+
+
+        $this->Persona = Persona::find(($personaId == 'CC') ? $this->cedulaSearch : $personaId);
+
+        if (!$this->Persona) {
+            return $this->addError('noFound', 'No se encontro');
+        }
+        $this->prediosL = $this->Persona->predios;
+        if ($this->prediosL->isEmpty()) {
+            $this->messageL = $this->messages[6];
+        }
+        $this->prediosR = $this->Persona->prediosAsignados();
+
+        if ($this->prediosR->isEmpty()) {
+            $this->messageR = $this->messages[6];
+        }
     }
     public function searchControl()
     {

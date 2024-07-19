@@ -18,7 +18,8 @@ class ControlFactory extends Factory
     {
         return [
             'state'=> 4,
-            'sum_coef'=>0
+            'sum_coef'=>0,
+            'sum_coef_can'=>0
         ];
     }
 }

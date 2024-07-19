@@ -6,7 +6,7 @@ use App\Http\Controllers\FileController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\PrediosController;
 use App\Http\Controllers\LoginController;
-
+use App\Http\Controllers\PersonasController;
 use App\Livewire\Consulta;
 use App\Livewire\Registrar;
 use App\Livewire\Asignacion;
@@ -28,12 +28,7 @@ use App\Livewire\Votacion;
 Route::get('/', function () {
     return view('welcome');
 })->name('home')->withoutMiddleware([EnsureAsambleaOn::class]);
-Route::get('/votos', function () {
-    return view('votos');
-});
-Route::get('/resultados', function () {
-    return view('resultados');
-});
+
 
 
 //rutas para las asambleas
@@ -44,24 +39,27 @@ Route::get('/files/export', [FileController::class, 'export'])->name('files.expo
 
 //rutas de las predios
 
-
-
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Admin')]], function () {
     Route::delete('/session/destroy', [SessionController::class, 'destroyAll'])->name('session.destroy');
     //Rutas de Usuarios
-
     Route::post('/predios/import', [PrediosController::class, 'import'])->name('predios.import');
 });
 
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Admin|Lider')]], function () {
     Route::get('admin/asambleas', [AsambleaController::class, 'index'])->name('admin.asambleas')->withoutMiddleware(EnsureAsambleaOn::class);
     Route::resource('asambleas', AsambleaController::class)->withoutMiddleware(EnsureAsambleaOn::class);
+    Route::post('admin/inicio', [AsambleaController::class, 'iniciarAsamblea'])->name('asambleas.inicia');
+    Route::post('admin/termina', [AsambleaController::class, 'terminarAsamblea'])->name('asambleas.termina');
+
     Route::get('/users', [UsersController::class, 'index'])->name('users.index')->withoutMiddleware([EnsureAsambleaOn::class]);;
     Route::post('users/create', [UsersController::class, 'createUser'])->name('users.create');
     Route::get('users/import', [UsersController::class, 'importUsers'])->name('users.import');
+
     Route::get('votacion', Votacion::class)->name('votacion');
-    Route::post('admin/inicio', [AsambleaController::class, 'iniciarAsamblea'])->name('asambleas.inicia');
-    Route::post('admin/termina', [AsambleaController::class, 'terminarAsamblea'])->name('asambleas.termina');
+
+    Route::post('predios/update', [PrediosController::class, 'updatePredio'])->name('predios.update');
+    Route::post('personas/update', [PersonasController::class, 'updatePersona'])->name('personas.update');
+
 });
 
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Admin|Lider|Operario')]], function () {

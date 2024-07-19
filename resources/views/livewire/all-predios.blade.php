@@ -4,12 +4,15 @@
         <h5 class="card-title"> Predios Disponibles</h5>
     </div>
     <div class="card-header row g-1">
+        @if ($asambleaOn->registro)
         <div class="col-3">
 
             <input wire:model.live='searchId' type="text" id="searchId" name="cc_propietario" class="form-control"
                 placeholder="Propietario" onkeypress="return onlyNumbers(event)" onclick="this.select()">
 
         </div>
+        @endif
+
         <div class="col-2">
             <select wire:model.live='decriptor1' class="form-control" name="descriptor1" id="">
                 @foreach ($distincts['descriptor1'] as $item)
@@ -37,7 +40,7 @@
             <input wire:model.live='numeral2' type="text" class="form-control" placeholder="#"
                 onkeypress="return onlyNumbers(event)" maxlength="5" onclick="this.select()">
         </div>
-        <div class="col-1 fpr">
+        <div class="col-1 ms-auto">
             <button wire:click='clean' class=" btn btn-danger"><i class='bi bi-x-circle-fill '></i></button>
         </div>
 
@@ -73,12 +76,12 @@
                         <tr>
                             <td>
                                 <button wire:click="dispatchPredio({{ $predio->id }})" class="btn pt-0 pb-0 mb-0">
-                                    <i class='bi bi-plus-circle-fill '></i>
+                                    <i class='bi {{$iconButton}} '></i>
                                 </button>
                             </td>
                     @endif
                     <td>
-                        <span class="btn py-0 " wire:dblclick='showPredio({{ $predio->id }})'>
+                        <span class="btn py-0 " wire:dblclick='showPredio({{ $predio->id }})'  wire:click='dispatchPredio({{ $predio->id }})' >
                             {{ $predio->descriptor1 }} {{ $predio->numeral1 }}
                             {{ $predio->descriptor2 }} {{ $predio->numeral2 }}
                         </span>
@@ -357,7 +360,6 @@
                                                                 {{ $predio->descriptor2 }} {{ $predio->numeral2 }}
                                                             </span>
                                                         </td>
-
                                                     </tr>
                                                 @empty
                                                     <tr class="table-active">

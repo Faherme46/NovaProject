@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('predios', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('cc_propietario');
+            $table->unsignedBigInteger('cc_propietario')->nullable();
             $table->unsignedBigInteger('cc_apoderado')->nullable();
             $table->string('descriptor1');
             $table->string('numeral1');
@@ -36,5 +36,3 @@ return new class extends Migration
     }
 
 };
-
-$table->after('2024_06_07_141154_create_personas_table');

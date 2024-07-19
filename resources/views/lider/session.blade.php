@@ -54,11 +54,15 @@
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>propietario</th>
-                                <th>cedula</th>
-                                <th>Apoderado</th>
+                                @if ($asambleaOn->registro)
+                                    <th>propietario</th>
+                                    <th>cedula</th>
+                                    <th>Apoderado</th>
+                                @endif
+
                                 <th>Descriptor </th>
                                 <th>Coef...</th>
+                                <td>Vota</td>
                             </tr>
                         </thead>
                         <tbody>
@@ -66,12 +70,16 @@
                                 @forelse ($predios as $p)
                                     <tr>
                                         <td>{{ $p->id }}</td>
-                                        <td>{{ $p->persona->nombre }} {{ $p->persona->apellido }}</td>
-                                        <td>{{ $p->cc_propietario }}</td>
-                                        <td>{{ $p->cc_apoderado }}</td>
+                                        @if ($asambleaOn->registro)
+                                            <td>{{ $p->persona->nombre }} {{ $p->persona->apellido }}</td>
+                                            <td>{{ $p->cc_propietario }}</td>
+                                            <td>{{ $p->cc_apoderado }}</td>
+                                        @endif
+
                                         <td>{{ $p->descriptor1 }} {{ $p->numeral1 }} {{ $p->descriptor2 }}
                                             {{ $p->numeral2 }}</td>
                                         <td>{{ $p->coeficiente }}</td>
+                                        <td>{{ ($p->vota)?'Si':'No' }}</td>
                                     </tr>
                                 @empty
                                     <tr>
@@ -98,44 +106,7 @@
 
 
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('asamblea-form');
-            const formTitle = document.getElementById('form-title');
-            const submitButton = document.getElementById('submit-button');
 
-            document.querySelectorAll('.btn-edit').forEach(button => {
-                button.addEventListener('click', function() {
-                    const id = this.dataset.id;
-                    const nombre = this.dataset.nombre;
-                    const lugar = this.dataset.lugar;
-                    const fecha = this.dataset.fecha;
-                    const hora = this.dataset.hora;
-                    const estado = this.dataset.estado;
-                    const nombreBd = this.dataset.nombrebd;
-
-                    form.action = `asambleas/${id}`; // Correcto
-                    form.method = 'POST';
-
-                    document.getElementById('asamblea-id').value = id;
-                    document.getElementById('nombre').value = nombre;
-                    document.getElementById('lugar').value = lugar;
-                    document.getElementById('fecha').value = fecha;
-                    document.getElementById('hora').value = hora;
-                    document.getElementById('estado').value = estado;
-
-                    formTitle.textContent = 'Editar asamblea';
-                    submitButton.textContent = 'Actualizar asamblea';
-
-                    const hiddenMethodInput = document.createElement('input');
-                    hiddenMethodInput.type = 'hidden';
-                    hiddenMethodInput.name = '_method';
-                    hiddenMethodInput.value = 'PUT';
-                    form.appendChild(hiddenMethodInput);
-                });
-            });
-        });
-    </script>
 
 
 

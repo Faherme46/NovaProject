@@ -24,10 +24,14 @@ class AllPredios extends Component
 
     public $Control;
 
-
+    public $iconButton='bi-plus-circle-fill';
     public function mount()
     {
 
+        $url=url()->current();
+        if ($url=='http://nova.local/consulta'){
+            $this->iconButton='bi-question-circle-fill';
+        }
         $this->distincts = [
             'descriptor1' => Predio::distinct()->pluck('descriptor1'),
             'numeral1' => Predio::distinct()->pluck('numeral1'),
@@ -41,9 +45,10 @@ class AllPredios extends Component
     {
         // Restablece las variables de búsqueda
         $this->reset(['descriptor1','descriptor2','numeral2','numeral1','searchId']);
-
+        $this->dispatch('$refresh');
+        $this->mount();
         // Actualiza la colección de predios para mostrar todos los disponibles
-        $this->prediosAll = Predio::all();
+
     }
     public function render()
     {
@@ -83,21 +88,20 @@ class AllPredios extends Component
     }
     public function dispatchPoderdante($id){
 
-        $this->dispatch('add-poderdante', poderdanteId: $id);
+        $this->dispatch('add-poderdante', poderdanteId: $id,personaId:$id);
     }
 
     public function dispatchControl($id){
-
         $this->dispatch('set-control', controlId: $id);
     }
-    #[On('find-persona')]
+
     public function showPersona($id){
         if(!$id){
             return;
         }
         $this->Persona=Persona::find($id);
         if($this->Persona){
-            $this->dispatch('showModalPersona');
+            $this->dispatch('showModalPersona',personaId:$id);
         }else{
             session()->flash('error1','No fue encontrado');
         }
@@ -109,7 +113,7 @@ class AllPredios extends Component
         }
         $this->Predio=Predio::find($id);
         if($this->Predio){
-            $this->dispatch('showModalPredio');
+            $this->dispatch('showModalPredio',predioId:$id);
         }else{
             session()->flash('error1','No fue encontrado');
         }
@@ -126,7 +130,12 @@ class AllPredios extends Component
         }else{
             session()->flash('error1','No fue encontrado');
         }
-
     }
+
+    #[On('refresh-predios')]
+    public function refreshPredios(){
+        $this->dispatch('$refresh');
+    }
+
 
 }

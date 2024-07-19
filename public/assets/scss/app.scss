@@ -214,3 +214,17 @@ a {
     background-color: rgba(150,150,150,.3);
 }
 
+.no-bottom-round .btn {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.scaled-switch-15 {
+    transform: scale(1.5);
+    transform-origin: top left;
+}
+
+.scaled-switch-20 {
+    transform: scale(2);
+    transform-origin: top left;
+}

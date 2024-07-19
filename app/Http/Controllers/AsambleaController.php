@@ -16,6 +16,14 @@ use App\Models\Persona;
 use App\Models\Asamblea;
 use App\Models\Control;
 
+use App\Imports\PersonasImport;
+use App\Imports\PrediosImport;
+
+use App\Imports\PredioWithRegistro;
+use App\Imports\UsersImport;
+
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Validators\ValidationException;
 
 class AsambleaController extends Controller
 {
@@ -37,10 +45,14 @@ class AsambleaController extends Controller
 
 
         if ($sessionId) {
-            $asambleas = Asamblea::get();
             $predios = Predio::get();
-            $personas = Persona::get();
-            return view('lider.session', compact('asambleas', 'personas', 'predios'));
+
+            if(cache('registro')){
+                $personas = Persona::get();
+                return view('lider.session', compact('personas', 'predios'));
+            }
+
+            return view('lider.session', compact('predios'));
         } else {
 
             $folders = $this->fileController->getFolders();
@@ -79,14 +91,13 @@ class AsambleaController extends Controller
         try {
             $asamblea = Asamblea::create($request->all());
             $this->sessionController->setSession($asamblea->id_asamblea, $asamblea->folder);
-            $this->prediosController->import($asamblea->folder);
+            $this->importPredios($asamblea->folder,$asamblea->registro);
 
             Cache::put('id_asamblea', $asamblea->id_asamblea);
             Cache::put('asambleaOn', true);
             Cache::put('inRegistro', $asamblea->registro);
             Cache::put('controles', $asamblea->controles);
             Control::factory()->count($asamblea->controles)->create();
-            return redirect()->route('asambleas.index')->with('success', 'Asamblea creada con éxito.');
         } catch (QueryException $qe) {
             if ($qe->errorInfo[1] == 1062) { // 1062 es el código de error para duplicados
                 return redirect()->route('asambleas.index')->withErrors('Ya existe una asamblea en la misma fecha.');
@@ -98,6 +109,8 @@ class AsambleaController extends Controller
             $this->destroy($asamblea->id_asamblea);
             return redirect()->route('asambleas.index')->withErrors($e->getMessage());
         }
+
+        return redirect()->route('asambleas.index')->with('success', 'Asamblea creada con éxito.');
     }
 
 
@@ -192,4 +205,31 @@ class AsambleaController extends Controller
 
 
     //Metodos de manejo de archivos
+    public function importPredios(String $file,$registro){
+        try {
+            $externalFilePathPredios = 'C:/Asambleas/Clientes/'.$file.'/predios.xlsx';
+            $externalFilePathPersonas= 'C:/Asambleas/Clientes/'.$file.'/personas.xlsx';
+            if ($registro){
+                Excel::import(new PersonasImport,$externalFilePathPersonas);
+                Excel::import(new PredioWithRegistro,$externalFilePathPredios);
+            }else{
+                Excel::import(new PrediosImport,$externalFilePathPredios);
+            }
+
+            Excel::import(new UsersImport, 'C:/Asambleas/usuarios.xlsx');
+
+            return redirect()->route('asambleas.index')->with('success','Carga de datos exitosa');
+        } catch (ValidationException $e) {
+            // Manejar excepciones específicas de validación de Excel
+            $failures = $e->failures();
+            throw new \Exception('Error: '.$failures[1]);
+            //Excepcion por archivo inexistente
+        } catch (\Illuminate\Contracts\Filesystem\FileNotFoundException $e) {
+            throw new \Exception('Error: No se encontró una de las hojas de cálculo');
+        } catch (\Exception $e) {
+
+            // Manejar cualquier otra excepción
+             throw new \Exception($e->getMessage());
+        }
+    }
 }
