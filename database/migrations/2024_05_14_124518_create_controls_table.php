@@ -18,6 +18,9 @@ return new class extends Migration
             $table->decimal('sum_coef_can', 8, 6);
             $table->decimal('sum_coef', 8, 6);
             $table->timestamps();
+
+            $table->foreign('state')->references('id')->on('states');
+            $table->foreign('cc_asistente')->references('id')->on('personas');
         });
     }
 

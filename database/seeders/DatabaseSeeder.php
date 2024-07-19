@@ -2,8 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use Database\Seeders\RoleSeeder;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -23,5 +21,6 @@ class DatabaseSeeder extends Seeder
         State::create(['id'=>5,'value'=>'Entregado']);
         State::create(['id'=>4,'value'=>'Unsigned']);
         $this->call(RoleSeeder::class);
+        $this->call(QuestionSeeder::class);
     }
 }

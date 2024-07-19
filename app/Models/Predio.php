@@ -11,10 +11,7 @@ class Predio extends Model
 
     protected $guarded=[];
 
-    protected $casts = [
-        'predios_id' => 'array',
-    ];
-
+   
     public function persona()
     {
         return $this->belongsTo(Persona::class, 'cc_propietario', 'id');
