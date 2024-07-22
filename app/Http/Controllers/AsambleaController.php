@@ -198,8 +198,7 @@ class AsambleaController extends Controller
     }
     public function asistencia()
     {
-        $allControls = Control::where('state',4)->get();
-        dd($allControls);
+        $allControls = Control::where('state','!=',4)->get();
         return view('asistencia', compact('allControls'));
     }
 

@@ -27,7 +27,7 @@
                                     @endforeach
                                 </td>
                                 <td>{{ $control->sum_coef }}</td>
-                                <td>{{ $control->estado }}</td>
+                                <td>{{ $control->state }}</td>
                             </tr>
                         @empty
                             <tr>

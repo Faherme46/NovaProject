@@ -5,12 +5,12 @@
     </div>
     <div class="card-header row g-1">
         @if ($asambleaOn->registro)
-        <div class="col-3">
+            <div class="col-3">
 
-            <input wire:model.live='searchId' type="text" id="searchId" name="cc_propietario" class="form-control"
-                placeholder="Propietario" onkeypress="return onlyNumbers(event)" onclick="this.select()">
+                <input wire:model.live='searchId' type="text" id="searchId" name="cc_propietario" class="form-control"
+                    placeholder="Propietario" onkeypress="return onlyNumbers(event)" onclick="this.select()">
 
-        </div>
+            </div>
         @endif
 
         <div class="col-2">
@@ -58,7 +58,7 @@
                 @else
                     <th>Coef</th>
                 @endif
-
+                <th>Vota</th>
             </thead>
             <tbody>
                 @forelse ($prediosAll as $predio)
@@ -76,12 +76,13 @@
                         <tr>
                             <td>
                                 <button wire:click="dispatchPredio({{ $predio->id }})" class="btn pt-0 pb-0 mb-0">
-                                    <i class='bi {{$iconButton}} '></i>
+                                    <i class='bi {{ $iconButton }} '></i>
                                 </button>
                             </td>
                     @endif
                     <td>
-                        <span class="btn py-0 " wire:dblclick='showPredio({{ $predio->id }})'  wire:click='dispatchPredio({{ $predio->id }})' >
+                        <span class="btn py-0 " wire:dblclick='showPredio({{ $predio->id }})'
+                            wire:click='dispatchPredio({{ $predio->id }})'>
                             {{ $predio->descriptor1 }} {{ $predio->numeral1 }}
                             {{ $predio->descriptor2 }} {{ $predio->numeral2 }}
                         </span>
@@ -105,7 +106,8 @@
                     @else
                         <td>{{ $predio->coeficiente }}</td>
                     @endif
-
+                    <td>{{($predio->vota)?'SI':'No'}}</td>
+                    </tr>
                 @empty
                     <tr>
                         <td colspan="4">No se hallaron Predios</td>
@@ -247,23 +249,24 @@
                             </li>
 
                             @if ($asambleaOn->registro)
-                            <li class="list-group-item d-flex">
+                                <li class="list-group-item d-flex">
 
-                                <div class="ms-0 me-auto ">
-                                    <div class="fw-bold">Propietario: </div>
-                                    <div class="d-flex">
-                                        <p class="ms-3 mb-0">{{ $Predio->persona->nombre }}
-                                            {{ $Predio->persona->apellido }}</p>
-                                        <p class="ms-3 mb-0"> {{ $Predio->persona->tipo_id }}: {{ $Predio->persona->id }}
-                                        </p>
+                                    <div class="ms-0 me-auto ">
+                                        <div class="fw-bold">Propietario: </div>
+                                        <div class="d-flex">
+                                            <p class="ms-3 mb-0">{{ $Predio->persona->nombre }}
+                                                {{ $Predio->persona->apellido }}</p>
+                                            <p class="ms-3 mb-0"> {{ $Predio->persona->tipo_id }}:
+                                                {{ $Predio->persona->id }}
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
-                                <span class="badge btn text-bg-primary rounded-pill pt-2"
-                                    wire:click='showPersona({{ $Predio->persona->id }})'>
-                                    <i class="bi bi-eye fs-2"></i>
-                                </span>
+                                    <span class="badge btn text-bg-primary rounded-pill pt-2"
+                                        wire:click='showPersona({{ $Predio->persona->id }})'>
+                                        <i class="bi bi-eye fs-2"></i>
+                                    </span>
 
-                            </li>
+                                </li>
                                 <li class="list-group-item">
                                     <h6>Apoderado: </h6>
                                     @if ($Predio->apoderado)

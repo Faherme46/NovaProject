@@ -7,6 +7,8 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\PrediosController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PersonasController;
+use App\Http\Controllers\QuestionsController;
+
 use App\Livewire\Consulta;
 use App\Livewire\Registrar;
 use App\Livewire\Asignacion;
@@ -59,6 +61,7 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
 
     Route::post('predios/update', [PrediosController::class, 'updatePredio'])->name('predios.update');
     Route::post('personas/update', [PersonasController::class, 'updatePersona'])->name('personas.update');
+    Route::post('questions/create',[QuestionsController::class,'createQuestion'])->name('questions.create');
 
 });
 

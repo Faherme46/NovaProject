@@ -20,6 +20,7 @@ class QuestionSeeder extends Seeder
         QuestionType::create(['name' => 'Aprobacion']);
         QuestionType::create(['name' => 'SI/NO']);
         QuestionType::create(['name' => 'TD']);
+        QuestionType::create(['name'=>'Libre']);
 
         Question::create([
             'title' => 'Aprobacion de estados Financieros',
@@ -142,18 +143,6 @@ class QuestionSeeder extends Seeder
             'type' => 2
         ]);
         Question::create([
-            'title' => 'Proposicion',
-            'optionA' => 'SI',
-            'optionB' => '',
-            'optionC' => 'NO',
-            'optionD' => '',
-            'optionE' => '',
-            'optionF' => '',
-            'nominalPriotiry' => false,
-            'prefab' => true,
-            'type' => 4
-        ]);
-        Question::create([
             'title' => 'Quorum',
             'optionA' => '',
             'optionB' => '',
@@ -166,16 +155,16 @@ class QuestionSeeder extends Seeder
             'type' => 1
         ]);
         Question::create([
-            'title' => 'Libre',
-            'optionA' => '',
+            'title' => 'Proposicion',
+            'optionA' => 'SI',
             'optionB' => '',
-            'optionC' => '',
+            'optionC' => 'NO',
             'optionD' => '',
             'optionE' => '',
             'optionF' => '',
             'nominalPriotiry' => false,
             'prefab' => true,
-            'type' => 2
+            'type' => 4
         ]);
     }
 }
