@@ -44,9 +44,14 @@ return [
             'visibility' => 'public',
             'throw' => false,
         ],
-        'external' => [
+        'externalClientes' => [
             'driver' => 'local',
             'root' => 'C:/Asambleas/Clientes',
+            'throw' => false,
+        ],
+        'externalAsambleas' => [
+            'driver' => 'local',
+            'root' => 'C:/Asambleas/Asambleas',
             'throw' => false,
         ],
 

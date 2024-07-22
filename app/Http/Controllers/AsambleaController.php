@@ -72,7 +72,7 @@ class AsambleaController extends Controller
         } else {
             $input['registro'] = false;
         }
-        $input['name'] = $input['folder'] . '_' . $input['fecha'] . '_' . $input['hora'];
+        $input['name'] = $input['folder'] . '_' . str_replace('-', '.', $input['fecha']);
 
         $request->merge($input);
 
@@ -93,11 +93,17 @@ class AsambleaController extends Controller
             $this->sessionController->setSession($asamblea->id_asamblea, $asamblea->folder);
             $this->importPredios($asamblea->folder,$asamblea->registro);
 
-            Cache::put('id_asamblea', $asamblea->id_asamblea);
-            Cache::put('asambleaOn', true);
-            Cache::put('inRegistro', $asamblea->registro);
-            Cache::put('controles', $asamblea->controles);
+            $data = [
+                'id_asamblea'   => $asamblea->id_asamblea,
+                'asambleaOn'    => true,
+                'inRegistro'    => $asamblea->registro,
+                'controles'     => $asamblea->controles,
+                'name_asamblea' => $asamblea->name
+            ];
+
+            Cache::putMany($data);
             Control::factory()->count($asamblea->controles)->create();
+            $this->fileController->createFolder($asamblea->name);
         } catch (QueryException $qe) {
             if ($qe->errorInfo[1] == 1062) { // 1062 es el código de error para duplicados
                 return redirect()->route('asambleas.index')->withErrors('Ya existe una asamblea en la misma fecha.');

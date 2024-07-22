@@ -1,13 +1,5 @@
 <div>
-    <style>
-        .custom-input {
-            border: none;
-            outline: none;
-            background: transparent;
-            font-size: 2rem;
-        }
-    </style>
-    <div class="row mt-5 g-3 justify-content-center">
+    <div class="row mt-3 g-3 justify-content-center">
         <div class="col-auto align-items-center ">
             <form action="{{route('questions.create')}}" method="post" id="form">
                 @csrf
@@ -176,36 +168,6 @@
         </div>
     </div>
 </div>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const editableTexts = document.querySelectorAll('.editable-text');
-        const editableInputs = document.querySelectorAll('.editable-input');
-
-        editableTexts.forEach(function(editableText, index) {
-            editableText.addEventListener('click', function() {
-                editableText.style.display = 'none';
-                editableInputs[index].style.display = 'block';
-                editableInputs[index].focus();
-            });
-        });
-
-        editableInputs.forEach(function(editableInput, index) {
-            editableInput.addEventListener('blur', function() {
-                editableText = editableTexts[index];
-                editableText.textContent = editableInput.value;
-                editableInput.style.display = 'none';
-                editableText.style.display = 'block';
-            });
-
-            editableInput.addEventListener('keydown', function(event) {
-                if (event.key === 'Enter') {
-                    editableInput.blur();
-                }
-            });
-        });
-    });
-
-</script>
 <script>
     document.addEventListener('livewire:init', function () {
         Livewire.on('resetInputs', function () {

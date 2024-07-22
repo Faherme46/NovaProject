@@ -228,3 +228,21 @@ a {
     transform: scale(2);
     transform-origin: top left;
 }
+
+.custom-input {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 2rem;
+}
+
+.super-large-text {
+    font-size: 4rem; /* Ajusta este valor según tus necesidades */
+  }
+
+.medium-large-text {
+    font-size: 3rem; /* Ajusta este valor según tus necesidades */
+}
+.normal-large-text {
+    font-size: 2rem; /* Ajusta este valor según tus necesidades */
+}
