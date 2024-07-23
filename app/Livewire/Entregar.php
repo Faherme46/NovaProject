@@ -10,19 +10,19 @@ use App\Models\Control;
 
 class Entregar extends Component
 {
-    public $controles;
+    public $controls;
     public $inModal=false;
     public $controlId;
     public $colors=[
-        1=>'btn-primary',
-        2=>'btn-info',
-        3=>'btn-warning',
-        4=>'btn-black',
-        5=>'btn-danger'
+        1=>'btn-primary', //activo
+        2=>'btn-info', //ausente
+        3=>'btn-warning', //retirado
+        4=>'btn-black', //sin asignar
+        5=>'btn-danger' //entregado
     ];
 
     public function mount(){
-        $this->controles=Control::all();
+        $this->controls=Control::all();
 
     }
 

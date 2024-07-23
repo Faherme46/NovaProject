@@ -46,7 +46,7 @@ class Votacion extends Component
     public function render()
     {
         $this->getValues();
-        return view('livewire.votacion');
+        return view('livewire.votacion.votacion');
     }
 
 
@@ -177,5 +177,5 @@ class Votacion extends Component
 
     }
 
-    
+
 }

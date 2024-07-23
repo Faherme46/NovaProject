@@ -51,14 +51,18 @@ class QuestionsController extends Controller
                 'type'=>$request->radioType
             ]);
             $questionName='Pregunta_'.$question->id-12;
-            $this->fileController->createSubFolder($questionName,Cache::get('name_asamblea'));  
-            return view('layout.presentation',compact('question'));
+            $this->fileController->createSubFolder($questionName,Cache::get('name_asamblea'));
+            $inVoting=false;
+            return view('layout.presentation',compact('question','inVoting'));
         } catch (\Throwable $th) {
             return redirect()->back()->withErrors([
                 'error' => $th->getMessage(),
             ]);
         }
+    }
 
-
+    public function voting(){
+        $inVoting=true;
+        return view('layout.presentation',compact('inVoting'));
     }
 }

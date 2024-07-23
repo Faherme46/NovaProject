@@ -122,10 +122,10 @@
         <div class="col-3 ms-2">
 
             <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title mb-0 text-center">Presentes </h3>
+                <div class="card-header py-1 ">
+                    <h4 class="card-title mb-0 text-center">Presentes </h4>
                 </div>
-                <div class="card-body ">
+                <div class="card-body py-1">
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item d-flex align-items-center justify-content-between">
                             <h5 class="card-title mb-0">Quorum: </h5>
@@ -145,10 +145,10 @@
             </div>
 
             <div class="card mt-3">
-                <div class="card-header">
-                    <h3 class="card-title mb-0 text-center">Votantes </h3>
+                <div class="card-header py-1">
+                    <h4 class="card-title mb-0 text-center">Votantes </h4>
                 </div>
-                <div class="card-body ">
+                <div class="card-body py-1">
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item d-flex align-items-center justify-content-between">
                             <h5 class="card-title mb-0">Quorum: </h5>

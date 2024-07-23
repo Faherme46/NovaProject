@@ -27,7 +27,9 @@
                             @enderror
                         </div>
                         <div class="col">
-                            <button class="btn btn-primary" wire:click.prevent='search'>Buscar</button>
+                            <button class="btn btn-primary" wire:click.prevent='search'>
+                                <i class="bi bi-search"></i>
+                            </button>
                         </div>
 
                     </div>
@@ -112,13 +114,11 @@
         {{-- asignar --}}
         <div class="col-12 ">
             <div class="card ">
-                <div class="card-header">
-                    <div class="row g-3">
+                <div class="card-header d-flex">
                         <div class="col-10">
                             @if ($controls)
                                 <form id="formPredios" class="row g-3" wire:submit='asignar(1)' method="GET">
-                                    <div class="mb-3 col-2 ">
-
+                                    <div class=" col-2 ">
                                         <select name="control" id="id_control_selected" wire:model="control"
                                             wire:change='ver' class="form-control" required>
                                             @foreach ($controls as $control)
@@ -140,7 +140,7 @@
                                 </form>
                             @else
                                 <form id="formPredios" class="row g-3" wire:submit='asignar(0)' method="GET">
-                                    <div class="mb-3 col-2 ">
+                                    <div class=" col-2 ">
                                         <select name="control" id="id_control" class="form-control" required
                                             wire:model="controlId">
                                             @foreach ($controlIds as $control)
@@ -160,9 +160,7 @@
                         <div class="col-2 text-right">
                             <input class="form-control" name="sum_coef" value="{{ $sumCoef }}" id="sumCoef"
                                 readonly></input>
-                            <small id="helpId" class="text-muted">Coeficiente total</small>
                         </div>
-                    </div>
 
                 </div>
                 <div class="card-body table-responsive table-fixed-header">

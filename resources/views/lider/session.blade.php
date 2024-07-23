@@ -40,7 +40,7 @@
             </div>
 
             <div class="mt-3">
-                <livewire:list-users />
+               @livewire('list-users', ['height100' => false])
             </div>
 
         </div>

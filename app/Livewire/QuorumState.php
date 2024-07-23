@@ -15,7 +15,7 @@ class QuorumState extends Component
     public function render()
     {
         $this->quorum=Control::where('state',1)->sum('sum_coef');
-        return view('livewire.quorum-state');
+        return view('livewire.components.quorum-state');
     }
 
     public function ver(){

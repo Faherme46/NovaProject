@@ -111,7 +111,7 @@
 
 
 
-    <div class="height-100 container">
+    <div class="mt-3 mx-3">
 
         @if (session('success'))
             <div class="alert alert-success alert-dismissible" role="alert">
@@ -154,9 +154,9 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
-        <div class="z-2">
-            @yield('content')
-        </div>
+
+        @yield('content')
+
 
 
     </div>

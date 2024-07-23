@@ -97,7 +97,7 @@
                                 <i class="bi bi-person-fill"></i>
                             </button>
 
-                            <button class="btn pt-0 pb-0 mb-0"
+                            <button class="btn p-0 mb-0"
                                 wire:dblclick='showPersona({{ $predio->cc_propietario }})'
                                 wire:click='dispatchPoderdante({{ $predio->cc_propietario }})'>
                                 {{ $predio->cc_propietario }}

@@ -30,10 +30,10 @@
 
 
 
-<body @auth id="body-pd" @endauth >
+<body >
     <x-theme-toggle />
-    <div class="container ">
-        @livewire('present-question',['question'=>$question])
+    <div class="px-3">
+        @livewire('present-question', ['question' => $question])
     </div>
 
 

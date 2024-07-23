@@ -3,7 +3,7 @@
 
     <div class="card d-flex p-3 ">
         <div class="col-12 ">
-            @foreach ($controles as $control)
+            @foreach ($controls as $control)
                 <button class="btn {{ $colors[$control->state] }} mb-2 me-2 fs-3"
                     @if ($control->state != 3) wire:click='confirm({{ $control->id }})' @endif>
                     {{ $control->id }}

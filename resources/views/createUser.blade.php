@@ -13,7 +13,7 @@
                         Crear Usuarios
                     </h5>
                 </div>
-                <div class="card-body">
+                <div class="card-body ">
                     <form action="{{ route('users.create') }}" method="POST">
                         @csrf
 
@@ -113,7 +113,7 @@
 
         </div>
         <div class="col-5">
-            <livewire:list-users />
+            @livewire('list-users', ['height100' => false])
         </div>
     </div>
 @endsection

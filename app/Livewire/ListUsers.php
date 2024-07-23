@@ -8,10 +8,11 @@ use Livewire\Component;
 class ListUsers extends Component
 {
     public $users;
+    public $height100=false;
 
-
-    public function mount(){
+    public function mount($height100){
         $this->users=User::all();
+        $this->height100=$height100;
     }
     public function render()
     {

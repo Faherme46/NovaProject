@@ -23,19 +23,19 @@
     <div class="row mt-3 justify-content-center">
         <div class="col-12 align-items-center ">
                 <div class="card ">
-                    <div class="card-header d-flex align-items-center ">
+                    <div class="card-header d-flex align-items-center py-0">
 
                         <div class="col-11  text-center ms-2">
                             <h1 class="mb-0 text-uppercase super-large-text " id="title" >{{$question->title}}</h1>
                         </div>
                         <div class="col-1 mx-2">
-                            <button type="submit" class="btn btn-primary" wire:click='vote' >
+                            <button type="submit" class="btn btn-primary" wire:click='voting' >
                                 <i class="bi bi-clipboard-check-fill fs-3"  ></i>
                             </button>
                         </div>
                     </div>
 
-                    <div class="card-body d-flex    ">
+                    <div class="card-body d-flex">
 
                         <ul class="list-group ">
                             <li class="list-group-item  bg-primary text-light dark">
