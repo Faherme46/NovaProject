@@ -22,6 +22,11 @@ class Question extends Model
         'optionF',
         'nominalPriotiry',
         'prefab',
+        'seconds',
         'type'
     ];
+
+    public function results(){
+        return $this->hasMany(Result::class);
+    }
 }

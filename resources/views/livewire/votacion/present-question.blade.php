@@ -23,7 +23,7 @@
     <div class="row mt-3 justify-content-center">
         <div class="col-12 align-items-center ">
                 <div class="card ">
-                    <div class="card-header d-flex align-items-center py-0">
+                    <div class="card-header d-flex align-items-center   ">
 
                         <div class="col-11  text-center ms-2">
                             <h1 class="mb-0 text-uppercase super-large-text " id="title" >{{$question->title}}</h1>

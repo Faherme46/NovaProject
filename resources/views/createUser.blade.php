@@ -1,5 +1,3 @@
-<link rel="stylesheet" href="{{ asset('assets/scss/crearUsuario.scss') }}">
-
 @extends('layout.app')
 
 

@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-
-use Illuminate\Http\Request;
-
+use Exception;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Cache;
 
 class FileController extends Controller
 {
@@ -30,52 +30,97 @@ class FileController extends Controller
         }
     }
 
-    public function createFolder($newFolderName)
+
+
+
+    public function getQuestionFolderPath($questionId,$title)
     {
-        $externalFolderPath = config('filesystems.disks.externalAsambleas.root');
-
-        // Verifica si la carpeta existe
-        if (!file_exists($externalFolderPath)) {
-            mkdir($externalFolderPath, 0755, true);
-        }
-
-        $newFolderPath = $externalFolderPath . DIRECTORY_SEPARATOR . $newFolderName;
-
+        $questionName = ($questionId - 12).'_'.$title;
+        $parentFolderName = $this->getAsambleaFolderPath();
+        $newFolderPath = $parentFolderName . '/' . $questionName;
         if (!file_exists($newFolderPath)) {
             mkdir($newFolderPath, 0755, true);
         }
+        return $newFolderPath;
     }
 
-    public function createSubFolder($newFolderName,$parentFolder)
+    public function getAsambleaFolderPath()
     {
         $externalFolderPath = config('filesystems.disks.externalAsambleas.root');
-
         // Verifica si la carpeta existe
+
         if (!file_exists($externalFolderPath)) {
             mkdir($externalFolderPath, 0755, true);
         }
+        $asambleaName = Cache::get('name_asamblea');
 
-        $parentFolderPath = $externalFolderPath . DIRECTORY_SEPARATOR . $parentFolder;
+        $asambleaFolderPath = $externalFolderPath . '/' . $asambleaName;
+        // Verifica si la carpeta existe
 
-        if (!file_exists($parentFolderPath)) {
-            mkdir($parentFolderPath, 0755, true);
+        if (!file_exists($asambleaFolderPath)) {
+            mkdir($asambleaFolderPath, 0755, true);
         }
 
-        $newFolderPath = $externalFolderPath . DIRECTORY_SEPARATOR . $parentFolder . DIRECTORY_SEPARATOR . $newFolderName;
+        return $asambleaFolderPath;
+    }
 
-        if (!file_exists($newFolderPath)) {
-            mkdir($newFolderPath, 0755, true);
+    public function getLocalPath(){
+
+    }
+
+    public function createChart($questionId, $title, $labels, $values, $name)
+    {
+        // Datos para el gráfico
+
+        $asambleaName=Cache::get('name_asamblea','');
+        $parent_path = $this->getQuestionFolderPath($questionId,$title); // Ruta donde se guardará la imagen
+        $output_path =  $parent_path . '/' . $name . '.png';
+        $localPath=($questionId-12).'/'.$name . '.png';
+
+        $combined =  array_merge($labels,array_map('strval', $values));
+        // Crear un array con los datos
+        $data = [
+            $title,
+            json_encode($combined),
+            $output_path
+        ];
+        $args = '';
+
+        foreach ($data as $value) {
+            $args .= ' ' . escapeshellarg($value);
         }
+
+        // dd($args);
+        // Convertir el array a JSON
+
+        // $json_data =  escapeshellarg($datos);
+        // Ejecutar el script de Python
+        $py_path = env('PYTHON_PATH');
+
+        $command = escapeshellcmd("$py_path C:/xampp/htdocs/nova/scripts/create_plot.py $args ".escapeshellarg($asambleaName));
+        // Ejecutar el comando y capturar la salida y errores
+
+        $output = shell_exec($command . ' 2>&1');
+        if ($output!='200') {
+            throw new Exception('Problemas al crear las Graficas: '.$output);
+        }else{
+            return $this->loadImage($output_path,$localPath);
+        }
+
+
     }
 
+    public function loadImage($sourcePath, $destinationPath)
+{
+    // Verifica si el archivo existe
+    if (file_exists($sourcePath)) {
+        // Mueve el archivo al directorio de almacenamiento
+        Storage::disk('results')->put($destinationPath, file_get_contents($sourcePath));
 
-
-
-    public function importPredios(Request $request)
-    {
+        return $destinationPath;
+    } else {
+        dd('algo muy malo ha sucedido');
+        throw new Exception('File does not exist');
     }
-    public function export()
-    {
-        dd('Todo');
-    }
+}
 }

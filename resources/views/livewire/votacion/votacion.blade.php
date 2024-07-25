@@ -1,8 +1,12 @@
 <div>
+    
     <div class="row mt-3 g-3 justify-content-center">
         <div class="col-auto align-items-center ">
             <form action="{{route('questions.create')}}" method="post" id="form">
                 @csrf
+
+                <input type="number" name="mins" id="" wire:model='mins' hidden>
+                <input type="number" name="secs" id="" wire:model='secs' hidden>
                 <div class="card ">
                     <div class="card-header d-flex align-items-center py-3 ">
                         <div class="col-2 me-2">
@@ -144,7 +148,7 @@
                 </div>
             </div>
 
-            <div class="card mt-3">
+            <div class="card mt-2">
                 <div class="card-header py-1">
                     <h4 class="card-title mb-0 text-center">Votantes </h4>
                 </div>
@@ -165,6 +169,26 @@
                     </ul>
                 </div>
             </div>
+            <div class="card mt-2">
+                <div class="card-header py-1">
+                    <h4 class="card-title mb-0 text-center">Tiempo </h4>
+                </div>
+                <div class="card-body py-1 d-flex justify-content-center">
+                    <div class="col-1 d-flex flex-column mt-3 ">
+                        <button class="btn-arrow up" wire:click='increment(1)'></button>
+                        <button class="btn-arrow down" wire:click='decrement(1)'></button>
+                    </div>
+                    <div class="col-auto me-2">
+                        <h1 class="ff-clock medium-large-text">
+                            {{($mins<10)?'0':''}}{{$mins}}:{{($secs<10)?'0':''}}{{$secs}}
+                        </h1>
+                    </div>
+                    <div class="col-1 d-flex flex-column mt-3">
+                        <button class="btn-arrow up" wire:click='increment(0)'></button>
+                        <button class="btn-arrow down" wire:click='decrement(0)'></button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -178,4 +202,3 @@
         });
     });
 </script>
-

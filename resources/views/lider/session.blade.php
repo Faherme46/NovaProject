@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="{{ asset('assets/scss/creaasamblea.scss') }}">
+
 
 @extends('layout.app')
 

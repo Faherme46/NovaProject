@@ -36,6 +36,8 @@ class Votacion extends Component
     public $quorumVote = 0;
     public $quorumRegistered = 0;
 
+    public $mins = 2;
+    public $secs = 0;
     public function mount()
     {
         $this->questionsPrefab = Question::where('prefab', true)->get();
@@ -115,7 +117,7 @@ class Votacion extends Component
 
     public function updatedQuestionType($value)
     {
-        $this->reset(['questionOptions','questionWhite']);
+        $this->reset(['questionOptions', 'questionWhite']);
         $this->dispatch('resetInputs');
         if ($this->questionId == 12) {
             switch ($value) {
@@ -174,8 +176,46 @@ class Votacion extends Component
             }
         }
         $this->dispatch('$refresh');
+    }
 
+    public function increment($min)
+    {
+        if ($min) {
+            if ($this->mins < 59) {
+                $this->mins++;
+                if($this->mins==60){
+                    $this->mins--;
+                }
+
+            }
+        } else {
+            if ($this->secs < 59) {
+                $this->secs+=10;
+                if($this->secs==60){
+                    $this->secs--;
+                }
+            }
+
+        }
+    }
+
+    public function decrement($min)
+    {
+        if ($min) {
+            if ($this->mins > 0) {
+                $this->mins--;
+
+            }
+        } else {
+            if ($this->secs > 0) {
+                $this->secs-=10;
+                if ($this->secs==49) {
+                    $this->secs++;
+                }
+            }
+        }
     }
 
 
+    
 }

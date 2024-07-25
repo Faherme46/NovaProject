@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('optionF')->nullable();
             $table->boolean('nominalPriotiry');
             $table->boolean('prefab');
+            $table->integer('seconds')->default(0);
             $table->timestamps();
 
             $table->foreign('type')->references('id')->on('question_types');

@@ -4,7 +4,7 @@
 <head>
     <meta charset='utf-8'>
     {{-- color theme --}}
-    <script src="{{ asset('assets/js/color-modes.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/color-modes.js') }}"></script>     --}}
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name='viewport' content='width=device-width, initial-scale=1'>
@@ -23,17 +23,28 @@
     {{-- popper --}}
     <script src="{{ asset('assets/js/popper.js') }}"></script>
 
+    <script src="{{asset('assets/js/chart.js')}}"></script>
 
 
     <link rel="stylesheet" href="{{ asset('assets/scss/app.scss') }}">
+
+    <style>
+        html,body{
+            overflow: hidden;
+        }
+    </style>
 </head>
 
 
 
 <body >
-    <x-theme-toggle />
     <div class="px-3">
-        @livewire('present-question', ['question' => $question])
+        <x-alerts />
+
+        <div class="z-2">
+            {{$slot}}
+        </div>
+
     </div>
 
 

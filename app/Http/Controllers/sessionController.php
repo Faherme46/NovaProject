@@ -9,16 +9,19 @@ use App\Models\Persona;
 use App\Models\Control;
 use App\Models\ControlPredio;
 use App\Models\Question;
-use Illuminate\Support\Facades\Session as MySession;
+use App\Models\Result;
+
+use Database\Seeders\QuestionSeeder;
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
-use Symfony\Component\Console\Question\Question as QuestionQuestion;
+
+use Illuminate\Support\Facades\Storage;
 
 class SessionController extends Controller
 {
     public function destroyAll()
     {
-
         //se limpiaran las tablas: personas,Predios, apoderados, votaciones,resultados,preguntas, votos
         $this->destroyOnError();
         return redirect()->route('admin.asambleas')->with('success', 'Sesion reestablecida');
@@ -41,9 +44,42 @@ class SessionController extends Controller
         Predio::truncate();
         Control::truncate();
         Persona::truncate();
-        Question::whereNotIn('id', $idsParaConservar)->delete();
+        Result::truncate();
+        Question::truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        $seeder= new QuestionSeeder();
+        $seeder->run();
+        $this->deleteAllFiles();
     }
+    public function deleteAllFiles()
+    {
+        $disk = Storage::disk('results');
+        // Verifica si el disco existe
+        if ($disk->exists('')) {
+            $this->deleteDirectory($disk, '');
+        }
+    }
+
+    private function deleteDirectory($disk, $directory)
+    {
+        // Obtén todos los archivos y subdirectorios en el directorio actual
+        $files = $disk->allFiles($directory);
+        $directories = $disk->allDirectories($directory);
+
+        // Borra todos los archivos
+        foreach ($files as $file) {
+            $disk->delete($file);
+        }
+
+        // Borra todos los subdirectorios recursivamente
+        foreach ($directories as $subDirectory) {
+            $this->deleteDirectory($disk, $subDirectory);
+        }
+
+        // Finalmente, borra el directorio actual si está vacío
+        $disk->deleteDirectory($directory);
+    }
+
     public function setSession($id_asamblea, $name_asamblea)
     {
         $data = [

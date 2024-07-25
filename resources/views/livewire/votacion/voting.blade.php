@@ -7,24 +7,87 @@
                 </button>
             </div>
             <div class="col-2">
-                <h1>00:00</h1>
+                <h1 class="mb-0">
+                    {{ $countdown }}
+                </h1>
             </div>
             <div class="col-2 justify-content-end d-flex">
-                <button class="btn btn-warning p-0 rounded-3 me-2">
-                    <i class="bi bi-pause-fill fs-2 py-0 px-1"></i>
+                <button class="btn btn-success p-0 rounded-3" wire:click='store'>
+                    <i class="bi bi-square-fill fs-2 px-1"></i>
                 </button>
-                <button class="btn btn-danger p-0 rounded-3">
-                    <i class="bi bi-stop-fill fs-2 px-1" ></i>
+                <button class="btn btn-info p-0 rounded-3" wire:click='createResults'>
+                    <i class="bi bi-square-fill fs-2 px-1"></i>
+                </button>
+                <button class="btn btn-warning p-0 rounded-3 me-2" wire:click='playPause({{ !$stopped }})'>
+
+                    @if ($stopped)
+                        <i class="bi bi-play-fill fs-2 py-0 px-1"></i>
+                    @else
+                        <i class="bi bi-pause-fill fs-2 py-0 px-1"></i>
+                    @endif
+                </button>
+                <button class="btn btn-danger p-0 rounded-3" wire:click='stopVote'>
+                    <i class="bi bi-stop-fill fs-2 px-1"></i>
                 </button>
 
             </div>
         </div>
         <div class="card-body ">
             @foreach ($controls as $control)
-                <span class="btn  @if ($control->state==4) btn-black @else btn-secondary @endif ms-0 mb-1 me-0 fs-2">
-                    {{($control->id<10)?'0':''}}{{$control->id}}
+                <span
+                    class="btn  @if ($control->state == 4) btn-black @else btn-secondary @endif ms-0 mb-1 me-0 fs-2">
+                    {{ $control->id < 10 ? '0' : '' }}{{ $control->id }}
                 </span>
             @endforeach
         </div>
     </div>
+    <div class="modal fade" id="modalConfirm"  data-bs-keyboard="false" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                        Se ha acabado el tiempo
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" data-bs-dismiss="modal" wire:click='oneMoreMinut'>+1
+                        min</button>
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal"
+                        wire:click='store'>Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+@script
+    <script>
+
+        $wire.on('modal-show', async() => {
+
+
+            await $wire.sleep(1);
+            $('#modalConfirm').modal('toggle');
+        });
+        $wire.on('modal-close', () => {
+
+            $('#modalConfirm').modal('hide');
+        });
+
+        $wire.on('pause-timer', () => {
+            clearInterval(timeInterval);
+
+        });
+
+        $wire.on('start-timer', () => {
+            startTimer();
+        });
+
+        function startTimer() {
+            timeInterval = setInterval(() => {
+                $wire.decrement()
+            }, 1000)
+        }
+    </script>
+@endscript

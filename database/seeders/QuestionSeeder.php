@@ -7,6 +7,7 @@ use Illuminate\Database\Seeder;
 
 use App\Models\Question;
 use App\Models\QuestionType;
+use App\Models\Result;
 
 class QuestionSeeder extends Seeder
 {
@@ -20,7 +21,7 @@ class QuestionSeeder extends Seeder
         QuestionType::create(['name' => 'Aprobacion']);
         QuestionType::create(['name' => 'SI/NO']);
         QuestionType::create(['name' => 'TD']);
-        QuestionType::create(['name'=>'Libre']);
+        QuestionType::create(['name' => 'Libre']);
 
         Question::create([
             'title' => 'Aprobacion de estados Financieros',
@@ -166,5 +167,7 @@ class QuestionSeeder extends Seeder
             'prefab' => true,
             'type' => 4
         ]);
+
+        
     }
 }

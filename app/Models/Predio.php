@@ -11,7 +11,7 @@ class Predio extends Model
 
     protected $guarded=[];
 
-   
+
     public function persona()
     {
         return $this->belongsTo(Persona::class, 'cc_propietario', 'id');
@@ -26,5 +26,8 @@ class Predio extends Model
     public function apoderado(){
         return $this->belongsTo(Persona::class,'cc_apoderado','id');
     }
+
+
+    
 
 }

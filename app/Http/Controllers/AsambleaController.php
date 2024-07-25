@@ -103,7 +103,7 @@ class AsambleaController extends Controller
 
             Cache::putMany($data);
             Control::factory()->count($asamblea->controles)->create();
-            $this->fileController->createFolder($asamblea->name);
+            $this->fileController->getAsambleaFolderPath();
         } catch (QueryException $qe) {
             if ($qe->errorInfo[1] == 1062) { // 1062 es el código de error para duplicados
                 return redirect()->route('asambleas.index')->withErrors('Ya existe una asamblea en la misma fecha.');

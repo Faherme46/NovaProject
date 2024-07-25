@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
+use App\Models\Result;
 use App\Models\Question;
 use App\Http\Controllers\FileController;
 
@@ -37,6 +38,9 @@ class QuestionsController extends Controller
                 'options' => 'Al menos uno de los campos debe tener un valor.',
             ]);
         }
+
+        $seconds=$request->mins*60+$request->secs;
+
         try {
             $question=Question::create([
                 'title'=>$request->title,
@@ -48,12 +52,15 @@ class QuestionsController extends Controller
                 'optionF'=>$request->optionF,
                 'nominalPriotiry'=>$request->boolean('radioCoef'),
                 'prefab'=>false,
+                'seconds'=>$seconds,
                 'type'=>$request->radioType
             ]);
-            $questionName='Pregunta_'.$question->id-12;
-            $this->fileController->createSubFolder($questionName,Cache::get('name_asamblea'));
-            $inVoting=false;
-            return view('layout.presentation',compact('question','inVoting'));
+
+            $this->fileController->getQuestionFolderPath($question->id,$question->title);
+
+            //todo log create question
+            session(['question_id'=>$question->id]);
+            return redirect()->route('questions.show');
         } catch (\Throwable $th) {
             return redirect()->back()->withErrors([
                 'error' => $th->getMessage(),
@@ -61,8 +68,5 @@ class QuestionsController extends Controller
         }
     }
 
-    public function voting(){
-        $inVoting=true;
-        return view('layout.presentation',compact('inVoting'));
-    }
+
 }

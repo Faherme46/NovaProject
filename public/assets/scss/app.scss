@@ -1,7 +1,7 @@
-@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap");
+
 @import url('./_variables.scss');
 
-@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap");
+@import url('../fonts/fonts.css');
 
 
 *,
@@ -246,3 +246,41 @@ a {
 .normal-large-text {
     font-size: 2rem; /* Ajusta este valor según tus necesidades */
 }
+
+.ff-clock{
+    font-family: Clock;
+}
+.btn-arrow {
+    position: relative;
+    display: inline-block;
+    width: 1rem; /* Ajusta el ancho del botón */
+    height: 1rem; /* Ajusta la altura del botón */
+    background-color: transparent; /* Fondo transparente */
+    border: none; /* Sin bordes */
+    cursor: pointer; /* Cursor de mano */
+    padding: 0; /* Sin padding */
+  }
+
+  .btn-arrow::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 1;
+    height: 1;
+    border-left: 0.6rem solid transparent;
+    border-right: 0.6rem solid transparent;
+  }
+
+  .btn-arrow.down::after {
+    border-top: 0.6rem solid var(--bs-secondary); /* Color de la flecha */
+  }
+
+  .btn-arrow.up::after {
+    border-bottom: 0.6rem solid var(--bs-secondary); /* Color de la flecha */
+  }
+
+  .btn-arrow:hover {
+    transform: scale(1.2); /* Aumenta el tamaño al pasar el cursor */
+  }

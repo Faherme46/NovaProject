@@ -66,6 +66,11 @@
                             <a href="{{ route('entregar') }}" class="nav_link">
                                 <i class='bi bi-door-closed-fill nav_icon'></i> <span class="nav_name">Entregar</span>
                             </a>
+                            @hasanyrole('Admin|Lider')
+                                <a href="{{ route('votacion') }}" class="nav_link">
+                                    <i class='bi bi-question-circle-fill nav_icon'></i> <span class="nav_name">Votacion</span>
+                                </a>
+                            @endhasanyrole
                         @endif
 
 
@@ -81,9 +86,7 @@
                             <a href="{{ route('users.index') }}" class="nav_link">
                                 <i class='bi bi-people-fill nav_icon'></i> <span class="nav_name">Usuarios</span>
                             </a>
-                            <a href="{{ route('votacion') }}" class="nav_link">
-                                <i class='bi bi-question-circle-fill nav_icon'></i> <span class="nav_name">Votacion</span>
-                            </a>
+
                         @endhasanyrole
 
 
@@ -116,6 +119,13 @@
         @if (session('success'))
             <div class="alert alert-success alert-dismissible" role="alert">
                 {{ session('success') }}
+
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+        @if (session('error'))
+            <div class="alert alert-warning alert-dismissible" role="alert">
+                {{ session('error') }}
 
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>

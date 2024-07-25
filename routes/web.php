@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Middleware\ValidateLogin;
 use App\Http\Middleware\EnsureAsambleaOn;
+use App\Livewire\PresentQuestion;
 use App\Livewire\Votacion;
 
 //rutas de redireccion
@@ -37,7 +38,7 @@ Route::get('/', function () {
 
 
 
-Route::get('/files/export', [FileController::class, 'export'])->name('files.export');
+
 
 //rutas de las predios
 
@@ -58,10 +59,13 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::get('users/import', [UsersController::class, 'importUsers'])->name('users.import');
 
     Route::get('votacion', Votacion::class)->name('votacion');
+    Route::get('questions/show',PresentQuestion::class)->name('questions.show');
 
     Route::post('predios/update', [PrediosController::class, 'updatePredio'])->name('predios.update');
     Route::post('personas/update', [PersonasController::class, 'updatePersona'])->name('personas.update');
     Route::post('questions/create',[QuestionsController::class,'createQuestion'])->name('questions.create');
+
+
 
 });
 
