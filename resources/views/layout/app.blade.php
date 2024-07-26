@@ -92,19 +92,6 @@
 
                     </div>
                 </div>
-                @auth
-                    <div>
-                        <p class="nav_logo"> <i class='bi bi-person-circle nav_logo-icon'></i>
-                            <span class="nav_logo-name">{{ $currentUser->name }} <br>
-                                <small class="">{{ $currentUser->getRoleNames()->first() }}</small> </span>
-
-                        </p>
-
-                        <hr class="divider">
-                        <a href="#" class="nav_link"> <i class='bi bi-box-arrow-right nav_icon'></i>
-                            <span class="nav_name">Salir</span> </a>
-                    </div>
-                @endauth
 
             </nav>
         </div>
@@ -113,7 +100,7 @@
 
 
 
-    <div class="mt-3 mx-3"> 
+    <div class="mt-3 mx-3">
 
 
 

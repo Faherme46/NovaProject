@@ -15,7 +15,7 @@ body {
     font-family: var(--body-font);
     font-size: var(--normal-font-size);
     transition: .5s;
-    overflow: hidden;
+    padding-left: calc(var(--nav-width))
 }
 
 a {
@@ -145,9 +145,7 @@ a {
 }
 
 @media screen and (min-width: 768px) {
-    #body-pd {
-        padding-left: calc(var(--nav-width))
-    }
+
 
     .header {
         height: calc(var(--header-height) + 1rem);
@@ -174,6 +172,8 @@ a {
     .body-pd {
         padding-left: calc(var(--nav-width) + 156px)
     }
+
+    
 }
 
 .table-responsive {
