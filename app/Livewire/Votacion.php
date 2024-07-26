@@ -23,7 +23,7 @@ class Votacion extends Component
         'F' => '',
     ];
     public $questionType = 0;
-    public $questionNominal;
+
     public $questionWhite = false;
 
     #prefab questions
@@ -80,7 +80,6 @@ class Votacion extends Component
         $this->questionTag = $selectedQuestion->title;
         $this->questionId = $selectedQuestion->id;
         $this->questionType = $selectedQuestion->type;
-        $this->questionNominal = $selectedQuestion->nominalPriotiry;
 
 
         $this->questionOptions = [
@@ -178,6 +177,7 @@ class Votacion extends Component
         $this->dispatch('$refresh');
     }
 
+
     public function increment($min)
     {
         if ($min) {
@@ -217,5 +217,5 @@ class Votacion extends Component
     }
 
 
-    
+
 }

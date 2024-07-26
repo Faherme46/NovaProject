@@ -21,7 +21,6 @@ class QuestionsController extends Controller
 
         $request->validate([
             'radioType'=>'required',
-            'radioCoef'=>'required',
             'title'=>'required'
         ],[
             'title.required'=>'Se requiere un titulo a la pregunta'
@@ -50,7 +49,6 @@ class QuestionsController extends Controller
                 'optionD'=>$request->optionD,
                 'optionE'=>$request->optionE,
                 'optionF'=>$request->optionF,
-                'nominalPriotiry'=>$request->boolean('radioCoef'),
                 'prefab'=>false,
                 'seconds'=>$seconds,
                 'type'=>$request->radioType

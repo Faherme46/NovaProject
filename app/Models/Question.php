@@ -20,7 +20,6 @@ class Question extends Model
         'optionD',
         'optionE',
         'optionF',
-        'nominalPriotiry',
         'prefab',
         'seconds',
         'type'
@@ -28,5 +27,24 @@ class Question extends Model
 
     public function results(){
         return $this->hasMany(Result::class);
+    }
+
+    public function getAvailableOptions(){
+        $options=[
+            'A'=>'optionA',
+            'B'=>'optionB',
+            'C'=>'optionC',
+            'D'=>'optionD',
+            'E'=>'optionE',
+            'F'=>'optionF',
+        ];
+
+        $availableOption=[];
+        foreach ($options as $key => $value) {
+            if ($this->$value) {
+                $availableOption[]=$key;
+            }
+        }
+        return $availableOption;
     }
 }

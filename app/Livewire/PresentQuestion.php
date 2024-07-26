@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\On;
 
 use App\Models\Control;
 use App\Models\Result;
@@ -28,20 +29,25 @@ class PresentQuestion extends Component
         3 => 'btn-success',       //votado
     ];
     public $controls;
+    public $controlsAssigned = [];
 
     public $inVoting = 2;
     public $inCoefResult = true;
 
-
+    public $votes = [];
     public function mount()
     {
-        $this->reset('inVoting', 'seconds', 'countdown');
+        $this->reset('inVoting', 'seconds', 'countdown', 'votes');
         $this->question = Question::find(session('question_id'));
-        if(!$this->question){
-            return redirect()->route('home')->with('error','Nada para mostrar');
+        if (!$this->question) {
+            return redirect()->route('home')->with('error', 'Nada para mostrar');
         }
-        $this->controls = Control::all();
-        $this->inCoefResult=!$this->question->nominalPriority;
+        $this->controls = Control::all()->pluck('id')->toArray();
+        $this->inCoefResult = !$this->question->nominalPriority;
+        $this->setControlsAssigned();
+
+        // $this->chartNom=Storage::disk('results')->url('images/results/10/nominalChart.png');
+
     }
     #[Layout('layout.presentation')]
     public function render()
@@ -59,16 +65,14 @@ class PresentQuestion extends Component
     {
         $this->seconds = $this->question->seconds;
         $this->updateCountdown();
-        $this->inVoting = 1;
-        $this->dispatch('$refresh');
         $this->dispatch('start-timer');
+        $this->inVoting = 1;
     }
 
     public function inResults()
     {
 
         $this->inVoting = 3;
-        $this->dispatch('$refresh');
         foreach ($this->question->results as $result) {
             $this->setImageUrl(($result));
         }
@@ -79,7 +83,7 @@ class PresentQuestion extends Component
         try {
             $path = $this->setChart($result);
 
-            $urlImg = Storage::disk('results')->url('images/results/'.$path);
+            $urlImg = Storage::disk('results')->url('images/results/' . $path);
 
 
 
@@ -165,6 +169,7 @@ class PresentQuestion extends Component
     public function store()
     {
         $this->dispatch('closeModal');
+        $this->createResults();
         $this->playPause(true);
         $this->inResults();
     }
@@ -194,31 +199,130 @@ class PresentQuestion extends Component
     public function createResults()
     {
 
-        Result::create([
+        $valuesCoef = [
+            'A'    => 0,
+            'B'    => 0,
+            'C'    => 0,
+            'D'    => 0,
+            'E'    => 0,
+            'F'    => 0,
+            'nule'  => 0
+        ];
+        $valuesNom = [
+            'A'    => 0,
+            'B'    => 0,
+            'C'    => 0,
+            'D'    => 0,
+            'E'    => 0,
+            'F'    => 0,
+            'nule'  => 0
+        ];
+        $availableOptions = $this->question->getAvailableOptions();
+
+        foreach ($this->votes as $id => $vote) {
+            $control = $this->controlsAssigned[$id];
+            if (in_array($vote, $availableOptions)) {
+                $valuesCoef[$vote] += $control->sum_coef_can;
+                $valuesNom[$vote] += $control->getPrediosCan();
+            } else {
+                $valuesCoef['nule'] += $control->sum_coef_can;
+                $valuesNom['nule'] += $control->getPrediosCan();
+            }
+        }
+
+        $absentNom = Control::whereIn('state', [2, 5])->sum('predios_vote');
+        $absentCoef = Control::whereIn('state', [2, 5])->sum('sum_coef_can');
+
+        $abstainted = array_diff(array_keys($this->controlsAssigned), array_keys($this->votes));
+        $abstaintedCoef = 0;
+        $abstaintedNom=0;
+        foreach ($abstainted as $control) {
+
+            $abstaintedNom  +=  $this->controlsAssigned[$control]['predios_vote'];
+            $abstaintedCoef +=  $this->controlsAssigned[$control]['sum_coef_can'];
+        }
+
+        $resultNom = Result::create([
             'question_id' => $this->question->id,
-            'optionA' => 10,
-            'optionB' => 11,
-            'optionC' => 12,
-            'optionD' => 13,
-            'optionE' => 1,
-            'optionF' => 14,
-            'abstainted' => 2,
-            'absent' => 0,
-            'nule' => 1,
+            'optionA' => $valuesNom['A'],
+            'optionB' => $valuesNom['B'],
+            'optionC' => $valuesNom['C'],
+            'optionD' => $valuesNom['D'],
+            'optionE' => $valuesNom['E'],
+            'optionF' => $valuesNom['F'],
+            'abstainted' => count($abstainted),
+            'absent' => $absentNom,
+            'nule' =>  $valuesNom['nule'],
             'isCoef' => false
         ]);
-        Result::create([
+        $resultCoef = Result::create([
             'question_id' => $this->question->id,
-            'optionA' => 2.73,
-            'optionB' => 1.41,
-            'optionC' => 1.26,
-            'optionD' => 1.36,
-            'optionE' => 1.98,
-            'optionF' => 1.84,
-            'abstainted' => 2.1,
-            'absent' => 0,
-            'nule' => 1.12,
+            'optionA' => $valuesCoef['A'],
+            'optionB' => $valuesCoef['B'],
+            'optionC' => $valuesCoef['C'],
+            'optionD' => $valuesCoef['D'],
+            'optionE' => $valuesCoef['E'],
+            'optionF' => $valuesCoef['F'],
+            'abstainted' => $abstaintedCoef,
+            'absent' => $absentCoef,
+            'nule'  =>   $valuesCoef['nule'],
             'isCoef' => true
         ]);
+        $this->inResults();
     }
+
+
+    public function goBack()
+    {
+        $this->reset();
+        return redirect()->route('votacion');
+    }
+
+    public function goPresent()
+    {
+        $this->mount();
+        $this->dispatch('$refresh');
+    }
+
+    public $auxId = 1;
+
+
+
+    public function proofGenerateResults()
+    {
+        $aux = [
+            1 => 'A',
+            2 => 'B',
+            4 => 'C',
+            8 => 'D',
+            16 => 'E',
+            32 => 'F',
+        ];
+        $options = [1, 2, 4, 8, 16, 32];
+        $auxId = $this->auxId;
+
+        if (array_key_exists($auxId, $this->controlsAssigned)) {
+            $control = $this->controlsAssigned[$auxId];
+            if (!$control->isAbsent()) {
+                $this->votes[$control->id] = $aux[$options[array_rand($options)]];
+            }
+        }
+        $this->auxId = array_rand($this->controlsAssigned);
+    }
+
+    
+
+    public function setControlsAssigned()
+    {
+        $controls = Control::whereHas('predios')->get();
+        foreach ($controls as $control) {
+            $this->controlsAssigned[$control->id] = $control;
+        }
+    }
+
+
+    public function proof1(){
+        dd($this->votes);
+    }
+
 }

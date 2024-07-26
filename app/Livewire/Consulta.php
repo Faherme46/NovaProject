@@ -29,7 +29,7 @@ class Consulta extends Component
     public $sumCoefL;
 
     public $maxControls;
-    public $tab = 4;
+    public $tab = 1;
     public $tabNames = [
         1 => 'Cambiar',
         2 => 'Retirar',

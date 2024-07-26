@@ -1,9 +1,13 @@
 <div class="col-12">
     <x-alerts />
-    <div class="position-fixed z-3 top-2 end-0 pe-4 pt-2 d-flex justify-content-between align-items-center">
+    <div class="position-fixed w-100 z-3 top-2 end-0 px-4 pt-2 d-flex justify-content-between align-items-center">
 
 
+       <button wire:click='goBack' class="btn btn-primary py-0">
+            <i class="bi bi-arrow-bar-left fs-3"></i>
+       </button>
 
+       
 
         <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
             <input type="radio" class="btn-check" wire:model='inCoefResult' value="0" wire:change='$refresh'

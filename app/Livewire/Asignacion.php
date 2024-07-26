@@ -162,10 +162,34 @@ class Asignacion extends Component
     }
 
 
+    public function proofAsignacion(){
+        $ids=[
+        1  =>   1,
+        2  =>   2,
+        3  =>   3,
+        4  =>   4,
+        5  =>   5,
+        55 => 55,
+        59 => 59,
+        97 => 97,
+        44 => 44,
+        35 => 35,
+        77 => 77,
+        92 => 92,
+        73 => 73,
+        21 => 21,
 
+    ];
+        foreach ($ids as $key=>$id) {
+            $control = Control::find($key);
+            $control->state = 1;
+            $control->predios()->attach($id);
+            $control->setCoef();
+            $control->save();
+        }
 
-
-
+        return redirect()->route('home');
+    }
 
 
 

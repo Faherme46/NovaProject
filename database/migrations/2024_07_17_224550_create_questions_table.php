@@ -21,7 +21,6 @@ return new class extends Migration
             $table->string('optionD')->nullable();
             $table->string('optionE')->nullable();
             $table->string('optionF')->nullable();
-            $table->boolean('nominalPriotiry');
             $table->boolean('prefab');
             $table->integer('seconds')->default(0);
             $table->timestamps();

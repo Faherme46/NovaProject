@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Predio;
 use Illuminate\Http\Request;
+
+use App\Models\Control;
 class PrediosController extends Controller
 {
 

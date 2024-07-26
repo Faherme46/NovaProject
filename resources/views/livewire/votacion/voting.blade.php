@@ -2,7 +2,7 @@
     <div class="card mt-2">
         <div class="card-header d-flex justify-content-between align-items-center">
             <div class="col-2">
-                <button class="btn btn-primary px-1 rounded-3" wire:click='goBack'>
+                <button class="btn btn-primary px-1 rounded-3" wire:click='goPresent'>
                     <i class="bi bi-arrow-left-circle-fill fs-3"></i>
                 </button>
             </div>
@@ -12,13 +12,16 @@
                 </h1>
             </div>
             <div class="col-2 justify-content-end d-flex">
-                <button class="btn btn-success p-0 rounded-3" wire:click='store'>
-                    <i class="bi bi-square-fill fs-2 px-1"></i>
+                <button class="btn btn-warning py-0 rounded-3 me-2" wire:click='proof1'>
+                    proof
                 </button>
-                <button class="btn btn-info p-0 rounded-3" wire:click='createResults'>
-                    <i class="bi bi-square-fill fs-2 px-1"></i>
+                <button class="btn btn-success py-0 rounded-3 me-2" wire:click='createResults'>
+                    results
                 </button>
-                <button class="btn btn-warning p-0 rounded-3 me-2" wire:click='playPause({{ !$stopped }})'>
+                <button class="btn btn-info py-0 rounded-3 me-2" wire:click='proofGenerateResults'>
+                    Generar
+                </button>
+                <button class="btn btn-warning py-0 rounded-3 me-2" wire:click='playPause({{ !$stopped }})'>
 
                     @if ($stopped)
                         <i class="bi bi-play-fill fs-2 py-0 px-1"></i>
@@ -34,9 +37,10 @@
         </div>
         <div class="card-body ">
             @foreach ($controls as $control)
-                <span
-                    class="btn  @if ($control->state == 4) btn-black @else btn-secondary @endif ms-0 mb-1 me-0 fs-2">
-                    {{ $control->id < 10 ? '0' : '' }}{{ $control->id }}
+                <span class="btn  ms-0 mb-1 me-0 fs-2
+                    @if (array_key_exists($control, $votes)) btn-primary
+                    @elseif( array_key_exists($control, $controlsAssigned)) btn-secondary @else btn-black @endif ">
+                    {{ $control < 10 ? '0' : '' }}{{ $control}}
                 </span>
             @endforeach
         </div>

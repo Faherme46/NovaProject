@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('state')->default(4);
             $table->unsignedBigInteger('cc_asistente')->nullable();
             $table->decimal('sum_coef_can', 8, 6);
+            $table->integer('predios_vote');
             $table->decimal('sum_coef', 8, 6);
             $table->timestamps();
 

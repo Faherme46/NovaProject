@@ -35,6 +35,15 @@ class Control extends Model
         $this->save();
     }
 
+    public function isAbsent(){
+        if($this->state==2 || $this->state==5){
+            return true;
+        }
+        return false;
+    }
+
+
+
 
     public function changeState($value){
         $this->state=$value;
@@ -50,6 +59,11 @@ class Control extends Model
     {
         $this->sum_coef_can = $this->predios()->where('vota',true)->sum('coeficiente');
         $this->sum_coef = $this->predios()->sum('coeficiente');
+        $this->predios_vote= $this->predios()->where('vota',true)->count();
         return $this->save();
+    }
+
+    public function getPrediosCan(){
+        return $this->predios()->where('vota',true)->count();
     }
 }

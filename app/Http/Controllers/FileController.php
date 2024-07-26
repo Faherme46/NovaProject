@@ -31,11 +31,9 @@ class FileController extends Controller
     }
 
 
-
-
-    public function getQuestionFolderPath($questionId,$title)
+    public function getQuestionFolderPath($questionId, $title)
     {
-        $questionName = ($questionId - 12).'_'.$title;
+        $questionName = ($questionId - 12) . '_' . $title;
         $parentFolderName = $this->getAsambleaFolderPath();
         $newFolderPath = $parentFolderName . '/' . $questionName;
         if (!file_exists($newFolderPath)) {
@@ -64,20 +62,20 @@ class FileController extends Controller
         return $asambleaFolderPath;
     }
 
-    public function getLocalPath(){
-
+    public function getLocalPath()
+    {
     }
 
     public function createChart($questionId, $title, $labels, $values, $name)
     {
         // Datos para el gráfico
 
-        $asambleaName=Cache::get('name_asamblea','');
-        $parent_path = $this->getQuestionFolderPath($questionId,$title); // Ruta donde se guardará la imagen
+        $asambleaName = Cache::get('name_asamblea', '');
+        $parent_path = $this->getQuestionFolderPath($questionId, $title); // Ruta donde se guardará la imagen
         $output_path =  $parent_path . '/' . $name . '.png';
-        $localPath=($questionId-12).'/'.$name . '.png';
+        $localPath = ($questionId - 12) . '/' . $name . '.png';
 
-        $combined =  array_merge($labels,array_map('strval', $values));
+        $combined =  array_merge($labels, array_map('strval', $values));
         // Crear un array con los datos
         $data = [
             $title,
@@ -97,30 +95,34 @@ class FileController extends Controller
         // Ejecutar el script de Python
         $py_path = env('PYTHON_PATH');
 
-        $command = escapeshellcmd("$py_path C:/xampp/htdocs/nova/scripts/create_plot.py $args ".escapeshellarg($asambleaName));
+        $command = escapeshellcmd("$py_path C:/xampp/htdocs/nova/scripts/create_plot.py $args " . escapeshellarg($asambleaName));
         // Ejecutar el comando y capturar la salida y errores
 
         $output = shell_exec($command . ' 2>&1');
-        if ($output!='200') {
-            throw new Exception('Problemas al crear las Graficas: '.$output);
-        }else{
-            return $this->loadImage($output_path,$localPath);
+        if ($output != '200') {
+            throw new Exception('Problemas al crear las Graficas: ' . $output);
+        } else {
+            return $this->loadImage($output_path, $localPath);
         }
-
-
     }
 
     public function loadImage($sourcePath, $destinationPath)
-{
-    // Verifica si el archivo existe
-    if (file_exists($sourcePath)) {
-        // Mueve el archivo al directorio de almacenamiento
-        Storage::disk('results')->put($destinationPath, file_get_contents($sourcePath));
+    {
+        // Verifica si el archivo existe
+        if (file_exists($sourcePath)) {
+            // Mueve el archivo al directorio de almacenamiento
+            Storage::disk('results')->put($destinationPath, file_get_contents($sourcePath));
 
-        return $destinationPath;
-    } else {
-        dd('algo muy malo ha sucedido');
-        throw new Exception('File does not exist');
+            return $destinationPath;
+        } else {
+            dd('algo muy malo ha sucedido');
+            throw new Exception('File does not exist');
+        }
     }
-}
+
+    public function createResult($values,$questionId,$title){
+        
+    }
+
+
 }

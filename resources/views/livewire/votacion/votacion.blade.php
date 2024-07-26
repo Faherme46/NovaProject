@@ -1,5 +1,5 @@
 <div>
-    
+
     <div class="row mt-3 g-3 justify-content-center">
         <div class="col-auto align-items-center ">
             <form action="{{route('questions.create')}}" method="post" id="form">
@@ -51,16 +51,6 @@
                                 wire:model.number.live='questionType'  value="4" @disabled($questionId != 12 && $questionType != 4)>
                             <label class="btn btn-outline-primary fw-bolder fs-5 py-1 px-2" for="radioType3">Si/No</label>
 
-                        </div>
-                        <div class="mx-2 vr"></div>
-                        <div class="btn-group" role="group">
-                            <input type="radio" class="btn-check" name="radioCoef" id="radioCoef1" autocomplete="off"
-                                wire:model='questionNominal' value="1" @disabled(!$questionId)>
-                            <label class="btn btn-outline-primary fw-bolder fs-5 py-1 px-2" for="radioCoef1">Nominal</label>
-
-                            <input type="radio" class="btn-check" name="radioCoef" id="radioCoef2" autocomplete="off"
-                            wire:model.boolean='questionNominal' value="0" @disabled(!$questionId)>
-                            <label class="btn btn-outline-primary fw-bolder fs-5 py-1 px-2" for="radioCoef2">Coef.</label>
                         </div>
                         <div class="mx-2 vr"></div>
                         <div class="form-check form-switch mb-0 align-items-center ">

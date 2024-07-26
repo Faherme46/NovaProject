@@ -54,8 +54,18 @@ def getArgsProof():
 
 
 def create_plot(title, labels, values, output_path,nameAsamblea):
-    fig, ax = plt.subplots(figsize=(15, 7.5))
-    bars=ax.bar(labels, values, color=['blue', 'orange', 'green', 'red', 'purple'], edgecolor='black')
+
+
+
+    if len(values)>6:
+        width=20
+        height=9
+    else:
+        width =15
+        height=7.5
+    fig, ax = plt.subplots(figsize=(width,height))
+
+    bars=ax.bar(labels, values, color=['blue', 'orange', 'green', 'red', 'purple','cyan','saddlebrown','pink','lime'], edgecolor='black')
 
     # Añadir los valores sobre las columnas
     for bar in bars:

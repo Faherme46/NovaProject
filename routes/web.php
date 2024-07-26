@@ -86,3 +86,5 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('users.logout')-
 
 //rutas de prueba
 Route::get('/asistenciaa', [AsambleaController::class, 'asistencia'])->name('asistenciaa');
+
+Route::get('/proofAsignacion', [Asignacion::class, 'proofAsignacion'])->name('proofAsignacion');
