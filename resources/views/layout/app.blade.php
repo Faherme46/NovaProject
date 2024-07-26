@@ -34,7 +34,7 @@
 
 
 
-<body @auth id="body-pd" @endauth >
+<body @auth id="body-pd" @endauth>
 
     <x-theme-toggle />
     <x-navbar />
@@ -86,7 +86,6 @@
                             <a href="{{ route('users.index') }}" class="nav_link">
                                 <i class='bi bi-people-fill nav_icon'></i> <span class="nav_name">Usuarios</span>
                             </a>
-
                         @endhasanyrole
 
 
@@ -115,6 +114,8 @@
 
 
     <div class="mt-3 mx-3">
+
+
 
         @if (session('success'))
             <div class="alert alert-success alert-dismissible" role="alert">
@@ -181,5 +182,22 @@
     <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('assets/js/app.js') }}"></script>
 </body>
+<script>
+    document.getElementById('fullscreen-button').addEventListener('click', function() {
+        if (!document.fullscreenElement) {
+            // Entrar en pantalla completa
+            document.documentElement.requestFullscreen().catch((err) => {
+                alert(`Error al intentar entrar en pantalla completa: ${err.message} (${err.name})`);
+            });
+            this.innerHTML = '<i class="bi bi-fullscreen-exit"></i>';
+        } else {
+            // Salir de pantalla completa
+            document.exitFullscreen().catch((err) => {
+                alert(`Error al intentar salir de pantalla completa: ${err.message} (${err.name})`);
+            });
+            this.innerHTML = '<i class="bi bi-fullscreen"></i>';
+        }
+    });
+</script>
 
 </html>

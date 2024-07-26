@@ -86,6 +86,7 @@
     </div>
 </div>
 <script>
+    
     document.addEventListener('DOMContentLoaded', function() {
       const textElement = document.getElementById('title');
 

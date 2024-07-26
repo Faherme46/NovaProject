@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('control_predios', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('control_id');
-            $table->unsignedBigInteger('predio_id');
+            $table->unsignedBigInteger('predio_id')->unique();
             $table->timestamps();
             $table->foreign('control_id')->references('id')->on('controls')->onDelete('cascade');
             $table->foreign('predio_id')->references('id')->on('predios')->onDelete('cascade');

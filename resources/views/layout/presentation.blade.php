@@ -23,13 +23,14 @@
     {{-- popper --}}
     <script src="{{ asset('assets/js/popper.js') }}"></script>
 
-    <script src="{{asset('assets/js/chart.js')}}"></script>
+    <script src="{{ asset('assets/js/chart.js') }}"></script>
 
 
     <link rel="stylesheet" href="{{ asset('assets/scss/app.scss') }}">
 
     <style>
-        html,body{
+        html,
+        body {
             overflow: hidden;
         }
     </style>
@@ -37,12 +38,19 @@
 
 
 
-<body >
+<body>
+    <div class="position-fixed mb-3 me-3 z-3 m-3 bottom-0 end-0">
+        <button type="button" class="btn btn-primary" id="fullscreen-button">
+            <i class="bi bi-fullscreen"></i>
+        </button>
+    </div>
+
+
     <div class="px-3">
         <x-alerts />
 
         <div class="z-2">
-            {{$slot}}
+            {{ $slot }}
         </div>
 
     </div>
@@ -52,5 +60,22 @@
     <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('assets/js/app.js') }}"></script>
 </body>
+<script>
+    document.getElementById('fullscreen-button').addEventListener('click', function() {
+        if (!document.fullscreenElement) {
+            // Entrar en pantalla completa
+            document.documentElement.requestFullscreen().catch((err) => {
+                alert(`Error al intentar entrar en pantalla completa: ${err.message} (${err.name})`);
+            });
+            this.innerHTML = '<i class="bi bi-fullscreen-exit"></i>';
+        } else {
+            // Salir de pantalla completa
+            document.exitFullscreen().catch((err) => {
+                alert(`Error al intentar salir de pantalla completa: ${err.message} (${err.name})`);
+            });
+            this.innerHTML = '<i class="bi bi-fullscreen"></i>';
+        }
+    });
+</script>
 
 </html>

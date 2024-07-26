@@ -31,7 +31,6 @@ class QuestionSeeder extends Seeder
             'optionD' => 'Aprobado',
             'optionE' => '',
             'optionF' => 'No Aprobado',
-            'nominalPriotiry' => false,
             'prefab' => true,
             'type' => 3
         ]);
@@ -43,7 +42,6 @@ class QuestionSeeder extends Seeder
             'optionD' => 'Aprobado',
             'optionE' => '',
             'optionF' => 'No Aprobado',
-            'nominalPriotiry' => false,
             'prefab' => true,
             'type' => 3
         ]);
@@ -55,7 +53,6 @@ class QuestionSeeder extends Seeder
             'optionD' => 'Aprobado',
             'optionE' => '',
             'optionF' => 'No Aprobado',
-            'nominalPriotiry' => false,
             'prefab' => true,
             'type' => 3
         ]);
@@ -67,7 +64,6 @@ class QuestionSeeder extends Seeder
             'optionD' => 'Aprobado',
             'optionE' => '',
             'optionF' => 'No Aprobado',
-            'nominalPriotiry' => false,
             'prefab' => true,
             'type' => 3
         ]);
@@ -79,7 +75,6 @@ class QuestionSeeder extends Seeder
             'optionD' => '',
             'optionE' => '',
             'optionF' => '',
-            'nominalPriotiry' => false,
             'prefab' => true,
             'type' => 2
         ]);
@@ -91,7 +86,6 @@ class QuestionSeeder extends Seeder
             'optionD' => '',
             'optionE' => '',
             'optionF' => '',
-            'nominalPriotiry' => false,
             'prefab' => true,
             'type' => 2
         ]);
@@ -103,7 +97,6 @@ class QuestionSeeder extends Seeder
             'optionD' => '',
             'optionE' => '',
             'optionF' => '',
-            'nominalPriotiry' => false,
             'prefab' => true,
             'type' => 5
         ]);
@@ -115,7 +108,6 @@ class QuestionSeeder extends Seeder
             'optionD' => '',
             'optionE' => '',
             'optionF' => '',
-            'nominalPriotiry' => false,
             'prefab' => true,
             'type' => 2
         ]);
@@ -127,7 +119,6 @@ class QuestionSeeder extends Seeder
             'optionD' => '',
             'optionE' => '',
             'optionF' => '',
-            'nominalPriotiry' => false,
             'prefab' => true,
             'type' => 2
         ]);
@@ -139,7 +130,6 @@ class QuestionSeeder extends Seeder
             'optionD' => '',
             'optionE' => '',
             'optionF' => '',
-            'nominalPriotiry' => false,
             'prefab' => true,
             'type' => 2
         ]);
@@ -151,7 +141,6 @@ class QuestionSeeder extends Seeder
             'optionD' => '',
             'optionE' => '',
             'optionF' => '',
-            'nominalPriotiry' => false,
             'prefab' => true,
             'type' => 1
         ]);
@@ -163,11 +152,10 @@ class QuestionSeeder extends Seeder
             'optionD' => '',
             'optionE' => '',
             'optionF' => '',
-            'nominalPriotiry' => false,
             'prefab' => true,
             'type' => 4
         ]);
 
-        
+
     }
 }

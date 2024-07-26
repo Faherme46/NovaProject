@@ -1,7 +1,7 @@
 <div>
 
     <div class="row mt-3 g-3 justify-content-center">
-        <div class="col-auto align-items-center ">
+        <div class="col-6 align-items-center ">
             <form action="{{route('questions.create')}}" method="post" id="form">
                 @csrf
 
@@ -34,8 +34,8 @@
                             <button type="submit" class="btn btn-primary" @disabled(!$questionId )>Presentar</button>
                         </div>
                     </div>
-                    <div class="card-header d-flex align-items-center py-3  ">
-                        <div class="btn-group" role="group">
+                    <div class="card-header d-flex align-items-center py-3 justify-content-between  ">
+                        <div class="btn-group me-5" role="group">
                             <input type="radio" class="btn-check" name="radioType" id="radioType1" autocomplete="off"
                                 wire:model.number.live='questionType'  value="1" @disabled($questionType != 1)>
                             <label class="btn btn-outline-primary  fw-bolder fs-5 py-1 px-2" for="radioType1">Quorum</label>
@@ -52,14 +52,14 @@
                             <label class="btn btn-outline-primary fw-bolder fs-5 py-1 px-2" for="radioType3">Si/No</label>
 
                         </div>
-                        <div class="mx-2 vr"></div>
                         <div class="form-check form-switch mb-0 align-items-center ">
+
                             <input class="form-check-input scaled-switch-15 me-2" type="checkbox" role="switch" id="switchBlanco"
                              wire:model.change='questionWhite' @disabled(!$questionType ||$questionType==1 || $questionType==5  )>
                             <label class="form-check-label fw-bolder fs-5 ms-3" for="switchBlanco">Blanco</label>
                         </div>
                     </div>
-                    <div class="card-body d-flex    ">
+                    <div class="card-body d-flex ">
 
                         <ul class="list-group">
                             <li class="list-group-item pe-0">

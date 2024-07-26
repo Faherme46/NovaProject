@@ -45,7 +45,7 @@ class PresentQuestion extends Component
         $this->controls = Control::all()->pluck('id')->toArray();
         $this->inCoefResult = !$this->question->nominalPriority;
         $this->setControlsAssigned();
-
+        $this->dispatch('full-screen-in');
         // $this->chartNom=Storage::disk('results')->url('images/results/10/nominalChart.png');
 
     }
@@ -73,15 +73,18 @@ class PresentQuestion extends Component
     {
 
         $this->inVoting = 3;
+        $quorum=$this->question->type==1;
+        
         foreach ($this->question->results as $result) {
-            $this->setImageUrl(($result));
+
+            $this->setImageUrl($result,$quorum);
         }
     }
 
-    public function setImageUrl($result)
+    public function setImageUrl($result, $quorum)
     {
         try {
-            $path = $this->setChart($result);
+            $path = $this->setChart($result,$quorum);
 
             $urlImg = Storage::disk('results')->url('images/results/' . $path);
 
@@ -102,7 +105,7 @@ class PresentQuestion extends Component
     }
 
 
-    public function setChart($result)
+    public function setChart($result,$quorum)
     {
         // Array para almacenar los datos del gráfico
         $labels = [];
@@ -121,7 +124,7 @@ class PresentQuestion extends Component
         $additionalOptions = [
             'abstainted' => 'Abstencion',
             'absent' => 'Ausente',
-            'nule' => 'Nulo'
+            'nule' => ($quorum)?'Presente':'Nulo'
         ];
 
         foreach ($additionalOptions as $key => $label) {
@@ -200,71 +203,76 @@ class PresentQuestion extends Component
     {
 
         $valuesCoef = [
-            'A'    => 0,
-            'B'    => 0,
-            'C'    => 0,
-            'D'    => 0,
-            'E'    => 0,
-            'F'    => 0,
-            'nule'  => 0
+              'A'      => 0,
+              'B'      => 0,
+              'C'      => 0,
+              'D'      => 0,
+              'E'      => 0,
+              'F'      => 0,
+            'nule'     => 0,
+            'absent'    =>0,
+            'abstainted'=>0,
         ];
         $valuesNom = [
-            'A'    => 0,
-            'B'    => 0,
-            'C'    => 0,
-            'D'    => 0,
-            'E'    => 0,
-            'F'    => 0,
-            'nule'  => 0
+            'A'      => 0,
+            'B'      => 0,
+            'C'      => 0,
+            'D'      => 0,
+            'E'      => 0,
+            'F'      => 0,
+          'nule'     => 0,
+          'absent'    =>0,
+          'abstainted'=>0,
         ];
         $availableOptions = $this->question->getAvailableOptions();
 
-        foreach ($this->votes as $id => $vote) {
-            $control = $this->controlsAssigned[$id];
-            if (in_array($vote, $availableOptions)) {
-                $valuesCoef[$vote] += $control->sum_coef_can;
-                $valuesNom[$vote] += $control->getPrediosCan();
-            } else {
-                $valuesCoef['nule'] += $control->sum_coef_can;
-                $valuesNom['nule'] += $control->getPrediosCan();
+        foreach ($this->controlsAssigned as $id => $control) {
+            if ($control->isAbsent()) {
+                $valuesCoef['absent'] += $control->sum_coef_can;
+                 $valuesNom['absent']  += $control->getPrediosCan();
+            }else{
+                if (array_key_exists($id, $this->votes)){
+                    $vote=$this->votes[$id];
+                    if (in_array($vote, $availableOptions)) {
+                        $valuesCoef[$vote] += $control->sum_coef_can;
+                        $valuesNom[$vote] += $control->getPrediosCan();
+                    } else {
+                        $valuesCoef['nule'] += $control->sum_coef_can;
+                        $valuesNom['nule'] += $control->getPrediosCan();
+                    }
+                }else{
+                    $valuesCoef['abstainted'] += $control->sum_coef_can;
+                    $valuesNom['abstainted']  += $control->getPrediosCan();
+                }
             }
         }
 
-        $absentNom = Control::whereIn('state', [2, 5])->sum('predios_vote');
-        $absentCoef = Control::whereIn('state', [2, 5])->sum('sum_coef_can');
 
-        $abstainted = array_diff(array_keys($this->controlsAssigned), array_keys($this->votes));
-        $abstaintedCoef = 0;
-        $abstaintedNom=0;
-        foreach ($abstainted as $control) {
 
-            $abstaintedNom  +=  $this->controlsAssigned[$control]['predios_vote'];
-            $abstaintedCoef +=  $this->controlsAssigned[$control]['sum_coef_can'];
-        }
 
         $resultNom = Result::create([
             'question_id' => $this->question->id,
-            'optionA' => $valuesNom['A'],
-            'optionB' => $valuesNom['B'],
-            'optionC' => $valuesNom['C'],
-            'optionD' => $valuesNom['D'],
-            'optionE' => $valuesNom['E'],
-            'optionF' => $valuesNom['F'],
-            'abstainted' => count($abstainted),
-            'absent' => $absentNom,
-            'nule' =>  $valuesNom['nule'],
+            'optionA'    => $valuesNom['A'],
+            'optionB'    => $valuesNom['B'],
+            'optionC'    => $valuesNom['C'],
+            'optionD'    => $valuesNom['D'],
+            'optionE'    => $valuesNom['E'],
+            'optionF'    => $valuesNom['F'],
+            'abstainted' => $valuesNom['abstainted'],
+            'absent'     => $valuesNom['absent'],
+            'nule'       => $valuesNom['nule'],
             'isCoef' => false
         ]);
         $resultCoef = Result::create([
             'question_id' => $this->question->id,
-            'optionA' => $valuesCoef['A'],
-            'optionB' => $valuesCoef['B'],
-            'optionC' => $valuesCoef['C'],
-            'optionD' => $valuesCoef['D'],
-            'optionE' => $valuesCoef['E'],
-            'optionF' => $valuesCoef['F'],
-            'abstainted' => $abstaintedCoef,
-            'absent' => $absentCoef,
+            'optionA'    => $valuesCoef['A'],
+            'optionB'    => $valuesCoef['B'],
+            'optionC'    => $valuesCoef['C'],
+            'optionD'    => $valuesCoef['D'],
+            'optionE'    => $valuesCoef['E'],
+            'optionF'    => $valuesCoef['F'],
+            'abstainted' => $valuesCoef['abstainted'],
+            'absent'     => $valuesCoef['absent'],
             'nule'  =>   $valuesCoef['nule'],
             'isCoef' => true
         ]);
@@ -310,7 +318,7 @@ class PresentQuestion extends Component
         $this->auxId = array_rand($this->controlsAssigned);
     }
 
-    
+
 
     public function setControlsAssigned()
     {
