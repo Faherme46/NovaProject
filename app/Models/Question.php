@@ -21,6 +21,8 @@ class Question extends Model
         'optionE',
         'optionF',
         'prefab',
+        'quorum',
+        'predios',
         'seconds',
         'type'
     ];

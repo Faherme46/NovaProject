@@ -75,6 +75,13 @@ return [
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
             'throw' => false,
         ],
+        'scripts' => [
+            'driver' => 'local',
+            'root' => storage_path('app/scripts'),
+            'url' => env('APP_URL') . '/storage/scripts',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
 
     ],
 

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Cache;
 use App\Models\Result;
 use App\Models\Question;
 use App\Http\Controllers\FileController;
+use App\Models\Control;
 
 class QuestionsController extends Controller
 {
@@ -50,6 +51,8 @@ class QuestionsController extends Controller
                 'optionE'=>$request->optionE,
                 'optionF'=>$request->optionF,
                 'prefab'=>false,
+                'quorum'=>Control::where('state',1)->sum('sum_coef_can'),
+                'predios'=>Control::where('state',1)->sum('predios_vote'),
                 'seconds'=>$seconds,
                 'type'=>$request->radioType
             ]);

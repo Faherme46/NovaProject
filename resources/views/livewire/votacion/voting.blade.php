@@ -15,7 +15,7 @@
                 <button class="btn btn-warning py-0 rounded-3 me-2" wire:click='proof1'>
                     proof
                 </button>
-                <button class="btn btn-success py-0 rounded-3 me-2" wire:click='createResults'>
+                <button class="btn btn-success py-0 rounded-3 me-2" wire:click='store'>
                     results
                 </button>
                 <button class="btn btn-info py-0 rounded-3 me-2" wire:click='proofGenerateResults'>

@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ResultExport;
+use App\Exports\VotesExport;
 use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Cache;
+use Maatwebsite\Excel\Facades\Excel;
 
 class FileController extends Controller
 {
@@ -35,7 +38,8 @@ class FileController extends Controller
     {
         $questionName = ($questionId - 12) . '_' . $title;
         $parentFolderName = $this->getAsambleaFolderPath();
-        $newFolderPath = $parentFolderName . '/' . $questionName;
+        $newFolderPath = $parentFolderName . '/Preguntas/' . $questionName;
+
         if (!file_exists($newFolderPath)) {
             mkdir($newFolderPath, 0755, true);
         }
@@ -62,14 +66,21 @@ class FileController extends Controller
         return $asambleaFolderPath;
     }
 
-    public function getLocalPath()
+    public function getOnlyQuestionPath($questionId, $title)
     {
+        $questionName = ($questionId - 12) . '_' . $title;
+        $parentFolderName = Cache::get('name_asamblea');
+        $newFolderPath = $parentFolderName . '/Preguntas/' . $questionName;
+        if (!file_exists($newFolderPath)) {
+            mkdir($newFolderPath, 0755, true);
+        }
+        return $newFolderPath;
     }
 
     public function createChart($questionId, $title, $labels, $values, $name)
     {
         // Datos para el gráfico
-
+        
         $asambleaName = Cache::get('name_asamblea', '');
         $parent_path = $this->getQuestionFolderPath($questionId, $title); // Ruta donde se guardará la imagen
         $output_path =  $parent_path . '/' . $name . '.png';
@@ -94,8 +105,9 @@ class FileController extends Controller
         // $json_data =  escapeshellarg($datos);
         // Ejecutar el script de Python
         $py_path = env('PYTHON_PATH');
-
-        $command = escapeshellcmd("$py_path C:/xampp/htdocs/nova/scripts/create_plot.py $args " . escapeshellarg($asambleaName));
+        $scriptPath=config('filesystems.disks.scripts.root').'/create_plot.py';
+        $scriptPath=str_replace('\\', '/', $scriptPath);
+        $command = escapeshellcmd("$py_path $scriptPath $args " . escapeshellarg($asambleaName));
         // Ejecutar el comando y capturar la salida y errores
 
         $output = shell_exec($command . ' 2>&1');
@@ -120,8 +132,19 @@ class FileController extends Controller
         }
     }
 
-    public function createResult($values,$questionId,$title){
-        
+    public function exportVotes($votos,$questionId,$title){
+        $path=$this->getOnlyQuestionPath($questionId,$title);
+        // Sort the data by key (Control) alphabetically
+        ksort($votos);
+        $export = new VotesExport($votos);
+        return Excel::store($export, $path.'/votos.xlsx','externalAsambleas');
+    }
+
+    public function exportResult($question){
+        $path=$this->getOnlyQuestionPath($question->id,$question->title);
+
+        $export = new ResultExport($question);
+        return Excel::store($export, $path.'/resultados.xlsx','externalAsambleas');
     }
 
 

@@ -22,6 +22,8 @@ return new class extends Migration
             $table->string('optionE')->nullable();
             $table->string('optionF')->nullable();
             $table->boolean('prefab');
+            $table->double('quorum')->nullable();
+            $table->integer('predios')->nullable();
             $table->integer('seconds')->default(0);
             $table->timestamps();
 

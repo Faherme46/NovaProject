@@ -22,6 +22,9 @@ class SessionController extends Controller
 {
     public function destroyAll()
     {
+        //se descargan las tablas
+        $this->downloadTables();
+
         //se limpiaran las tablas: personas,Predios, apoderados, votaciones,resultados,preguntas, votos
         $this->destroyOnError();
         return redirect()->route('admin.asambleas')->with('success', 'Sesion reestablecida');
@@ -29,9 +32,6 @@ class SessionController extends Controller
 
     public function destroyOnError()
     {
-        $idsParaConservar = Question::orderBy('id')
-            ->take(12)
-            ->pluck('id');
         Session::truncate();
         Cache::forget('id_asamblea');
         Cache::forget('asambleaOn');
@@ -116,5 +116,9 @@ class SessionController extends Controller
     {
         $sessionOn = Session::findOrFail($id);
         $sessionOn->update($session);
+    }
+
+    public function downloadTables(){
+        
     }
 }
