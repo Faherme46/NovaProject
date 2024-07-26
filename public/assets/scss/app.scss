@@ -15,7 +15,9 @@ body {
     font-family: var(--body-font);
     font-size: var(--normal-font-size);
     transition: .5s;
-    padding-left: calc(var(--nav-width))
+
+
+
 }
 
 a {
@@ -109,6 +111,7 @@ a {
     color: var(--first-color-light);
     margin-bottom: 1.5rem;
     transition: .3s
+
 }
 
 .nav_link:hover {
@@ -144,6 +147,10 @@ a {
     padding-top: 1rem;
 }
 
+#body-pd{
+    padding-left: calc(var(--nav-width));
+}
+
 @media screen and (min-width: 768px) {
 
 
@@ -170,10 +177,10 @@ a {
     }
 
     .body-pd {
-        padding-left: calc(var(--nav-width) + 156px)
+        padding-left: calc(var(--nav-width) + 156px) !important
     }
 
-    
+
 }
 
 .table-responsive {

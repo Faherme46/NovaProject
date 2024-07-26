@@ -244,11 +244,12 @@ class Registrar extends Component
 
 
         try {
-            $predios=Predio::whereIn('id', $this->prediosAvailable)->get();
+
             if ($option){
 
                 $controlH = $this->controls[$this->controlH];
-                $controlH->attachPredios($predios);
+                $controlH->attachPredios($this->prediosAvailable);
+                $controlH->setSumCoef();
             }else{
                 if ($control->asignacion()) {
                     $this->getAvailableControls();
@@ -256,8 +257,8 @@ class Registrar extends Component
                     return session()->flash('warning1', 'El control ya esta en uso');
                 };
                 $control->cc_asistente = $this->cedula;
-                $control->sum_coef = $this->sumCoef;
-                $control->attachPredios($predios);
+                $control->attachPredios($this->prediosAvailable);
+                $control->setCoef();
                 $control->state = 1;
                 $control->save();
             }

@@ -54,21 +54,13 @@ class Votacion extends Component
 
     public function getValues()
     {
-        $this->prediosRegistered = Control::where('state', 1)
+        $this->prediosRegistered = Control::whereIn('state', [1,2])
             ->withCount('predios')
             ->get()
             ->sum('predios_count');
-        $this->prediosVote = Control::where('state', 1)
-            ->withCount(['predios as predios_votan' => function ($query) {
-                $query->where('vota', true);
-            }])
-            ->get()
-            ->sum('predios_votan');
-        $this->controlsRegistered = Control::where('state', 1)->count();
-        $this->controlsVote = Control::where('sum_coef_can', '!=', 0)
-            ->whereNotIn('state', [3, 4])
-            ->count();
-
+        $this->prediosVote = Control::whereIn('state', [1,2])->sum('predios_vote');
+        $this->controlsRegistered = Control::whereIn('state', [1,2])->count();
+        $this->controlsVote = Control::where('sum_coef_can', '!=', 0)->count();
         $this->quorumVote = Control::whereNotIn('state', [3, 4])->sum('sum_coef_can');
         $this->quorumRegistered = Control::whereNotIn('state', [3, 4])->sum('sum_coef');
     }

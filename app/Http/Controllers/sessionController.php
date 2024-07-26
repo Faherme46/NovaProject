@@ -40,7 +40,6 @@ class SessionController extends Controller
         Cache::forget('name-asamblea');
         session()->flush();
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-        ControlPredio::truncate();
         Predio::truncate();
         Control::truncate();
         Persona::truncate();
@@ -119,6 +118,6 @@ class SessionController extends Controller
     }
 
     public function downloadTables(){
-        
+
     }
 }

@@ -283,7 +283,7 @@
                                 <h6>Control:
 
                                     @if ($Predio->control)
-                                        {{ $Predio->control[0]->id }}
+                                        {{ $Predio->control->id }}
                                     @else
                                         Sin Asignar
                                     @endif
