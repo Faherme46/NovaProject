@@ -20,7 +20,7 @@ class Predio extends Model
 
     public function control()
     {
-        return $this->belongsToMany(Control::class, 'control_predios');
+        return $this->belongsTo(Control::class);
     }
 
     public function apoderado(){
@@ -28,6 +28,6 @@ class Predio extends Model
     }
 
 
-    
+
 
 }

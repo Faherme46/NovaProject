@@ -324,7 +324,7 @@
                                                     class="list-group-item d-flex align-items-center justify-content-between">
                                                     <h5 class="mb-0">Control:</h5>
                                                     <input type="text" class="form-control w-50" disabled
-                                                        value="{{ !$Predio->control->isEmpty() ? $Predio->control[0]->id : 'Sin Asignar' }}">
+                                                        value="{{$Predio->control ? $Predio->control->id : 'Sin Asignar' }}">
                                                 </li>
                                                 <li
                                                     class="list-group-item d-flex align-items-center justify-content-center">

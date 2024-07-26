@@ -62,13 +62,13 @@
             </thead>
             <tbody>
                 @forelse ($prediosAll as $predio)
-                    @if (!$predio->control->isEmpty())
+                    @if ($predio->control)
                         <tr class="table-active">
                             <td>
                                 <button class="btn pt-0 pb-0 mb-0"
-                                    wire:dblclick='showControl({{ $predio->control[0]->id }})'
-                                    wire:click="dispatchControl({{ $predio->control[0]->id }})">
-                                    {{ $predio->control[0]->id }}
+                                    wire:dblclick='showControl({{ $predio->control->id }})'
+                                    wire:click="dispatchControl({{ $predio->control->id }})">
+                                    {{ $predio->control->id }}
 
                                 </button>
                             </td>
@@ -97,8 +97,7 @@
                                 <i class="bi bi-person-fill"></i>
                             </button>
 
-                            <button class="btn p-0 mb-0"
-                                wire:dblclick='showPersona({{ $predio->cc_propietario }})'
+                            <button class="btn p-0 mb-0" wire:dblclick='showPersona({{ $predio->cc_propietario }})'
                                 wire:click='dispatchPoderdante({{ $predio->cc_propietario }})'>
                                 {{ $predio->cc_propietario }}
                             </button>
@@ -106,7 +105,7 @@
                     @else
                         <td>{{ $predio->coeficiente }}</td>
                     @endif
-                    <td>{{($predio->vota)?'SI':'No'}}</td>
+                    <td>{{ $predio->vota ? 'SI' : 'No' }}</td>
                     </tr>
                 @empty
                     <tr>
@@ -283,10 +282,10 @@
                             <li class="list-group-item">
                                 <h6>Control:
 
-                                    @if ($Predio->control->isEmpty())
-                                        Sin Asignar
-                                    @else
+                                    @if ($Predio->control)
                                         {{ $Predio->control[0]->id }}
+                                    @else
+                                        Sin Asignar
                                     @endif
                                 </h6>
                             </li>

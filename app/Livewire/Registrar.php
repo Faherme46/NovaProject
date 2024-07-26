@@ -162,7 +162,7 @@ class Registrar extends Component
     public function addPredios($predios)
     {
         foreach ($predios as $predio) {
-            if (!array_key_exists($predio->id, $this->prediosAvailable) && $predio->control->isEmpty()) {
+            if (!array_key_exists($predio->id, $this->prediosAvailable) && !$predio->control) {
                 $this->prediosAvailable[$predio->id] = $predio;
                 $this->predioSelected[] = $predio->id;
             }
@@ -244,10 +244,11 @@ class Registrar extends Component
 
 
         try {
+            $predios=Predio::whereIn('id', $this->prediosAvailable)->get();
             if ($option){
-                $idPredios = $this->predioSelected;
+
                 $controlH = $this->controls[$this->controlH];
-                $controlH->predios()->syncWithoutDetaching($idPredios);
+                $controlH->attachPredios($predios);
             }else{
                 if ($control->asignacion()) {
                     $this->getAvailableControls();
@@ -256,7 +257,7 @@ class Registrar extends Component
                 };
                 $control->cc_asistente = $this->cedula;
                 $control->sum_coef = $this->sumCoef;
-                $control->predios()->attach($this->predioSelected);
+                $control->attachPredios($predios);
                 $control->state = 1;
                 $control->save();
             }

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('cc_propietario')->nullable();
             $table->unsignedBigInteger('cc_apoderado')->nullable();
+            $table->unsignedBigInteger('control_id')->nullable();
             $table->string('descriptor1');
             $table->string('numeral1');
             $table->string('descriptor2');
@@ -23,6 +24,7 @@ return new class extends Migration
             $table->boolean('vota');
             $table->timestamps();
             $table->foreign('cc_propietario')->references('id')->on('personas');
+            $table->foreign('control_id')->references('id')->on('controls');
 
         });
     }

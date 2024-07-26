@@ -87,8 +87,8 @@ class Asignacion extends Component
     public function addPredioToList($predio)
     {
 
-        if (!$predio->control->isEmpty()) {
-            $this->control = $predio->control[0];
+        if ($predio->control) {
+            $this->control = $predio->control;
             $this->updatedControl();
         } else {
             $this->predioSelected[$predio->id] = $predio;
@@ -162,28 +162,32 @@ class Asignacion extends Component
     }
 
 
-    public function proofAsignacion(){
-        $ids=[
-        1  =>   1,
-        2  =>   2,
-        3  =>   3,
-        4  =>   4,
-        5  =>   5,
-        55 => 55,
-        59 => 59,
-        97 => 97,
-        44 => 44,
-        35 => 35,
-        77 => 77,
-        92 => 92,
-        73 => 73,
-        21 => 21,
+    public function proofAsignacion()
+    {
+        $ids = [
+            1 =>4,
+            2 =>5,
+            3 =>31,
+            4 =>41,
+            5 =>51,
+            55 => 55,
+            59 => 59,
+            97 => 97,
+            44 => 44,
+            35 => 35,
+            77 => 77,
+            92 => 92,
+            73 => 73,
+            21 => 21,
 
-    ];
-        foreach ($ids as $key=>$id) {
+        ];
+
+        foreach ($ids as $key => $id) {
             $control = Control::find($key);
             $control->state = 1;
-            $control->predios()->attach($id);
+
+            $predio=Predio::find($id);
+            $control->predios()->save($predio);
             $control->setCoef();
             $control->save();
         }
@@ -205,7 +209,7 @@ class Asignacion extends Component
         try {
 
             $control->state = 1;
-            $control->predios()->attach(array_keys($this->predioSelected));
+            $control->attachPredios($this->predioSelected);
             $control->setCoef();
             $control->save();
         } catch (\Exception $e) {

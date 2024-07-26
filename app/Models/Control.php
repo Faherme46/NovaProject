@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 use App\Models\Asignacion;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Control extends Model
 {
@@ -19,7 +20,7 @@ class Control extends Model
 
     public function predios()
     {
-        return $this->belongsToMany(Predio::class, 'control_predios');
+        return $this->HasMany(Predio::class);
     }
     public function persona()
     {
@@ -30,7 +31,7 @@ class Control extends Model
     public function retirar(){
         $this->state=3;
         $this->setCoef();
-        $this->predios()->detach();
+        $this->predios()->delete();
         $this->cc_asistente=null;
         $this->save();
     }
@@ -65,5 +66,12 @@ class Control extends Model
 
     public function getPrediosCan(){
         return $this->predios()->where('vota',true)->count();
+    }
+
+    public function attachPredios($arrayPredios){
+        foreach ($arrayPredios as $predio) {
+            $this->predios()->save($predio);
+        }
+        return $this;
     }
 }

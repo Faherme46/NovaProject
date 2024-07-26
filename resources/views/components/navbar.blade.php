@@ -1,18 +1,15 @@
-
-
 <nav class="navbar navbar-expand-lg bg-primary header " id="header">
     <div class="container-fluid">
-
-        <div class="header_toggle" >
-            <i class='bi bi-list bx-w' id="header-toggle"></i>
-        </div>
-
-
+        @auth
+            <div class="header_toggle">
+                <i class='bi bi-list bx-w' id="header-toggle"></i>
+            </div>
+        @endauth
 
         <div class="collapse navbar-collapse me-3" id="navbarSupportedContent">
-            <h2 class="mb-0 ms-2 text-light " >{{ $name_asamblea }}</h2>
+            <h2 class="mb-0 ms-2 text-light ">{{ $name_asamblea }}</h2>
             <div class="mx-auto">
-                <livewire:quorum-state/>
+                <livewire:quorum-state />
             </div>
             <ul class="ms-auto navbar-nav mb-0 ">
                 <li class="dropdown nav-item">
@@ -58,4 +55,3 @@
         </button>
     </div>
 </nav>
-

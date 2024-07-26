@@ -20,17 +20,14 @@
                         <tr>
                             <td>{{ $control->id }}</td>
                             {{-- <td>{{ $control->persona->nombre }} {{ $control->persona->apellido }}</td> --}}
-
+                            </td>
+                            <td colspan="2">
                             @foreach ($control->predios as $predio)
-                                <td>
                                     {{ $predio->descriptor1 }} {{ $predio->numeral1 }} {{ $predio->descriptor2 }}
-                                    {{ $predio->numeral2 }} <br>
-                                </td>
-                                <td>
-                                    {{ $predio->vota ? 'Si' : 'No' }}
-                                </td>
+                                    {{ $predio->numeral2 }}
+                                    <br>
                             @endforeach
-
+                            </td>
                             <td>{{ $control->sum_coef }}</td>
                             <td>{{ $control->state }}</td>
                         </tr>
