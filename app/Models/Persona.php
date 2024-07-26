@@ -15,6 +15,7 @@ class Persona extends Model
     {
         return $this->hasMany(Predio::class, 'cc_propietario', 'id');
     }
+    
 
     public function controls()
     {

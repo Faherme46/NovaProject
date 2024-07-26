@@ -24,6 +24,7 @@ return new class extends Migration
             $table->boolean('vota');
             $table->timestamps();
             $table->foreign('cc_propietario')->references('id')->on('personas');
+            $table->foreign('cc_apoderado')->references('id')->on('personas');
             $table->foreign('control_id')->references('id')->on('controls');
 
         });

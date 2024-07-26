@@ -21,7 +21,7 @@
                             <input class="me-2 form-control @error('cedula') is-invalid @enderror" type="text"
                                 class="form-control" onkeypress="return onlyNumbers(event)" maxlength="12"
                                 name="cedula" value="{{ $cedula ? $cedula : '' }}" wire:model='cedula'
-                                @disabled($asistente) onclick="this.select()">
+                                @disabled($asistente) onclick="this.select()" wire:keydown.enter='search'>
                             @error('cedula')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -168,7 +168,7 @@
                         <thead>
                             <tr>
                                 <th>Cc Propietario</th>
-                                <th>Propietario</th>
+                                <th>A/P</th>
                                 <th>Predio</th>
                                 <th>Coef.</th>
                                 <th>
@@ -181,8 +181,7 @@
                             @forelse ($prediosAvailable as $predio)
                                 <tr>
                                     <td>{{ $predio->persona->id }}</td>
-                                    <td>{{ $predio->persona->nombre }}
-                                        {{ $predio->persona->apellido }} </td>
+                                    <td>{{$predio->getRelationPersona($asistente->id)}}</td>
                                     <td>{{ $predio->descriptor1 }} {{ $predio->numeral1 }}
                                         {{ $predio->descriptor2 }} {{ $predio->numeral2 }} </td>
                                     <td>{{ $predio->coeficiente }}</td>
@@ -201,9 +200,7 @@
                                 @foreach ($controls[$controlH]->predios as $predio)
                                     <tr class="table-active">
                                         <td>{{ $predio->persona->id }}</td>
-                                        <td>{{ $predio->persona->nombre }}
-                                            {{ $predio->persona->apellido }}
-                                        </td>
+                                        <td>{{$predio->getRelationPersona($asistente->id)}}</td>
                                         <td>{{ $predio->descriptor1 }} {{ $predio->numeral1 }}
                                             {{ $predio->descriptor2 }} {{ $predio->numeral2 }} </td>
                                         <td colspan="2">{{ $predio->coeficiente }}</td>

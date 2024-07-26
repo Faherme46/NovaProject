@@ -28,6 +28,18 @@ class Predio extends Model
     }
 
 
+    public function getRelationPersona($id){
+        if ($this->cc_propietario==$id) {
+            return 'P';
+        }
+        if ($this->cc_apoderado==$id) {
+            return 'AR';
+        }
+
+        return 'A';
+    }
+
+
 
 
 }

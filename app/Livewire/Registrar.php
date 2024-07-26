@@ -107,6 +107,7 @@ class Registrar extends Component
             $this->lastName = $this->asistente->apellido;
 
             $this->addPredios($this->asistente->predios);
+            $this->addPredios($this->asistente->prediosEnPoder);
 
             $this->selectAll = true;
         } else {
