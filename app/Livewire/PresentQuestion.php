@@ -173,7 +173,7 @@ class PresentQuestion extends Component
 
     public function store()
     {
-        
+
         $this->dispatch('closeModal');
         $this->playPause(true);
         $this->createResults();
@@ -279,8 +279,12 @@ class PresentQuestion extends Component
 
 
             $fileCotroller = new FileController;
-            $fileCotroller->exportVotes($this->votes, $this->question->id, $this->question->title);
+
+
             $fileCotroller->exportResult($this->question);
+            dd('here1');
+            $fileCotroller->exportVotes($this->votes, $this->question->id, $this->question->title);
+
         } catch (\Throwable $th) {
             dd('Error ', $th->getMessage());
         }

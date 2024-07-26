@@ -68,19 +68,18 @@ class FileController extends Controller
 
     public function getOnlyQuestionPath($questionId, $title)
     {
+
         $questionName = ($questionId - 12) . '_' . $title;
         $parentFolderName = Cache::get('name_asamblea');
         $newFolderPath = $parentFolderName . '/Preguntas/' . $questionName;
-        if (!file_exists($newFolderPath)) {
-            mkdir($newFolderPath, 0755, true);
-        }
+        
         return $newFolderPath;
     }
 
     public function createChart($questionId, $title, $labels, $values, $name)
     {
         // Datos para el gráfico
-        
+
         $asambleaName = Cache::get('name_asamblea', '');
         $parent_path = $this->getQuestionFolderPath($questionId, $title); // Ruta donde se guardará la imagen
         $output_path =  $parent_path . '/' . $name . '.png';

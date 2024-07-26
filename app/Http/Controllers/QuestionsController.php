@@ -58,7 +58,7 @@ class QuestionsController extends Controller
             ]);
 
             $this->fileController->getQuestionFolderPath($question->id,$question->title);
-
+            
             //todo log create question
             session(['question_id'=>$question->id]);
             return redirect()->route('questions.show');
