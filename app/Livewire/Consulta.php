@@ -100,7 +100,7 @@ class Consulta extends Component
     public function render()
     {
         $this->setSumCoef();
-        return view('livewire.consulta');
+        return view('views.gestion.consulta');
     }
 
 

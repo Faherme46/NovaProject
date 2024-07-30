@@ -1,5 +1,5 @@
 <div class="row me-3">
-    <x-alerts />
+   
 
     <div class="col-12">
         <div class="card">

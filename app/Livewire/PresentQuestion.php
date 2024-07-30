@@ -53,11 +53,11 @@ class PresentQuestion extends Component
     public function render()
     {
         if ($this->inVoting == 1) {
-            return view('livewire.votacion.voting');
+            return view('views.votacion.voting');
         } elseif ($this->inVoting == 2) {
-            return view('livewire.votacion.present-question');
+            return view('views.votacion.present-question');
         } elseif ($this->inVoting == 3) {
-            return view('livewire.votacion.results');
+            return view('views.votacion.results');
         }
     }
 

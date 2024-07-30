@@ -18,7 +18,7 @@ class UsersController extends Controller
 {
     public function index()
     {
-        return view('createUser');
+        return view('views.gestion.createUser');
     }
 
     public function createUser(Request $request)

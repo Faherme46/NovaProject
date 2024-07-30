@@ -21,6 +21,7 @@ use App\Http\Middleware\ValidateLogin;
 use App\Http\Middleware\EnsureAsambleaOn;
 use App\Livewire\PresentQuestion;
 use App\Livewire\Votacion;
+use App\Livewire\LiderSetup;
 
 //rutas de redireccion
 
@@ -51,12 +52,12 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Admin|Lider')]], function () {
     Route::get('admin/asambleas', [AsambleaController::class, 'index'])->name('admin.asambleas')->withoutMiddleware(EnsureAsambleaOn::class);
     Route::resource('asambleas', AsambleaController::class)->withoutMiddleware(EnsureAsambleaOn::class);
-    Route::post('admin/inicio', [AsambleaController::class, 'iniciarAsamblea'])->name('asambleas.inicia');
-    Route::post('admin/termina', [AsambleaController::class, 'terminarAsamblea'])->name('asambleas.termina');
+    
 
     Route::get('/users', [UsersController::class, 'index'])->name('users.index')->withoutMiddleware([EnsureAsambleaOn::class]);;
     Route::post('users/create', [UsersController::class, 'createUser'])->name('users.create');
     Route::get('users/import', [UsersController::class, 'importUsers'])->name('users.import');
+    Route::get('gestion/asamblea', LiderSetup::class)->name('gestion.asamblea');
 
     Route::get('votacion', Votacion::class)->name('votacion');
     Route::get('questions/show',PresentQuestion::class)->name('questions.show');
@@ -85,5 +86,4 @@ Route::post('/login', [LoginController::class, 'authenticate'])->name('users.aut
 Route::get('/logout', [LoginController::class, 'logout'])->name('users.logout')->withoutMiddleware(EnsureAsambleaOn::class);
 
 //rutas de prueba
-Route::get('/asistenciaa', [AsambleaController::class, 'asistencia'])->name('asistenciaa');
 Route::get('/proofAsignacion', [Asignacion::class, 'proofAsignacion'])->name('proofAsignacion');

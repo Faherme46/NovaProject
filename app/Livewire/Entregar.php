@@ -29,7 +29,7 @@ class Entregar extends Component
     #[Layout('layout.full-page')]
     public function render()
     {
-        return view('livewire.entregar');
+        return view('views.gestion.entregar');
     }
 
     public function change($value){

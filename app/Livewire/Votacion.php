@@ -48,7 +48,7 @@ class Votacion extends Component
     public function render()
     {
         $this->getValues();
-        return view('livewire.votacion.votacion');
+        return view('views.votacion.votacion');
     }
 
 
@@ -208,6 +208,8 @@ class Votacion extends Component
         }
     }
 
-
+    public function proof(){
+        session()->flash('success','Have a winner');
+    }
 
 }

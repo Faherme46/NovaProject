@@ -57,7 +57,7 @@
                                     <i class='bi bi-building-check nav_icon'></i> <span class="nav_name">Asignar</span>
                                 </a>
                             @endif
-                            <a href="{{ route('asistenciaa') }}" class="nav_link">
+                            <a href="{{ route('gestion.asamblea') }}" class="nav_link">
                                 <i class='bi bi-ui-checks-grid nav_icon'></i> <span class="nav_name">Asignaciones</span>
                             </a>
                             <a href="{{ route('consulta') }}" class="nav_link">
@@ -170,21 +170,7 @@
     <script type="text/javascript" src="{{ asset('assets/js/app.js') }}"></script>
 </body>
 <script>
-    document.getElementById('fullscreen-button').addEventListener('click', function() {
-        if (!document.fullscreenElement) {
-            // Entrar en pantalla completa
-            document.documentElement.requestFullscreen().catch((err) => {
-                alert(`Error al intentar entrar en pantalla completa: ${err.message} (${err.name})`);
-            });
-            this.innerHTML = '<i class="bi bi-fullscreen-exit"></i>';
-        } else {
-            // Salir de pantalla completa
-            document.exitFullscreen().catch((err) => {
-                alert(`Error al intentar salir de pantalla completa: ${err.message} (${err.name})`);
-            });
-            this.innerHTML = '<i class="bi bi-fullscreen"></i>';
-        }
-    });
+    
 </script>
 
 </html>

@@ -44,7 +44,7 @@ class Asignacion extends Component
     {
 
         $this->setSumCoef();
-        return view('livewire.asignacion');
+        return view('views.registro.asignacion');
     }
 
 

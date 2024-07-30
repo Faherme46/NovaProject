@@ -16,6 +16,6 @@ class ListUsers extends Component
     }
     public function render()
     {
-        return view('livewire.list-users');
+        return view('views.gestion.list-users');
     }
 }

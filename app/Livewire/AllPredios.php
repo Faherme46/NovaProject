@@ -75,7 +75,7 @@ class AllPredios extends Component
         // Ejecuta la consulta y obtiene los resultados
         $this->prediosAll = $query->get();
 
-        return view('livewire.all-predios');
+        return view('views.registro.all-predios');
     }
 
 

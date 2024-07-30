@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class SessionController extends Controller
 {
@@ -25,14 +26,18 @@ class SessionController extends Controller
         //se descargan las tablas
         $this->downloadTables();
 
-        //se limpiaran las tablas: personas,Predios, apoderados, votaciones,resultados,preguntas, votos
+        $sessionData = Auth::user();
+
+
+        //se limpiaran las tablas
         $this->destroyOnError();
+        Auth::attempt([ "username"=> $sessionData->username,"password"=> $sessionData["passwordTxt"]]);
         return redirect()->route('admin.asambleas')->with('success', 'Sesion reestablecida');
     }
 
     public function destroyOnError()
     {
-        Session::truncate();
+
         Cache::forget('id_asamblea');
         Cache::forget('asambleaOn');
         Cache::forget('inRegistro');
@@ -40,12 +45,14 @@ class SessionController extends Controller
         Cache::forget('name-asamblea');
         session()->flush();
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        Session::truncate();
         Predio::truncate();
         Control::truncate();
         Persona::truncate();
         Result::truncate();
         Question::truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
         $seeder= new QuestionSeeder();
         $seeder->run();
         $this->deleteAllFiles();

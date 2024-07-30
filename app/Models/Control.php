@@ -44,8 +44,6 @@ class Control extends Model
     }
 
 
-
-
     public function changeState($value){
         $this->state=$value;
         $this->save();
@@ -73,5 +71,17 @@ class Control extends Model
             $this->predios()->save($predio);
         }
         return $this;
+    }
+
+    public function getStateTxt(){
+        $states=[
+            1=>'Activo',
+            2=> 'Ausente',
+            3=> 'Retirado',
+            4=> 'No Asignado',
+            5=> 'Entregado'
+        ];
+
+        return $states[$this->state];
     }
 }

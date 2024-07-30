@@ -33,7 +33,7 @@ class LiderSetup extends Component
     public function render()
     {
 
-        return view('livewire.lider-setup');
+        return view('views.gestion.lider-setup');
     }
 
     public function mount(){

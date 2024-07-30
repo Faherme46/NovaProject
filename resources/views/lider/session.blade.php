@@ -15,20 +15,7 @@
                     <h6>Controles: {{ $asambleaOn->controles }}</h6>
                 </div>
                 <div class="card-footer d-flex align-items-center">
-                    <form action="{{ route('asambleas.inicia') }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="id_asamblea" value="{{ $asambleaOn->id_asamblea }}">
-                        <button type="submit" class="btn btn-danger mt-3 me-3">
-                            Iniciar
-                        </button>
-                    </form>
-                    <form action="{{ route('asambleas.termina') }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="id_asamblea" value="{{ $asambleaOn->id_asamblea }}">
-                        <button type="submit" class="btn btn-warning mt-3 me-3">
-                            Terminar
-                        </button>
-                    </form>
+                    
                     <form action="{{ route('session.destroy') }}" method="POST">
                         @csrf
                         @method('DELETE')
@@ -62,7 +49,7 @@
 
                                 <th>Descriptor </th>
                                 <th>Coef...</th>
-                                <td>Vota</td>
+                                <th>Vota</th>
                             </tr>
                         </thead>
                         <tbody>

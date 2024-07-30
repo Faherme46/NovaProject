@@ -202,12 +202,6 @@ class AsambleaController extends Controller
             return back()->withErrors($e->getMessage());
         }
     }
-    public function asistencia()
-    {
-        $allControls = Control::where('state','!=',4)->get();
-        return view('asistencia', compact('allControls'));
-    }
-
 
     //Metodos de manejo de archivos
     public function importPredios(String $file,$registro){

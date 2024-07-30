@@ -47,7 +47,6 @@
 
 
     <div class="px-3">
-        <x-alerts />
 
         <div class="z-2">
             {{ $slot }}

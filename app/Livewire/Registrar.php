@@ -58,7 +58,7 @@ class Registrar extends Component
     public function render()
     {
         $this->getAvailableControls();
-        return view('livewire.registrar');
+        return view('views.registro.registrar');
     }
 
     public function getAvailableControls()

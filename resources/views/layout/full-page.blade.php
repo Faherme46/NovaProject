@@ -1,6 +1,10 @@
 @extends('layout.app')
 
 @section('content')
-    
-    {{$slot}}
+
+    <div class="col-12">
+
+        <x-alerts/>
+        {{ $slot }}
+    </div>
 @endsection

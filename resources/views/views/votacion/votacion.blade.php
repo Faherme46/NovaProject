@@ -1,5 +1,5 @@
 <div>
-
+    <button wire:click='proof'>Hello</button>
     <div class="row mt-3 g-3 justify-content-center">
         <div class="col-auto w-50 align-items-center ">
             <form action="{{ route('questions.create') }}" method="post" id="form">
@@ -124,44 +124,32 @@
                 </div>
                 <div class="card-body py-1">
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item d-flex align-items-center justify-content-between">
-                            <h5 class="card-title mb-0">Quorum: </h5>
-                            <input type="text" class="form-control px-1 ms-2 w-50" wire:model='quorumRegistered'>
+                        <li class="list-group-item d-flex align-items-center justify-content-between px-0">
+                            <h5 class="card-title mb-0">Quorum:&nbsp;&nbsp;&nbsp; </h5>
+                            <div class="d-flex w-75">
+                                <input type="text" class="form-control px-1 ms-2  " wire:model='quorumRegistered'>
+                                <input type="number " class="form-control px-1 ms-1 " wire:model='quorumVote'>
+                            </div>
+
                         </li>
-                        <li class="list-group-item d-flex align-items-center justify-content-between">
-                            <h5 class="card-title mb-0">Predios: </h5>
-                            <input type="text" class="form-control px-1 ms-2 w-50" wire:model='prediosRegistered'>
+                        <li class="list-group-item d-flex align-items-center justify-content-between px-0">
+                            <h5 class="card-title mb-0">Predios:&nbsp;&nbsp;&nbsp;&nbsp; </h5>
+                            <div class="d-flex w-75">
+                                <input  type="text"  class="form-control px-1 ms-2  " wire:model='prediosRegistered'>
+                                <input type="number " class="form-control px-1 ms-1 " wire:model='prediosVote'>
+                            </div>
                         </li>
-                        <li class="list-group-item d-flex align-items-center justify-content-between">
-                            <h5 class="card-title mb-0">Controles: </h5>
-                            <input type="text" class="form-control px-1 ms-2 w-50"
-                                wire:model='controlsRegistered'>
+                        <li class="list-group-item d-flex align-items-center justify-content-between px-0">
+                            <h5 class="card-title mb-0">Controles:&nbsp; </h5>
+                            <div class="d-flex w-75">
+                                <input  type="text"  class="form-control px-1 ms-2  " wire:model='controlsRegistered'>
+                                <input type="number " class="form-control px-1 ms-1 " wire:model='controlsVote'>
+                            </div>
                         </li>
                     </ul>
                 </div>
             </div>
 
-            <div class="card mt-2">
-                <div class="card-header py-1">
-                    <h4 class="card-title mb-0 text-center">Votantes </h4>
-                </div>
-                <div class="card-body py-1">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item d-flex align-items-center justify-content-between">
-                            <h5 class="card-title mb-0">Quorum: </h5>
-                            <input type="number " class="form-control px-1 ms-2 w-50" wire:model='quorumVote'>
-                        </li>
-                        <li class="list-group-item d-flex align-items-center justify-content-between">
-                            <h5 class="card-title mb-0">Predios: </h5>
-                            <input type="text" class="form-control px-1 ms-2 w-50" wire:model='prediosVote'>
-                        </li>
-                        <li class="list-group-item d-flex align-items-center justify-content-between">
-                            <h5 class="card-title mb-0">Controles: </h5>
-                            <input type="text" class="form-control px-1 ms-2 w-50" wire:model='controlsVote'>
-                        </li>
-                    </ul>
-                </div>
-            </div>
             <div class="card mt-2">
                 <div class="card-header py-1">
                     <h4 class="card-title mb-0 text-center">Tiempo </h4>

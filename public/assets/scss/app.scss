@@ -1,6 +1,6 @@
 
 @import url('./_variables.scss');
-
+@import url('./_tables.scss');
 @import url('../fonts/fonts.css');
 
 
@@ -15,7 +15,6 @@ body {
     font-family: var(--body-font);
     font-size: var(--normal-font-size);
     transition: .5s;
-
 
 
 }
@@ -134,14 +133,6 @@ a {
     color: var(--white-color-txt)
 }
 
-.active::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    width: 2px;
-    height: 32px;
-    background-color: var(--white-color-txt)
-}
 
 .height-100 {
     padding-top: 1rem;
@@ -183,44 +174,6 @@ a {
 
 }
 
-.table-responsive {
-    padding: 0;
-    padding-inline:0.5rem;
-    padding-bottom: 0.5rem;
-    position: relative;
-    height: 18rem; /* Ajusta según sea necesario */
-    overflow: auto;
-}
-
-
-.table-fixed-header thead th {
-    position: sticky;
-    top: 0;
-    z-index: 1; /* Para asegurarse de que el encabezado se superponga */
-}
-
-.table-fixed-header tbody td {
-
-    top: 4rem;
-}
-
-
-.table-h100{
-    @media (min-width:1000px) {
-        height: 38.5rem;
-    }
-    @media (min-width:1200px) {
-        height: 38.5rem;
-    }
-    @media (min-width:1400px) {
-        height: 37rem;
-    }
-
-}
-
-.highlight{
-    background-color: rgba(150,150,150,.3);
-}
 
 .no-bottom-round .btn {
     border-bottom-left-radius: 0;
@@ -291,4 +244,9 @@ a {
 
   .btn-arrow:hover {
     transform: scale(1.2); /* Aumenta el tamaño al pasar el cursor */
+  }
+
+
+  .w-35{
+    width: 35% !important;
   }

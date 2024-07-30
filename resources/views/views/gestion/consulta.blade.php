@@ -1,5 +1,5 @@
 <div>
-    <x-alerts />
+    
     <div class="col-12">
         <div class="card px-0 ">
             <div class="card-header pb-0 no-bottom-round">
@@ -110,7 +110,6 @@
                 <div class="row g-1">
                     @if ($tab != 3)
                         <div class="col-5">
-
                             <div class="card p-0">
                                 <div class="card-header d-flex align-items-center justify-content-between">
                                     <div class="col-auto">
@@ -134,13 +133,22 @@
                                 </div>
                                 <div class="card-body table-responsive table-fixed-header px-0">
                                     <table class="w-100 table mb-0 ">
+                                        <thead class="text-end p">
+                                            <th scope="col" ></th>
+                                            <th scope="col" colspan=1 >Vota</th>
+                                            <th ></th>
+                                        </thead>
                                         <tbody>
                                             @forelse ($prediosL as $predio)
                                                 <tr scope="row">
+
                                                     <td style="width: 85%">{{ $predio->descriptor1 }}
                                                         {{ $predio->numeral1 }}
-                                                        {{ $predio->descriptor2 }} {{ $predio->numeral2 }}</td>
-
+                                                        {{ $predio->descriptor2 }} {{ $predio->numeral2 }}
+                                                    </td>
+                                                    <td>
+                                                        {{($predio->vota)?'Si':'No'}}
+                                                    </td>
                                                     <td>
                                                         @if ($tab < 3)
                                                             <button class="btn p-0"
@@ -148,9 +156,6 @@
                                                                 <i class='bi bi-arrow-right-square-fill'></i>
                                                             </button>
                                                         @endif
-
-
-
                                                     </td>
                                                 </tr>
                                             @empty
@@ -227,18 +232,32 @@
 
 
                                     <table class="w-100 table mb-0 ">
-
+                                        <thead class="text-end">
+                                            <th scope="col" ></th>
+                                            <th scope="col" colspan=1 >Vota</th>
+                                            <th ></th>
+                                        </thead>
                                         <tbody>
                                             @forelse ($prediosR as $predio)
                                                 <tr scope="row">
                                                     <td>{{ $predio->descriptor1 }} {{ $predio->numeral1 }}
-                                                        {{ $predio->descriptor2 }} {{ $predio->numeral2 }}</td>
+                                                        {{ $predio->descriptor2 }} {{ $predio->numeral2 }}
+                                                    </td>
+
+                                                    <td>
+                                                        {{($predio->vota)?'Si':'No'}}
+                                                    </td>
                                                     <td>
                                                         @if ($tab == 2)
                                                             <button class="btn p-0"
                                                                 wire:click="toLeft({{ $predio->id }})">
                                                                 <i class='bi bi-arrow-left-square-fill'></i>
                                                             </button>
+                                                        @endif
+                                                        @if ($tab == 4)
+                                                            @isset($Persona)
+                                                                {{$predio->getRelationPersona($Persona->id)}}
+                                                            @endisset
                                                         @endif
                                                     </td>
                                                 </tr>
