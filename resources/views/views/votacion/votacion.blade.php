@@ -1,5 +1,4 @@
 <div>
-    <button wire:click='proof'>Hello</button>
     <div class="row mt-3 g-3 justify-content-center">
         <div class="col-auto w-50 align-items-center ">
             <form action="{{ route('questions.create') }}" method="post" id="form">

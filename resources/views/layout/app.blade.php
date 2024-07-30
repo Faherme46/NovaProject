@@ -42,8 +42,17 @@
         <div class="l-navbar" id="nav-bar">
             <nav class="nav">
                 <div>
-                    <a href="{{ route('home') }}" class="nav_logo"> <i class='bi bi-house-fill nav_logo-icon'></i> <span
-                            class="nav_logo-name">Home</span> </a>
+                    <a href="{{ route('home') }}" class="nav_logo">
+
+                        @hasrole('Admin')
+                            <i class='bi bi-gear-fill nav_logo-icon'></i>
+                            <span class="nav_logo-name">Gestion</span> </a>
+                        @else
+                            <i class='bi bi-house-fill nav_logo-icon'></i>
+                            <span class="nav_logo-name">Home</span> </a>
+                        @endhasrole
+
+
                     <div class="nav_list">
 
 
@@ -76,17 +85,7 @@
 
 
 
-                        @hasanyrole('Admin')
-                            <a href="{{ route('admin.asambleas') }}" class="nav_link">
-                                <i class='bi bi-gear-wide-connected nav_icon'></i> <span class="nav_name">Asamblea</span>
-                            </a>
-                        @endhasanyrole
 
-                        @hasanyrole('Admin|Lider')
-                            <a href="{{ route('users.index') }}" class="nav_link">
-                                <i class='bi bi-people-fill nav_icon'></i> <span class="nav_name">Usuarios</span>
-                            </a>
-                        @endhasanyrole
 
 
 
@@ -169,8 +168,6 @@
     <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('assets/js/app.js') }}"></script>
 </body>
-<script>
-    
-</script>
+<script></script>
 
 </html>

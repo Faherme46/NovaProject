@@ -1,4 +1,11 @@
 <?php
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+
+
+use App\Http\Middleware\ValidateLogin;
+use App\Http\Middleware\EnsureAsambleaOn;
+
 
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\AsambleaController;
@@ -9,50 +16,33 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PersonasController;
 use App\Http\Controllers\QuestionsController;
 
+use App\Livewire\PresentQuestion;
+use App\Livewire\Votacion;
+use App\Livewire\LiderSetup;
+use App\Livewire\Home;
+use App\Livewire\Main;
 use App\Livewire\Consulta;
 use App\Livewire\Registrar;
 use App\Livewire\Asignacion;
 use App\Livewire\Entregar;
 
-use Illuminate\Support\Facades\Route;
-
-
-use App\Http\Middleware\ValidateLogin;
-use App\Http\Middleware\EnsureAsambleaOn;
-use App\Livewire\PresentQuestion;
-use App\Livewire\Votacion;
-use App\Livewire\LiderSetup;
-
 //rutas de redireccion
-
-
-
-
-
-Route::get('/', function () {
-    return view('welcome');
-})->name('home')->withoutMiddleware([EnsureAsambleaOn::class]);
-
-
-
-//rutas para las asambleas
-
-
-
 
 
 //rutas de las predios
 
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Admin')]], function () {
     Route::delete('/session/destroy', [SessionController::class, 'destroyAll'])->name('session.destroy');
+
     //Rutas de Usuarios
     Route::post('/predios/import', [PrediosController::class, 'import'])->name('predios.import');
+
 });
 
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Admin|Lider')]], function () {
-    Route::get('admin/asambleas', [AsambleaController::class, 'index'])->name('admin.asambleas')->withoutMiddleware(EnsureAsambleaOn::class);
+
     Route::resource('asambleas', AsambleaController::class)->withoutMiddleware(EnsureAsambleaOn::class);
-    
+
 
     Route::get('/users', [UsersController::class, 'index'])->name('users.index')->withoutMiddleware([EnsureAsambleaOn::class]);;
     Route::post('users/create', [UsersController::class, 'createUser'])->name('users.create');
@@ -75,7 +65,7 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::get('/asistencia/registrar', Registrar::class)->name('asistencia.registrar');
     Route::get('/consulta', Consulta::class)->name('consulta');
     Route::get('/entregar', Entregar::class)->name('entregar');
-
+    Route::get('/', Main::class)->name('home')->withoutMiddleware(EnsureAsambleaOn::class);
 });
 //rutas para registro
 

@@ -6,8 +6,6 @@ use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 
-use Carbon\Carbon;
-use DateTimeZone;
 
 use App\Http\Controllers\FileController;
 
@@ -89,34 +87,36 @@ class AsambleaController extends Controller
 
 
         try {
-            $asamblea = Asamblea::create($request->all());
-            $this->sessionController->setSession($asamblea->id_asamblea, $asamblea->folder);
-            $this->importPredios($asamblea->folder,$asamblea->registro);
+            $imports=$this->importPredios($request->folder,$request->registro);
 
-            $data = [
-                'id_asamblea'   => $asamblea->id_asamblea,
-                'asambleaOn'    => true,
-                'inRegistro'    => $asamblea->registro,
-                'controles'     => $asamblea->controles,
-                'name_asamblea' => $asamblea->name
-            ];
+            if($imports==200){
+                $asamblea = Asamblea::create($request->all());
+                $this->sessionController->setSession($asamblea->id_asamblea, $asamblea->folder);
+                $data = [
+                    'id_asamblea'   => $asamblea->id_asamblea,
+                    'asambleaOn'    => true,
+                    'inRegistro'    => $asamblea->registro,
+                    'controles'     => $asamblea->controles,
+                    'name_asamblea' => $asamblea->name
+                ];
 
-            Cache::putMany($data);
-            Control::factory()->count($asamblea->controles)->create();
-            $this->fileController->getAsambleaFolderPath();
+                Cache::putMany($data);
+                Control::factory()->count($asamblea->controles)->create();
+                $this->fileController->getAsambleaFolderPath();
+            }
         } catch (QueryException $qe) {
             if ($qe->errorInfo[1] == 1062) { // 1062 es el código de error para duplicados
-                return redirect()->route('asambleas.index')->withErrors('Ya existe una asamblea en la misma fecha.');
+                return redirect()->route('home')->withErrors('Ya existe una asamblea en la misma fecha.');
             } else {
-                return redirect()->route('asambleas.index')->withErrors($qe->getMessage());
+                return redirect()->route('home')->withErrors($qe->getMessage());
             }
         } catch (\Exception $e) {
             $this->sessionController->destroyOnError();
             $this->destroy($asamblea->id_asamblea);
-            return redirect()->route('asambleas.index')->withErrors($e->getMessage());
+            return redirect()->route('home')->withErrors($e->getMessage());
         }
 
-        return redirect()->route('asambleas.index')->with('success', 'Asamblea creada con éxito.');
+        return redirect()->route('home')->with('success', 'Asamblea creada con éxito.');
     }
 
 
@@ -134,14 +134,14 @@ class AsambleaController extends Controller
 
         $asamblea = Asamblea::findOrFail($id);
         $asamblea->update($request->all());
-        return redirect()->route('admin.asambleas')->with('success', 'Reunión actualizada con éxito.');
+        return redirect()->route('home')->with('success', 'Reunión actualizada con éxito.');
     }
 
     public function destroy($id)
     {
         $asamblea = Asamblea::findOrFail($id);
         $asamblea->delete();
-        return redirect()->route('admin.asambleas');
+        return redirect()->route('home');
     }
 
 
@@ -167,41 +167,6 @@ class AsambleaController extends Controller
     }
 
 
-    public function iniciarAsamblea(Request $request)
-    {
-        try {
-            $asamblea = Asamblea::findOrFail($request->id_asamblea);
-            $time = Carbon::now(new DateTimeZone('America/Bogota'));
-            if ($asamblea->h_inicio == null) {
-                $asamblea->h_inicio = $time;
-                $asamblea->save();
-                return back()->with('info', 'Se ha iniciado la asamblea en: ' . $time);
-            } else {
-                return back()->with('warning', 'Ya se establecio el inicio en: ' . $asamblea->h_inicio);
-            }
-        } catch (\Exception $e) {
-            //throw $th;
-            return back()->withErrors($e->getMessage());
-        }
-    }
-
-    public function terminarAsamblea(Request $request)
-    {
-        try {
-            $asamblea = Asamblea::findOrFail($request->id_asamblea);
-            $time = Carbon::now(new DateTimeZone('America/Bogota'));
-            if ($asamblea->h_cierre == null) {
-                $asamblea->h_cierre = $time;
-                $asamblea->save();
-                return back()->with('info', 'Se ha terminado la asamblea en: ' . $time);
-            } else {
-                return back()->with('warning', 'Ya se establecio el cierre en: ' . $asamblea->h_cierre);
-            }
-        } catch (\Exception $e) {
-            //throw $th;
-            return back()->withErrors($e->getMessage());
-        }
-    }
 
     //Metodos de manejo de archivos
     public function importPredios(String $file,$registro){
@@ -217,7 +182,7 @@ class AsambleaController extends Controller
 
             Excel::import(new UsersImport, 'C:/Asambleas/usuarios.xlsx');
 
-            return redirect()->route('asambleas.index')->with('success','Carga de datos exitosa');
+            return 200;
         } catch (ValidationException $e) {
             // Manejar excepciones específicas de validación de Excel
             $failures = $e->failures();

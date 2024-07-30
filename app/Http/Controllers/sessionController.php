@@ -32,7 +32,7 @@ class SessionController extends Controller
         //se limpiaran las tablas
         $this->destroyOnError();
         Auth::attempt([ "username"=> $sessionData->username,"password"=> $sessionData["passwordTxt"]]);
-        return redirect()->route('admin.asambleas')->with('success', 'Sesion reestablecida');
+        return redirect()->route('gestion')->with('success', 'Sesion reestablecida');
     }
 
     public function destroyOnError()

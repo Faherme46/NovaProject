@@ -111,7 +111,7 @@
 
         </div>
         <div class="col-5">
-            @livewire('list-users', ['height100' => true])
+            @livewire('list-users')
         </div>
     </div>
 @endsection

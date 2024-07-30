@@ -3,7 +3,7 @@
     <div class="card-header">
         Usuarios
     </div>
-    <div class="card-body table-responsive table-fixed-header @if ($height100) table-h100 @endif ">
+    <div class="card-body table-responsive table-fixed-header table-h100">
 
         <table class="table">
             <thead>
