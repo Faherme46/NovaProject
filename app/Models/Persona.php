@@ -13,9 +13,9 @@ class Persona extends Model
 
     public function predios()
     {
-        return $this->hasMany(Predio::class, 'cc_propietario', 'id');
+        return $this->belongsToMany(Predio::class, 'predios_personas');
     }
-    
+
 
     public function controls()
     {

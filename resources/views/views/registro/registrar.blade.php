@@ -114,59 +114,59 @@
         <div class="col-12 ">
             <div class="card ">
                 <div class="card-header d-flex">
-                        <div class="col-10">
-                            @if ($controls)
-                                <form id="formPredios" class="row g-3" wire:submit='asignar(1)' method="GET">
-                                    <div class=" col-2 ">
-                                        <select name="control" id="id_control_selected" wire:model="control"
-                                            wire:change='ver' class="form-control" required>
-                                            @foreach ($controls as $control)
-                                                <option value="{{ $control->id }}">
-                                                    {{ $control->id }} </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="col-2">
-                                        <button type="submit" class="btn btn-primary">
-                                            Agregar
-                                        </button>
-                                    </div>
-                                    <div class="col-1">
-                                        <button type="button" class="btn btn-primary" wire:click="resetControl">
-                                            <i class='bi bi-plus-circle-fill '></i>
-                                        </button>
-                                    </div>
-                                </form>
-                            @else
-                                <form id="formPredios" class="row g-3" wire:submit='asignar(0)' method="GET">
-                                    <div class=" col-2 ">
-                                        <select name="control" id="id_control" class="form-control" required
-                                            wire:model="controlId">
-                                            @foreach ($controlIds as $control)
-                                                <option value="{{ $control }}" @selected($control == $controlId)>
-                                                    {{ $control }} </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="col-2">
-                                        <button type="submit" class="btn btn-primary">
-                                            Asignar
-                                        </button>
-                                    </div>
-                                </form>
-                            @endif
-                        </div>
-                        <div class="col-2 text-right">
-                            <input class="form-control" name="sum_coef" value="{{ $sumCoef }}" id="sumCoef"
-                                readonly></input>
-                        </div>
+                    <div class="col-10">
+                        @if ($controls)
+                            <form id="formPredios" class="row g-3" wire:submit='asignar(1)' method="GET">
+                                <div class=" col-2 ">
+                                    <select name="control" id="id_control_selected" wire:model="control"
+                                        wire:change='ver' class="form-control" required>
+                                        @foreach ($controls as $control)
+                                            <option value="{{ $control->id }}">
+                                                {{ $control->id }} </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-2">
+                                    <button type="submit" class="btn btn-primary">
+                                        Agregar
+                                    </button>
+                                </div>
+                                <div class="col-1">
+                                    <button type="button" class="btn btn-primary" wire:click="resetControl">
+                                        <i class='bi bi-plus-circle-fill '></i>
+                                    </button>
+                                </div>
+                            </form>
+                        @else
+                            <form id="formPredios" class="row g-3" wire:submit='asignar(0)' method="GET">
+                                <div class=" col-2 ">
+                                    <select name="control" id="id_control" class="form-control" required
+                                        wire:model="controlId">
+                                        @foreach ($controlIds as $control)
+                                            <option value="{{ $control }}" @selected($control == $controlId)>
+                                                {{ $control }} </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-2">
+                                    <button type="submit" class="btn btn-primary">
+                                        Asignar
+                                    </button>
+                                </div>
+                            </form>
+                        @endif
+                    </div>
+                    <div class="col-2 text-right">
+                        <input class="form-control" name="sum_coef" value="{{ $sumCoef }}" id="sumCoef"
+                            readonly></input>
+                    </div>
 
                 </div>
                 <div class="card-body table-responsive table-fixed-header">
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Cc Propietario</th>
+
                                 <th>A/P</th>
                                 <th>Predio</th>
                                 <th>Coef.</th>
@@ -179,8 +179,11 @@
                         <tbody>
                             @forelse ($prediosAvailable as $predio)
                                 <tr>
-                                    <td>{{ $predio->persona->id }}</td>
-                                    <td>{{$predio->getRelationPersona($asistente->id)}}</td>
+
+                                    <td>
+
+                                    </td>
+
                                     <td>{{ $predio->descriptor1 }} {{ $predio->numeral1 }}
                                         {{ $predio->descriptor2 }} {{ $predio->numeral2 }} </td>
                                     <td>{{ $predio->coeficiente }}</td>
@@ -198,8 +201,10 @@
                             @if ($controls)
                                 @foreach ($controls[$controlH]->predios as $predio)
                                     <tr class="table-active">
-                                        <td>{{ $predio->persona->id }}</td>
-                                        <td>{{$predio->getRelationPersona($asistente->id)}}</td>
+
+                                        <td><span class="badge p-1 fs-6 text-bg-info">
+                                                {{ $predio->getRelationPersona($asistente->id) }}
+                                            </span></td>
                                         <td>{{ $predio->descriptor1 }} {{ $predio->numeral1 }}
                                             {{ $predio->descriptor2 }} {{ $predio->numeral2 }} </td>
                                         <td colspan="2">{{ $predio->coeficiente }}</td>

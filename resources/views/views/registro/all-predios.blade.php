@@ -1,15 +1,11 @@
 <div class="card">
 
-    <div class="card-header">
-        <h5 class="card-title"> Predios Disponibles</h5>
-    </div>
+
     <div class="card-header row g-1">
         @if ($asambleaOn->registro)
             <div class="col-3">
-
                 <input wire:model.live='searchId' type="text" id="searchId" name="cc_propietario" class="form-control"
                     placeholder="Propietario" onkeypress="return onlyNumbers(event)" onclick="this.select()">
-
             </div>
         @endif
 
@@ -46,7 +42,7 @@
 
 
     </div>
-    <div class="card-body table-responsive table-fixed-header table-h100 ">
+    <div class="card-body table-responsive table-fixed-header table-h100 px-0">
 
         <table class="table">
 
@@ -91,16 +87,18 @@
 
                     @if ($asambleaOn->registro)
                         <td>
-                            <button type="button" class="btn p-0"
-                                wire:click='dispatchPersona({{ $predio->cc_propietario }})'
-                                wire:confirm='¿Deseas cambiar el Asistente?'>
-                                <i class="bi bi-person-fill"></i>
-                            </button>
+                            @foreach ($predio->personas as $persona)
+                                <button type="button" class="btn p-0"
+                                    wire:click='dispatchPersona({{ $persona->id }})'
+                                    wire:confirm='¿Deseas cambiar el Asistente?'>
+                                    <i class="bi bi-person-fill"></i>
+                                </button>
 
-                            <button class="btn p-0 mb-0" wire:dblclick='showPersona({{ $predio->cc_propietario }})'
-                                wire:click='dispatchPoderdante({{ $predio->cc_propietario }})'>
-                                {{ $predio->cc_propietario }}
-                            </button>
+                                <button class="btn p-0 mb-0" wire:dblclick='showPersona({{ $persona->id }})'
+                                    wire:click='dispatchPoderdante({{ $persona->id }})'>
+                                    {{ $persona->id }}
+                                </button>
+                            @endforeach
                         </td>
                     @else
                         <td>{{ $predio->coeficiente }}</td>

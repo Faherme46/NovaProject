@@ -282,7 +282,6 @@ class PresentQuestion extends Component
 
 
             $fileCotroller->exportResult($this->question);
-            dd('here1');
             $fileCotroller->exportVotes($this->votes, $this->question->id, $this->question->title);
 
         } catch (\Throwable $th) {

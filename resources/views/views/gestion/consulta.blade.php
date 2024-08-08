@@ -1,5 +1,5 @@
 <div>
-    
+
     <div class="col-12">
         <div class="card px-0 ">
             <div class="card-header pb-0 no-bottom-round">
@@ -134,9 +134,9 @@
                                 <div class="card-body table-responsive table-fixed-header px-0">
                                     <table class="w-100 table mb-0 ">
                                         <thead class="text-end p">
-                                            <th scope="col" ></th>
-                                            <th scope="col" colspan=1 >Vota</th>
-                                            <th ></th>
+                                            <th scope="col"></th>
+                                            <th scope="col" colspan=1>Vota</th>
+                                            <th></th>
                                         </thead>
                                         <tbody>
                                             @forelse ($prediosL as $predio)
@@ -147,7 +147,7 @@
                                                         {{ $predio->descriptor2 }} {{ $predio->numeral2 }}
                                                     </td>
                                                     <td>
-                                                        {{($predio->vota)?'Si':'No'}}
+                                                        {{ $predio->vota ? 'Si' : 'No' }}
                                                     </td>
                                                     <td>
                                                         @if ($tab < 3)
@@ -233,9 +233,9 @@
 
                                     <table class="w-100 table mb-0 ">
                                         <thead class="text-end">
-                                            <th scope="col" ></th>
-                                            <th scope="col" colspan=1 >Vota</th>
-                                            <th ></th>
+                                            <th scope="col"></th>
+                                            <th scope="col" colspan=1>Vota</th>
+                                            <th></th>
                                         </thead>
                                         <tbody>
                                             @forelse ($prediosR as $predio)
@@ -245,7 +245,7 @@
                                                     </td>
 
                                                     <td>
-                                                        {{($predio->vota)?'Si':'No'}}
+                                                        {{ $predio->vota ? 'Si' : 'No' }}
                                                     </td>
                                                     <td>
                                                         @if ($tab == 2)
@@ -256,7 +256,7 @@
                                                         @endif
                                                         @if ($tab == 4)
                                                             @isset($Persona)
-                                                                {{$predio->getRelationPersona($Persona->id)}}
+                                                                {{ $predio->getRelationPersona($Persona->id) }}
                                                             @endisset
                                                         @endif
                                                     </td>
@@ -343,7 +343,7 @@
                                                     class="list-group-item d-flex align-items-center justify-content-between">
                                                     <h5 class="mb-0">Control:</h5>
                                                     <input type="text" class="form-control w-50" disabled
-                                                        value="{{$Predio->control ? $Predio->control->id : 'Sin Asignar' }}">
+                                                        value="{{ $Predio->control ? $Predio->control->id : 'Sin Asignar' }}">
                                                 </li>
                                                 <li
                                                     class="list-group-item d-flex align-items-center justify-content-center">
@@ -360,24 +360,24 @@
                                         <div class="col-6 ">
                                             @if ($asambleaOn->registro)
                                                 <ul class="list-group list-group ">
-                                                    <li
-                                                        class="list-group-item bg-primary d-flex justify-content-between align-items-center">
-                                                        <h5 class="mb-0 bx-w"><strong>Propietario</strong> </h5>
-                                                        <button type="button" class="btn p-0" wire:click=''>
-                                                            <i class="bi bi-eye-fill fs-3"></i>
-                                                        </button>
-                                                    </li>
-                                                    <li class="list-group-item ">
-                                                        <h6 class="mb-0">
-                                                            {{ $Predio->persona->nombre }}
-                                                            {{ $Predio->persona->apellido }}
-                                                        </h6>
-                                                    </li>
-                                                    <li
-                                                        class="list-group-item d-flex align-items-center justify-content-center">
-                                                        <h5 class="mb-0">Cedula: {{ $Predio->persona->id }}</h5>
-                                                    </li>
+                                                    <li class="list-group-item bg-primary
+                                                        d-flex justify-content-between align-items-center">
+                                                        <h5 class="mb-0 bx-w"><strong>Propietarios</strong> </h5>
 
+                                                    </li>
+                                                    @foreach ($Predio->personas as $persona)
+                                                        <li class="list-group-item d-flex justify-content-between">
+
+                                                            <p class="mb-0 w-75">
+                                                                {{ $persona->nombre }}
+                                                                    {{ $persona->apellido }}
+
+                                                            </p>
+                                                            <p class="mb-0">{{ $persona->id }}</p>
+
+
+                                                        </li>
+                                                    @endforeach
 
                                                 </ul>
                                             @endif

@@ -36,28 +36,7 @@ class AsambleaController extends Controller
         $this->sessionController = new SessionController;
         $this->fileController = new FileController;
     }
-    public function index()
-    {
 
-        $sessionId = $this->sessionController->getSessionId();
-
-
-        if ($sessionId) {
-            $predios = Predio::get();
-
-            if(cache('registro')){
-                $personas = Persona::get();
-                return view('lider.session', compact('personas', 'predios'));
-            }
-
-            return view('lider.session', compact('predios'));
-        } else {
-
-            $folders = $this->fileController->getFolders();
-            return view('admin.asamblea', compact('folders'));
-            # code...
-        }
-    }
 
     public function store(Request $request)
     {
@@ -112,7 +91,6 @@ class AsambleaController extends Controller
             }
         } catch (\Exception $e) {
             $this->sessionController->destroyOnError();
-            $this->destroy($asamblea->id_asamblea);
             return redirect()->route('home')->withErrors($e->getMessage());
         }
 

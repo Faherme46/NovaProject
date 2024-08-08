@@ -1,15 +1,24 @@
 <div>
     @php
-        $role=$currentUser->getRoleNames()[0];
-        $registro=$asambleaOn->registro;
+        $role = $currentUser->getRoleNames()[0];
+        $registro = $asambleaOn ? $asambleaOn->registro : null;
     @endphp
     <div class="row justify-content-center px-5">
 
         @foreach ($panels as $panel)
-            @if (($panel['onlyAdmin'])?$role=='Admin':true)
+            @if (
+                $panel['onlyAdmin']
+                    ? $role == 'Admin'
+                    : (true && $panel['onlyRegistro'] == 0) ||
+                        (($registro && $panel['onlyRegistro'] == 1) || (!$registro && $panel['onlyRegistro'] == 2)))
                 <button class="btn p-0 mx-1 my-1 " style="width: 300px;" {{ $panel['directives'] }}
-                @disabled($panel['nonOperario']&&$role=='Operario')
-                @if ($panel['title']=='Asignar'&&$registro||$panel['title']=='Registro'&&!$registro) hidden @endif>
+                    @disabled(
+                        ($panel['nonOperario'] && $role == 'Operario') ||
+                            ($asambleaOn && $panel['title'] == 'Programar') ||
+                            (!$asambleaOn &&
+                                $panel['title'] != 'Programar' &&
+                                $panel['title'] != 'Configurar Diseño' &&
+                                $panel['title'] != 'Usuarios'))>
                     <div class="card ">
                         <div class="row g-0">
                             <div class="col-4">
@@ -28,132 +37,6 @@
                 </button>
             @endif
         @endforeach
-
-    </div>
-
-
-
-    <div class="modal fade" id="modalFilePersonas" tabindex="-1" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header justify-content-between   ">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Archivo de Predios </h1>
-                    @if ($asambleaOn)
-                        @if ($asambleaOn->registro)
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#modalFilePersonas">
-                                Archivo de personas
-                            </button>
-                        @endif
-                    @endif
-
-
-                </div>
-                <div class="modal-body table-responsive table-fixed-header table-h100">
-
-                    <table class="table table-bordered table-striped  mt-3 mb3">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                @if ($asambleaOn)
-                                    @if ($asambleaOn->registro)
-                                        <th>propietario</th>
-                                        <th>cedula</th>
-                                        <th>Apoderado</th>
-                                    @endif
-                                @endif
-                                <th>Descriptor </th>
-                                <th>Coef...</th>
-                                <th>Vota</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                            @forelse ($predios as $p)
-                                <tr>
-                                    <td>{{ $p->id }}</td>
-                                    @if ($asambleaOn->registro)
-                                        <td>{{ $p->persona->nombre }} {{ $p->persona->apellido }}</td>
-                                        <td>{{ $p->cc_propietario }}</td>
-                                        <td>{{ $p->cc_apoderado }}</td>
-                                    @endif
-
-                                    <td>{{ $p->descriptor1 }} {{ $p->numeral1 }} {{ $p->descriptor2 }}
-                                        {{ $p->numeral2 }}</td>
-                                    <td>{{ $p->coeficiente }}</td>
-                                    <td>{{ $p->vota ? 'Si' : 'No' }}</td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="7">No hay entradas</td>
-                                </tr>
-                            @endforelse
-
-                        </tbody>
-                    </table>
-
-                </div>
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="modal fade" id="modalFilePredios" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header justify-content-between   ">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Archivo de Predios </h1>
-
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                        data-bs-target="#modalFilePersonas">
-                        Archivo de predios
-                    </button>
-
-                </div>
-                <div class="modal-body table-responsive table-fixed-header table-h100">
-
-                    <table class="table table-bordered table-striped  mt-3 mb3">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>propietario</th>
-                                <th>cedula</th>
-                                <th>Apoderado</th>
-
-                                <th>Descriptor </th>
-                                <th>Coef...</th>
-                                <th>Vota</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                            @forelse ($predios as $p)
-                                <tr>
-                                    <td>{{ $p->id }}</td>
-                                    <td>{{ $p->persona->nombre }} {{ $p->persona->apellido }}</td>
-                                    <td>{{ $p->cc_propietario }}</td>
-                                    <td>{{ $p->cc_apoderado }}</td>
-
-                                    <td>{{ $p->descriptor1 }} {{ $p->numeral1 }} {{ $p->descriptor2 }}
-                                        {{ $p->numeral2 }}</td>
-                                    <td>{{ $p->coeficiente }}</td>
-                                    <td>{{ $p->vota ? 'Si' : 'No' }}</td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="7">No hay entradas</td>
-                                </tr>
-                            @endforelse
-
-                        </tbody>
-                    </table>
-
-                </div>
-            </div>
-
-        </div>
 
     </div>
 
@@ -246,26 +129,167 @@
             </div>
         </div>
     </div>
+    @if ($asambleaOn)
 
-    <div class="modal fade" tabindex="-1" id="modalDeleteSession" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">¿Desea eliminar la sesión?</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        @if ($registro)
+            {{-- <div class="modal fade" id="modalFilePersonas" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header justify-content-between   ">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Archivo de personas </h1>
+
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#modalFilePredios">
+                                Archivo de predios
+                            </button>
+                        </div>
+                        <div class="modal-body table-responsive table-fixed-header table-h100">
+
+                            <table class="table table-bordered table-striped  mt-3 mb3">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+
+                                        @if ($asambleaOn->registro)
+                                            <th>propietario</th>
+                                            <th>cedula</th>
+                                            <th>Apoderado</th>
+                                        @endif
+                                        <th>Descriptor </th>
+                                        <th>Coef...</th>
+                                        <th>Vota</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @forelse ($predios as $p)
+                                        <tr>
+                                            <td>{{ $p->id }}</td>
+
+                                                <td>{{ $p->persona->nombre }} {{ $p->persona->apellido }}</td>
+                                                <td>{{ $p->cc_propietario }}</td>
+                                                <td>{{ $p->cc_apoderado }}</td>
+
+
+                                            <td>{{ $p->descriptor1 }} {{ $p->numeral1 }} {{ $p->descriptor2 }}
+                                                {{ $p->numeral2 }}</td>
+                                            <td>{{ $p->coeficiente }}</td>
+                                            <td>{{ $p->vota ? 'Si' : 'No' }}</td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="7">No hay entradas</td>
+                                        </tr>
+                                    @endforelse
+
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+
                 </div>
 
-                <div class="modal-footer justify-content-between align-items-center">
-                    <span class="badge m-0 text-bg-warning fs-6 ">Esta accion no se puede deshacer</span>
-                    <form action="{{ route('session.destroy') }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger ">
-                            Eliminar sesion
-                        </button>
-                    </form>
+            </div> --}}
+        @endif
+
+
+        <div class="modal fade" id="modalFilePredios" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header justify-content-between   ">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Archivo de Predios </h1>
+                        @if ($registro)
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#modalFilePersonas">
+                                Archivo de Personas
+                            </button>
+                        @endif
+
+
+                    </div>
+                    <div class="modal-body table-responsive table-fixed-header table-h100 pt-0">
+
+                        <table class="table table-bordered table-striped   mb-3">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    @if ($asambleaOn->registro)
+                                        <th>Propietarios</th>
+                                        <th>Cedula</th>
+                                        <th>Apoderado</th>
+                                    @endif
+                                    <th>Descriptor </th>
+                                    <th>Coef...</th>
+                                    <th>Vota</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @forelse ($predios as $p)
+                                    <tr>
+                                        <td>{{ $p->id }}</td>
+                                        @if ($asambleaOn->registro)
+                                            <td>
+                                                @foreach ($p->personas as $persona)
+                                                    {{ $persona->nombre }} {{ $persona->apellido }}
+                                                @endforeach
+                                            </td>
+                                            <td>
+                                                @foreach ($p->personas as $persona)
+                                                    {{ $persona->id }}
+                                                @endforeach
+                                            </td>
+                                            <td>
+                                                {{ $p->cc_apoderado }}
+                                            </td>
+                                        @endif
+                                        <td>{{ $p->descriptor1 }} {{ $p->numeral1 }} {{ $p->descriptor2 }}
+                                            {{ $p->numeral2 }}</td>
+                                        <td>{{ $p->coeficiente }}</td>
+                                        <td>{{ $p->vota ? 'Si' : 'No' }}</td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="7">No hay entradas</td>
+                                    </tr>
+                                @endforelse
+
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="modal fade" tabindex="-1" id="modalDeleteSession" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">¿Desea eliminar la sesión?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-footer justify-content-between align-items-center">
+                        <span class="badge m-0 text-bg-warning fs-6 ">Esta accion no se puede deshacer</span>
+                        <form action="{{ route('session.destroy') }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger ">
+                                Eliminar sesion
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    @endif
 </div>

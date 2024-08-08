@@ -22,28 +22,24 @@ class Main extends Component
             'title'=> 'Programar',
             'body'=> 'Configurar y programar una asamblea',
             'onlyAdmin'=>true,
-            'nonOperario'=>true
-        ],[
-            "directives"=> 'data-bs-toggle=modal data-bs-target=#modalDeleteSession @disabled(!$asambleaOn)',
-            'icon'=> 'bi-palette',
-            'title'=> 'Configurar Diseño',
-            'body'=> 'Colores, tamaños y fuentes',
-            'onlyAdmin'=>true,
-            'nonOperario'=>true
+            'nonOperario'=>true,
+            'onlyRegistro'=>0
         ],[
             "directives"=> 'data-bs-toggle=modal data-bs-target=#modalDeleteSession @disabled(!$asambleaOn)',
             'icon'=> 'bi-trash',
             'title'=> 'Eliminar Sesión',
             'body'=> 'Limpia todas las tablas de la base de datos.',
             'onlyAdmin'=>true,
-            'nonOperario'=>true
+            'nonOperario'=>true,
+            'onlyRegistro'=>0
         ],[
-            "directives"=> 'data-bs-toggle=modal data-bs-target=#modalFilePredios @disabled(!$asambleaOn)',
-            'icon'=> 'bi-file-arrow-up',
-            'title'=> 'Archivos',
-            'body'=> 'Archivos cargados de predios y personas',
-            'onlyAdmin'=>false,
-            'nonOperario'=>true
+            "directives"=> 'data-bs-toggle=modal data-bs-target=#modalDeleteSession @disabled(!$asambleaOn)',
+            'icon'=> 'bi-palette',
+            'title'=> 'Configurar Diseño',
+            'body'=> 'Colores, tamaños y fuentes',
+            'onlyAdmin'=>true,
+            'nonOperario'=>true,
+            'onlyRegistro'=>0
         ],
         [
             "directives"=> 'onclick=location.href="/users";',
@@ -51,7 +47,16 @@ class Main extends Component
             'title'=> 'Usuarios',
             'body'=> 'Crear y Consultar Usuarios',
             'onlyAdmin'=>false,
-            'nonOperario'=>true
+            'nonOperario'=>true,
+            'onlyRegistro'=>0
+        ],[
+            "directives"=> 'data-bs-toggle=modal data-bs-target=#modalFilePredios @disabled(!$asambleaOn)',
+            'icon'=> 'bi-file-arrow-up',
+            'title'=> 'Archivos',
+            'body'=> 'Archivos cargados de predios y personas',
+            'onlyAdmin'=>false,
+            'nonOperario'=>true,
+            'onlyRegistro'=>0
         ],
         [
             "directives"=> 'onclick=location.href="/gestion/asamblea";',
@@ -59,14 +64,16 @@ class Main extends Component
             'title'=> 'Asamblea',
             'body'=> 'Control y estadisticas de asamblea',
             'onlyAdmin'=>false,
-            'nonOperario'=>true
+            'nonOperario'=>true,
+            'onlyRegistro'=>0
         ],[
             "directives"=> 'onclick=location.href="/votacion";',
             'icon'=> 'bi-question-circle',
             'title'=> 'Votacion',
             'body'=> 'Crear y Presentar Votaciones',
             'onlyAdmin'=>false,
-            'nonOperario'=>false
+            'nonOperario'=>false,
+            'onlyRegistro'=>0
         ],
         [
             "directives"=> 'onclick=location.href="/asistencia/registrar";',
@@ -74,7 +81,8 @@ class Main extends Component
             'title'=> 'Registrar',
             'body'=> 'Asignar predios a personas',
             'onlyAdmin'=>false,
-            'nonOperario'=>false
+            'nonOperario'=>false,
+            'onlyRegistro'=>1
         ],
         [
             "directives"=> 'onclick=location.href="/asistencia/asignar";',
@@ -82,7 +90,8 @@ class Main extends Component
             'title'=> 'Asignar',
             'body'=> 'Asignar controles a predios',
             'onlyAdmin'=>false,
-            'nonOperario'=>true
+            'nonOperario'=>true,
+            'onlyRegistro'=>2
         ],
         [
             "directives"=> 'onclick=location.href="/consulta";',
@@ -90,7 +99,8 @@ class Main extends Component
             'title'=> 'Consulta',
             'body'=> 'Controles, predios y personas',
             'onlyAdmin'=>false,
-            'nonOperario'=>false
+            'nonOperario'=>false,
+            'onlyRegistro'=>0
         ],
         [
             "directives"=> 'onclick=location.href="/entregar";',
@@ -98,7 +108,8 @@ class Main extends Component
             'title'=> 'Entregar',
             'body'=> 'Recibir Controles',
             'onlyAdmin'=>false,
-            'nonOperario'=>false
+            'nonOperario'=>false,
+            'onlyRegistro'=>1
         ],
     ];
 

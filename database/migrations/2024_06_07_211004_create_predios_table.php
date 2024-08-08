@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('predios', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('cc_propietario')->nullable();
             $table->unsignedBigInteger('cc_apoderado')->nullable();
             $table->unsignedBigInteger('control_id')->nullable();
             $table->string('descriptor1');
@@ -23,7 +22,6 @@ return new class extends Migration
             $table->float('coeficiente');
             $table->boolean('vota');
             $table->timestamps();
-            $table->foreign('cc_propietario')->references('id')->on('personas');
             $table->foreign('cc_apoderado')->references('id')->on('personas');
             $table->foreign('control_id')->references('id')->on('controls');
 

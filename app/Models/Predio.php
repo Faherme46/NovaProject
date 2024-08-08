@@ -12,9 +12,9 @@ class Predio extends Model
     protected $guarded=[];
 
 
-    public function persona()
+    public function personas()
     {
-        return $this->belongsTo(Persona::class, 'cc_propietario', 'id');
+        return $this->belongsToMany(Persona::class,'predios_personas');
     }
 
 
@@ -29,14 +29,14 @@ class Predio extends Model
 
 
     public function getRelationPersona($id){
-        if ($this->cc_propietario==$id) {
-            return 'P';
+        if ($this->personas->contains($id)) {
+            return 'Propietario';
         }
         if ($this->cc_apoderado==$id) {
-            return 'AR';
+            return 'Ap. Registrado';
         }
 
-        return 'A';
+        return 'Apoderado';
     }
 
     public function getFullName(){

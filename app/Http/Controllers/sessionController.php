@@ -29,6 +29,7 @@ class SessionController extends Controller
         $sessionData = Auth::user();
 
 
+        session()->flush();
         //se limpiaran las tablas
         $this->destroyOnError();
         Auth::attempt([ "username"=> $sessionData->username,"password"=> $sessionData["passwordTxt"]]);
@@ -43,7 +44,6 @@ class SessionController extends Controller
         Cache::forget('inRegistro');
         Cache::forget('controles');
         Cache::forget('name-asamblea');
-        session()->flush();
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         Session::truncate();
         Predio::truncate();
