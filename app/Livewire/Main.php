@@ -15,7 +15,11 @@ class Main extends Component
     public $personas;
     public $folders;
 
+
+    public $desc=true;
+
     public $panels=[
+
         [
             "directives"=> 'data-bs-toggle=modal data-bs-target=#modalCreateAsamblea @disabled($asambleaOn)',
             'icon'=> 'bi-sliders',
@@ -25,10 +29,10 @@ class Main extends Component
             'nonOperario'=>true,
             'onlyRegistro'=>0
         ],[
-            "directives"=> 'data-bs-toggle=modal data-bs-target=#modalDeleteSession @disabled(!$asambleaOn)',
-            'icon'=> 'bi-trash',
-            'title'=> 'Eliminar Sesión',
-            'body'=> 'Limpia todas las tablas de la base de datos.',
+            "directives"=> 'onclick=location.href="/gestion/informes";',
+            'icon'=> 'bi-file-earmark-richtext',
+            'title'=> 'Informes',
+            'body'=> 'Gestión y generación del informe',
             'onlyAdmin'=>true,
             'nonOperario'=>true,
             'onlyRegistro'=>0
@@ -128,4 +132,25 @@ class Main extends Component
     {
         return view('views.main');
     }
+
+    public function orderPersonasByCc(){
+
+        if ($this->desc) {
+            $this->personas=$this->personas->sortByDesc('id');
+        }else{
+            $this->personas=$this->personas->sortBy('id');
+        }
+        $this->desc = !$this->desc;
+        $this->dispatch('showModalFilePersonas');
+    }
+    public function orderPersonasByName(){
+        if ($this->desc) {
+            $this->personas=$this->personas->sortByDesc('name');
+        }else{
+            $this->personas=$this->personas->sortBy('name');
+        }
+        $this->desc = !$this->desc;
+        $this->dispatch('showModalFilePersonas');
+    }
+
 }

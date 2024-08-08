@@ -1,6 +1,6 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
 
 
 use App\Http\Middleware\ValidateLogin;
@@ -19,7 +19,7 @@ use App\Http\Controllers\QuestionsController;
 use App\Livewire\PresentQuestion;
 use App\Livewire\Votacion;
 use App\Livewire\LiderSetup;
-use App\Livewire\Home;
+use App\Livewire\Reports;
 use App\Livewire\Main;
 use App\Livewire\Consulta;
 use App\Livewire\Registrar;
@@ -33,7 +33,7 @@ use App\Livewire\Entregar;
 
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Admin')]], function () {
     Route::delete('/session/destroy', [SessionController::class, 'destroyAll'])->name('session.destroy');
-
+    Route::get('gestion/informes', Reports::class)->name('gestion.report');
     //Rutas de Usuarios
     Route::post('/predios/import', [PrediosController::class, 'import'])->name('predios.import');
 

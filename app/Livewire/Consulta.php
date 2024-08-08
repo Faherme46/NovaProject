@@ -91,7 +91,7 @@ class Consulta extends Component
     }
     public function mount()
     {
-        $this->Predio = Predio::find(3);
+        
         $this->tiposId=Persona::distinct()->pluck('tipo_id');
         $this->maxControls = Cache::get('controles');
     }

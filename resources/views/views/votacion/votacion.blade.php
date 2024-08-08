@@ -115,37 +115,56 @@
                 </div>
             </form>
         </div>
-        <div class="col-3 ms-2">
+        <div class="col-4 ms-2">
 
             <div class="card">
-                <div class="card-header py-1 ">
-                    <h4 class="card-title mb-0 text-center">Presentes </h4>
-                </div>
-                <div class="card-body py-1">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item d-flex align-items-center justify-content-between px-0">
-                            <h5 class="card-title mb-0">Quorum:&nbsp;&nbsp;&nbsp; </h5>
-                            <div class="d-flex w-75">
-                                <input type="text" class="form-control px-1 ms-2  " wire:model='quorumRegistered'>
-                                <input type="number " class="form-control px-1 ms-1 " wire:model='quorumVote'>
-                            </div>
 
-                        </li>
-                        <li class="list-group-item d-flex align-items-center justify-content-between px-0">
-                            <h5 class="card-title mb-0">Predios:&nbsp;&nbsp;&nbsp;&nbsp; </h5>
-                            <div class="d-flex w-75">
-                                <input  type="text"  class="form-control px-1 ms-2  " wire:model='prediosRegistered'>
-                                <input type="number " class="form-control px-1 ms-1 " wire:model='prediosVote'>
-                            </div>
-                        </li>
-                        <li class="list-group-item d-flex align-items-center justify-content-between px-0">
-                            <h5 class="card-title mb-0">Controles:&nbsp; </h5>
-                            <div class="d-flex w-75">
-                                <input  type="text"  class="form-control px-1 ms-2  " wire:model='controlsRegistered'>
-                                <input type="number " class="form-control px-1 ms-1 " wire:model='controlsVote'>
-                            </div>
-                        </li>
-                    </ul>
+                <div class="card-body py-0 px-0">
+                    <table class="table">
+                        <thead >
+                            <tr class="table-active">
+                                <th></th>
+                                <th class="text-center">Presentes</th>
+                                <th class="text-center">Habilitados</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-end">
+                                    <h5 class="card-title mb-0">Quorum:</h5>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control px-1 ms-2  " wire:model='quorumRegistered'>
+                                </td>
+                                <td>
+                                    <input type="number " class="form-control px-1 ms-1 " wire:model='quorumVote'>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-end">
+                                    <h5 class="card-title mb-0">Controles:</h5>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control px-1 ms-2" wire:model='controlsRegistered'>
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control px-1 ms-1 " wire:model='controlsVote'>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-end">
+                                    <h5 class="card-title mb-0">Predios:</h5>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control px-1 ms-2" wire:model='prediosRegistered'>
+                                </td>
+                                <td>
+                                    <input type="number " class="form-control px-1 ms-1 " wire:model='prediosVote'>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
                 </div>
             </div>
 

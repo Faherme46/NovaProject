@@ -9,8 +9,9 @@
             @if (
                 $panel['onlyAdmin']
                     ? $role == 'Admin'
-                    : (true && $panel['onlyRegistro'] == 0) ||
-                        (($registro && $panel['onlyRegistro'] == 1) || (!$registro && $panel['onlyRegistro'] == 2)))
+                    : true &&
+                        ($panel['onlyRegistro'] == 0 ||
+                            (($registro && $panel['onlyRegistro'] == 1) || (!$registro && $panel['onlyRegistro'] == 2))))
                 <button class="btn p-0 mx-1 my-1 " style="width: 300px;" {{ $panel['directives'] }}
                     @disabled(
                         ($panel['nonOperario'] && $role == 'Operario') ||
@@ -132,7 +133,7 @@
     @if ($asambleaOn)
 
         @if ($registro)
-            {{-- <div class="modal fade" id="modalFilePersonas" tabindex="-1" aria-labelledby="exampleModalLabel"
+            <div class="modal fade" id="modalFilePersonas" tabindex="-1" aria-labelledby="exampleModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
                     <div class="modal-content">
@@ -149,33 +150,36 @@
                             <table class="table table-bordered table-striped  mt-3 mb3">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
-
-                                        @if ($asambleaOn->registro)
-                                            <th>propietario</th>
-                                            <th>cedula</th>
-                                            <th>Apoderado</th>
-                                        @endif
-                                        <th>Descriptor </th>
-                                        <th>Coef...</th>
-                                        <th>Vota</th>
+                                        <th>Nombre</th>
+                                        <th>Cedula</th>
+                                        <th>Predios en propiedad</th>
+                                        <th>Predios en poder</th>
                                     </tr>
                                 </thead>
                                 <tbody>
 
-                                    @forelse ($predios as $p)
+                                    @forelse ($personas as $persona)
                                         <tr>
-                                            <td>{{ $p->id }}</td>
-
-                                                <td>{{ $p->persona->nombre }} {{ $p->persona->apellido }}</td>
-                                                <td>{{ $p->cc_propietario }}</td>
-                                                <td>{{ $p->cc_apoderado }}</td>
 
 
-                                            <td>{{ $p->descriptor1 }} {{ $p->numeral1 }} {{ $p->descriptor2 }}
-                                                {{ $p->numeral2 }}</td>
-                                            <td>{{ $p->coeficiente }}</td>
-                                            <td>{{ $p->vota ? 'Si' : 'No' }}</td>
+                                            <td>{{ $persona->nombre }} {{ $persona->apellido }}</td>
+                                            <td>{{ $persona->id }}</td>
+                                            <td>
+                                                @forelse ($persona->predios as $p)
+                                                    {{ $p->getFullName() }}
+                                                    <br>
+                                                @empty
+                                                    No hay Predios en propiedad
+                                                @endforelse
+                                            </td>
+                                            <td>
+                                                @forelse ($persona->prediosEnPoder as $p)
+                                                    {{ $p->getFullName() }}
+                                                    <br>
+                                                @empty
+                                                    No hay Predios en poder
+                                                @endforelse
+                                            </td>
                                         </tr>
                                     @empty
                                         <tr>
@@ -191,7 +195,7 @@
 
                 </div>
 
-            </div> --}}
+            </div>
         @endif
 
 
@@ -216,14 +220,15 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
+                                    <th>Descriptor </th>
+                                    <th>Coef...</th>
+                                    <th>Vota</th>
                                     @if ($asambleaOn->registro)
                                         <th>Propietarios</th>
                                         <th>Cedula</th>
                                         <th>Apoderado</th>
                                     @endif
-                                    <th>Descriptor </th>
-                                    <th>Coef...</th>
-                                    <th>Vota</th>
+
                                 </tr>
                             </thead>
                             <tbody>
@@ -231,25 +236,27 @@
                                 @forelse ($predios as $p)
                                     <tr>
                                         <td>{{ $p->id }}</td>
+                                        <td>{{ $p->getFullName() }}</td>
+                                        <td>{{ $p->coeficiente }}</td>
+                                        <td>{{ $p->vota ? 'Si' : 'No' }}</td>
                                         @if ($asambleaOn->registro)
                                             <td>
                                                 @foreach ($p->personas as $persona)
                                                     {{ $persona->nombre }} {{ $persona->apellido }}
+                                                    <br>
                                                 @endforeach
                                             </td>
                                             <td>
                                                 @foreach ($p->personas as $persona)
                                                     {{ $persona->id }}
+                                                    <br>
                                                 @endforeach
                                             </td>
                                             <td>
                                                 {{ $p->cc_apoderado }}
                                             </td>
                                         @endif
-                                        <td>{{ $p->descriptor1 }} {{ $p->numeral1 }} {{ $p->descriptor2 }}
-                                            {{ $p->numeral2 }}</td>
-                                        <td>{{ $p->coeficiente }}</td>
-                                        <td>{{ $p->vota ? 'Si' : 'No' }}</td>
+
                                     </tr>
                                 @empty
                                     <tr>
@@ -266,30 +273,27 @@
             </div>
 
         </div>
-
-
-
-        <div class="modal fade" tabindex="-1" id="modalDeleteSession" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">¿Desea eliminar la sesión?</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
-                    </div>
-
-                    <div class="modal-footer justify-content-between align-items-center">
-                        <span class="badge m-0 text-bg-warning fs-6 ">Esta accion no se puede deshacer</span>
-                        <form action="{{ route('session.destroy') }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger ">
-                                Eliminar sesion
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
     @endif
 </div>
+<script>
+    document.addEventListener('livewire:init', () => {
+        Livewire.on('showModalFilePersona', (event) => {
+            $('#modalFilePredios').modal('hide');
+            $('#modalFilePersonas').modal('hide');
+            $('#modalFilePersonas').modal('show');
+        });
+
+        Livewire.on('showModalFilePredio', (event) => {
+            $('#modalFilePredios').modal('hide');
+            $('#modalFilePersonas').modal('hide');
+            $('#modalFilePredios').modal('show');
+        });
+
+        Livewire.on('showModalControl', (event) => {
+            $('#modalFilePredios').modal('hide');
+            $('#modalFilePersonas').modal('hide');
+            $('#modalFilePersonas').modal('show');
+        });
+
+    });
+</script>

@@ -15,29 +15,25 @@
                         <div class="btn-group " role="group" aria-label="Basic radio toggle button group">
                             <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off"
                                 wire:model.live='tab' value='1'>
-                            <label class="btn btn-outline-primary" for="btnradio1">Cambiar</label>
+                            <label class="btn btn-outline-primary d-flex" for="btnradio1">Cambiar Control</label>
 
                             <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off"
                                 wire:model.live='tab' value='2'>
-                            <label class="btn btn-outline-primary" for="btnradio2">Retirar</label>
+                            <label class="btn btn-outline-primary" for="btnradio2">Retirar Predios</label>
 
                             <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off"
                                 wire:model.live='tab' value='3'>
-                            <label class="btn btn-outline-primary" for="btnradio3">Predio</label>
+                            <label class="btn btn-outline-primary" for="btnradio3">Consultar Predios</label>
                             @if ($asambleaOn->registro)
                                 <input type="radio" class="btn-check" name="btnradio" id="btnradio4"
                                     autocomplete="off" wire:model.live='tab' value='4'>
-                                <label class="btn btn-outline-primary" for="btnradio4">Personas</label>
+                                <label class="btn btn-outline-primary" for="btnradio4">Consultar Personas</label>
                             @endif
                         </div>
                     </div>
 
 
-                    <div class="col-1 text-end">
-                        <button class="btn btn-danger d-inline-block" wire:click='proof' wire:keypress='$refresh'>
-                            <i class='bi bi-info-circle-fill '></i>
-                        </button>
-                    </div>
+
                 </div>
             </div>
             @if ($tab == 4)
@@ -127,17 +123,14 @@
                                                 class="form-control bg-success-subtle  @error('controlIdL') is-invalid @enderror  @error('controlId') is-invalid @enderror"
                                                 wire:model.live='controlIdL' value="controlIdL" placeholder="Control"
                                                 onkeypress="return onlyNumbers(event)" maxlength="3">
+
                                         @endif
 
                                     </div>
                                 </div>
                                 <div class="card-body table-responsive table-fixed-header px-0">
                                     <table class="w-100 table mb-0 ">
-                                        <thead class="text-end p">
-                                            <th scope="col"></th>
-                                            <th scope="col" colspan=1>Vota</th>
-                                            <th></th>
-                                        </thead>
+
                                         <tbody>
                                             @forelse ($prediosL as $predio)
                                                 <tr scope="row">
@@ -146,9 +139,7 @@
                                                         {{ $predio->numeral1 }}
                                                         {{ $predio->descriptor2 }} {{ $predio->numeral2 }}
                                                     </td>
-                                                    <td>
-                                                        {{ $predio->vota ? 'Si' : 'No' }}
-                                                    </td>
+
                                                     <td>
                                                         @if ($tab < 3)
                                                             <button class="btn p-0"
@@ -232,11 +223,7 @@
 
 
                                     <table class="w-100 table mb-0 ">
-                                        <thead class="text-end">
-                                            <th scope="col"></th>
-                                            <th scope="col" colspan=1>Vota</th>
-                                            <th></th>
-                                        </thead>
+
                                         <tbody>
                                             @forelse ($prediosR as $predio)
                                                 <tr scope="row">
@@ -244,9 +231,6 @@
                                                         {{ $predio->descriptor2 }} {{ $predio->numeral2 }}
                                                     </td>
 
-                                                    <td>
-                                                        {{ $predio->vota ? 'Si' : 'No' }}
-                                                    </td>
                                                     <td>
                                                         @if ($tab == 2)
                                                             <button class="btn p-0"
@@ -368,11 +352,11 @@
                                                     @foreach ($Predio->personas as $persona)
                                                         <li class="list-group-item d-flex justify-content-between">
 
-                                                            <p class="mb-0 w-75">
-                                                                {{ $persona->nombre }}
-                                                                    {{ $persona->apellido }}
+                                                            <button class="mb-0 w-75 btn p-0"
+                                                            wire:click='searchPersona({{$persona->id}})'>
+                                                                {{ $persona->nombre }}{{ $persona->apellido }}
 
-                                                            </p>
+                                                            </button>
                                                             <p class="mb-0">{{ $persona->id }}</p>
 
 
@@ -387,9 +371,7 @@
                                 </form>
                             </div>
                         @else
-                            <h3>
-                                Debe elejir un predio
-                            </h3>
+                            Debe elegir un predio
                         @endif
 
                     @endif
@@ -416,12 +398,10 @@
 </div>
 <script type="text/javascript">
     function submitformPersona() {
-        console.log('buba')
         document.formPersona.submit();
     }
 
     function submitformPredio() {
-        console.log('buba')
         document.formPredio.submit();
     }
 </script>

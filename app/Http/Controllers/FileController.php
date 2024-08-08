@@ -9,6 +9,7 @@ use Exception;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Cache;
 use Maatwebsite\Excel\Facades\Excel;
+use Ramsey\Uuid\Type\Integer;
 
 class FileController extends Controller
 {
@@ -72,7 +73,7 @@ class FileController extends Controller
         $questionName = ($questionId - 12) . '_' . $title;
         $parentFolderName = Cache::get('name_asamblea');
         $newFolderPath = $parentFolderName . '/Preguntas/' . $questionName;
-        
+
         return $newFolderPath;
     }
 
@@ -146,5 +147,10 @@ class FileController extends Controller
         return Excel::store($export, $path.'/resultados.xlsx','externalAsambleas');
     }
 
+
+    public function importConf():int{
+        $path='';
+        return 0;
+    }
 
 }

@@ -27,6 +27,12 @@ class LoginController extends Controller
             'password' => ['required'],
         ], $messages);
 
+        $fileController=new FileController;
+        $response=$fileController->importConf();
+        if ($response!=200) {
+            $message='No se ha encontrado el archivo de configuracion';
+            return redirect()->back()->withErrors($message)->withInput();
+        }
 
 
         if (Auth::attempt($credentials)) {
@@ -37,6 +43,8 @@ class LoginController extends Controller
             return back()->withErrors('El usuario o contraseña no son validos');
         }
     }
+
+    
 
     public function logout(Request $request){
         Auth::logout();
