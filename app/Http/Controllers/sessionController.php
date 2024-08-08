@@ -7,7 +7,7 @@ use App\Models\Session;
 use App\Models\Predio;
 use App\Models\Persona;
 use App\Models\Control;
-use App\Models\ControlPredio;
+use App\Models\PrediosPersona;
 use App\Models\Question;
 use App\Models\Result;
 
@@ -50,6 +50,7 @@ class SessionController extends Controller
         Control::truncate();
         Persona::truncate();
         Result::truncate();
+        PrediosPersona::truncate();
         Question::truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 

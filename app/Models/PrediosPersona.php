@@ -4,8 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use PhpOffice\PhpSpreadsheet\Worksheet\ProtectedRange;
 
-class Predios_Persona extends Model
+class PrediosPersona extends Model
 {
     use HasFactory;
+
+    protected $guarded=[];
 }

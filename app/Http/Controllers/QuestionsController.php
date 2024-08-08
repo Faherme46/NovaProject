@@ -40,6 +40,10 @@ class QuestionsController extends Controller
             ]);
         }
 
+        if ( $request->controls<=0 ) {
+            return redirect()->back()->withErrors(['No se han registrado controles']);
+        }
+
         $seconds=$request->mins*60+$request->secs;
 
         try {

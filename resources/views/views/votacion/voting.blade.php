@@ -33,13 +33,16 @@
             </div>
         </div>
         <div class="card-body ">
-            @foreach ($controls as $control)
+            <div class="container p-0">
+                @foreach ($controls as $control)
                 <span class="btn  ms-0 mb-1 me-0 fs-2
                     @if (array_key_exists($control, $votes)) btn-primary
                     @elseif( array_key_exists($control, $controlsAssigned)) btn-secondary @else btn-black @endif ">
                     {{ $control < 10 ? '0' : '' }}{{ $control}}
                 </span>
             @endforeach
+            </div>
+
         </div>
     </div>
     <div class="modal fade" id="modalConfirm"  data-bs-keyboard="false" tabindex="-1">

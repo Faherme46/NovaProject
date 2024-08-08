@@ -6,6 +6,7 @@
 
                 <input type="number" name="mins" id="" wire:model='mins' hidden>
                 <input type="number" name="secs" id="" wire:model='secs' hidden>
+                <input type="number" name="controls" wire:model='controlsRegistered' hidden>
                 <div class="card ">
                     <div class="card-header d-flex align-items-center py-3 ">
 
