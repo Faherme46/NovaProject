@@ -10,7 +10,7 @@
         @endif
 
         <div class="col-2">
-            <select wire:model.live='decriptor1' class="form-control" name="descriptor1" id="">
+            <select wire:model.live='descriptor1' class="form-control" name="descriptor1" id="">
                 @foreach ($distincts['descriptor1'] as $item)
                     <option value="{{ $item }}">{{ $item }}</option>
                 @endforeach
@@ -65,7 +65,6 @@
                                     wire:dblclick='showControl({{ $predio->control->id }})'
                                     wire:click="dispatchControl({{ $predio->control->id }})">
                                     {{ $predio->control->id }}
-
                                 </button>
                             </td>
                         @else
@@ -79,8 +78,7 @@
                     <td>
                         <span class="btn py-0 " wire:dblclick='showPredio({{ $predio->id }})'
                             wire:click='dispatchPredio({{ $predio->id }})'>
-                            {{ $predio->descriptor1 }} {{ $predio->numeral1 }}
-                            {{ $predio->descriptor2 }} {{ $predio->numeral2 }}
+                            {{ $predio->getFullName()}}
                         </span>
                     </td>
 
@@ -98,6 +96,7 @@
                                     wire:click='dispatchPoderdante({{ $persona->id }})'>
                                     {{ $persona->id }}
                                 </button>
+                                <br>
                             @endforeach
                         </td>
                     @else

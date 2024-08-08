@@ -24,7 +24,8 @@ class QuestionsController extends Controller
             'radioType'=>'required',
             'title'=>'required'
         ],[
-            'title.required'=>'Se requiere un titulo a la pregunta'
+            'title.required'=>'Se requiere un titulo a la pregunta',
+            'radioType.required'=>'Se requiere un un tipo de la pregunta'
         ]);
         if ( $request->radioType != 1 &&
             !$request->filled('optionA') &&
@@ -58,7 +59,7 @@ class QuestionsController extends Controller
             ]);
 
             $this->fileController->getQuestionFolderPath($question->id,$question->title);
-            
+
             //todo log create question
             session(['question_id'=>$question->id]);
             return redirect()->route('questions.show');

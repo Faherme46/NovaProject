@@ -149,8 +149,14 @@ class FileController extends Controller
 
 
     public function importConf():int{
-        $path='';
-        return 0;
+        $path=storage_path('conf.json');
+        if (file_exists($path)) {
+            $config = json_decode(file_get_contents($path), true);
+            return 200;
+        } else {
+            return 0;
+        }
+
     }
 
 }

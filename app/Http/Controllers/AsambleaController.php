@@ -84,6 +84,7 @@ class AsambleaController extends Controller
                 $this->fileController->getAsambleaFolderPath();
             }
         } catch (QueryException $qe) {
+            $this->sessionController->destroyOnError();
             if ($qe->errorInfo[1] == 1062) { // 1062 es el código de error para duplicados
                 return redirect()->route('home')->withErrors('Ya existe una asamblea en la misma fecha.');
             } else {

@@ -1,4 +1,3 @@
-
 @extends('layout.app')
 
 
@@ -9,7 +8,7 @@
             <div class="col-10">
                 <div class="card rounded-3 text-black">
                     <div class="row g-0">
-                        <div class="col-lg-6">
+                        <div class="col-6">
                             <div class="card-body  mx-5 px-5">
                                 <style>
                                     /* Ejemplo de estilo personalizado */
@@ -17,34 +16,34 @@
                                         color: red;
                                         /* Cambia el color para ver si se aplica correctamente */
                                     }
+
                                     .gradient-custom-2 {
-    /* fallback for old browsers */
-    background: #fccb90;
+                                        /* fallback for old browsers */
+                                        background: #fccb90;
 
-    /* Chrome 10-25, Safari 5.1-6 */
-    background: -webkit-linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
+                                        /* Chrome 10-25, Safari 5.1-6 */
+                                        background: -webkit-linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
 
-    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    background: linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
-}
+                                        /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+                                        background: linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
+                                    }
 
-@media (min-width: 768px) {
-    .gradient-form {
-        height: 90vh !important;
-    }
-}
+                                    @media (min-width: 768px) {
+                                        .gradient-form {
+                                            height: 90vh !important;
+                                        }
+                                    }
 
-@media (min-width: 769px) {
-    .gradient-custom-2 {
-        border-top-right-radius: .3rem;
-        border-bottom-right-radius: .3rem;
-    }
-}
+                                    @media (min-width: 769px) {
+                                        .gradient-custom-2 {
+                                            border-top-right-radius: .3rem;
+                                            border-bottom-right-radius: .3rem;
+                                        }
+                                    }
                                 </style>
-                                <div class="text-center">
-                                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/lotus.webp"
+                                <div class="text-center mb-4">
+                                    <img src="/storage/images/logo.png"
                                         style="width: 185px;" alt="logo">
-                                    <h4 class="mt-1 mb-5 pb-1 card-title">Bienvenido al equipo Tecnovis</h4>
                                 </div>
 
                                 <form action="{{ route('users.authenticate') }}" method="POST">
@@ -52,14 +51,14 @@
 
                                     <div class="form-outline mb-4">
                                         <input type="text" id="form2Example11" class="form-control"
-                                            placeholder="Username" name="username" />
-                                        <small class="form-label text-muted" for="form2Example11">Username</small>
+                                             name="username" />
+                                        <small class="form-label text-muted" for="form2Example11">Usuario</small>
 
                                     </div>
 
                                     <div data-mdb-input-init class="form-outline mb-4">
                                         <input type="password" id="form2Example22" class="form-control" name="password" />
-                                        <small class="form-label text-muted" for="form2Example22">Password</small>
+                                        <small class="form-label text-muted" for="form2Example22">Contraseña</small>
                                     </div>
 
                                     <div class="text-center pt-1 mb-5 pb-1">
@@ -72,8 +71,8 @@
 
                             </div>
                         </div>
-                        <div class="col-lg-6 d-flex align-items-center gradient-custom-2">
-                            <div class="text-white px-3 py-4 p-md-5 mx-md-4">
+                        <div class="col-6 d-flex align-items-center gradient-custom-2">
+                            <div class="text-white px-3  mx-4">
                                 <h3 class="mb-4">Somos mas que una compañia</h3>
                                 <p class=" mb-0 ">En Tecnovis, no solo gestionamos logística;creamos experiencias que unen
                                     comunidades.

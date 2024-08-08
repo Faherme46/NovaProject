@@ -27,6 +27,13 @@ class Question extends Model
         'type'
     ];
 
+    public function resultCoef(){
+        return $this->hasOne(Result::class)->where('isCoef',1);
+    }
+    public function resultNom(){
+        return $this->hasOne(Result::class)->where('isCoef',0);
+    }
+
     public function results(){
         return $this->hasMany(Result::class);
     }

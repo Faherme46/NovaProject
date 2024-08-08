@@ -34,6 +34,7 @@ use App\Livewire\Entregar;
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Admin')]], function () {
     Route::delete('/session/destroy', [SessionController::class, 'destroyAll'])->name('session.destroy');
     Route::get('gestion/informes', Reports::class)->name('gestion.report');
+    Route::post('gestion/informes/crear', Reports::class)->name('gestion.report.create');
     //Rutas de Usuarios
     Route::post('/predios/import', [PrediosController::class, 'import'])->name('predios.import');
 

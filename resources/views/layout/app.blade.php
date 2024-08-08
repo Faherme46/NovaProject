@@ -66,9 +66,7 @@
                                     <i class='bi bi-building-check nav_icon'></i> <span class="nav_name">Asignar</span>
                                 </a>
                             @endif
-                            <a href="{{ route('gestion.asamblea') }}" class="nav_link">
-                                <i class='bi bi-ui-checks-grid nav_icon'></i> <span class="nav_name">Asignaciones</span>
-                            </a>
+
                             <a href="{{ route('consulta') }}" class="nav_link">
                                 <i class='bi bi-info-circle-fill nav_icon'></i> <span class="nav_name">Consulta</span>
                             </a>
@@ -78,6 +76,9 @@
                             @hasanyrole('Admin|Lider')
                                 <a href="{{ route('votacion') }}" class="nav_link">
                                     <i class='bi bi-question-circle-fill nav_icon'></i> <span class="nav_name">Votacion</span>
+                                </a>
+                                <a href="{{ route('gestion.asamblea') }}" class="nav_link">
+                                    <i class='bi bi-ui-checks-grid nav_icon'></i> <span class="nav_name">Asignaciones</span>
                                 </a>
                             @endhasanyrole
                         @endif

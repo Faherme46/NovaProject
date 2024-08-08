@@ -52,6 +52,8 @@
                                 wire:model.number.live='questionType' value="4" @disabled($questionId != 12 && $questionType != 4)>
                             <label class="btn btn-outline-primary fw-bolder fs-5 py-1 px-2"
                                 for="radioType3">Si/No</label>
+                                <input type="radio" class="btn-check" name="radioType" id="radioType5" autocomplete="off"
+                                wire:model.number.live='questionType' value="5" hidden>
 
                         </div>
                         <div class="form-check form-switch mb-0 align-items-center ">
@@ -121,7 +123,7 @@
 
                 <div class="card-body py-0 px-0">
                     <table class="table">
-                        <thead >
+                        <thead>
                             <tr class="table-active">
                                 <th></th>
                                 <th class="text-center">Presentes</th>
@@ -134,7 +136,8 @@
                                     <h5 class="card-title mb-0">Quorum:</h5>
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control px-1 ms-2  " wire:model='quorumRegistered'>
+                                    <input type="text" class="form-control px-1 ms-2  "
+                                        wire:model='quorumRegistered'>
                                 </td>
                                 <td>
                                     <input type="number " class="form-control px-1 ms-1 " wire:model='quorumVote'>
@@ -145,7 +148,8 @@
                                     <h5 class="card-title mb-0">Controles:</h5>
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control px-1 ms-2" wire:model='controlsRegistered'>
+                                    <input type="text" class="form-control px-1 ms-2"
+                                        wire:model='controlsRegistered'>
                                 </td>
                                 <td>
                                     <input type="number" class="form-control px-1 ms-1 " wire:model='controlsVote'>
@@ -156,7 +160,8 @@
                                     <h5 class="card-title mb-0">Predios:</h5>
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control px-1 ms-2" wire:model='prediosRegistered'>
+                                    <input type="text" class="form-control px-1 ms-2"
+                                        wire:model='prediosRegistered'>
                                 </td>
                                 <td>
                                     <input type="number " class="form-control px-1 ms-1 " wire:model='prediosVote'>

@@ -58,7 +58,7 @@ class Main extends Component
             'icon'=> 'bi-file-arrow-up',
             'title'=> 'Archivos',
             'body'=> 'Archivos cargados de predios y personas',
-            'onlyAdmin'=>false,
+            'onlyAdmin'=>true,
             'nonOperario'=>true,
             'onlyRegistro'=>0
         ],
@@ -76,7 +76,7 @@ class Main extends Component
             'title'=> 'Votacion',
             'body'=> 'Crear y Presentar Votaciones',
             'onlyAdmin'=>false,
-            'nonOperario'=>false,
+            'nonOperario'=>true,
             'onlyRegistro'=>0
         ],
         [
@@ -89,12 +89,12 @@ class Main extends Component
             'onlyRegistro'=>1
         ],
         [
-            "directives"=> 'onclick=location.href="/asistencia/asignar";',
+            "directives"=> 'onclick=location.href="/asistencia/asignacion";',
             'icon'=> 'bi-building-check',
             'title'=> 'Asignar',
             'body'=> 'Asignar controles a predios',
             'onlyAdmin'=>false,
-            'nonOperario'=>true,
+            'nonOperario'=>false,
             'onlyRegistro'=>2
         ],
         [
@@ -113,7 +113,7 @@ class Main extends Component
             'body'=> 'Recibir Controles',
             'onlyAdmin'=>false,
             'nonOperario'=>false,
-            'onlyRegistro'=>1
+            'onlyRegistro'=>0
         ],
     ];
 
