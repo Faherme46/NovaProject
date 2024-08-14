@@ -35,8 +35,20 @@ class Predio extends Model
         if ($this->cc_apoderado==$id) {
             return 'Ap. Registrado';
         }
-
         return 'Apoderado';
+    }
+    public function getRelationPersonaInt($id){
+        if ($this->personas->contains($id)) {
+            return 1; //propietario
+        }
+        if ($this->cc_apoderado==$id) {
+            return 2;//apoderado registrado
+        }
+        return 3;//apoderado
+    }
+
+    public function asistente(){
+        return $this->control->persona();
     }
 
     public function getFullName(){

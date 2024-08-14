@@ -1,7 +1,7 @@
 <div>
     <div class="row mt-3 g-3 justify-content-center">
         <div class="col-auto w-50 align-items-center ">
-            <form action="{{ route('questions.create') }}" method="post" id="form">
+            <form action="{{ route('questions.create') }}" method="POST" id="form">
                 @csrf
 
                 <input type="number" name="mins" id="" wire:model='mins' hidden>
@@ -27,7 +27,8 @@
                             </ul>
                         </div>
 
-                        <input type="text" wire:model='questionTag' class="form-control me-2" name="title">
+                        <input type="text" wire:model='questionTag' class="form-control me-2" name="title"
+                            @readonly($questionId < 12)>
 
 
                         <button type="submit" class="btn btn-primary" @disabled(!$questionId)>Presentar</button>
@@ -53,7 +54,7 @@
                                 wire:model.number.live='questionType' value="4" @disabled($questionId != 12 && $questionType != 4)>
                             <label class="btn btn-outline-primary fw-bolder fs-5 py-1 px-2"
                                 for="radioType3">Si/No</label>
-                                <input type="radio" class="btn-check" name="radioType" id="radioType5" autocomplete="off"
+                            <input type="radio" class="btn-check" name="radioType" id="radioType5" autocomplete="off"
                                 wire:model.number.live='questionType' value="5" hidden>
 
                         </div>
@@ -88,29 +89,31 @@
 
                         </ul>
                         <ul class="list-group w-100 ">
+
                             <li class="list-group-item ">
-                                <input type="text" class="custom-input resettable" name="optionA"
+                                <input type="text" class="custom-input resettable" name="optionA" id="optionA"
                                     value="{{ $questionOptions['A'] }}" @readonly($questionType != 2)>
                             </li>
                             <li class="list-group-item">
-                                <input type="text" class="custom-input resettable" name="optionB"
+                                <input type="text" class="custom-input resettable" name="optionB" id="optionB"
                                     value="{{ $questionOptions['B'] }}" @readonly($questionType != 2)>
                             </li>
                             <li class="list-group-item">
-                                <input type="text" class="custom-input resettable" name="optionC"
+                                <input type="text" class="custom-input resettable" name="optionC" id="optionC"
                                     value="{{ $questionOptions['C'] }}" @readonly($questionType != 2)>
                             </li>
                             <li class="list-group-item">
-                                <input type="text" class="custom-input resettable" name="optionD"
+                                <input type="text" class="custom-input resettable" name="optionD" id="optionD"
                                     value="{{ $questionOptions['D'] }}" @readonly($questionType != 2)>
                             </li>
                             <li class="list-group-item">
-                                <input type="text" class="custom-input resettable" name="optionE"
+                                <input type="text" class="custom-input resettable" name="optionE" id="optionE"
                                     value="{{ $questionOptions['E'] }}" @readonly($questionType != 2)>
                             </li>
                             <li class="list-group-item">
-                                <input type="text" class="custom-input resettable" name="optionF"
-                                    value="{{ $questionOptions['F'] }}" @readonly($questionType != 2)>
+                                <input type="text" class="custom-input resettable" name="optionF" id="optionF"
+                                    value="{{ $questionOptions['F'] }}" @readonly($questionType != 2)
+                                    wire:keydown='disableWhite'>
                             </li>
                         </ul>
                     </div>
@@ -123,7 +126,7 @@
             <div class="card">
 
                 <div class="card-body py-0 px-0">
-                    <table class="table">
+                    <table class="table mb-0">
                         <thead>
                             <tr class="table-active">
                                 <th></th>
@@ -197,13 +200,48 @@
         </div>
     </div>
 </div>
+
 <script>
     document.addEventListener('livewire:init', function() {
-        Livewire.on('resetInputs', function() {
+        Livewire.on('resetInputs', function(questionOptions) {
             let inputs = document.querySelectorAll('.resettable');
+
             inputs.forEach(function(input) {
                 input.value = '';
             });
         });
+
     });
 </script>
+
+@script
+    <script>
+        $wire.on('setInputs', () => {
+
+            questionA = document.getElementById('optionA')
+            questionB = document.getElementById('optionB')
+            questionC = document.getElementById('optionC')
+            questionD = document.getElementById('optionD')
+            questionE = document.getElementById('optionE')
+            questionF = document.getElementById('optionF')
+
+            questionA.value = $wire.questionOptions.A
+            questionB.value = $wire.questionOptions.B
+            questionC.value = $wire.questionOptions.C
+            questionD.value = $wire.questionOptions.D
+            questionE.value = $wire.questionOptions.E
+            questionF.value = $wire.questionOptions.F
+        });
+
+        $wire.on('setWhite', (event) => {
+            let id = event.myId
+            input=document.getElementById(id);
+            input.value='En Blanco'
+        });
+        $wire.on('setNone', (event) => {
+            let id = event.myId
+            input=document.getElementById(id);
+            input.value=''
+        });
+    </script>
+@endscript

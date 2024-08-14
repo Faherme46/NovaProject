@@ -35,6 +35,7 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::delete('/session/destroy', [SessionController::class, 'destroyAll'])->name('session.destroy');
     Route::get('gestion/informes', Reports::class)->name('gestion.report');
     Route::post('gestion/informes/crear', Reports::class)->name('gestion.report.create');
+    Route::post('gestion/informes/document', [FileController::class,'createReport'])->name('gestion.report.docs');
     //Rutas de Usuarios
     Route::post('/predios/import', [PrediosController::class, 'import'])->name('predios.import');
 

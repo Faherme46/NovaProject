@@ -5,11 +5,16 @@ namespace App\Http\Controllers;
 use App\Exports\ResultExport;
 use App\Exports\VotesExport;
 use App\Http\Controllers\Controller;
+use App\Models\Predio;
 use Exception;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Cache;
 use Maatwebsite\Excel\Facades\Excel;
-use Ramsey\Uuid\Type\Integer;
+use Illuminate\Http\Request;
+use Carbon\Carbon;
+
+
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class FileController extends Controller
 {
@@ -105,8 +110,8 @@ class FileController extends Controller
         // $json_data =  escapeshellarg($datos);
         // Ejecutar el script de Python
         $py_path = env('PYTHON_PATH');
-        $scriptPath=config('filesystems.disks.scripts.root').'/create_plot.py';
-        $scriptPath=str_replace('\\', '/', $scriptPath);
+        $scriptPath = config('filesystems.disks.scripts.root') . '/create_plot.py';
+        $scriptPath = str_replace('\\', '/', $scriptPath);
         $command = escapeshellcmd("$py_path $scriptPath $args " . escapeshellarg($asambleaName));
         // Ejecutar el comando y capturar la salida y errores
 
@@ -132,31 +137,146 @@ class FileController extends Controller
         }
     }
 
-    public function exportVotes($votos,$questionId,$title){
-        $path=$this->getOnlyQuestionPath($questionId,$title);
+    public function exportVotes($votos, $questionId, $title)
+    {
+        $path = $this->getOnlyQuestionPath($questionId, $title);
         // Sort the data by key (Control) alphabetically
         ksort($votos);
         $export = new VotesExport($votos);
-        return Excel::store($export, $path.'/votos.xlsx','externalAsambleas');
+        return Excel::store($export, $path . '/votos.xlsx', 'externalAsambleas');
     }
 
-    public function exportResult($question){
-        $path=$this->getOnlyQuestionPath($question->id,$question->title);
+    public function exportResult($question)
+    {
+        $path = $this->getOnlyQuestionPath($question->id, $question->title);
 
         $export = new ResultExport($question);
-        return Excel::store($export, $path.'/resultados.xlsx','externalAsambleas');
+        return Excel::store($export, $path . '/resultados.xlsx', 'externalAsambleas');
     }
 
 
-    public function importConf():int{
-        $path=storage_path('conf.json');
+    public function importConf(): int
+    {
+        $path = storage_path('conf.json');
         if (file_exists($path)) {
             $config = json_decode(file_get_contents($path), true);
             return 200;
         } else {
             return 0;
         }
-
     }
 
+    public function createDocs($request)
+    {
+        $variables = $this->getVariables($request);
+        // $views = ['front-page',
+        //           'index-registro',
+        //         'personas-citadas',
+        // 'asistencia-quorum'];
+        $views=['personas-citadas'];
+        foreach ($views as $key=> $view) {
+            $pdf = Pdf::loadView('docs/'.$view, $variables);
+            // Aplicar el CSS personalizado
+            $pdf->setOptions([
+                'isHtml5ParserEnabled' => true,
+                'isRemoteEnabled' => true,
+                'defaultFont' => 'Helvetica',
+                'isPhpEnabled' => true,
+            ]);
+
+            $pdf->setPaper('A4', 'portrait');
+            $pdf->save(cache('name_asamblea') . '/Informe/Informe'.$key.'.pdf','externalAsambleas');
+            $canvas=$pdf->getCanvas();
+            $canvas->page_text(280,810," {PAGE_NUM} de {PAGE_COUNT}",'Helvetica', 7, array(0, 0, 0));
+            $docs[]= $pdf->output();
+        }
+
+        return $docs;
+    }
+
+    public function getVariables($request)
+    {
+        $predios=Predio::where('id','<','10')->get();
+        if (cache('inRegistro')) {
+            $variables = [
+                'title' => 'Informe de Asamblea Ordinaria',
+                'subtitle' => '',
+                'h_start' => $request->h_start,
+                'h_end' => $request->h_end,
+                'date' => Carbon::now()->locale('es')->isoFormat('MMMM YYYY'),
+                'anexos' => $request->anexos,
+                'firstFooter'=>'Los datos utilizados por TECNOVIS para la elaboración de los
+                                Anexos relacionados en este informe
+                                (incluye los cálculos para las votaciones),
+                                y que comprende la lista de delegados,
+                                tiene como base la información suministrada
+                                por la Administración de Bosque del Hato a TECNOVIS,
+                                para el desarrollo de esta Asamblea.'
+            ];
+        } else {
+            $variables = [
+                'title' => 'Asamblea de copropietarios',
+                'subtitle' => 'Informe de Votación',
+
+                'date' => Carbon::now()->locale('es')->isoFormat('MMMM YYYY'),
+            ];
+        }
+
+        $variables += [
+            'registro' => cache('inRegistro'),
+            'client_name' => $request->client_name,
+            'dateAsamblea' => $request->date,
+            'type' => $request->type,
+            'reference' => $request->reference,
+            'predios' => $predios
+        ];
+        return $variables;
+    }
+    public function createReport(Request $request)
+    {
+        $messages = [
+            'anexos.required' => 'Se requieren anexos',
+            'date.required' => 'Se requiere la fecha',
+            'type' => 'Se requiere el tipo de asamblea',
+            'client_name' => 'Se requiere el nombre del cliente',
+            'reference' => 'Se requiere la referencia',
+        ];
+
+        $request->validate([
+            'anexos' => ['required'],
+            'date' => ['required'],
+            'type' => ['required'],
+            'client_name' => ['required'],
+            'reference' => ['required'],
+        ], $messages);
+
+
+        // Guardar el PDF en la ruta especificada
+
+        $filePath = $this->getAsambleaFolderPath(); // Por ejemplo, en la carpeta 'storage/app/public/'
+        $filePath = $filePath . '/Informe';
+
+        if (!file_exists($filePath)) {
+            mkdir($filePath, 0755, true);
+        }
+
+        $docs=$this->createDocs($request);
+        // foreach ($docs as $pdf) {
+        //     // $pdf->save();
+        // }
+
+        $pdfContent=end($docs);
+        // $variables=$this->getVariables($request);
+        // return view('docs.asistencia-quorum', $variables);
+         return response()->stream(
+             function () use ($pdfContent) {
+                 echo $pdfContent;
+             },
+             200,
+             [
+                 'Content-Type' => 'application/pdf',
+                 'Content-Disposition' => 'inline; filename="Informe.pdf"',
+             ]
+         );
+    }
 }

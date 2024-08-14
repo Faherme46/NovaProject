@@ -79,13 +79,16 @@
                 <h2 class="card-title mb-0">Asignaciones</h2>
             </div>
             <div class="card-body table-responsive table-fixed-header table-h100 px-0">
-                <table class="table table-striped mb-0 ">
+                <table class="table mb-0 ">
                     <thead>
-                        <tr class="table-primary">
+                        <tr class="table-active">
                             <th class="text-center"><i class="bi bi-building bx"></i></th>
-                            {{-- <th>Nombre</th> --}}
+                            @if ($asambleaOn->registro)
+                                <th>Asistente</th>
+                            @endif
                             <th class="align-middle bx">Predios</th>
-                            <th class="align-middle bx">Coeficiente</th>
+                            <th class="align-middle bx">Coef. Neto</th>
+                            <th class="align-middle bx">Coef. Vota</th>
                             <th class="align-middle bx">Estado</th>
                         </tr>
                     </thead>
@@ -95,7 +98,10 @@
 
                             <tr>
                                 <td class="text-center">{{ $control->id }}</td>
-                                {{-- <td>{{ $control->persona->nombre }} {{ $control->persona->apellido }}</td> --}}
+                                @if ($asambleaOn->registro)
+                                    <td>{{ $control->persona->nombre }} {{ $control->persona->apellido }}</td>
+                                @endif
+                                {{--  --}}
                                 </td>
                                 <td>
                                     @foreach ($control->predios as $predio)
@@ -105,6 +111,7 @@
                                     @endforeach
                                 </td>
                                 <td>{{ $control->sum_coef }}</td>
+                                <td>{{ $control->sum_coef_can }}</td>
                                 <td>
                                     <span
                                         class="badge p-1 fs-6 {{ $colors[$control->state] }}">{{ $control->getStateTxt() }}</span>

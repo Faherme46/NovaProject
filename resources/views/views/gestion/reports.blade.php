@@ -4,15 +4,12 @@
             <h4 class="card-title mb-0">Contenido del informe</h4>
         </div>
         <div class="card-body">
-            <form action="{{ route('gestion.report.create') }}" method="post" class="row g-3">
+            <form action="{{ route('gestion.report.docs') }}" method="post" class="row g-3">
+                @csrf
                 <div class="col-8 ">
 
                     <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-title mb-0">
-                                Información General
-                            </h5>
-                        </div>
+
                         <div class="card-body">
                             <div class="row g-2">
 
@@ -22,7 +19,7 @@
                                         <span class="input-group-text" id="basic-addon1">
                                             Cliente
                                         </span>
-                                        <input type="text" class="form-control" placeholder="Cliente"
+                                        <input type="text" class="form-control" placeholder="Cliente" name="client_name"
                                             wire:model='values.cliente'>
                                     </div>
                                 </div>
@@ -31,7 +28,8 @@
                                         <span class="input-group-text">
                                             Referencia
                                         </span>
-                                        <input type="text" class="form-control" wire:model='values.referencia'>
+                                        <input type="text" class="form-control" wire:model='values.referencia'
+                                        name="reference">
                                     </div>
                                 </div>
                                 <div class="col-4">
@@ -39,7 +37,8 @@
                                         <span class="input-group-text">
                                             Tipo
                                         </span>
-                                        <input type="text" class="form-control" wire:model='values.tipo'>
+                                        <input type="text" class="form-control" wire:model='values.tipo'
+                                        name="type">
                                     </div>
                                 </div>
                                 <div class="col-8">
@@ -47,7 +46,8 @@
                                         <span class="input-group-text">
                                             Direccion
                                         </span>
-                                        <input type="text" class="form-control" wire:model='values.direccion'>
+                                        <input type="text" class="form-control" wire:model='values.direccion'
+                                        name="address">
                                     </div>
                                 </div>
                                 <div class="col-4">
@@ -56,7 +56,7 @@
                                             Fecha
                                         </span>
                                         <input type="text" class="form-control" placeholder="--/--/----"
-                                            wire:model='values.fecha'>
+                                            wire:model='values.fecha' name="date">
                                     </div>
                                 </div>
                                 <div class="col-4">
@@ -64,8 +64,8 @@
                                         <span class="input-group-text">
                                             Hora inicio
                                         </span>
-                                        <input type="text" class="form-control" placeholder="00:00"
-                                            wire:model='values.h_inicio'>
+                                        <input type="text" class="form-control" placeholder="00:00" value="10:00"
+                                            wire:model='values.h_inicio' name="h_start">
                                     </div>
                                 </div>
                                 <div class="col-4">
@@ -73,8 +73,8 @@
                                         <span class="input-group-text">
                                             Hora Fin
                                         </span>
-                                        <input type="text" class="form-control" placeholder="00:00"
-                                            wire:model='values.h_fin'>
+                                        <input type="text" class="form-control" placeholder="00:00" value="10:00"
+                                            wire:model='values.h_fin' name="h_end">
                                     </div>
                                 </div>
                             </div>
@@ -132,7 +132,7 @@
                                                     <span class="input-group-text" id="basic-addon1">
                                                         Anexo {{ $i }}
                                                     </span>
-                                                    <input type="text" class="form-control px-2"
+                                                    <input type="text" class="form-control px-2" name="anexos[]"
                                                         value="{{ $anexos[$i - 1] }}">
 
                                                 </div>
@@ -144,6 +144,18 @@
                                 </div>
                             </div>
                         @endif
+                        <div class="col-5">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="card-title mb-0">
+                                        Otros
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 @if ($asambleaOn->registro)
@@ -153,7 +165,8 @@
                                 <h5 class="card-title mb-0">Orden del dia</h5>
                             </div>
                             <div class="card-body p-0">
-                                <textarea class="form-control rounded-0 " wire:model='values.orden' rows="17"></textarea>
+                                <textarea class="form-control rounded-0 " wire:model='values.orden'
+                                style="min-height: 50vh"></textarea>
                             </div>
                         </div>
 
@@ -202,8 +215,7 @@
                                                 </div>
                                             </button>
 
-                                            <button type="button" class="btn btn-info p-0 my-1 w-45 ms-2"
-                                                data-bs-toggle=modal data-bs-target=#modalCreateReport
+                                            <button type="submit" class="btn btn-info p-0 my-1 w-45 ms-2"
                                                 @disabled(!$asambleaOn || $report)>
                                                 <div class="card ">
                                                     <div class="card-body d-flex align-items-center p-1">
@@ -376,28 +388,6 @@
                                 Eliminar sesion
                             </button>
                         </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="modal fade" tabindex="-1" id="modalCreateReport" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Crear el informe</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        Se generara un documento pdf con los parametros indicados, con toda la información relevante.
-                    </div>
-                    <div class="modal-footer justify-content-end align-items-center">
-
-
-                        <button type="submit" class="btn btn-success ">
-                            Generar informe
-                        </button>
-
                     </div>
                 </div>
             </div>

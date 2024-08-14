@@ -76,7 +76,8 @@ class AsambleaController extends Controller
                     'asambleaOn'    => true,
                     'inRegistro'    => $asamblea->registro,
                     'controles'     => $asamblea->controles,
-                    'name_asamblea' => $asamblea->name
+                    'name_asamblea' => $asamblea->name,
+                    'client_name'=>$asamblea->folder
                 ];
 
                 Cache::putMany($data);

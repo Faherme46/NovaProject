@@ -18,8 +18,8 @@ class PersonasImport implements ToModel,WithHeadingRow
         return new Persona([
             'id'=>$row['cc_propietario'],
             'tipo_id'=>$row['tipo_id'],
-            'nombre'=>$row['nombre_p'],
-            'apellido'=>$row['apellido_p']
+            'nombre'=>strtoupper($row['nombre_p']),
+            'apellido'=>strtoupper($row['apellido_p'])
         ]);
     }
 }

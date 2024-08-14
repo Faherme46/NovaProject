@@ -8,7 +8,6 @@ use Livewire\Attributes\Layout;
 
 use App\Models\Control;
 use App\Models\Question;
-
 class Reports extends Component
 {
     public $report;
@@ -63,8 +62,8 @@ class Reports extends Component
             'direccion' => ($this->asamblea->lugar) ? $this->asamblea->lugar : 'No aplica',
             'fecha' => $this->asamblea->fecha,
             'hora' => $this->asamblea->hora,
-            'h_inicio' => $this->asamblea->h_inicio,
-            'h_fin' => $this->asamblea->h_cierre,
+            'h_inicio' =>date('h:i a', strtotime($this->asamblea->h_inicio)),
+            'h_fin' => date('h:i a',strtotime($this->asamblea->h_cierre)),
             'footer1' => 'Los datos utilizados por TECNOVIS para la elaboración de los Anexos
                 relacionados en este informe (incluye los cálculos para las votaciones),
                 y que comprende la lista de delegados, tiene como base la información suministrada
@@ -74,7 +73,7 @@ class Reports extends Component
 
         $this->questions=Question::where('id','>',12)->get();
         if(!$this->questions->isEmpty()){
-            
+
             $this->selectQuestion($this->questions->first()->id);
         }
 
@@ -114,4 +113,6 @@ class Reports extends Component
     public function selectQuestion($questionId){
         $this->question=$this->questions->find($questionId);
     }
+
+
 }

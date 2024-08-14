@@ -63,6 +63,7 @@ class Votacion extends Component
         $this->controlsVote = Control::where('sum_coef_can', '!=', 0)->count();
         $this->quorumVote = Control::whereNotIn('state', [3, 4])->sum('sum_coef_can');
         $this->quorumRegistered = Control::whereNotIn('state', [3, 4])->sum('sum_coef');
+
     }
 
     public function setQuestion($questionId)
@@ -72,8 +73,6 @@ class Votacion extends Component
         $this->questionTag = $selectedQuestion->title;
         $this->questionId = $selectedQuestion->id;
         $this->questionType = $selectedQuestion->type;
-
-
         $this->questionOptions = [
             'A' => $selectedQuestion->optionA,
             'B' => $selectedQuestion->optionB,
@@ -89,84 +88,89 @@ class Votacion extends Component
     {
         if ($value) {
             if ($this->questionType == 2 || $this->questionType == 6) {
-                $this->questionOptions['F'] = 'En blanco';
+                $id='optionF';
             } elseif ($this->questionType == 3) {
-                $this->questionOptions['E'] = 'En blanco';
+                $id='optionE';
             } elseif ($this->questionType == 4) {
-                $this->questionOptions['B'] = 'En blanco';
+                $id='optionB';
             }
+            $this->dispatch('setWhite',myId:$id);
         } else {
             if ($this->questionType == 2 || $this->questionType == 6) {
-                $this->questionOptions['F'] = '';
+                $id='optionF';
             } elseif ($this->questionType == 3) {
-                $this->questionOptions['E'] = '';
+                $id='optionE';
             } elseif ($this->questionType == 4) {
-                $this->questionOptions['B'] = '';
+                $id='optionB';
             }
+            $this->dispatch('setNone',myId:$id);
         }
+
     }
 
     public function updatedQuestionType($value)
     {
         $this->reset(['questionOptions', 'questionWhite']);
         $this->dispatch('resetInputs');
-        if ($this->questionId == 12) {
-            switch ($value) {
-                case 1:
 
-                    $this->questionOptions = [
-                        'A' => '',
-                        'B' => '',
-                        'C' => '',
-                        'D' => '',
-                        'E' => '',
-                        'F' => '',
-                    ];
-                    break;
-                case 2:
-                    $this->questionOptions = [
-                        'A' => '',
-                        'B' => '',
-                        'C' => '',
-                        'D' => '',
-                        'E' => '',
-                        'F' => '',
-                    ];
-                    break;
-                case 3:
+         if ($this->questionId == 12) {
 
-                    $this->questionOptions = [
-                        'A' => '',
-                        'B' => '',
-                        'C' => '',
-                        'D' => 'Aprobado',
-                        'E' => '',
-                        'F' => 'No Aprobado',
-                    ];
-                    break;
-                case 4:
-                    $this->questionOptions = [
-                        'A' => 'Si ',
-                        'B' => '',
-                        'C' => 'No',
-                        'D' => '',
-                        'E' => '',
-                        'F' => '',
-                    ];
-                    break;
-                default:
-                    $this->questionOptions = [
-                        'A' => '',
-                        'B' => '',
-                        'C' => '',
-                        'D' => '',
-                        'E' => '',
-                        'F' => '',
-                    ];
-                    break;
-            }
-        }
-        $this->dispatch('$refresh');
+             switch ($value) {
+                 case 1:
+
+                     $this->questionOptions = [
+                         'A' => '',
+                         'B' => '',
+                         'C' => '',
+                         'D' => '',
+                         'E' => '',
+                         'F' => '',
+                     ];
+                     break;
+                 case 2:
+                     $this->questionOptions = [
+                         'A' => '',
+                         'B' => '',
+                         'C' => '',
+                         'D' => '',
+                         'E' => '',
+                         'F' => '',
+                     ];
+                     break;
+                 case 3:
+
+                     $this->questionOptions = [
+                         'A' => '',
+                         'B' => '',
+                         'C' => '',
+                         'D' => 'Aprobado',
+                         'E' => '',
+                         'F' => 'No Aprobado',
+                     ];
+                     break;
+                 case 4:
+                     $this->questionOptions = [
+                         'A' => 'Si ',
+                         'B' => '',
+                         'C' => 'No',
+                         'D' => '',
+                         'E' => '',
+                         'F' => '',
+                     ];
+                     break;
+                 default:
+                     $this->questionOptions = [
+                         'A' => '',
+                         'B' => '',
+                         'C' => '',
+                         'D' => '',
+                         'E' => '',
+                         'F' => '',
+                     ];
+                     break;
+             }
+         }
+         $this->dispatch('setInputs');
     }
 
 
@@ -210,6 +214,10 @@ class Votacion extends Component
 
     public function proof(){
         session()->flash('success','Have a winner');
+    }
+
+    public function disableWhite(){
+        $this->questionWhite = false;
     }
 
 }

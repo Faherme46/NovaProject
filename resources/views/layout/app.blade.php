@@ -7,6 +7,8 @@
 
 <head>
     <meta charset='utf-8'>
+    <meta charset="UTF-8">
+
     {{-- color theme --}}
     <script src="{{ asset('assets/js/color-modes.js') }}"></script>
 

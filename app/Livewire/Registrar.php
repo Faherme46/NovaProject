@@ -40,7 +40,7 @@ class Registrar extends Component
     public $predioSelected = [];
     public $selectAll = false;
 
-    public $controls;
+    public $asistenteControls;
     public $controlH;
 
 
@@ -77,7 +77,7 @@ class Registrar extends Component
     public function cleanData($cedula)
     {
         $this->reset([
-            'asistente', 'name', 'lastName', 'ccPoderdante', 'sumCoef', 'controlId','controls','controlH',
+            'asistente', 'name', 'lastName', 'ccPoderdante', 'sumCoef', 'controlId','asistenteControls','controlH',
             'poderdantes', 'poderdantesIDs', 'prediosAvailable', 'predioSelected', 'selectAll'
         ]);
         if ($cedula) {
@@ -86,20 +86,22 @@ class Registrar extends Component
         }
     }
 
-    public function search()
+    public function search($persona=null)
     {
         $this->validate();
 
         $this->cleanData(0);
 
-        $this->asistente = Persona::find($this->cedula);
+        $this->asistente =($persona)?$persona: Persona::find($this->cedula);
+
+
 
         if ($this->asistente) {
             if (!$this->asistente->controls->isEmpty()) {
                 foreach ($this->asistente->controls as $control) {
-                    $this->controls[$control->id] = $control;
+                    $this->asistenteControls[$control->id] = $control;
                 }
-                $keys = array_keys($this->controls);
+                $keys = array_keys($this->asistenteControls);
                 $this->controlH = $keys[0];
             }
 
@@ -115,25 +117,39 @@ class Registrar extends Component
         }
     }
 
+    public function searchPersonaCC($cc,$name,$lastName){
+        $persona = Persona::find($this->cedula);
+        if($persona){
+            $this->search($persona);
+        }else{
+            try {
+                $this->asistente = Persona::create([
+                    'tipo_id' => 'CC',
+                    'id' => $cc,
+                    'nombre' => strtoupper($name),
+                    'apellido' => strtoupper($lastName)
+                ]);
+
+                $this->dispatch('hideModal');
+            } catch (\Exception $e) {
+                return back()->withCookie('error' . $e->getMessage());
+            }
+        }
+    }
     public function creaPersona()
     {
         try {
             $this->asistente = Persona::create([
                 'tipo_id' => $this->tipoId,
                 'id' => $this->cedula,
-                'nombre' => $this->toFirstMayus($this->name),
-                'apellido' => $this->toFirstMayus($this->lastName)
+                'nombre' => strtoupper($this->name),
+                'apellido' => strtoupper($this->lastName)
             ]);
 
             $this->dispatch('hideModal');
         } catch (\Exception $e) {
             return back()->withCookie('error' . $e->getMessage());
         }
-    }
-
-    public function toFirstMayus($string)
-    {
-        return ucwords(strtolower($string));
     }
 
     public function addPoderdante()
@@ -248,9 +264,9 @@ class Registrar extends Component
 
             if ($option){
 
-                $controlH = $this->controls[$this->controlH];
+                $controlH = $this->asistenteControls[$this->controlH];
                 $controlH->attachPredios($this->prediosAvailable);
-                $controlH->setSumCoef();
+                $controlH->setCoef();
             }else{
                 if ($control->asignacion()) {
                     $this->getAvailableControls();
@@ -318,7 +334,5 @@ class Registrar extends Component
 
         $this->search();
     }
-    public function ver()
-    {
-    }
+
 }

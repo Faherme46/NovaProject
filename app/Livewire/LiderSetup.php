@@ -7,7 +7,7 @@ use Livewire\Attributes\Layout;
 
 use App\Models\Control;
 use App\Models\Asamblea;
-
+use App\Models\Persona;
 use Illuminate\Support\Facades\Cache;
 use Carbon\Carbon;
 use DateTimeZone;
@@ -60,10 +60,15 @@ class LiderSetup extends Component
         try {
             $asamblea = Asamblea::find(Cache::get('id_asamblea'));
             $time = Carbon::now(new DateTimeZone('America/Bogota'));
-            if ($asamblea->h_inicio == null) {
+            if (!$asamblea->h_inicio) {
                 $asamblea->h_inicio = $time;
                 $asamblea->save();
                 $this->started=true;
+                if (cache('inRegistro')) {
+                    cache(['asistentes_init' =>  Persona::whereHas('controls')->count()]);
+                    cache(['quorum_init'=> Control::whereNotIn('state', [3, 4])->sum('sum_coef')]);
+                }
+
                 session()->flash('info1', 'Se ha iniciado la asamblea en: ' . $time);
             } else {
                 session()->flash('warning1', 'Ya se establecio el inicio en: ' . $asamblea->h_inicio);

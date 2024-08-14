@@ -118,12 +118,12 @@
         <div class="card ">
             <div class="card-header d-flex">
                 <div class="col-10">
-                    @if ($controls)
+                    @if ($asistenteControls)
                         <form id="formPredios" class="row g-3" wire:submit='asignar(1)' method="GET">
                             <div class=" col-2 ">
-                                <select name="control" id="id_control_selected" wire:model="control" wire:change='ver'
+                                <select name="control" id="id_control_selected" wire:model="controlH" wire:change='ver'
                                     class="form-control" required>
-                                    @foreach ($controls as $control)
+                                    @foreach ($asistenteControls as $control)
                                         <option value="{{ $control->id }}">
                                             {{ $control->id }} </option>
                                     @endforeach
@@ -203,8 +203,8 @@
                             </tr>
                         @endforelse
 
-                        @if ($controls)
-                            @foreach ($controls[$controlH]->predios as $predio)
+                        @if ($asistenteControls)
+                            @foreach ($asistenteControls[$controlH]->predios as $predio)
                                 <tr class="table-active">
 
                                     <td><span class="badge p-1 fs-6 text-bg-info">
