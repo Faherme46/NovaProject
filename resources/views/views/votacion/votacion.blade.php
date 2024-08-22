@@ -38,25 +38,35 @@
                         <div class="btn-group" role="group">
                             <input type="radio" class="btn-check" name="radioType" id="radioType1" autocomplete="off"
                                 wire:model.number.live='questionType' value="1" @disabled($questionType != 1)>
-                            <label class="btn btn-outline-primary  fw-bolder fs-5 py-1 px-2"
+                            <label class="btn btn-outline-primary  fw-bolder  px-2"
                                 for="radioType1">Quorum</label>
 
                             <input type="radio" class="btn-check" name="radioType" id="radioType4" autocomplete="off"
                                 wire:model.number.live='questionType' value="2" @disabled($questionId != 12 && $questionType != 2)>
-                            <label class="btn btn-outline-primary fw-bolder fs-5 py-1 px-2"
+                            <label class="btn btn-outline-primary fw-bolder  px-2"
                                 for="radioType4">Seleccion</label>
                             <input type="radio" class="btn-check" name="radioType" id="radioType2" autocomplete="off"
                                 wire:model.number.live='questionType' value="3" @disabled($questionId != 12 && $questionType != 3)>
-                            <label class="btn btn-outline-primary fw-bolder fs-5 py-1 px-2"
+                            <label class="btn btn-outline-primary fw-bolder  px-2"
                                 for="radioType2">Aprobacion</label>
 
                             <input type="radio" class="btn-check" name="radioType" id="radioType3" autocomplete="off"
                                 wire:model.number.live='questionType' value="4" @disabled($questionId != 12 && $questionType != 4)>
-                            <label class="btn btn-outline-primary fw-bolder fs-5 py-1 px-2"
+                            <label class="btn btn-outline-primary fw-bolder  px-2"
                                 for="radioType3">Si/No</label>
                             <input type="radio" class="btn-check" name="radioType" id="radioType5" autocomplete="off"
                                 wire:model.number.live='questionType' value="5" hidden>
 
+                        </div>
+                        <div class="btn-group" role="group" >
+                            <input type="radio" class="btn-check" name="radioCoef" value="0"
+                                id="radioNom" @disabled(!$questionId) @checked(!$coefGraph)>
+
+                            <label class="btn btn-outline-primary" for="radioNom" >Nominal</label>
+
+                            <input type="radio" class="btn-check" name="radioCoef" value="1"
+                                id="radioCoef" @disabled(!$questionId) @checked($coefGraph)>
+                            <label class="btn btn-outline-primary" for="radioCoef" >Coeficiente</label>
                         </div>
                         <div class="form-check form-switch mb-0 align-items-center ">
 
@@ -112,8 +122,7 @@
                             </li>
                             <li class="list-group-item">
                                 <input type="text" class="custom-input resettable" name="optionF" id="optionF"
-                                    value="{{ $questionOptions['F'] }}" @readonly($questionType != 2)
-                                    wire:keydown='disableWhite'>
+                                    value="{{ $questionOptions['F'] }}" @readonly($questionType != 2) wire:keydown='disableWhite'>
                             </li>
                         </ul>
                     </div>
@@ -130,13 +139,17 @@
                         <thead>
                             <tr class="table-active">
                                 <th></th>
-                                <th class="text-center">Presentes</th>
-                                <th class="text-center">Habilitados</th>
+                                <th class="text-center">
+                                    <h5 class="card-title mb-0">Presentes</h5>
+                                </th>
+                                <th class="text-center">
+                                    <h5 class="card-title mb-0">Habilitados</h5>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td class="text-end">
+                                <td class="text-end align-content-center">
                                     <h5 class="card-title mb-0">Quorum:</h5>
                                 </td>
                                 <td>
@@ -148,7 +161,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td class="text-end">
+                                <td class="text-end align-content-center">
                                     <h5 class="card-title mb-0">Controles:</h5>
                                 </td>
                                 <td>
@@ -160,7 +173,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td class="text-end">
+                                <td class="text-end align-content-center">
                                     <h5 class="card-title mb-0">Predios:</h5>
                                 </td>
                                 <td>
@@ -176,27 +189,29 @@
 
                 </div>
             </div>
-
-            <div class="card mt-2">
-                <div class="card-header py-1">
-                    <h4 class="card-title mb-0 text-center">Tiempo </h4>
-                </div>
-                <div class="card-body py-1 d-flex justify-content-center">
-                    <div class="col-1 d-flex flex-column mt-3 ">
-                        <button class="btn-arrow up" wire:click='increment(1)'></button>
-                        <button class="btn-arrow down" wire:click='decrement(1)'></button>
+            <div class="row mt-2">
+                <div class="card px-0 w-50">
+                    <div class="card-header py-1">
+                        <h4 class="card-title mb-0 text-center">Tiempo </h4>
                     </div>
-                    <div class="col-auto me-2">
-                        <h1 class="ff-clock medium-large-text">
-                            {{ $mins < 10 ? '0' : '' }}{{ $mins }}:{{ $secs < 10 ? '0' : '' }}{{ $secs }}
-                        </h1>
-                    </div>
-                    <div class="col-1 d-flex flex-column mt-3">
-                        <button class="btn-arrow up" wire:click='increment(0)'></button>
-                        <button class="btn-arrow down" wire:click='decrement(0)'></button>
+                    <div class="card-body py-1 d-flex justify-content-center">
+                        <div class="col-1 d-flex flex-column mt-3 me-2">
+                            <button class="btn-arrow up" wire:click='increment(1)'></button>
+                            <button class="btn-arrow down" wire:click='decrement(1)'></button>
+                        </div>
+                        <div class="col-auto me-2">
+                            <h1 class="ff-clock medium-large-text">
+                                {{ $mins < 10 ? '0' : '' }}{{ $mins }}:{{ $secs < 10 ? '0' : '' }}{{ $secs }}
+                            </h1>
+                        </div>
+                        <div class="col-1 d-flex flex-column mt-3">
+                            <button class="btn-arrow up" wire:click='increment(0)'></button>
+                            <button class="btn-arrow down" wire:click='decrement(0)'></button>
+                        </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
@@ -235,13 +250,13 @@
 
         $wire.on('setWhite', (event) => {
             let id = event.myId
-            input=document.getElementById(id);
-            input.value='En Blanco'
+            input = document.getElementById(id);
+            input.value = 'En Blanco'
         });
         $wire.on('setNone', (event) => {
             let id = event.myId
-            input=document.getElementById(id);
-            input.value=''
+            input = document.getElementById(id);
+            input.value = ''
         });
     </script>
 @endscript

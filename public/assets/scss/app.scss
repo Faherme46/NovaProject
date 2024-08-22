@@ -1,4 +1,3 @@
-
 @import url('./_variables.scss');
 @import url('./_tables.scss');
 @import url('../fonts/fonts.css');
@@ -63,18 +62,19 @@ a {
     justify-content: space-between;
     overflow: hidden
 }
-.bx-b{
+
+.bx-b {
     color: var(--black-color);
 }
 
-.bx-w{
+.bx-w {
 
     color: var(--white-color-txt);
 }
 
 
 
-.bx{
+.bx {
     font-size: 20px !important;
     cursor: pointer !important;
 }
@@ -108,7 +108,6 @@ a {
     color: var(--first-color-light);
     margin-bottom: 1.5rem;
     transition: .3s
-
 }
 
 .nav_link:hover {
@@ -136,7 +135,7 @@ a {
     padding-top: 1rem;
 }
 
-#body-pd{
+#body-pd {
     padding-left: calc(var(--nav-width));
 }
 
@@ -196,31 +195,42 @@ a {
 }
 
 .super-large-text {
-    font-size: 4rem; /* Ajusta este valor según tus necesidades */
-  }
+    font-size: 4rem;
+    /* Ajusta este valor según tus necesidades */
+}
 
 .medium-large-text {
-    font-size: 3rem; /* Ajusta este valor según tus necesidades */
-}
-.normal-large-text {
-    font-size: 2rem; /* Ajusta este valor según tus necesidades */
+    font-size: 3rem;
+    /* Ajusta este valor según tus necesidades */
 }
 
-.ff-clock{
+.normal-large-text {
+    font-size: 2rem;
+    /* Ajusta este valor según tus necesidades */
+}
+
+.ff-clock {
     font-family: Clock;
 }
+
 .btn-arrow {
     position: relative;
     display: inline-block;
-    width: 1rem; /* Ajusta el ancho del botón */
-    height: 1rem; /* Ajusta la altura del botón */
-    background-color: transparent; /* Fondo transparente */
-    border: none; /* Sin bordes */
-    cursor: pointer; /* Cursor de mano */
-    padding: 0; /* Sin padding */
-  }
+    width: 1rem;
+    /* Ajusta el ancho del botón */
+    height: 1rem;
+    /* Ajusta la altura del botón */
+    background-color: transparent;
+    /* Fondo transparente */
+    border: none;
+    /* Sin bordes */
+    cursor: pointer;
+    /* Cursor de mano */
+    padding: 0;
+    /* Sin padding */
+}
 
-  .btn-arrow::after {
+.btn-arrow::after {
     content: '';
     position: absolute;
     top: 50%;
@@ -230,29 +240,51 @@ a {
     height: 1;
     border-left: 0.6rem solid transparent;
     border-right: 0.6rem solid transparent;
-  }
+}
 
-  .btn-arrow.down::after {
-    border-top: 0.6rem solid var(--bs-secondary); /* Color de la flecha */
-  }
+.btn-arrow.down::after {
+    border-top: 0.6rem solid var(--bs-secondary);
+    /* Color de la flecha */
+}
 
-  .btn-arrow.up::after {
-    border-bottom: 0.6rem solid var(--bs-secondary); /* Color de la flecha */
-  }
+.btn-arrow.up::after {
+    border-bottom: 0.6rem solid var(--bs-secondary);
+    /* Color de la flecha */
+}
 
-  .btn-arrow:hover {
-    transform: scale(1.2); /* Aumenta el tamaño al pasar el cursor */
-  }
+.btn-arrow:hover {
+    transform: scale(1.2);
+    /* Aumenta el tamaño al pasar el cursor */
+}
 
 
-  .w-35{
+.w-35 {
     width: 35% !important;
-  }
+}
 
-  .w-45{
+.w-45 {
     width: 45% !important;
-  }
+}
 
-  .w-40{
+.w-40 {
     width: 40% !important;
-  }
+}
+
+
+
+.non-disabled {
+    pointer-events: none;
+    /* Evita la interacción del usuario */
+    opacity: 1;
+    /* Mantiene la apariencia de habilitado */
+}
+
+.non-disabled:disabled {
+    background-color: #fff;
+    /* Asegura que el fondo se vea como habilitado */
+    border-color: #ced4da;
+    /* Mantiene el borde como uno habilitado */
+    cursor: not-allowed;
+    /* Muestra un cursor "no permitido" */
+    color: inherit;
+}

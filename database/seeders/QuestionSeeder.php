@@ -155,6 +155,17 @@ class QuestionSeeder extends Seeder
             'prefab' => true,
             'type' => 4
         ]);
+        Question::create([
+            'title' => 'Prueba',
+            'optionA' => 'A',
+            'optionB' => 'B',
+            'optionC' => 'C',
+            'optionD' => 'D',
+            'optionE' => 'E',
+            'optionF' => 'F',
+            'prefab' => true,
+            'type' => 6
+        ]);
 
 
     }

@@ -121,7 +121,7 @@
                     @if ($asistenteControls)
                         <form id="formPredios" class="row g-3" wire:submit='asignar(1)' method="GET">
                             <div class=" col-2 ">
-                                <select name="control" id="id_control_selected" wire:model="controlH" wire:change='ver'
+                                <select name="control" id="id_control_selected" wire:model="controlH" wire:change='changePredios'
                                     class="form-control" required>
                                     @foreach ($asistenteControls as $control)
                                         <option value="{{ $control->id }}">

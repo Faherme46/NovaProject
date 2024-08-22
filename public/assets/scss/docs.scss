@@ -4,28 +4,13 @@ body {
 
 
 
-@page {
-    margin: 27mm 25mm 20mm;
-}
+
 
 .footer .page-number:after { content: counter(page); }
 
-header {
-    position: fixed;
-    top: -53;
-    height: 20mm;
-    display: flex;
-    line-height: 35px;
-    width: 100%;
-}
 
-.title {
-    position: fixed;
-    top: -40;
-    right: 0;
-    left: 0;
-    text-align: center;
-}
+
+
 
 
 footer {
@@ -60,10 +45,7 @@ hr {
     color: blue;
 }
 
-.body {
 
-    height: 225mm;
-}
 
 .page {
     height: 100%;
@@ -81,36 +63,43 @@ td {
     text-align: left;
     width: fit-content; /* Permite que las celdas ajusten su ancho al contenido */
 }
-.table-general {
-    table-layout: auto; /* Asegura que el ancho se ajuste al contenido */
-    border: solid 0.5px var(--darkblue-color);
-}
+
 .border-darkblue, .table-general td{
     border: solid 0.5px var(--darkblue-color);
 }
 
 .border-black-1{
-    border: solid 0.5px var(--darkblue-color);
+    border: solid 0.5px var(--black-color);
 }
 .bg-darkblue{
     background-color: var(--darkblue-color);
 }
-.table-general th{
-    border: solid 0.5px white;
-}
 
-.table-general tr,.table-general td,.table-general th{
-    padding-top:0.5rem;
-    padding-bottom: 0.5rem;
 
-}
 .txt-small{
     font-size: 7pt;
 }
 
 .table-anexos td{
-    font-size: 10px;
+
     border: solid 0.1pt var(--black-color);
     text-align: center;
     text-decoration: none;
+}
+
+.fs-10{
+    font-size: 10pt;
+}
+
+.fs-10px
+{
+    font-size: 10px;
+}
+.fs-12px
+{
+    font-size: 12px;
+}
+.no-line-spacing {
+    line-height: 1.2; /* Elimina el espacio extra entre líneas */
+    margin: 0; /* Elimina el margen alrededor del párrafo */
 }

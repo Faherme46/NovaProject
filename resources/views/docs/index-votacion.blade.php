@@ -54,16 +54,12 @@
 
         <hr class="blue">
     </header>
-    <footer>
-        <hr class="w-25 mb-1">
-        <small class="txt-small no-line-spacing">{{$firstFooter}}</small>
-    </footer>
     <div class="body">
             <br><br>
             <h4 class="text-center">Contenido</h4>
             <br><br><br>
             <div class="anexos">
-                <p>Resultados de las votaciones</p>
+                <p>Resultados de las votaciones (Consultas)</p>
 
                 <ul>
                     @for ($i = 0; $i < count($anexos); $i++)
@@ -71,34 +67,34 @@
                     @endfor
                 </ul>
             </div>
-            <hr >
+            <hr>
+            <br>
+            <br>
             <br>
             <h5>Información General</h5>
             <br>
             <table class="table table-general">
                 <tr>
                     <th class="bb-white text-light bold bg-darkblue text-end" >Cliente:</th>
-                    <td class="ps-2" colspan="5">{{$asamblea->folder}}</td>
+                    <td class="ps-2" colspan="3">{{$asamblea->folder}}</td>
                 </tr>
                 <tr>
                     <th class="bb-white text-light bold bg-darkblue text-end" >Referencia:</th>
-                    <td class="ps-2" colspan="5">{{$asamblea->referencia}}</td>
+                    <td class="ps-2" colspan="3">{{$asamblea->referencia}}</td>
                 </tr>
                 <tr>
                     <th class="bb-white text-light bold bg-darkblue text-end" >Tipo de Asamblea:</th>
                     <td class="ps-2" >{{$asamblea->tipo}}</td>
-                    <th class="bb-white text-light bold bg-darkblue" >Direccion:</th>
-                    <td class="ps-2" colspan="3">{{$asamblea->lugar}}</td>
-                </tr>
-                <tr>
                     <th class=" text-light bold bg-darkblue text-end">Fecha</th>
                     <td class="ps-2">{{$asamblea->fecha}}</td>
-                    <th class=" text-light bold bg-darkblue">Hora Inicio:</th>
-                    <td class="ps-2">{{$asamblea->h_inicio}}</td>
-                    <th class=" text-light bold bg-darkblue">Hora Fin:</th>
-                    <td class="ps-2">{{$asamblea->h_cierre}}</td>
                 </tr>
             </table>
+
     </div>
+
+
+
+
 </body>
+
 </html>

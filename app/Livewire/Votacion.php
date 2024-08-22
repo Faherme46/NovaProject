@@ -23,7 +23,7 @@ class Votacion extends Component
         'F' => '',
     ];
     public $questionType = 0;
-
+    public $coefGraph=1;
     public $questionWhite = false;
 
     #prefab questions
@@ -73,6 +73,7 @@ class Votacion extends Component
         $this->questionTag = $selectedQuestion->title;
         $this->questionId = $selectedQuestion->id;
         $this->questionType = $selectedQuestion->type;
+        $this->coefGraph= ($selectedQuestion->coefGraph==='1');
         $this->questionOptions = [
             'A' => $selectedQuestion->optionA,
             'B' => $selectedQuestion->optionB,

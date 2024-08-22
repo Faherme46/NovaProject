@@ -43,7 +43,7 @@ class PresentQuestion extends Component
             return redirect()->route('home')->with('error', 'Nada para mostrar');
         }
         $this->controls = Control::all()->pluck('id')->toArray();
-        $this->inCoefResult = !$this->question->nominalPriority;
+        $this->inCoefResult = $this->question->coefGraph;
         $this->setControlsAssigned();
         $this->dispatch('full-screen-in');
         // $this->chartNom=Storage::disk('results')->url('images/results/10/nominalChart.png');

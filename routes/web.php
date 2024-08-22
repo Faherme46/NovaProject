@@ -15,7 +15,7 @@ use App\Http\Controllers\PrediosController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PersonasController;
 use App\Http\Controllers\QuestionsController;
-
+use App\Http\Controllers\ReportController;
 use App\Livewire\PresentQuestion;
 use App\Livewire\Votacion;
 use App\Livewire\LiderSetup;
@@ -25,6 +25,7 @@ use App\Livewire\Consulta;
 use App\Livewire\Registrar;
 use App\Livewire\Asignacion;
 use App\Livewire\Entregar;
+use App\Livewire\JobStatus;
 
 //rutas de redireccion
 
@@ -34,11 +35,11 @@ use App\Livewire\Entregar;
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Admin')]], function () {
     Route::delete('/session/destroy', [SessionController::class, 'destroyAll'])->name('session.destroy');
     Route::get('gestion/informes', Reports::class)->name('gestion.report');
-    Route::post('gestion/informes/crear', Reports::class)->name('gestion.report.create');
-    Route::post('gestion/informes/document', [FileController::class,'createReport'])->name('gestion.report.docs');
-    //Rutas de Usuarios
+    Route::get('gestion/informes/Informe', [ReportController::class,'createReport'])->name('gestion.report.docs');
     Route::post('/predios/import', [PrediosController::class, 'import'])->name('predios.import');
 
+    Route::post('questions/setResult', [QuestionsController::class,   'setResult'])->name('questions.setResult');
+    Route::post('gestion/asamblea/update', [AsambleaController::class,'updateAsamblea'])->name('asamblea.update');
 });
 
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Admin|Lider')]], function () {

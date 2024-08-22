@@ -10,7 +10,8 @@ use Livewire\Attributes\On;
 use App\Models\Control;
 use App\Models\Persona;
 use App\Models\Predio;
-
+use Carbon\Carbon;
+use DateTimeZone;
 use Illuminate\Database\QueryException;
 
 
@@ -276,6 +277,8 @@ class Registrar extends Component
                 $control->cc_asistente = $this->cedula;
                 $control->attachPredios($this->prediosAvailable);
                 $control->setCoef();
+                $control->h_entrega= Carbon::now(new DateTimeZone('America/Bogota'))->second(0)->format('H:i');
+
                 $control->state = 1;
                 $control->save();
             }
@@ -303,7 +306,7 @@ class Registrar extends Component
 
     public function resetControl()
     {
-        $this->reset(['controlH', 'controls']);
+        $this->reset(['controlH', 'asistenteControls']);
     }
 
     #[On('add-predio')]
@@ -333,6 +336,10 @@ class Registrar extends Component
         $this->cedula = $personaId;
 
         $this->search();
+    }
+
+    public function changePredios(){
+
     }
 
 }

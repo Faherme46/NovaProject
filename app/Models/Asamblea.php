@@ -12,17 +12,5 @@ class Asamblea extends Model
     protected $table = 'asambleas';
     protected $primaryKey = 'id_asamblea';
 
-    protected $fillable = [
-        'name',
-        'folder',
-        'lugar',
-        'fecha',
-        'hora',
-        'estado',
-        'registro',
-        'ciudad',
-        'controles',
-        'h_inicio',
-        'h_cierre'
-    ];
+    protected $guarded=[];
 }

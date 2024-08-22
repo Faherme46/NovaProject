@@ -20,7 +20,9 @@ return new class extends Migration
             $table->date('fecha');
             $table->time('hora');
             $table->integer('controles');
-            $table->enum('estado', ['pendiente', 'en_progreso', 'finalizada','cancelada']);
+            $table->string('referencia')->nullable();
+            $table->string('tipo')->nullable();
+            // $table->enum('estado', ['pendiente', 'en_progreso', 'finalizada','cancelada']);
             $table->boolean('registro');
             $table->time('h_inicio')->nullable();
             $table->time('h_cierre')->nullable();

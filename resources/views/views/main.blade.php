@@ -52,6 +52,7 @@
 
                     <form class="row g-3" id="asamblea-form" action="{{ route('asambleas.store') }}" method="POST">
                         @csrf
+                        
                         <div class="form-group col-12">
                             <label for="folder">Cliente</label>
                             <select id="folder" class="form-select" aria-label="Default select example"
@@ -94,7 +95,8 @@
                         </div>
                         <div class="form-group col-6">
                             <label for="controles">Numero de controles</label>
-                            <input type="number" class="form-control" id="controles" name="controles" required>
+                            <input type="number" class="form-control" id="controles" name="controles"
+                             oninput="debouncedValidateMultipleOf50(this)" required>
                         </div>
                         <div class="row mt-2 justify-content-between ">
                             <div class="form-group text-center col-4 ">

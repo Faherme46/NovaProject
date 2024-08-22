@@ -20,12 +20,15 @@ class QuestionsController extends Controller
     }
     public function createQuestion(Request $request){
 
+      
         $request->validate([
             'radioType'=>'required',
+            'radioCoef'=>'required',
             'title'=>'required'
         ],[
             'title.required'=>'Se requiere un titulo a la pregunta',
-            'radioType.required'=>'Se requiere un un tipo de la pregunta'
+            'radioType.required'=>'Se requiere un tipo de la pregunta',
+            'radioCoef.required'=>'Se requiere el Coeficiente/Nominal de la pregunta'
         ]);
         if ( $request->radioType != 1 &&
             !$request->filled('optionA') &&
@@ -48,14 +51,15 @@ class QuestionsController extends Controller
 
         try {
             $question=Question::create([
-                'title'=>$request->title,
-                'optionA'=>$request->optionA,
-                'optionB'=>$request->optionB,
-                'optionC'=>$request->optionC,
-                'optionD'=>$request->optionD,
-                'optionE'=>$request->optionE,
-                'optionF'=>$request->optionF,
+                'title'=>strtoupper($request->title),
+                'optionA'=>strtoupper($request->optionA),
+                'optionB'=>strtoupper($request->optionB),
+                'optionC'=>strtoupper($request->optionC),
+                'optionD'=>strtoupper($request->optionD),
+                'optionE'=>strtoupper($request->optionE),
+                'optionF'=>strtoupper($request->optionF),
                 'prefab'=>false,
+                'coefGraph'=>($request->radioCoef),
                 'quorum'=>Control::where('state',1)->sum('sum_coef_can'),
                 'predios'=>Control::where('state',1)->sum('predios_vote'),
                 'seconds'=>$seconds,
@@ -72,7 +76,11 @@ class QuestionsController extends Controller
                 'error' => $th->getMessage(),
             ]);
         }
+
+
     }
+
+
 
 
 }

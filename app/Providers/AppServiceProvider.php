@@ -1,9 +1,11 @@
 <?php
 
 namespace App\Providers;
-
+use Illuminate\Support\Facades\Event;
+use App\Events\JobStatus;
 use App\Http\Controllers\AsambleaController;
 use App\Http\Controllers\sessionController;
+use App\Listeners\JobStatusListener;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Maatwebsite\Excel\ExcelServiceProvider;
@@ -17,7 +19,9 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Register any application services.
      */
-    public function register(): void
+
+
+         public function register(): void
     {
         $this->app->register(ExcelServiceProvider::class);
     }
@@ -27,7 +31,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-
+        Event::listen(
+            JobStatus::class,
+            JobStatusListener::class,
+        );
 
 
         View::composer('*', function ($view) {

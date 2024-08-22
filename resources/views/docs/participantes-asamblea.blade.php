@@ -32,8 +32,10 @@
             height: 217mm;
         }
 
-        th {
-            border: 1px wheat solid;
+        td {
+
+            white-space: nowrap; /* Evita que el contenido se divida en varias líneas */
+            padding: 0; /* Opcional: Elimina el padding si no lo necesitas */
         }
 
         {!! file_get_contents(public_path('\assets\scss\custom.css')) !!} {!! file_get_contents(public_path('\assets\scss\_variables.scss')) !!} {!! file_get_contents(public_path('\assets\scss\docs.scss')) !!}
@@ -61,7 +63,7 @@
                                 Unidad residencial: <br>
                                 Fecha de asamblea: <br>
                                 Cantidad total de predios: <br>
-                                Asistentes Contabilizados: <br>
+                                Predios que asistieron: <br>
                                 Coeficiente de asistencia: <br>
                             </p>
                         </td>
@@ -70,8 +72,9 @@
                                 {{ $asamblea->folder }} <br>
                                 {{ $asamblea->fecha }} <br>
                                 {{ $predios->count() }}<br>
-                                {{ cache('predios_init') }} <br>
-                                {{ cache('quorum_init') }}
+                                {{ $prediosCount }} <span class="ms-5">(Asistió el
+                                    {{ round(($prediosCount / $predios->count()) * 100, 3) }}% de los predios)</span><br>
+                                {{ $quorum }}
                             </p>
                         </td>
 
@@ -112,13 +115,13 @@
                     <th class="pb-1 fs-10x">Salida</th>
                 </tr>
             </thead>
-            <tbody class="fs-12px">
+            <tbody class="fs-10px">
                 @foreach ($predios as $predio)
                     <tr>
-                        <td class="p-0 px-1 ">{{ $predio->numeral1 }}</td>
-                        <td class="p-0 px-1 ">{{ $predio->numeral2 }}</td>
-                        <td class="px-0">{{ $predio->coeficiente }}</td>
-                        @if ($predio->control&&$predio->quorum_start)
+                        <td class="p-0">{{ $predio->numeral1 }}</td>
+                        <td class="p-0">{{ $predio->numeral2 }}</td>
+                        <td class="p-0">{{ $predio->coeficiente }}</td>
+                        @if ($predio->control)
                             @if ($predio->personas->contains($predio->control->persona))
                                 <td class="p-0">Propietario</td>
                             @else
@@ -128,14 +131,14 @@
                                 {{ $predio->control->persona->nombre }} {{ $predio->control->persona->apellido }}
                             </td>
                             <td>
-                                {{ $predio->control->h_entrega}}
+                                {{$predio->control->h_entrega}}
                             </td>
-                            <td>{{ $predio->control->h_recibe}}</td>
+                            <td>{{$predio->control->h_recibe}}</td>
                         @else
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
                         @endif
 
 
@@ -146,9 +149,6 @@
         </table>
 
     </div>
-
-
-
 
 </body>
 

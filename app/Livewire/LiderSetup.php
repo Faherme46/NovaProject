@@ -8,6 +8,7 @@ use Livewire\Attributes\Layout;
 use App\Models\Control;
 use App\Models\Asamblea;
 use App\Models\Persona;
+use App\Models\Predio;
 use Illuminate\Support\Facades\Cache;
 use Carbon\Carbon;
 use DateTimeZone;
@@ -22,12 +23,12 @@ class LiderSetup extends Component
     public $quorumRegistered;
     public $quorumVote;
 
+    public $asamblea;
+    public $started = false;
+    public $finished = false;
 
-    public $started=false;
-    public $finished=false;
-
-    public $byControlAsc=false;
-    public $byCoefAsc=false;
+    public $byControlAsc = false;
+    public $byCoefAsc = false;
 
     #[Layout('layout.full-page')]
     public function render()
@@ -36,42 +37,49 @@ class LiderSetup extends Component
         return view('views.gestion.lider-setup');
     }
 
-    public function mount(){
-        $this->allControls = Control::whereNotIn('state',[4,3])->get();
+    public function mount()
+    {
+        $this->allControls = Control::whereNotIn('state', [4, 3])->get();
 
-        $this->prediosRegistered=$this->allControls->sum(function ($control) {
+        $this->prediosRegistered = $this->allControls->sum(function ($control) {
             return $control->predios->count();
         });
-        $this->prediosVote=$this->allControls->sum(function ($control) {
+        $this->prediosVote = $this->allControls->sum(function ($control) {
             return $control->predios_vote;
         });
 
-        $this->quorumRegistered=$this->allControls->sum(function ($control) {
+        $this->quorumRegistered = $this->allControls->sum(function ($control) {
             return $control->sum_coef;
         });
-        $this->quorumVote=$this->allControls->sum(function ($control) {
+        $this->quorumVote = $this->allControls->sum(function ($control) {
             return $control->sum_coef_can;
         });
+        $this->asamblea=Asamblea::find(cache('id_asamblea'));
+
+        $this->started=($this->asamblea->h_inicio);
+        $this->finished=($this->asamblea->h_cierre);
     }
 
 
     public function iniciar()
     {
-        try {
-            $asamblea = Asamblea::find(Cache::get('id_asamblea'));
-            $time = Carbon::now(new DateTimeZone('America/Bogota'));
-            if (!$asamblea->h_inicio) {
-                $asamblea->h_inicio = $time;
-                $asamblea->save();
-                $this->started=true;
-                if (cache('inRegistro')) {
-                    cache(['asistentes_init' =>  Persona::whereHas('controls')->count()]);
-                    cache(['quorum_init'=> Control::whereNotIn('state', [3, 4])->sum('sum_coef')]);
-                }
 
+        try {
+
+            $time = Carbon::now(new DateTimeZone('America/Bogota'))->second(0);
+            if (!$this->asamblea->h_inicio) {
+
+                $this->started = true;
+                if (cache('inRegistro')) {
+                    cache(['predios_init' =>  Predio::whereHas('control')->count()]);
+                    cache(['quorum_init' => Control::whereNotIn('state', [3, 4])->sum('sum_coef')]);
+                    Predio::whereHas('control')->update(['quorum_start' => true]);
+                }
+                $this->asamblea->h_inicio = $time;
+                $this->asamblea->save();
                 session()->flash('info1', 'Se ha iniciado la asamblea en: ' . $time);
             } else {
-                session()->flash('warning1', 'Ya se establecio el inicio en: ' . $asamblea->h_inicio);
+                session()->flash('warning1', 'Ya se establecio el inicio en: ' . $this->asamblea->h_inicio);
             }
         } catch (\Exception $e) {
             session()->flash('error1', $e->getMessage());
@@ -82,21 +90,29 @@ class LiderSetup extends Component
     {
 
         try {
-            $asamblea = Asamblea::find(Cache::get('id_asamblea'));
-            $time = Carbon::now(new DateTimeZone('America/Bogota'));
-            if ($asamblea->h_cierre == null) {
-                $asamblea->h_cierre = $time;
-                $asamblea->save();
-                $this->finished=true;
+
+            $time = Carbon::now(new DateTimeZone('America/Bogota'))->second(0);
+            if ($this->asamblea->h_cierre == null) {
+
+                if (cache('inRegistro')) {
+
+                    Predio::whereHas('control', function ($query) use ($time) {
+                        $query->where('state', 1);
+                    })->update(['quorum_end' => true]);
+                    Control::whereHas('predios')->update(['h_recibe'=>$time->format('H:i')]);
+                    cache(['asistentes_end' =>  Predio::where('quorum_end',true)->count()]);
+                    cache(['quorum_end' => Control::whereNotIn('state', [1])->sum('sum_coef')]);
+                }
+                $this->asamblea->h_cierre = $time;
+                $this->asamblea->save();
+                $this->finished = true;
                 session()->flash('info1', 'Se ha terminado la asamblea en: ' . $time);
             } else {
-                session()->flash('warning1', 'Ya se establecio el cierre en: ' . $asamblea->h_cierre);
+                session()->flash('warning1', 'Ya se establecio el cierre en: ' . $this->asamblea->h_cierre);
             }
         } catch (\Exception $e) {
             //throw $th;
             session()->flash('error1', $e->getMessage());
         }
     }
-
-
 }

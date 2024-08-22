@@ -118,7 +118,7 @@
                         <td class="p-0 px-1 ">{{ $predio->numeral1 }}</td>
                         <td class="p-0 px-1 ">{{ $predio->numeral2 }}</td>
                         <td class="px-0">{{ $predio->coeficiente }}</td>
-                        @if ($predio->control&&$predio->quorum_start)
+                        @if ($predio->control&&$predio->quorum_end)
                             @if ($predio->personas->contains($predio->control->persona))
                                 <td class="p-0">Propietario</td>
                             @else

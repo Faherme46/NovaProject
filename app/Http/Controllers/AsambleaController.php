@@ -101,20 +101,32 @@ class AsambleaController extends Controller
 
 
 
-    public function update(Request $request, $id)
+    public function updateAsamblea(Request $request)
     {
-
+        $messages=[
+        '*.required' =>'El campo :attribute no puede estar vacio',
+        'fecha.date' => 'El campo :attribute debe ser una fecha válida.',
+        '*.date_format' => 'El campo :attribute no corresponde con el formato :format.',
+        ];
         $request->validate([
-            'nombre' => 'required',
             'lugar' => 'required',
             'fecha' => 'required|date',
             'hora' => 'required',
-            'estado' => 'required|in:pendiente,en_progreso,finalizada,cancelada',
-        ]);
+            'controles' => 'required',
+            'h_inicio'=>'required',
+            'h_cierre'=>'required',
+            'referencia'=>'required',
+            'tipo'=>'required'
+        ],$messages);
 
-        $asamblea = Asamblea::findOrFail($id);
-        $asamblea->update($request->all());
-        return redirect()->route('home')->with('success', 'Reunión actualizada con éxito.');
+        $asamblea = Asamblea::find($request->id_asamblea);
+        if($asamblea){
+            $asamblea->update($request->all());
+            return back()->with('success1', 'Reunión actualizada con éxito.');
+        }else{
+            return back()->with('error1', 'No se encontro la asamblea')->withInput();
+        }
+
     }
 
     public function destroy($id)

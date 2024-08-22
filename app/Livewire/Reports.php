@@ -5,9 +5,14 @@ namespace App\Livewire;
 use App\Models\Asamblea;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
+use Carbon\Carbon;
+use App\Jobs\GeneratePdf;
 
 use App\Models\Control;
+use App\Models\Predio;
 use App\Models\Question;
+use Illuminate\Support\Facades\Http;
+
 class Reports extends Component
 {
     public $report;
@@ -23,6 +28,11 @@ class Reports extends Component
     public $anexos;
     public $questions;
     public $question;
+    public $questionResultTxt;
+
+    public $ordenDia='';
+    public $allQuestionsVerified = false;
+    public $viewGeneral = 1;
 
     public function mount()
     {
@@ -45,34 +55,27 @@ class Reports extends Component
 
         $this->asamblea = Asamblea::find(cache('id_asamblea'));
         $this->defVariables();
+        $this->setQuestionsVerified();
+        $this->ordenDia=htmlspecialchars(implode("\n",cache('ordenDia', [''])));
+
     }
 
     #[Layout('layout.full-page')]
     public function render()
     {
-        return view('views.gestion.reports');
+        if ($this->viewGeneral) {
+            return view('views.gestion.reports');
+        } else {
+            return view('views.gestion.questions-verify');
+        }
     }
 
     public function defVariables()
     {
-        $this->values = [
-            'cliente' => $this->asamblea->folder,
-            'referencia' => 'Asamblea Ordinaria',
-            'tipo' => 'Presencial',
-            'direccion' => ($this->asamblea->lugar) ? $this->asamblea->lugar : 'No aplica',
-            'fecha' => $this->asamblea->fecha,
-            'hora' => $this->asamblea->hora,
-            'h_inicio' =>date('h:i a', strtotime($this->asamblea->h_inicio)),
-            'h_fin' => date('h:i a',strtotime($this->asamblea->h_cierre)),
-            'footer1' => 'Los datos utilizados por TECNOVIS para la elaboración de los Anexos
-                relacionados en este informe (incluye los cálculos para las votaciones),
-                y que comprende la lista de delegados, tiene como base la información suministrada
-                por la Administración de' . $this->asamblea->folder . ' a TECNOVIS, para el desarrollo de esta Asamblea.',
-            'orden' => "1. Registro\n2. Verificación del quorum\n3. Aprobación reglamento de asamblea\n4. Elección presidente y secretario\n5. Aprobación orden del día\n6. Informe de comisión verificadora\n7. Elección comisión verificadora\n8. Presentación y aprobación proyecto presupuesto periodo 2024\n9. Aprobación de la cuota de expensas comunes\n10. Nombramiento de comité de convivencia\n11. Fortalecimiento del consejo de administración\n12. Informe administrativo\n13. Presentación de estados financieros\n14. Informe revisor fiscal y aprobación estados financieros\n15. Elección revisora fiscal\n16. Proposiciones y varios\n17. Cierre"
-        ];
 
-        $this->questions=Question::where('id','>',12)->get();
-        if(!$this->questions->isEmpty()){
+
+        $this->questions = Question::where('id', '>', 13)->get();
+        if (!$this->questions->isEmpty()) {
 
             $this->selectQuestion($this->questions->first()->id);
         }
@@ -82,8 +85,6 @@ class Reports extends Component
         } else {
             $this->defReportVariablesV();
         }
-
-
     }
 
     public function defReportVariablesR()
@@ -110,9 +111,59 @@ class Reports extends Component
         ];
     }
 
-    public function selectQuestion($questionId){
-        $this->question=$this->questions->find($questionId);
+    public function selectQuestion($questionId)
+    {
+        $this->question = $this->questions->find($questionId);
+        $this->questionResultTxt = $this->question->resultTxt;
+
+
+    }
+    public function saveOrdenDia()
+    {
+        $list=($this->ordenDia)?explode("\n", $this->ordenDia):[];
+        cache(['ordenDia'=> $list]);
     }
 
+    public function setView($value)
+    {
+        $this->viewGeneral = $value;
+    }
+
+    public function setQuestionsVerified()
+    {
+        if ($this->questions->isEmpty()) {
+            return $this->allQuestionsVerified = false;
+        }
+        $nullResults = $this->questions->whereNull('resultTxt')->whereNotIn('type', [1, 7]);
+        if ($nullResults->isEmpty()) {
+            $this->allQuestionsVerified = true;
+        } else {
+            $this->allQuestionsVerified = false;
+        }
+    }
+
+
+
+    public function setResult()
+    {
+
+        $this->question->resultTxt = ($this->questionResultTxt)?$this->questionResultTxt:null;
+        $this->question->save();
+
+        session()->flash('success1', 'Cambios Guardados');
+    }
+
+
+    public function verifyForm(){
+        if ($this->questions->whereNull('resultTxt')->isNotEmpty()) {
+
+            return session()->flash('error1','Todas las preguntas deben tener resultado');
+        }
+        $url=env('APP_URL').'/gestion/informes/Informe';
+
+
+        $this->dispatch('submit-form-report');
+        return redirect();
+    }
 
 }

@@ -1,172 +1,101 @@
-<div class="px-3 pb-3">
-    <div class="card mt-0">
+<div>
+    <x-alerts />
+    <div class="card mt-0 mx-3">
         <div class="card-header">
             <h4 class="card-title mb-0">Contenido del informe</h4>
         </div>
         <div class="card-body">
-            <form action="{{ route('gestion.report.docs') }}" method="post" class="row g-3">
-                @csrf
-                <div class="col-8 ">
-
+            <div class="row g-3">
+                <div class="col-6">
                     <div class="card">
-
-                        <div class="card-body">
-                            <div class="row g-2">
-
-
-                                <div class="col-6">
-                                    <div class="input-group ">
-                                        <span class="input-group-text" id="basic-addon1">
-                                            Cliente
-                                        </span>
-                                        <input type="text" class="form-control" placeholder="Cliente" name="client_name"
-                                            wire:model='values.cliente'>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="input-group ">
-                                        <span class="input-group-text">
-                                            Referencia
-                                        </span>
-                                        <input type="text" class="form-control" wire:model='values.referencia'
-                                        name="reference">
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="input-group ">
-                                        <span class="input-group-text">
-                                            Tipo
-                                        </span>
-                                        <input type="text" class="form-control" wire:model='values.tipo'
-                                        name="type">
-                                    </div>
-                                </div>
-                                <div class="col-8">
-                                    <div class="input-group ">
-                                        <span class="input-group-text">
-                                            Direccion
-                                        </span>
-                                        <input type="text" class="form-control" wire:model='values.direccion'
-                                        name="address">
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="input-group ">
-                                        <span class="input-group-text">
-                                            Fecha
-                                        </span>
-                                        <input type="text" class="form-control" placeholder="--/--/----"
-                                            wire:model='values.fecha' name="date">
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="input-group ">
-                                        <span class="input-group-text">
-                                            Hora inicio
-                                        </span>
-                                        <input type="text" class="form-control" placeholder="00:00" value="10:00"
-                                            wire:model='values.h_inicio' name="h_start">
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="input-group ">
-                                        <span class="input-group-text">
-                                            Hora Fin
-                                        </span>
-                                        <input type="text" class="form-control" placeholder="00:00" value="10:00"
-                                            wire:model='values.h_fin' name="h_end">
-                                    </div>
+                        <form action="{{ route('asamblea.update') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="id_asamblea" value="{{ $asamblea->id_asamblea }}">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="card-title mb-0">
+                                    General
+                                </h5>
+                                <div class="">
+                                    <button type="submit" class="btn btn-primary py-1">Guardar</button>
                                 </div>
                             </div>
-                        </div>
+                            <div class="card-body">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text" id="basic-addon1">
+                                        Cliente
+                                    </span>
+                                    <input type="text" class="form-control fs-5 " placeholder="Cliente"
+                                        name="client_name" value="{{ $asamblea->folder }}" disabled>
+                                </div>
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">
+                                        Referencia:
+                                    </span>
+                                    <input type="text" class="form-control fs-5 " value="{{ $asamblea->referencia }}"
+                                        name="referencia" required>
+                                </div>
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">
+                                        Tipo:
+                                    </span>
+                                    <input type="text" class="form-control fs-5 " value="{{ $asamblea->tipo }}"
+                                        name="tipo" required>
+                                    <span class="input-group-text">
+                                        Controles:
+                                    </span>
+                                    <input type="number" class="form-control fs-5 " value="{{ $asamblea->controles }}"
+                                        name="controles" oninput="debouncedValidateMultipleOf50(this)" required>
+                                </div>
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">
+                                        Direccion:
+                                    </span>
+                                    <input type="text" class="form-control fs-5" value="{{ $asamblea->lugar }}"
+                                        name="lugar" required>
+                                </div>
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">
+                                        Fecha
+                                    </span>
+                                    <input type="date" class="form-control fs-5" value="{{ $asamblea->fecha }}"
+                                        name="fecha" required>
+                                    <span class="input-group-text">
+                                        Hora:
+                                    </span>
+                                    <input type="time" class="form-control fs-5 " value="{{ $asamblea->hora }}"
+                                        name="hora" required>
+                                </div>
+
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">
+                                        Hora Inicio
+                                    </span>
+                                    <input type="time" class="form-control fs-5 " value="{{ $asamblea->h_inicio }}"
+                                        name="h_inicio" required>
+                                    <span class="input-group-text">
+                                        Hora Cierre
+                                    </span>
+                                    <input type="time" class="form-control fs-5 " value="{{ $asamblea->h_cierre }}"
+                                        name="h_cierre" required>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                    <div class="row mt-2 g-2">
-                        {{-- <div class="col-5">
-                            <div class="card px-0 ">
-                                <div class="card-header">
-                                    <h4 class="card-title mb-0">Estadísticas de asamblea</h4>
-                                </div>
-                                <div class="card-body p-0">
-                                    <table class="table table-bordered table-striped table-no-outer-borders mb-0">
-                                        <tbody>
-                                            <tr>
-                                                <td class="text-end">Controles registrados:</td>
-                                                <td class="text-start">{{ $allControls->count() }}</td>
-                                            </tr>
 
-                                            <tr>
-                                                <td class="text-end">Predios Citados:</td>
-                                                <td class="text-start">{{ $prediosRegistered }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-end">Predios Asistentes:</td>
-                                                <td class="text-start">{{ $prediosRegistered }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-end">Quorum Inicial:</td>
-                                                <td class="text-start">{{ $quorumRegistered }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-end">Quorum Final:</td>
-                                                <td class="text-start">{{ $quorumVote }}</td>
-                                            </tr>
-                                            <!-- Añade más filas según sea necesario -->
-                                        </tbody>
-                                    </table>
-                                </div>
-
-
-                            </div>
-                        </div> --}}
-                        @if ($asambleaOn->registro)
-                            <div class="col-7">
-                                <div class="card px-0">
-                                    <div class="card-header justify-content-between d-flex">
-                                        <h6 class="card-title mb-0">Anexos</h6>
-
-                                    </div>
-                                    <div class="card-body px-2">
-                                        <div id="input-group-container">
-                                            @for ($i = 1; $i <= count($anexos); $i++)
-                                                <div class="input-group me-2">
-                                                    <span class="input-group-text" id="basic-addon1">
-                                                        Anexo {{ $i }}
-                                                    </span>
-                                                    <input type="text" class="form-control px-2" name="anexos[]"
-                                                        value="{{ $anexos[$i - 1] }}">
-
-                                                </div>
-                                            @endfor
-
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
-                        <div class="col-5">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h6 class="card-title mb-0">
-                                        Otros
-                                    </h6>
-                                </div>
-                                <div class="card-body">
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 @if ($asambleaOn->registro)
-                    <div class="col-4">
+                    <div class="col-3">
                         <div class="card px-0">
-                            <div class="card-header">
+                            <div class="card-header d-flex justify-content-between align-items-center">
                                 <h5 class="card-title mb-0">Orden del dia</h5>
+                                <button type="button" class="btn btn-primary p-1 px-2" id="saveOrdenDia"
+                                    wire:click='saveOrdenDia'>
+                                    <i class="bi bi-floppy-fill"></i>
+                                </button>
                             </div>
                             <div class="card-body p-0">
-                                <textarea class="form-control rounded-0 " wire:model='values.orden'
-                                style="min-height: 50vh"></textarea>
+                                <input type="hidden" name="ordenDia" id="ordenDia" hidden>
+                                <textarea class="form-control rounded-0 " style="min-height: 50vh" id="txtOrdenDia" wire:model='ordenDia'></textarea>
                             </div>
                         </div>
 
@@ -174,197 +103,70 @@
                 @endif
 
 
-
-
-
-                <div class="row mt-3" style="min-height: 80vh">
-                    <div class="card px-0 ">
-                        <div class="card-header">
-                            <h5 class="card-title mb-0 " id="scrollspyVotacion">Votaciones</h5>
-                        </div>
-                        <div class="card-body">
-                            @if (!$questions->isEmpty())
-                                <div class="row">
-                                    <div class="col-4">
-                                        <div class="row px-0">
-                                            <div class="list-group pe-0 border"
-                                                style="max-height: 50vh; overflow-y: auto;">
-
-                                                @foreach ($questions as $q)
-                                                    <button type="button"
-                                                        class="list-group-item list-group-item-action
-                                                         @if ($q->id == $question->id) active @endif"
-                                                        wire:click='selectQuestion({{ $q->id }})'>
-                                                        {{ $q->title }}
-                                                    </button>
-                                                @endforeach
-                                            </div>
-                                        </div>
-                                        <div class="row mt-3 justify-content-center">
-
-
-                                            <button type="button" class="btn btn-danger p-0 my-1 w-45 "
-                                                data-bs-toggle=modal data-bs-target=#modalDeleteSession
-                                                {{-- @disabled(!$asambleaOn || !$report) --}}>
-                                                <div class="card ">
-                                                    <div class="card-body d-flex align-items-center p-1">
-                                                        <i class="bi bi-trash" style="font-size:40px"></i>
-
-                                                        <h5 class="card-title mb-0 ms-2">Eliminar sesión</h5>
-                                                    </div>
-                                                </div>
-                                            </button>
-
-                                            <button type="submit" class="btn btn-info p-0 my-1 w-45 ms-2"
-                                                @disabled(!$asambleaOn || $report)>
-                                                <div class="card ">
-                                                    <div class="card-body d-flex align-items-center p-1">
-                                                        <i class="bi bi-file-earmark-richtext"
-                                                            style="font-size:40px"></i>
-                                                        <h5 class="card-title mb-0 ms-2">Crear informe </h5>
-                                                    </div>
-                                                </div>
-                                            </button>
-
-
-
-                                        </div>
-
-
+                <div class="col-3">
+                    <form action="{{route('gestion.report.docs')}}" method="GET" class="px-3" id="formReport"
+                    target="_blank">
+                        @csrf
+                        <div class="card">
+                            <div class="card-body px-0">
+                                @if ($this->questions->isEmpty())
+                                    <div class="text-danger text-center mt-2">
+                                        <small>No se han hecho votaciones</small>
                                     </div>
-                                    <div class="col-8">
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <h5 class="card-title mb-0">
-                                                    {{ $question->title }}
-                                                </h5>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="row px-2">
+                                @endif
+                                @if (!$allQuestionsVerified)
+                                    <div class="text-danger text-center mt-2">
+                                        <small>Hay votaciones sin resultado</small>
+                                    </div>
+                                @endif
 
-
-                                                    <table class="table table-bordered">
-                                                        <thead class="table-active">
-                                                            <tr>
-                                                                <th>Descripcion</th>
-                                                                <th>Votos</th>
-                                                                <th>Coeficiente</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @php
-                                                                $options = [
-                                                                    'optionA',
-                                                                    'optionB',
-                                                                    'optionC',
-                                                                    'optionD',
-                                                                    'optionE',
-                                                                    'optionF',
-                                                                ];
-
-                                                            @endphp
-                                                            @foreach ($options as $op)
-                                                                @if ($question[$op])
-                                                                    <tr>
-                                                                        <td>
-                                                                            {{ $question[$op] }}
-                                                                        </td>
-                                                                        <td>
-                                                                            {{ $question->resultNom[$op] }}
-                                                                        </td>
-                                                                        <td>
-                                                                            {{ $question->resultCoef[$op] }}
-                                                                        </td>
-                                                                    </tr>
-                                                                @endif
-                                                            @endforeach
-
-                                                            <tr>
-                                                                <td>
-                                                                    {{ 'Abstencion' }}
-                                                                </td>
-                                                                <td>
-                                                                    {{ $question->resultNom['abstainted'] }}
-                                                                </td>
-                                                                <td>
-                                                                    {{ $question->resultCoef['abstainted'] }}
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    {{ 'Ausente' }}
-                                                                </td>
-                                                                <td>
-                                                                    {{ $question->resultNom['absent'] }}
-                                                                </td>
-                                                                <td>
-                                                                    {{ $question->resultCoef['absent'] }}
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    {{ 'Nulos' }}
-                                                                </td>
-                                                                <td>
-                                                                    {{ $question->resultNom['nule'] }}
-                                                                </td>
-                                                                <td>
-                                                                    {{ $question->resultCoef['nule'] }}
-                                                                </td>
-                                                            </tr>
-
-                                                        </tbody>
-
-                                                    </table>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-6">
-                                                        <h6 class="text-center">
-                                                            Coeficiente
-                                                        </h6>
-                                                        <a
-                                                            href="/storage/images/results/{{ $question->resultCoef->chartPath }}">
-                                                            <img src="/storage/images/results/{{ $question->resultCoef->chartPath }}"
-                                                                class="w-100 h-auto">
-                                                        </a>
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <h6 class="text-center">
-                                                            Nominal
-                                                        </h6>
-                                                        <a
-                                                            href="/storage/images/results/{{ $question->resultNom->chartPath }}">
-                                                            <img src="/storage/images/results/{{ $question->resultNom->chartPath }}"
-                                                                class="w-100 h-auto">
-                                                        </a>
-                                                    </div>
-                                                </div>
+                                {{-- @if (!$ordenDia)
+                                    <div class="text-danger text-center mt-2">
+                                        <small>No se ha guardado Orden del Dia</small>
+                                    </div>
+                                @endif --}}
+                                <div class="row justify-content-center px-4 mt-3">
+                                    <button type="button" class="btn btn-success p-1" wire:click='setView(0)'
+                                        @disabled($this->questions->isEmpty())>
+                                        <div class="card ">
+                                            <div
+                                                class="card-body d-flex align-items-center p-1 justify-content-center">
+                                                <i class="bi bi-card-checklist" style="font-size:40px"></i>
+                                                <h5 class="card-title mb-0 ms-2">Ver Votaciones</h5>
                                             </div>
                                         </div>
-                                    </div>
+                                    </button>
+                                    <button type="button" class="btn btn-info p-1 mt-2" @disabled(!$asambleaOn || !$allQuestionsVerified)
+                                    wire:click='verifyForm'>
+                                        <div class="card ">
+                                            <div
+                                                class="card-body d-flex align-items-center p-1 justify-content-center">
+                                                <i class="bi bi-file-earmark-richtext" style="font-size:40px"></i>
+                                                <h5 class="card-title mb-0 ms-2">Crear informe </h5>
+                                            </div>
+                                        </div>
+                                    </button>
+                                    <button type="button" class="btn btn-danger p-1 mt-2" data-bs-toggle=modal
+                                        data-bs-target=#modalDeleteSession @disabled(!$asambleaOn || !$report)>
+                                        <div class="card ">
+                                            <div
+                                                class="card-body d-flex align-items-center p-1 justify-content-center">
+                                                <i class="bi bi-trash" style="font-size:40px"></i>
+                                                <h5 class="card-title mb-0 ms-2">Eliminar sesión</h5>
+                                            </div>
+                                        </div>
+                                    </button>
+
+
                                 </div>
-                            @else
-                                <h4>
-                                    No se realizaron votaciones
-                                </h4>
-                            @endif
-
-
-
+                            </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
-
-
-            </form>
+            </div>
 
         </div>
     </div>
-
-
-
-
-
 
     @if ($asambleaOn)
         <div class="modal fade" tabindex="-1" id="modalDeleteSession" aria-hidden="true">
@@ -392,6 +194,42 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="loadingModal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="d-flex justify-content-center align-items-center">
+                            @if(cache('report',false))
+                                <h2>
+                                    <span class="badge text-bg-success"><i class="bi bi-check2-square"></i></span>
+                                    El informe se ha generado Correctamente
+                                </h2>
+                            @else
+                                <div class="spinner-border text-primary me-2" role="status"
+                                    style="{width: 6rem;height: 6rem;border-width: 0.6  em;}">
+                                    <span class="visually-hidden">Cargando...</span>
+                                </div>
+                                <div>
+                                    <p class="mb-0">El informe se está generando.<br>
+                                        Este proceso puede tardar unos minutos, por favor espere.</p>
+                                </div>
+                            @endif
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     @endif
 
 </div>
+@script
+    <script>
+        $wire.on('submit-form-report', () => {
+            document.getElementById('formReport').submit();
+            $('#loadingModal').modal('hide');
+            $('#loadingModal').modal('show');
+        });
+    </script>
+@endscript

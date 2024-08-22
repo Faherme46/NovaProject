@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 
-class SessionController extends Controller
+class sessionController extends Controller
 {
     public function destroyAll()
     {
@@ -42,6 +42,7 @@ class SessionController extends Controller
         Cache::forget('id_asamblea');
         Cache::forget('asambleaOn');
         Cache::forget('inRegistro');
+        Cache::forget('report');
         Cache::forget('controles');
         Cache::forget('name-asamblea');
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');

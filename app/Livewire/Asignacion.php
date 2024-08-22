@@ -15,6 +15,8 @@ use App\Models\Control;
 use App\Models\Persona;
 use App\Models\Predio;
 
+use Carbon\Carbon;
+use DateTimeZone;
 class Asignacion extends Component
 {
     public $predioSelected = [];
@@ -211,6 +213,7 @@ class Asignacion extends Component
             $control->state = 1;
             $control->attachPredios($this->predioSelected);
             $control->setCoef();
+            $control->h_entrega= Carbon::now(new DateTimeZone('America/Bogota'))->second(0)->format('H:i');
             $control->save();
         } catch (\Exception $e) {
             return  session()->flash('warning1', $e->getMessage());

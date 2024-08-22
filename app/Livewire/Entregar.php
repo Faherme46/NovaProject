@@ -7,6 +7,7 @@ use Livewire\Component;
 use Livewire\Attributes\Layout;
 
 use App\Models\Control;
+use Carbon\Carbon;
 
 class Entregar extends Component
 {
@@ -33,7 +34,6 @@ class Entregar extends Component
     }
 
     public function change($value){
-
         $control=Control::find($this->controlId);
         $control->changeState($value);
         $this->inModal=false;
@@ -52,5 +52,10 @@ class Entregar extends Component
 
     public function close(){
         $this->reset('controlId','inModal');
+    }
+
+    public function entregarAll(){
+        $now=Carbon::now(new \DateTimeZone('America/Bogota'));
+        $this->controls=Control::whereHas('predios')->update(['h_recibe'=>$now,'state'==5]);
     }
 }

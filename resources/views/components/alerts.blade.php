@@ -1,4 +1,4 @@
-<div class="z-3">
+<div class="z-3 position-fixed " >
 
     @session('success1')
         <div class="alert alert-success alert-dismissible" role="alert">

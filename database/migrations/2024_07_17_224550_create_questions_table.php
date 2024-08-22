@@ -25,6 +25,8 @@ return new class extends Migration
             $table->double('quorum')->nullable();
             $table->integer('predios')->nullable();
             $table->integer('seconds')->default(0);
+            $table->string('resultTxt')->nullable();
+            $table->boolean('coefGraph')->default(1);
             $table->timestamps();
 
             $table->foreign('type')->references('id')->on('question_types');

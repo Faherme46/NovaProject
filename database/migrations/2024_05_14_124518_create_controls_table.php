@@ -19,7 +19,8 @@ return new class extends Migration
             $table->integer('predios_vote');
             $table->decimal('sum_coef', 8, 6);
             $table->timestamps();
-
+            $table->string('h_entrega')->nullable();//se le entrega al cliente
+            $table->string('h_recibe')->nullable();//recibe el operario
             $table->foreign('state')->references('id')->on('states');
             $table->foreign('cc_asistente')->references('id')->on('personas');
         });
