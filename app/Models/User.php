@@ -9,7 +9,6 @@ use Illuminate\Notifications\Notifiable;
 
 use Spatie\Permission\Traits\HasRoles;
 
-use App\Models\Role;
 
 class User extends Authenticatable
 {
@@ -43,6 +42,10 @@ class User extends Authenticatable
         ];
     }
 
-    
+
+    public function personas(){
+        return $this->hasMany(Persona::class);
+    }
+
 
 }

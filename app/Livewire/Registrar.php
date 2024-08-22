@@ -281,6 +281,11 @@ class Registrar extends Component
 
                 $control->state = 1;
                 $control->save();
+                $control->persona()->update([
+                    'registered'=>true,
+                    'registeredBy'=>auth()->id()
+                ]);
+
             }
 
         } catch (QueryException $e) {

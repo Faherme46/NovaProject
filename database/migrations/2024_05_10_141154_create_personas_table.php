@@ -16,7 +16,13 @@ return new class extends Migration
             $table->string('tipo_id');
             $table->string('nombre');
             $table->string( 'apellido')->nullable();
+            $table->boolean('registered')->default(false);
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->timestamps();
+
+
+            $table->foreign('user_id')->references('id')->on('users');
+
         });
     }
 
