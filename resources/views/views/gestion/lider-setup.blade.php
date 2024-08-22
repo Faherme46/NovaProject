@@ -14,7 +14,7 @@
         <div class="col-4">
             <div class="card">
                 <div class="card-header">
-                    <h2 class="card-title">{{ $asambleaOn->folder }}</h2>
+                    <h2 class="card-title">{{ $asamblea['folder'] }}</h2>
                 </div>
                 <div class="card-body px-0 pt-0">
 
@@ -23,15 +23,15 @@
                         <tbody>
                             <tr>
                                 <td class="text-end">Fecha:</td>
-                                <td>{{ $asambleaOn->fecha }} </td>
+                                <td>{{ $asamblea['fecha']}} </td>
                             </tr>
                             <tr>
                                 <td class="text-end">Hora:</td>
-                                <td class="text-start"> {{ $asambleaOn->hora }}</td>
+                                <td class="text-start"> {{ $asamblea['hora'] }}</td>
                             </tr>
                             <tr>
                                 <td class="text-end">Controles:</td>
-                                <td class="text-start">{{ $asambleaOn->controles }}</td>
+                                <td class="text-start">{{ $asamblea['controles'] }}</td>
                             </tr>
                             <tr>
                                 <td class="text-end">Controles registrados:</td>
@@ -85,7 +85,7 @@
                         <thead>
                             <tr class="table-active">
                                 <th class="text-center"><i class="bi bi-building bx"></i></th>
-                                @if ($asambleaOn->registro)
+                                @if ($asamblea['registro'])
                                     <th>Asistente</th>
                                 @endif
                                 <th class="align-middle bx">Predios</th>
@@ -100,7 +100,7 @@
 
                                 <tr>
                                     <td class="text-center">{{ $control->id }}</td>
-                                    @if ($asambleaOn->registro)
+                                    @if ($asamblea['registro'])
                                         <td>{{ $control->persona->nombre }} {{ $control->persona->apellido }}</td>
                                     @endif
                                     {{--  --}}

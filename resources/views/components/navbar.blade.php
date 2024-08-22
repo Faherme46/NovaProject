@@ -7,7 +7,7 @@
         @endauth
 
         <div class="collapse navbar-collapse me-3" id="navbarSupportedContent">
-            <h2 class="mb-0 ms-2 text-light ">{{ $name_asamblea }}</h2>
+            <h2 class="mb-0 ms-2 text-light ">{{ $asamblea['folder'] }}</h2>
             <div class="mx-auto">
                 <livewire:quorum-state />
             </div>
@@ -22,7 +22,7 @@
                         @auth
                             <li class="dropdown-item">
                                 <span class="dropdown-item d-flex gap-2 align-items-center">
-                                    {{ $currentUser->name }}
+                                    {{ auth()->user()->name }}
                                 </span>
                             </li>
                             <li class="dropdown-item">

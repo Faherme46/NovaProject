@@ -50,7 +50,10 @@ class AsambleaController extends Controller
             $input['registro'] = false;
         }
         $input['name'] = $input['folder'] . '_' . str_replace('-', '.', $input['fecha']);
+        if (array_key_exists('signature', $input)) {
 
+            $input['signature'] = true;
+        }
         $request->merge($input);
 
         $request->validate([
@@ -60,10 +63,10 @@ class AsambleaController extends Controller
             'hora' => 'required|date_format:H:i',
             'controles' => 'required',
             'registro' => 'required|boolean',
+
         ], [
             'folder.required' => 'Debe seleccionar un cliente.',
         ]);
-
 
         try {
             $imports=$this->importPredios($request->folder,$request->registro);
@@ -77,7 +80,8 @@ class AsambleaController extends Controller
                     'inRegistro'    => $asamblea->registro,
                     'controles'     => $asamblea->controles,
                     'name_asamblea' => $asamblea->name,
-                    'client_name'=>$asamblea->folder
+                    'client_name'=>$asamblea->folder,
+                    'asamblea'=>$asamblea
                 ];
 
                 Cache::putMany($data);

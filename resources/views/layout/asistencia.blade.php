@@ -3,7 +3,7 @@
 @section('content')
     <div class="row g-2">
         <div class="col-7">
-            <x-alerts />
+            
             {{$slot}}
         </div>
         <div class="col-5">

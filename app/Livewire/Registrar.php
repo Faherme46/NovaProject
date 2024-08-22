@@ -283,7 +283,7 @@ class Registrar extends Component
                 $control->save();
                 $control->persona()->update([
                     'registered'=>true,
-                    'registeredBy'=>auth()->id()
+                    'user_id'=>auth()->id()
                 ]);
 
             }

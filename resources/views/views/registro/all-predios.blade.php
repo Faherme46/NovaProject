@@ -2,7 +2,7 @@
 
 
     <div class="card-header row g-1">
-        @if ($asambleaOn->registro)
+        @if ($asamblea['registro'])
             <div class="col-3">
                 <input wire:model.live='searchId' type="text" id="searchId" name="cc_propietario" class="form-control"
                     placeholder="Propietario" onkeypress="return onlyNumbers(event)" onclick="this.select()">
@@ -49,7 +49,7 @@
             <thead>
                 <th>Añadir</th>
                 <th class="ps-4">Predio</th>
-                @if ($asambleaOn->registro)
+                @if ($asamblea['registro'])
                     <th>Propietario</th>
                 @else
                     <th>Coef</th>
@@ -83,7 +83,7 @@
                     </td>
 
 
-                    @if ($asambleaOn->registro)
+                    @if ($asamblea['registro'])
                         <td>
                             @foreach ($predio->personas as $persona)
                                 <button type="button" class="btn p-0"
@@ -146,7 +146,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="row g-3">
-                            <div class="@if ($asambleaOn->registro) col-6 @else col-12 @endif">
+                            <div class="@if ($asamblea['registro']) col-6 @else col-12 @endif">
                                 <div class="card">
                                     <div class="card-header">
                                         <h6 class="card-title"> Propiedades </h6>
@@ -176,7 +176,7 @@
                                     </div>
                                 </div>
                             </div>
-                            @if ($asambleaOn->registro)
+                            @if ($asamblea['registro'])
                                 <div class="col-6">
                                     <div class="card">
                                         <div class="card-header">
@@ -244,7 +244,7 @@
                                 <h6 class="mb-0">Id: {{ $Predio->id }}</h6>
                             </li>
 
-                            @if ($asambleaOn->registro)
+                            @if ($asamblea['registro'])
                                 <li class="list-group-item d-flex">
 
                                     <div class="ms-0 me-auto ">
@@ -320,7 +320,7 @@
                                     <li class="list-group-item">Sin asignar</li>
                                 @endif
 
-                                @if ($asambleaOn->registro && $Control->asignacion())
+                                @if ($asamblea['registro'] && $Control->asignacion())
                                     <li class="list-group-item d-flex">
                                         <div class="ms-0 me-auto ">
 

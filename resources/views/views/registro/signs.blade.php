@@ -6,9 +6,7 @@
         </button>
     </div>
     <div class="card mt-2">
-        <div class="card-header">
-            alfa y beta
-        </div>
+        
         <div class="card-body">
             <button  class="btn btn-primary" wire:click='proof'>
                 Button

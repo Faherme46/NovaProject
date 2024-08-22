@@ -39,16 +39,12 @@ class AppServiceProvider extends ServiceProvider
                 $states[$item->id] = $item->value;
                 # code...
             }
-            $asambleaController = new AsambleaController();
-            $sessionController = new sessionController();
-            $id = $sessionController->getSessionId();
-            $sessionUser = Auth::user();
-            $asamblea = $asambleaController->getOne($id);
+
+            $asamblea = cache('asamblea',false);
             $view->with(
                 [
-                    'name_asamblea' => ($asamblea) ? $asamblea->folder : '-',
-                    'asambleaOn' => $asamblea,
-                    'currentUser' => ($sessionUser) ? $sessionUser : null,
+                    'asamblea' => $asamblea,
+                    'registro' => ($asamblea) ? $asamblea['registro'] : false,
                     'states' => $states
                 ]
             );

@@ -58,8 +58,8 @@
                     <div class="nav_list">
 
 
-                        @if ($asambleaOn)
-                            @if ($asambleaOn->registro)
+                        @if ($asamblea)
+                            @if ($asamblea['registro'])
                                 <a href="{{ route('asistencia.registrar') }}" class="nav_link ">
                                     <i class='bi bi-person-check-fill nav_icon'></i> <span class="nav_name">Registro</span>
                                 </a>
@@ -154,7 +154,6 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
-        <x-alerts/>
         @yield('content')
 
 

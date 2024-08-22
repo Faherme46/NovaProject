@@ -24,7 +24,7 @@
                             <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off"
                                 wire:model.live='tab' value='3'>
                             <label class="btn btn-outline-primary" for="btnradio3">Consultar Predios</label>
-                            @if ($asambleaOn->registro)
+                            @if ($asamblea['registro'])
                                 <input type="radio" class="btn-check" name="btnradio" id="btnradio4"
                                     autocomplete="off" wire:model.live='tab' value='4'>
                                 <label class="btn btn-outline-primary" for="btnradio4">Consultar Personas</label>
@@ -165,7 +165,7 @@
 
                                 <div class="card-footer justify-content-between d-flex">
                                     <div class="col-7 align-content-center">
-                                        @if ($asambleaOn->registro && $nameL)
+                                        @if ($asamblea['registro'] && $nameL)
                                             <p class="mb-0">{{ $nameL }}</p>
                                         @endif
                                     </div>
@@ -260,7 +260,7 @@
                                 </div>
                                 <div class="card-footer justify-content-between d-flex">
                                     <div class="col-7 align-content-center">
-                                        @if ($asambleaOn->registro && $nameR)
+                                        @if ($asamblea['registro'] && $nameR)
                                             <p class="mb-0">{{ $nameR }}</p>
                                         @endif
                                     </div>
@@ -304,7 +304,7 @@
                                     name="formPredio">
                                     @csrf
                                     <div class="card-body pt-3 px-2 d-flex justify-content-center">
-                                        <div class="col-5 @if (!$asambleaOn->registro) mx-auto @endif me-4">
+                                        <div class="col-5 @if (!$asamblea['registro']) mx-auto @endif me-4">
                                             <ul class="list-group list-group-flush">
                                                 <li
                                                     class="list-group-item d-flex align-items-center justify-content-between">
@@ -342,7 +342,7 @@
                                             </ul>
                                         </div>
                                         <div class="col-6 ">
-                                            @if ($asambleaOn->registro)
+                                            @if ($asamblea['registro'])
                                                 <ul class="list-group list-group ">
                                                     <li class="list-group-item bg-primary
                                                         d-flex justify-content-between align-items-center">

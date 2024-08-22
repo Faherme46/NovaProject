@@ -83,7 +83,7 @@
                     </div>
 
                 </div>
-                @if ($asambleaOn->registro)
+                @if ($asamblea['registro'])
                     <div class="col-3">
                         <div class="card px-0">
                             <div class="card-header d-flex justify-content-between align-items-center">
@@ -136,7 +136,7 @@
                                             </div>
                                         </div>
                                     </button>
-                                    <button type="button" class="btn btn-info p-1 mt-2" @disabled(!$asambleaOn || !$allQuestionsVerified)
+                                    <button type="button" class="btn btn-info p-1 mt-2" @disabled(!$asamblea || !$allQuestionsVerified)
                                     wire:click='verifyForm'>
                                         <div class="card ">
                                             <div
@@ -147,7 +147,7 @@
                                         </div>
                                     </button>
                                     <button type="button" class="btn btn-danger p-1 mt-2" data-bs-toggle=modal
-                                        data-bs-target=#modalDeleteSession @disabled(!$asambleaOn || !$report)>
+                                        data-bs-target=#modalDeleteSession @disabled(!$asamblea || !$report)>
                                         <div class="card ">
                                             <div
                                                 class="card-body d-flex align-items-center p-1 justify-content-center">
@@ -168,7 +168,7 @@
         </div>
     </div>
 
-    @if ($asambleaOn)
+    @if ($asamblea)
         <div class="modal fade" tabindex="-1" id="modalDeleteSession" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">

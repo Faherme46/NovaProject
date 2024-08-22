@@ -1,4 +1,5 @@
 <div>
+    <x-alerts/>
     <div class="row g-2 mb-2 z-2">
         {{-- buscar --}}
         <div class="col-4 ">
