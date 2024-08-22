@@ -115,6 +115,15 @@ class Main extends Component
             'nonOperario'=>false,
             'onlyRegistro'=>0
         ],
+        [
+            "directives"=> 'onclick=location.href="/asistencia/firmas";',
+            'icon'=> 'bi-pen',
+            'title'=> 'Firmas',
+            'body'=> 'Recibir Firmas electronicas',
+            'onlyAdmin'=>false,
+            'nonOperario'=>false,
+            'onlyRegistro'=>1
+        ],
     ];
 
 

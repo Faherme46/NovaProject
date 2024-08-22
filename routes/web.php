@@ -26,6 +26,7 @@ use App\Livewire\Registrar;
 use App\Livewire\Asignacion;
 use App\Livewire\Entregar;
 use App\Livewire\JobStatus;
+use App\Livewire\Signs;
 
 //rutas de redireccion
 
@@ -65,6 +66,7 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
 
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Admin|Lider|Operario')]], function () {
     Route::get('/asistencia/asignacion', Asignacion::class)->name('asistencia.asignacion');
+    Route::get('/asistencia/firmas', Signs::class)->name('asistencia.firmas');
     Route::get('/asistencia/registrar', Registrar::class)->name('asistencia.registrar');
     Route::get('/consulta', Consulta::class)->name('consulta');
     Route::get('/entregar', Entregar::class)->name('entregar');
