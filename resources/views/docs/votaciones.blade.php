@@ -102,7 +102,7 @@
                     </thead>
                     <tbody>
                         @foreach ($options as $option)
-                            @if ($q['option' . $option] !== null)
+                            @if ($q['option' . $option])
                                 <tr>
                                     <td>{{ $option }}</td>
                                     <td>{{ $q->resultNom['option' . $option] }}</td>

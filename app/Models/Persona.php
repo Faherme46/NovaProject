@@ -38,4 +38,8 @@ class Persona extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function signature(){
+        return $this->hasOne(Signature::class);
+    }
+
 }

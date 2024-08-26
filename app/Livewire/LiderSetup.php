@@ -54,10 +54,10 @@ class LiderSetup extends Component
         $this->quorumVote = $this->allControls->sum(function ($control) {
             return $control->sum_coef_can;
         });
-        $this->asamblea=Asamblea::find(cache('id_asamblea'));
+        $this->asamblea = Asamblea::find(cache('id_asamblea'));
 
-        $this->started=($this->asamblea->h_inicio);
-        $this->finished=($this->asamblea->h_cierre);
+        $this->started = ($this->asamblea->h_inicio);
+        $this->finished = ($this->asamblea->h_cierre);
     }
 
 
@@ -71,8 +71,11 @@ class LiderSetup extends Component
 
                 $this->started = true;
                 if (cache('inRegistro')) {
-                    cache(['predios_init' =>  Predio::whereHas('control')->count()]);
-                    cache(['quorum_init' => Control::whereNotIn('state', [3, 4])->sum('sum_coef')]);
+                    cache(['predios_init' =>  Predio::whereHas('control')->count(),
+                    'quorum_init' => Control::whereNotIn('state', [3, 4])->sum('sum_coef'),
+                    'asamblea' => $this->asamblea
+
+                ]);
                     Predio::whereHas('control')->update(['quorum_start' => true]);
                 }
                 $this->asamblea->h_inicio = $time;
@@ -99,9 +102,12 @@ class LiderSetup extends Component
                     Predio::whereHas('control', function ($query) use ($time) {
                         $query->where('state', 1);
                     })->update(['quorum_end' => true]);
-                    Control::whereHas('predios')->update(['h_recibe'=>$time->format('H:i')]);
-                    cache(['asistentes_end' =>  Predio::where('quorum_end',true)->count()]);
-                    cache(['quorum_end' => Control::whereNotIn('state', [1])->sum('sum_coef')]);
+                    Control::whereHas('predios')->update(['h_recibe' => $time->format('H:i')]);
+                    cache([
+                        'asistentes_end' =>  Predio::where('quorum_end', true)->count(),
+                        'quorum_end' => Control::whereNotIn('state', [1])->sum('sum_coef'),
+                        'asamblea' => $this->asamblea
+                    ]);
                 }
                 $this->asamblea->h_cierre = $time;
                 $this->asamblea->save();

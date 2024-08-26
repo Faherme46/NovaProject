@@ -21,6 +21,8 @@ return new class extends Migration
             $table->timestamps();
             $table->string('h_entrega')->nullable();//se le entrega al cliente
             $table->string('h_recibe')->nullable();//recibe el operario
+            $table->string('t_publico')->default(0);
+
             $table->foreign('state')->references('id')->on('states');
             $table->foreign('cc_asistente')->references('id')->on('personas');
         });

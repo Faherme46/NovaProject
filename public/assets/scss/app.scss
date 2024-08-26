@@ -288,3 +288,9 @@ a {
     /* Muestra un cursor "no permitido" */
     color: inherit;
 }
+#drawing-canvas{
+    min-width: 60vw;
+    min-height: 60vh;
+    border: 1px solid var(--black-color);
+    border-bottom: 3px solid var(--black-color);
+}

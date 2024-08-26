@@ -21,6 +21,7 @@
     {{-- Fuente de iconos --}}
     <link href='{{ asset('vendor/bootstrap-icons/font/bootstrap-icons.min.css') }}' rel='stylesheet'>
 
+    <script type='text/javascript' src='{{ asset('assets/js/fabric.min.js') }}'></script>
 
     {{-- Bootstrap js --}}
     <script type='text/javascript' src='{{ asset('vendor/bootstrap/dist/js/bootstrap.bundle.js') }}'></script>

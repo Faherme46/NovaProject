@@ -7,7 +7,7 @@
         @endauth
 
         <div class="collapse navbar-collapse me-3" id="navbarSupportedContent">
-            <h2 class="mb-0 ms-2 text-light ">{{ $asamblea['folder'] }}</h2>
+            <h2 class="mb-0 ms-2 text-light ">{{ ($asamblea)?$asamblea['folder']:'-' }}</h2>
             <div class="mx-auto">
                 <livewire:quorum-state />
             </div>

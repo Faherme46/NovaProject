@@ -20,6 +20,7 @@
     <script type='text/javascript' src='{{ asset('vendor/bootstrap/dist/js/bootstrap.bundle.js') }}'></script>
     {{-- jquery --}}
     <script type='text/javascript' src='{{ asset('assets/js/jquery.min.js') }}'></script>
+    <script type='text/javascript' src='{{ asset('assets/js/fabric.min.js') }}'></script>
     {{-- popper --}}
     <script src="{{ asset('assets/js/popper.js') }}"></script>
 

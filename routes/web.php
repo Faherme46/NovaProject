@@ -26,6 +26,7 @@ use App\Livewire\Registrar;
 use App\Livewire\Asignacion;
 use App\Livewire\Entregar;
 use App\Livewire\JobStatus;
+use App\Livewire\Signing;
 use App\Livewire\Signs;
 
 //rutas de redireccion
@@ -38,7 +39,6 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::get('gestion/informes', Reports::class)->name('gestion.report');
     Route::get('gestion/informes/Informe', [ReportController::class,'createReport'])->name('gestion.report.docs');
     Route::post('/predios/import', [PrediosController::class, 'import'])->name('predios.import');
-
     Route::post('questions/setResult', [QuestionsController::class,   'setResult'])->name('questions.setResult');
     Route::post('gestion/asamblea/update', [AsambleaController::class,'updateAsamblea'])->name('asamblea.update');
 });
@@ -66,11 +66,14 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
 
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Admin|Lider|Operario')]], function () {
     Route::get('/asistencia/asignacion', Asignacion::class)->name('asistencia.asignacion');
-    Route::get('/asistencia/firmas', Signs::class)->name('asistencia.firmas');
+
     Route::get('/asistencia/registrar', Registrar::class)->name('asistencia.registrar');
     Route::get('/consulta', Consulta::class)->name('consulta');
     Route::get('/entregar', Entregar::class)->name('entregar');
     Route::get('/', Main::class)->name('home')->withoutMiddleware(EnsureAsambleaOn::class);
+    Route::post('/gestion/saveSign', [FileController::class,'saveSignImg'])->name('gestion.sign.save');
+    Route::get('/asistencia/firmas', Signs::class)->name('asistencia.signs');
+    Route::get('/asistencia/firmando', Signing::class)->name('asistencia.signing');
 });
 //rutas para registro
 

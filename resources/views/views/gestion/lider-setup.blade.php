@@ -75,7 +75,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-auto">
+        <div class="col-8">
             <div class="card">
                 <div class="card-header">
                     <h2 class="card-title mb-0">Asignaciones</h2>
@@ -88,10 +88,11 @@
                                 @if ($asamblea['registro'])
                                     <th>Asistente</th>
                                 @endif
-                                <th class="align-middle bx">Predios</th>
-                                <th class="align-middle bx">Coef. Neto</th>
-                                <th class="align-middle bx">Coef. Vota</th>
-                                <th class="align-middle bx">Estado</th>
+                                <th class="text-center">Predios</th>
+                                <th class="text-center">Coef. Neto</th>
+                                <th class="text-center">Coef. Vota</th>
+                                <th class="text-center">Estado</th>
+                                <th class="text-center">T.D.</th>
                             </tr>
                         </thead>
 
@@ -116,6 +117,9 @@
                                     <td>{{ $control->sum_coef_can }}</td>
                                     <td>
                                         <span class="badge p-1 fs-6 {{ $colors[$control->state] }}">{{ $control->getStateTxt() }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge p-1 fs-6 ">{{($control->t_publico)?'Publico':'Privado'}}</span>
                                     </td>
                                 </tr>
                             @empty

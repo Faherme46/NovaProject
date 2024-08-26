@@ -126,6 +126,7 @@ class AsambleaController extends Controller
         $asamblea = Asamblea::find($request->id_asamblea);
         if($asamblea){
             $asamblea->update($request->all());
+            cache(['asamblea'=>$asamblea]);
             return back()->with('success1', 'Reunión actualizada con éxito.');
         }else{
             return back()->with('error1', 'No se encontro la asamblea')->withInput();
@@ -137,6 +138,7 @@ class AsambleaController extends Controller
     {
         $asamblea = Asamblea::findOrFail($id);
         $asamblea->delete();
+        cache()->forget('asamblea');
         return redirect()->route('home');
     }
 

@@ -115,8 +115,6 @@ class Reports extends Component
     {
         $this->question = $this->questions->find($questionId);
         $this->questionResultTxt = $this->question->resultTxt;
-
-
     }
     public function saveOrdenDia()
     {
@@ -147,7 +145,7 @@ class Reports extends Component
     public function setResult()
     {
 
-        $this->question->resultTxt = ($this->questionResultTxt)?$this->questionResultTxt:null;
+        $this->question->resultTxt = ($this->questionResultTxt)?strtoupper($this->questionResultTxt):null;
         $this->question->save();
 
         session()->flash('success1', 'Cambios Guardados');
