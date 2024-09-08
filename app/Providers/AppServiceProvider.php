@@ -40,7 +40,7 @@ class AppServiceProvider extends ServiceProvider
                 # code...
             }
 
-            $asamblea = cache('asamblea',false);
+            $asamblea = \App\Models\Asamblea::find(cache('id_asamblea'));
             $view->with(
                 [
                     'asamblea' => $asamblea,

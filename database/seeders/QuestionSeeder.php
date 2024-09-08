@@ -21,7 +21,7 @@ class QuestionSeeder extends Seeder
         QuestionType::create(['name' => 'Aprobacion']);
         QuestionType::create(['name' => 'SI/NO']);
         QuestionType::create(['name' => 'TD']);
-        QuestionType::create(['name' => 'Libre']);
+        QuestionType::create(['name' => 'Prueba']);
 
         Question::create([
             'title' => 'Aprobacion de estados Financieros',
@@ -157,12 +157,12 @@ class QuestionSeeder extends Seeder
         ]);
         Question::create([
             'title' => 'Prueba',
-            'optionA' => 'A',
-            'optionB' => 'B',
-            'optionC' => 'C',
-            'optionD' => 'D',
-            'optionE' => 'E',
-            'optionF' => 'F',
+            'optionA' => '',
+            'optionB' => '',
+            'optionC' => '',
+            'optionD' => '',
+            'optionE' => '',
+            'optionF' => '',
             'prefab' => true,
             'type' => 6
         ]);

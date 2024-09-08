@@ -35,17 +35,25 @@ class PresentQuestion extends Component
     public $inCoefResult = true;
 
     public $votes = [];
+
+
     public function mount()
     {
         $this->reset('inVoting', 'seconds', 'countdown', 'votes');
+
+        // $this->question = Question::find(19);
         $this->question = Question::find(session('question_id'));
+
         if (!$this->question) {
             return redirect()->route('home')->with('error', 'Nada para mostrar');
         }
+
         $this->controls = Control::all()->pluck('id')->toArray();
+        $this->dispatch('full-screen-in');
         $this->inCoefResult = $this->question->coefGraph;
         $this->setControlsAssigned();
-        $this->dispatch('full-screen-in');
+
+
         // $this->chartNom=Storage::disk('results')->url('images/results/10/nominalChart.png');
 
     }
@@ -134,8 +142,8 @@ class PresentQuestion extends Component
             $values[] = $result->$key;
         }
 
+        $fileController=new FileController;
 
-        $fileController = new FileController;
         $imageName = ($result->isCoef) ? 'coefChart' : 'nominalChart';
         $chart = $fileController->createChart($this->question->id, $this->question->title, $labels, $values, $imageName);
 
@@ -278,20 +286,16 @@ class PresentQuestion extends Component
             ]);
 
 
-            $fileCotroller = new FileController;
+            $fileController=new FileController;
 
-
-            $fileCotroller->exportResult($this->question);
-            $fileCotroller->exportVotes($this->votes, $this->question->id, $this->question->title);
-
+            $fileController->exportResult($this->question);
+            $fileController->exportVotes($this->votes, $this->question->id, $this->question->title);
         } catch (\Throwable $th) {
             dd('Error ', $th->getMessage());
         }
 
 
         $this->inResults();
-
-
     }
 
 

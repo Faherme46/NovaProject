@@ -70,14 +70,25 @@
     let lastY = 0;
 
     // Función para comenzar el dibujo
+    // Función para iniciar el dibujo (tanto para mouse como táctil)
     function startDrawing(e) {
         isDrawing = true;
-        [lastX, lastY] = [e.offsetX, e.offsetY]; // Guardar la posición inicial
+        const {
+            offsetX,
+            offsetY
+        } = getEventPosition(e);
+        [lastX, lastY] = [offsetX, offsetY]; // Guardar la posición inicial
     }
 
-    // Función para dibujar en el canvas
+    // Función para dibujar en el canvas (tanto para mouse como táctil)
     function draw(e) {
         if (!isDrawing) return; // Si no se está dibujando, salir de la función
+
+        const {
+            offsetX,
+            offsetY
+        } = getEventPosition(e);
+
         ctx.strokeStyle = '#000000'; // Color de la línea
         ctx.lineWidth = 2; // Grosor de la línea
         ctx.lineJoin = 'round';
@@ -85,59 +96,52 @@
 
         ctx.beginPath();
         ctx.moveTo(lastX, lastY); // Mover a la última posición registrada
-        ctx.lineTo(e.offsetX, e.offsetY); // Dibujar línea hacia la nueva posición
+        ctx.lineTo(offsetX, offsetY); // Dibujar línea hacia la nueva posición
         ctx.stroke();
 
         // Actualizar la posición
-        [lastX, lastY] = [e.offsetX, e.offsetY];
+        [lastX, lastY] = [offsetX, offsetY];
     }
 
-    // Función para detener el dibujo
+    // Función para detener el dibujo (tanto para mouse como táctil)
     function stopDrawing() {
         isDrawing = false;
     }
 
+    // Función para obtener la posición del evento (mouse o táctil)
+    function getEventPosition(e) {
+        let offsetX, offsetY;
+        if (e.type.includes('touch')) {
+
+            const touch = e.touches[0] || e.changedTouches[0];
+            const rect = canvas.getBoundingClientRect();
+            console.log(touch)
+            offsetX = touch.clientX - rect.left + window.scrollX ;
+            offsetY = touch.clientY - rect.top + window.scrollY ;
+        } else {
+            offsetX = e.offsetX;
+            offsetY = e.offsetY;
+
+        }
+
+        return {
+            offsetX,
+            offsetY
+        };
+    }
     // Eventos del ratón
+
+
+
+
+
     canvas.addEventListener('mousedown', startDrawing);
     canvas.addEventListener('mousemove', draw);
     canvas.addEventListener('mouseup', stopDrawing);
     canvas.addEventListener('mouseout', stopDrawing);
-
-    // Soporte para pantallas táctiles
-    canvas.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-
-        var ctx = canvas.getContext("2d");
-        var touches = evt.changedTouches;
-
-        for (var i = 0; i < touches.length; i++) {
-            ongoingTouches.push(touches[i]);
-            var color = colorForTouch(touches[i]);
-            ctx.fillStyle = color;
-            ctx.fillRect(touches[i].pageX - 2, touches[i].pageY - 2, 4, 4);
-        }
-    });
-    canvas.addEventListener('touchmove', (e) => {
-        e.preventDefault();
-        var ctx = canvas.getContext("2d");
-        var touches = evt.changedTouches;
-
-        ctx.lineWidth = 4;
-
-        for (var i = 0; i < touches.length; i++) {
-            var color = colorForTouch(touches[i]);
-            var idx = ongoingTouchIndexById(touches[i].identifier);
-
-            ctx.fillStyle = color;
-            ctx.beginPath();
-            ctx.moveTo(ongoingTouches[idx].pageX, ongoingTouches[idx].pageY);
-            ctx.lineTo(touches[i].pageX, touches[i].pageY);
-            ctx.closePath();
-            ctx.stroke();
-            ongoingTouches.splice(idx, 1, touches[i]); // swap in the new touch record
-        }
-    });
-
+    // Listeners para eventos táctiles
+    canvas.addEventListener('touchstart', startDrawing);
+    canvas.addEventListener('touchmove', draw);
     canvas.addEventListener('touchend', stopDrawing);
     canvas.addEventListener('touchcancel', stopDrawing);
 
@@ -155,10 +159,6 @@
         });
 
     }
-
-
     document.getElementById('saveButton').addEventListener('click', saveCanvasAsImage);
-
-    // Evento para el botón de limpiar canvas
     document.getElementById('clearButton').addEventListener('click', clearCanvas);
 </script>

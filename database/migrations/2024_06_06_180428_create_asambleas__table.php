@@ -22,6 +22,7 @@ return new class extends Migration
             $table->integer('controles');
             $table->string('referencia')->nullable();
             $table->string('tipo')->nullable();
+            $table->json('ordenDia')->nullable();
             // $table->enum('estado', ['pendiente', 'en_progreso', 'finalizada','cancelada']);
             $table->boolean('registro');
             $table->boolean('signature')->default(false);

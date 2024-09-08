@@ -1,7 +1,8 @@
 <div>
+    <x-alerts />
     <div class="row mt-3 g-3 justify-content-center">
         <div class="col-auto w-50 align-items-center ">
-            <form action="{{ route('questions.create') }}" method="POST" id="form">
+            <form wire:submit='createQuestion' id="form">
                 @csrf
 
                 <input type="number" name="mins" id="" wire:model='mins' hidden>
@@ -27,46 +28,56 @@
                             </ul>
                         </div>
 
-                        <input type="text" wire:model='questionTag' class="form-control me-2" name="title"
-                            @readonly($questionId < 12)>
-
-
-                        <button type="submit" class="btn btn-primary" @disabled(!$questionId)>Presentar</button>
+                        <input type="text" wire:model='questionTitle' class="form-control me-2" required>
+                        <button type="button" class="btn btn-primary" @disabled(!$isQuestion) data-bs-toggle=modal
+                            data-bs-target=#modalPresentQuestion>Presentar</button>
 
                     </div>
                     <div class="card-header d-flex align-items-center py-3 justify-content-between  ">
                         <div class="btn-group" role="group">
-                            <input type="radio" class="btn-check" name="radioType" id="radioType1" autocomplete="off"
-                                wire:model.number.live='questionType' value="1" @disabled($questionType != 1)>
-                            <label class="btn btn-outline-primary  fw-bolder  px-2"
-                                for="radioType1">Quorum</label>
+                            @if ($questionType == 6)
+                                <input type="radio" class="btn-check" name="radioType" id="radioType6"
+                                    wire:model.number.live='questionType' value="6" @disabled($questionType != 6)
+                                    checked>
+                                <label class="btn btn-outline-primary  fw-bolder  px-2" for="radioType6">Prueba</label>
+                            @elseif ($questionType == 5)
+                                <input type="radio" class="btn-check" name="radioType" id="radioType5"
+                                    wire:model.number.live='questionType' value="5" @disabled($questionType != 5)
+                                    checked>
+                                <label class="btn btn-outline-primary  fw-bolder  px-2" for="radioType5">
+                                    Tratamiento de datos
+                                </label>
+                            @else
+                                <input type="radio" class="btn-check" name="radioType" id="radioType1"
+                                    wire:model.number.live='questionType' value="1" @disabled(!$isQuestion || $questionType != 1)>
+                                <label class="btn btn-outline-primary  fw-bolder  px-2" for="radioType1">Quorum</label>
 
-                            <input type="radio" class="btn-check" name="radioType" id="radioType4" autocomplete="off"
-                                wire:model.number.live='questionType' value="2" @disabled($questionId != 12 && $questionType != 2)>
-                            <label class="btn btn-outline-primary fw-bolder  px-2"
-                                for="radioType4">Seleccion</label>
-                            <input type="radio" class="btn-check" name="radioType" id="radioType2" autocomplete="off"
-                                wire:model.number.live='questionType' value="3" @disabled($questionId != 12 && $questionType != 3)>
-                            <label class="btn btn-outline-primary fw-bolder  px-2"
-                                for="radioType2">Aprobacion</label>
+                                <input type="radio" class="btn-check" name="radioType" id="radioType4"
+                                    wire:model.number.live='questionType' value="2" @disabled(!$isQuestion || ($questionType != 2 && $questionId != 12))>
 
-                            <input type="radio" class="btn-check" name="radioType" id="radioType3" autocomplete="off"
-                                wire:model.number.live='questionType' value="4" @disabled($questionId != 12 && $questionType != 4)>
-                            <label class="btn btn-outline-primary fw-bolder  px-2"
-                                for="radioType3">Si/No</label>
-                            <input type="radio" class="btn-check" name="radioType" id="radioType5" autocomplete="off"
-                                wire:model.number.live='questionType' value="5" hidden>
+                                <label class="btn btn-outline-primary fw-bolder  px-2"
+                                    for="radioType4">Seleccion</label>
+
+                                <input type="radio" class="btn-check" name="radioType" id="radioType2"
+                                    wire:model.number.live='questionType' value="3" @disabled(!$isQuestion || ($questionType != 3 && $questionId != 12))>
+                                <label class="btn btn-outline-primary fw-bolder  px-2"
+                                    for="radioType2">Aprobacion</label>
+
+                                <input type="radio" class="btn-check" name="radioType" id="radioType3"
+                                    wire:model.number.live='questionType' value="4" @disabled(!$isQuestion || ($questionType != 4 && $questionId != 12))>
+                                <label class="btn btn-outline-primary fw-bolder  px-2" for="radioType3">Si/No</label>
+                            @endif
+
 
                         </div>
-                        <div class="btn-group" role="group" >
-                            <input type="radio" class="btn-check" name="radioCoef" value="0"
-                                id="radioNom" @disabled(!$questionId) @checked(!$coefGraph)>
+                        <div class="btn-group" role="group">
+                            <input type="radio" class="btn-check" name="radioCoef" value="0" id="radioNom"
+                                @disabled(!$isQuestion) wire:model.number.live='questionCoefChart'>
+                            <label class="btn btn-outline-primary" for="radioNom">Nominal</label>
 
-                            <label class="btn btn-outline-primary" for="radioNom" >Nominal</label>
-
-                            <input type="radio" class="btn-check" name="radioCoef" value="1"
-                                id="radioCoef" @disabled(!$questionId) @checked($coefGraph)>
-                            <label class="btn btn-outline-primary" for="radioCoef" >Coeficiente</label>
+                            <input type="radio" class="btn-check" name="radioCoef" value="1" id="radioCoef"
+                                @disabled(!$isQuestion) wire:model.number.live='questionCoefChart'>
+                            <label class="btn btn-outline-primary" for="radioCoef">Coeficiente</label>
                         </div>
                         <div class="form-check form-switch mb-0 align-items-center ">
 
@@ -76,57 +87,96 @@
                         </div>
                     </div>
                     <div class="card-body d-flex ">
+                        <table class="table table-bordered border-black ">
+                            <tr>
+                                <th class="text-center">
+                                    <input type="text" class="custom-input text-center " size="1"
+                                        value="A" disabled>
+                                </th>
+                                <td>
+                                    <input type="text" class="custom-input resettable w-100" id="optionA"
+                                        wire:model.live='questionOptions.A' @readonly(!in_array($questionType, [2, 6]))>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-center">
+                                    <input type="text" class="custom-input " size="1" value="B"
+                                        disabled>
+                                </th>
+                                <td>
+                                    <input type="text" class="custom-input  resettable w-100" id="optionB"
+                                        wire:model.live='questionOptions.B' @readonly(!in_array($questionType, [2, 6]))>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-center">
+                                    <input type="text" class="custom-input " size="1" value="C"
+                                        disabled>
+                                </th>
+                                <td>
+                                    <input type="text" class="custom-input  resettable w-100" id="optionC"
+                                        wire:model.live='questionOptions.C' @readonly(!in_array($questionType, [2, 6]))>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-center">
+                                    <input type="text" class="custom-input " size="1" value="D"
+                                        disabled>
+                                </th>
+                                <td>
+                                    <input type="text" class="custom-input resettable w-100" id="optionD"
+                                        wire:model.live='questionOptions.D' @readonly(!in_array($questionType, [2, 6]))>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-center">
+                                    <input type="text" class="custom-input" size="1" value="E"
+                                        disabled>
+                                </th>
+                                <td>
+                                    <input type="text" class="custom-input  resettable w-100" id="optionE"
+                                        wire:model.live='questionOptions.E' @readonly(!in_array($questionType, [2, 6]))>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-center">
+                                    <input type="text" class="custom-input " size="1" value="F"
+                                        disabled>
+                                </th>
+                                <td>
+                                    <input type="text" class="custom-input w-100 resettable w-100" id="optionF"
+                                        wire:model.live='questionOptions.F' @readonly(!in_array($questionType, [2, 6]))
+                                        wire:keydown='disableWhite'>
+                                </td>
+                            </tr>
+                        </table>
 
-                        <ul class="list-group">
-                            <li class="list-group-item pe-0">
-                                <input type="text" class="custom-input " size="1" value="A" disabled>
-                            </li>
-                            <li class="list-group-item pe-0">
-                                <input type="text" class="custom-input " size="1" value="B" disabled>
-                            </li>
-                            <li class="list-group-item pe-0">
-                                <input type="text" class="custom-input " size="1" value="C" disabled>
-                            </li>
-                            <li class="list-group-item pe-0">
-                                <input type="text" class="custom-input " size="1" value="D" disabled>
-                            </li>
-                            <li class="list-group-item pe-0">
-                                <input type="text" class="custom-input" size="1" value="E" disabled>
-                            </li>
-                            <li class="list-group-item pe-0">
-                                <input type="text" class="custom-input " size="1" value="F" disabled>
-                            </li>
-
-                        </ul>
-                        <ul class="list-group w-100 ">
-
-                            <li class="list-group-item ">
-                                <input type="text" class="custom-input resettable" name="optionA" id="optionA"
-                                    value="{{ $questionOptions['A'] }}" @readonly($questionType != 2)>
-                            </li>
-                            <li class="list-group-item">
-                                <input type="text" class="custom-input resettable" name="optionB" id="optionB"
-                                    value="{{ $questionOptions['B'] }}" @readonly($questionType != 2)>
-                            </li>
-                            <li class="list-group-item">
-                                <input type="text" class="custom-input resettable" name="optionC" id="optionC"
-                                    value="{{ $questionOptions['C'] }}" @readonly($questionType != 2)>
-                            </li>
-                            <li class="list-group-item">
-                                <input type="text" class="custom-input resettable" name="optionD" id="optionD"
-                                    value="{{ $questionOptions['D'] }}" @readonly($questionType != 2)>
-                            </li>
-                            <li class="list-group-item">
-                                <input type="text" class="custom-input resettable" name="optionE" id="optionE"
-                                    value="{{ $questionOptions['E'] }}" @readonly($questionType != 2)>
-                            </li>
-                            <li class="list-group-item">
-                                <input type="text" class="custom-input resettable" name="optionF" id="optionF"
-                                    value="{{ $questionOptions['F'] }}" @readonly($questionType != 2) wire:keydown='disableWhite'>
-                            </li>
-                        </ul>
                     </div>
 
+                </div>
+
+                <div class="modal fade" tabindex="-1" id="modalPresentQuestion" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">
+                                    Iniciar presentación
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                A continuación se mostrará la ventana de votación
+                            </div>
+                            <div class="modal-footer justify-content-between align-items-center">
+                                <span class="badge m-0 text-bg-warning fs-6 ">Esta accion no se puede corregir</span>
+
+                                <button type="submit" class="btn btn-primary " data-bs-dismiss="modal">
+                                    Presentar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>
@@ -189,25 +239,23 @@
 
                 </div>
             </div>
-            <div class="row mt-2">
-                <div class="card px-0 w-50">
-                    <div class="card-header py-1">
-                        <h4 class="card-title mb-0 text-center">Tiempo </h4>
+            <div class="card px-0 w-50 mt-2">
+                <div class="card-header py-1">
+                    <h4 class="card-title mb-0 text-center">Tiempo </h4>
+                </div>
+                <div class="card-body py-1 d-flex justify-content-center">
+                    <div class="col-1 d-flex flex-column mt-3 me-2">
+                        <button class="btn-arrow up" wire:click='increment(1)'></button>
+                        <button class="btn-arrow down" wire:click='decrement(1)'></button>
                     </div>
-                    <div class="card-body py-1 d-flex justify-content-center">
-                        <div class="col-1 d-flex flex-column mt-3 me-2">
-                            <button class="btn-arrow up" wire:click='increment(1)'></button>
-                            <button class="btn-arrow down" wire:click='decrement(1)'></button>
-                        </div>
-                        <div class="col-auto me-2">
-                            <h1 class="ff-clock medium-large-text">
-                                {{ $mins < 10 ? '0' : '' }}{{ $mins }}:{{ $secs < 10 ? '0' : '' }}{{ $secs }}
-                            </h1>
-                        </div>
-                        <div class="col-1 d-flex flex-column mt-3">
-                            <button class="btn-arrow up" wire:click='increment(0)'></button>
-                            <button class="btn-arrow down" wire:click='decrement(0)'></button>
-                        </div>
+                    <div class="col-auto me-2">
+                        <h1 class="ff-clock medium-large-text">
+                            {{ $mins < 10 ? '0' : '' }}{{ $mins }}:{{ $secs < 10 ? '0' : '' }}{{ $secs }}
+                        </h1>
+                    </div>
+                    <div class="col-1 d-flex flex-column mt-3">
+                        <button class="btn-arrow up" wire:click='increment(0)'></button>
+                        <button class="btn-arrow down" wire:click='decrement(0)'></button>
                     </div>
                 </div>
             </div>
@@ -258,5 +306,6 @@
             input = document.getElementById(id);
             input.value = ''
         });
+
     </script>
 @endscript

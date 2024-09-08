@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 
-class sessionController extends Controller
+class SessionController extends Controller
 {
     public function destroyAll()
     {
@@ -39,12 +39,13 @@ class sessionController extends Controller
     public function destroyOnError()
     {
 
-        Cache::forget('id_asamblea');
-        Cache::forget('asambleaOn');
-        Cache::forget('inRegistro');
-        Cache::forget('report');
-        Cache::forget('controles');
-        Cache::forget('name-asamblea');
+
+        Cache::forget('asamblea');
+        Cache::forget('asistentes_end');
+        Cache::forget('quorum_end');
+
+        Cache::forget('predios_init');
+        Cache::forget('quorum_init');
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         Session::truncate();
         Predio::truncate();

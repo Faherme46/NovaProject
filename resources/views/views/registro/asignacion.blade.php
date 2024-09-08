@@ -1,10 +1,10 @@
 <div class="row me-3">
-   
+   <x-alerts/>
 
     <div class="col-12">
         <div class="card">
             <div class="card-header px-0">
-                <div class=" d-flex px-2  justify-content-between">
+                <div class=" d-flex px-2  justify-content-start">
                     <div class="col-1">
                         <button class="btn btn-danger" wire:click='cleanData'>
                             <i class='bi bi-trash-fill '></i>
@@ -13,13 +13,6 @@
                     <div class="col-10 text-center">
                         <h2 class="card-title mb-0">Asignacion de predios</h2>
                     </div>
-                    <div class="col-1 justify-content-end mr-0">
-                        <button class="btn btn-danger" wire:click='proof' wire:keypress='$refresh'>
-                            <i class='bi bi-info-circle-fill '></i>
-                        </button>
-                    </div>
-
-
                 </div>
             </div>
             <div class="card-body">

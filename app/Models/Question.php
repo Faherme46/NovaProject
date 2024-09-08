@@ -12,21 +12,7 @@ class Question extends Model
     use HasFactory;
     protected $guarded = [];
 
-    protected $fillable = [
-        'title',
-        'optionA',
-        'optionB',
-        'optionC',
-        'optionD',
-        'optionE',
-        'optionF',
-        'prefab',
-        'quorum',
-        'predios',
-        'seconds',
-        'type'
-    ];
-
+    
     public function resultCoef(){
         return $this->hasOne(Result::class)->where('isCoef',1);
     }

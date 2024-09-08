@@ -69,14 +69,14 @@ class Main extends Component
                 'title'=> 'Programar',
                 'body'=> 'Configurar y programar una asamblea',
                 'visible'=> ($this->role=='Admin'),
-                'enabled'=>!(cache('asambleaOn',false)),
+                'enabled'=>!(cache('asamblea',false)),
             ],[
                 "directives"=> 'onclick=location.href="/gestion/informes";',
                 'icon'=> 'bi-file-earmark-richtext',
                 'title'=> 'Informes',
                 'body'=> 'Gestión y generación del informe',
                 'visible'=> ($this->role=='Admin'),
-                'enabled'=>true,
+                'enabled'=>cache('asamblea',false)  ,
             ],[
                 "directives"=> 'data-bs-toggle=modal data-bs-target=#modalDeleteSession @disabled(!$asambleaOn)',
                 'icon'=> 'bi-palette',
@@ -153,7 +153,7 @@ class Main extends Component
                 'icon'=> 'bi-pen',
                 'title'=> 'Firmas',
                 'body'=> 'Recibir Firmas electronicas',
-                'visible'=> true,
+                'visible'=> (cache('asamblea'))?cache('asamblea')['registro']:false,
                 'enabled'=>(cache('asamblea'))?cache('asamblea')['signature']:false,
             ],
         ];

@@ -102,6 +102,9 @@
                                         function toggleCampo() {
                                             if (!$('#registro1').is(':checked')) {
                                                 $('#signature').prop('checked', false);
+                                                $('#signature').prop('disabled', true);
+                                            }else{
+                                                $('#signature').prop('disabled', false);
                                             }
                                         }
 
@@ -118,7 +121,7 @@
                             <div class="col-6 ps-2 d-flex align-items-center justify-content-end">
                                 <div class="form-check pt-1">
                                     <input class="form-check-input" type="checkbox" value="1" name="signature"
-                                        id="signature">
+                                        id="signature" >
                                     <label class="form-check-label" for="signature">
                                         Firma electronica
                                     </label>

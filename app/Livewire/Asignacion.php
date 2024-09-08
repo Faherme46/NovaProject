@@ -157,12 +157,7 @@ class Asignacion extends Component
         }
     }
 
-    public function proof()
-    {
-        $persona = Persona::find('294962');
-        dd($persona->prediosAsignados());
-    }
-
+    
 
     public function proofAsignacion()
     {

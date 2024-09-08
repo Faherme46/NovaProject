@@ -1,5 +1,5 @@
-<div class="" >
-    <x-alerts/>
+<div class="">
+    <x-alerts />
     <div class="card mx-3 px-0 " style="min-height: 80vh">
         <div class="card-header">
             <h5 class="card-title mb-0 " id="scrollspyVotacion">Votaciones</h5>
@@ -41,24 +41,49 @@
                         </div>
                         <div class="card-body">
                             @if ($question->type != 1)
-                                <div class="row mb-2">
-                                    <form wire:submit='setResult' class="row mb-2" id="resultForm">
-                                        @csrf
-                                        <div class="col-9">
+                                <form wire:submit='setResult' class="mb-2" id="resultForm">
+                                    @csrf
+                                    <div class="row mb-2">
+                                        <div class="col-12">
                                             <input type="hidden" name="question_id" value="{{ $question->id }}"
                                                 id="resultId">
                                             <input type="text" class="form-control " placeholder="Resultado"
                                                 wire:model='questionResultTxt' name="result" id="resultValue">
                                         </div>
-                                        <div class="col-2">
-                                            <button type="submit" class="btn btn-primary"
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <div class="btn-group" role="group">
+                                                <input type="radio" class="btn-check" name="radioCoef" value="0"
+                                                    wire:model='questionIsCoefChart' id="radioNom">
+
+                                                <label class="btn btn-outline-primary" for="radioNom">Nominal</label>
+
+                                                <input type="radio" class="btn-check" name="radioCoef" value="1"
+                                                    wire:model='questionIsCoefChart' id="radioCoef">
+                                                <label class="btn btn-outline-primary"
+                                                    for="radioCoef">Coeficiente</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-4 d-flex align-items-center">
+                                            <div class="form-check form-check-reverse form-switch">
+                                                <input class="form-check-input scaled-switch-15 " type="checkbox"
+                                                    wire:model='questionIsValid' id="reverseCheck1">
+                                                <label class="form-check-label fs-5" for="reverseCheck1">
+                                                    Mostrar en el informe
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-2 offset-3 d-flex justify-content-end">
+                                            <button type="submit" class="btn btn-success"
                                                 wire:click='setQuestionsVerified'>
                                                 Guardar
                                             </button>
                                         </div>
+                                    </div>
 
-                                    </form>
-                                </div>
+
+                                </form>
                             @endif
 
                             <div class="row px-2">
@@ -91,10 +116,10 @@
                                                         {{ $question[$op] }}
                                                     </td>
                                                     <td>
-                                                        {{ $question->resultNom[$op] }}
+                                                        {{ $question->resultNom ? $question->resultNom[$op] : 'Sin resultado' }}
                                                     </td>
                                                     <td>
-                                                        {{ $question->resultCoef[$op] }}
+                                                        {{ $question->resultCoef ? $question->resultCoef[$op] : 'Sin resultado' }}
                                                     </td>
                                                 </tr>
                                             @endif
@@ -105,10 +130,10 @@
                                                 {{ 'Abstencion' }}
                                             </td>
                                             <td>
-                                                {{ $question->resultNom['abstainted'] }}
+                                                {{ $question->resultNom ? $question->resultNom['abstainted'] : 'Sin resultado' }}
                                             </td>
                                             <td>
-                                                {{ $question->resultCoef['abstainted'] }}
+                                                {{ $question->resultCoef ? $question->resultCoef['abstainted'] : 'Sin resultado' }}
                                             </td>
                                         </tr>
                                         <tr>
@@ -116,10 +141,10 @@
                                                 {{ 'Ausente' }}
                                             </td>
                                             <td>
-                                                {{ $question->resultNom['absent'] }}
+                                                {{ $question->resultNom ? $question->resultNom['absent'] : 'Sin resultado' }}
                                             </td>
                                             <td>
-                                                {{ $question->resultCoef['absent'] }}
+                                                {{ $question->resultCoef ? $question->resultCoef['absent'] : 'Sin resultado' }}
                                             </td>
                                         </tr>
                                         <tr>
@@ -127,10 +152,10 @@
                                                 {{ 'Nulos' }}
                                             </td>
                                             <td>
-                                                {{ $question->resultNom['nule'] }}
+                                                {{ $question->resultNom ? $question->resultNom['nule'] : 'Sin resultado' }}
                                             </td>
                                             <td>
-                                                {{ $question->resultCoef['nule'] }}
+                                                {{ $question->resultCoef ? $question->resultCoef['nule'] : 'Sin resultado' }}
                                             </td>
                                         </tr>
 
@@ -139,28 +164,30 @@
                                 </table>
                             </div>
                             <div class="row">
-                                <div class="col-6 text-center">
+                                @if ($question->resultCoef && $question->resultNom)
+                                    <div class="col-6 text-center">
 
-                                    <a target="_blank" class="btn btn-outline-primary "
-                                        href="/storage/images/results/{{ $question->resultCoef->chartPath }}">
-                                        <span>
-                                            <h5 class="text-center mb-0">
-                                              <span><i class="bi bi-file-image"></i></span>  Gráfico Coeficiente
-                                            </h5>
-                                        </span>
-                                    </a>
-                                </div>
-                                <div class="col-6 text-center">
+                                        <a target="_blank" class="btn btn-outline-primary "
+                                            href="/storage/images/results/{{ $question->resultCoef->chartPath }}">
+                                            <span>
+                                                <h5 class="text-center mb-0">
+                                                    <span><i class="bi bi-file-image"></i></span> Gráfico Coeficiente
+                                                </h5>
+                                            </span>
+                                        </a>
+                                    </div>
+                                    <div class="col-6 text-center">
 
-                                    <a target="_blank" class="btn btn-outline-primary "
-                                        href="/storage/images/results/{{ $question->resultNom->chartPath }}">
-                                        <span>
-                                            <h5 class="text-center mb-0">
-                                              <span><i class="bi bi-file-image"></i></span>  Gráfico Nominal
-                                            </h5>
-                                        </span>
-                                    </a>
-                                </div>
+                                        <a target="_blank" class="btn btn-outline-primary "
+                                            href="/storage/images/results/{{ $question->resultNom->chartPath }}">
+                                            <span>
+                                                <h5 class="text-center mb-0">
+                                                    <span><i class="bi bi-file-image"></i></span> Gráfico Nominal
+                                                </h5>
+                                            </span>
+                                        </a>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -175,7 +202,5 @@
     </div>
 </div>
 @script
-    <script>
-        
-    </script>
+    <script></script>
 @endscript

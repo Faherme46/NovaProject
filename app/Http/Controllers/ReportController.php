@@ -29,8 +29,8 @@ class ReportController extends Controller
         $this->asamblea = Asamblea::find(cache('id_asamblea'));
         // $this->predios = Predio::where('id', '<', 12)->get();
         $this->predios = Predio::where('id','<',10)->get();
-        $this->questions = Question::where('id','>',13)->get();
-
+        $this->questions = Question::whereNot('prefab')->get();
+        dd($this->questions);
 
         $this->variables += [
             'registro' => cache('inRegistro'),
@@ -56,7 +56,7 @@ class ReportController extends Controller
                 ];
                 $this->createDocument('index-votacion');
             } else {
-                $anexos = (cache('ordenDia', '')) ? [
+                $anexos = ($this->asamblea->ordenDia) ? [
                     'Listado de Personas Citadas a la Asamblea ',
                     'Asistencia Para Quorum',
                     'Listado Total de Participantes en la Asamblea',
@@ -88,8 +88,8 @@ class ReportController extends Controller
                 $this->variables['index'] = 2;
                 $this->createDocument('participantes-asamblea');
                 $this->variables['index'] = 3;
-                if (cache('ordenDia', '')) {
-                    $this->variables['ordenDia'] = cache('ordenDia');
+                if ($this->asamblea->ordenDia) {
+                    $this->variables['ordenDia'] = $this->asamblea->ordenDia;
                     $this->createDocument('orden-dia');
                 }
 

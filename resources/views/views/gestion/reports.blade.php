@@ -70,6 +70,7 @@
                                     <span class="input-group-text">
                                         Hora Inicio
                                     </span>
+
                                     <input type="time" class="form-control fs-5 " value="{{ $asamblea->h_inicio }}"
                                         name="h_inicio" required>
                                     <span class="input-group-text">
@@ -147,7 +148,7 @@
                                         </div>
                                     </button>
                                     <button type="button" class="btn btn-danger p-1 mt-2" data-bs-toggle=modal
-                                        data-bs-target=#modalDeleteSession @disabled(!$asamblea || !$report)>
+                                        data-bs-target=#modalDeleteSession {{--@disabled(!$asamblea || !$report)--}}>
                                         <div class="card ">
                                             <div
                                                 class="card-body d-flex align-items-center p-1 justify-content-center">

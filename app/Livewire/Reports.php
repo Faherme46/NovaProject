@@ -29,10 +29,11 @@ class Reports extends Component
     public $questions;
     public $question;
     public $questionResultTxt;
-
+    public $questionIsCoefChart;
+    public $questionIsValid;
     public $ordenDia='';
     public $allQuestionsVerified = false;
-    public $viewGeneral = 1;
+    public $viewGeneral = 0;
 
     public function mount()
     {
@@ -54,9 +55,10 @@ class Reports extends Component
         $this->report = cache('report', null);
 
         $this->asamblea = Asamblea::find(cache('id_asamblea'));
+
         $this->defVariables();
         $this->setQuestionsVerified();
-        $this->ordenDia=htmlspecialchars(implode("\n",cache('ordenDia', [''])));
+        $this->ordenDia=($this->asamblea->ordenDia)?htmlspecialchars(implode("\n",json_decode($this->asamblea->ordenDia))):'';
 
     }
 
@@ -73,10 +75,8 @@ class Reports extends Component
     public function defVariables()
     {
 
-
-        $this->questions = Question::where('id', '>', 13)->get();
+        $this->questions = Question::where('prefab',false)->whereNot('type',6)->get();
         if (!$this->questions->isEmpty()) {
-
             $this->selectQuestion($this->questions->first()->id);
         }
 
@@ -115,11 +115,15 @@ class Reports extends Component
     {
         $this->question = $this->questions->find($questionId);
         $this->questionResultTxt = $this->question->resultTxt;
+        $this->questionIsCoefChart=(bool) $this->question->coefGraph;
+        $this->questionIsValid=(bool) $this->question->isValid;
+
     }
     public function saveOrdenDia()
     {
         $list=($this->ordenDia)?explode("\n", $this->ordenDia):[];
-        cache(['ordenDia'=> $list]);
+        $this->asamblea->update(['ordenDia'=>json_encode($list)]);
+
     }
 
     public function setView($value)
@@ -140,17 +144,15 @@ class Reports extends Component
         }
     }
 
-
-
     public function setResult()
     {
-
         $this->question->resultTxt = ($this->questionResultTxt)?strtoupper($this->questionResultTxt):null;
+        $this->question->coefGraph= (bool) $this->questionIsCoefChart;
+        $this->question->isValid= (bool) $this->questionIsValid;
         $this->question->save();
 
         session()->flash('success1', 'Cambios Guardados');
     }
-
 
     public function verifyForm(){
         if ($this->questions->whereNull('resultTxt')->isNotEmpty()) {
@@ -158,7 +160,6 @@ class Reports extends Component
             return session()->flash('error1','Todas las preguntas deben tener resultado');
         }
         $url=env('APP_URL').'/gestion/informes/Informe';
-
 
         $this->dispatch('submit-form-report');
         return redirect();

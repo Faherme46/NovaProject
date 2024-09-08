@@ -16,7 +16,7 @@ class EnsureAsambleaOn
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!Cache::get('asambleaOn')) {
+        if (!Cache::get('asamblea')) {
             return redirect()->route('home')->withErrors(['msg' => 'No hay asamblea en sesion']);
         }
 
