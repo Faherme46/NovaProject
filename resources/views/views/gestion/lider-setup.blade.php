@@ -14,7 +14,7 @@
         <div class="col-4">
             <div class="card">
                 <div class="card-header">
-                    <h2 class="card-title">{{ $asamblea['folder'] }}</h2>
+                    <h2 class="card-title mb-0">{{ $asamblea['folder'] }}</h2>
                 </div>
                 <div class="card-body px-0 pt-0">
 
@@ -81,9 +81,9 @@
                     <h2 class="card-title mb-0">Asignaciones</h2>
                 </div>
                 <div class="card-body table-responsive table-fixed-header table-h100 px-0">
-                    <table class="table mb-0 ">
+                    <table class="table mb-0 table-striped-columns">
                         <thead>
-                            <tr class="table-active">
+                            <tr class="">
                                 <th class="text-center"><i class="bi bi-building bx"></i></th>
                                 @if ($asamblea['registro'])
                                     <th>Asistente</th>
@@ -119,7 +119,7 @@
                                         <span class="badge p-1 fs-6 {{ $colors[$control->state] }}">{{ $control->getStateTxt() }}</span>
                                     </td>
                                     <td>
-                                        <span class="badge p-1 fs-6 ">{{($control->t_publico)?'Publico':'Privado'}}</span>
+                                        <span class="badge p-1 fs-6 text-bg-info">{{($control->t_publico)?'Publico':'Privado'}}</span>
                                     </td>
                                 </tr>
                             @empty

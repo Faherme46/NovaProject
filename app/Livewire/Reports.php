@@ -29,11 +29,12 @@ class Reports extends Component
     public $questions;
     public $question;
     public $questionResultTxt;
+    public $questionTitle;
     public $questionIsCoefChart;
     public $questionIsValid;
     public $ordenDia='';
     public $allQuestionsVerified = false;
-    public $viewGeneral = 0;
+    public $viewGeneral = 1;
 
     public function mount()
     {
@@ -117,7 +118,7 @@ class Reports extends Component
         $this->questionResultTxt = $this->question->resultTxt;
         $this->questionIsCoefChart=(bool) $this->question->coefGraph;
         $this->questionIsValid=(bool) $this->question->isValid;
-
+        $this->questionTitle = $this->question->title;
     }
     public function saveOrdenDia()
     {
@@ -136,7 +137,8 @@ class Reports extends Component
         if ($this->questions->isEmpty()) {
             return $this->allQuestionsVerified = false;
         }
-        $nullResults = $this->questions->whereNull('resultTxt')->whereNotIn('type', [1, 7]);
+        $nullResults = $this->questions->whereNull('resultTxt')->whereNotIn('type', [5, 6]);
+
         if ($nullResults->isEmpty()) {
             $this->allQuestionsVerified = true;
         } else {
@@ -144,20 +146,21 @@ class Reports extends Component
         }
     }
 
-    public function setResult()
+    public function storeQuestion()
     {
+        $this->question->title=$this->questionTitle;
         $this->question->resultTxt = ($this->questionResultTxt)?strtoupper($this->questionResultTxt):null;
         $this->question->coefGraph= (bool) $this->questionIsCoefChart;
         $this->question->isValid= (bool) $this->questionIsValid;
         $this->question->save();
 
-        session()->flash('success1', 'Cambios Guardados');
+        session()->flash('success', 'Cambios Guardados');
     }
 
     public function verifyForm(){
         if ($this->questions->whereNull('resultTxt')->isNotEmpty()) {
 
-            return session()->flash('error1','Todas las preguntas deben tener resultado');
+            return session()->flash('warning','Todas las preguntas deben tener resultado');
         }
         $url=env('APP_URL').'/gestion/informes/Informe';
 

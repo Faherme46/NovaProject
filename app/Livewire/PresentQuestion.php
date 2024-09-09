@@ -110,7 +110,7 @@ class PresentQuestion extends Component
             }
             $result->save();
         } catch (\Throwable $th) {
-            dd('error1', $th->getMessage());
+            $this->addError('error',$th->getMessage());
         }
     }
 

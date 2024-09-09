@@ -250,10 +250,10 @@ class Registrar extends Component
         $this->validate();
 
         if (!$this->prediosAvailable || !$this->predioSelected) {
-            return session()->flash('warning1', 'No hay predios para asignar1');
+            return session()->flash('warning', 'No hay predios para asignar1');
         }
         if (!$this->controlId) {
-            return session()->flash('warning1', 'No hay Control Seleccionado');
+            return session()->flash('warning', 'No hay Control Seleccionado');
         }
 
         $control = Control::find($this->controlId);
@@ -272,7 +272,7 @@ class Registrar extends Component
                 if ($control->asignacion()) {
                     $this->getAvailableControls();
                     $this->controlId = reset($this->controlIds);
-                    return session()->flash('warning1', 'El control ya esta en uso');
+                    return session()->flash('warning', 'El control ya esta en uso');
                 };
                 $control->cc_asistente = $this->cedula;
                 $control->attachPredios($this->prediosAvailable);
@@ -291,12 +291,12 @@ class Registrar extends Component
         } catch (QueryException $e) {
             if ($e->errorInfo[1] == 1062) {
                 // Manejar la excepción específica de "Duplicate entry"
-                return  session()->flash('warning1', 'El número de control ya está asignado. Por favor, elige otro.');
+                return  session()->flash('warning', 'El número de control ya está asignado. Por favor, elige otro.');
             } else {
-                return  session()->flash('warning1', $e->getMessage());
+                return  session()->flash('warning', $e->getMessage());
             }
         } catch (\Exception $e) {
-            return  session()->flash('warning1', $e->getMessage());
+            return  session()->flash('warning', $e->getMessage());
         }
 
 
@@ -304,7 +304,7 @@ class Registrar extends Component
         if (count($this->prediosAvailable) == count($this->predioSelected)) {
             $this->cleanData(1);
         }
-        session()->flash('success1', 'Predios Asignados con exito');
+        session()->flash('success', 'Predios Asignados con exito');
         return redirect()->route('asistencia.registrar');
     }
 

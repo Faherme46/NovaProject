@@ -75,7 +75,7 @@ class PersonasController extends Controller
        $persona->tipo_id=$request->tipoid;
        $persona->save();
 
-       return redirect()->route('consulta')->with('success1', 'Se ha actualizado la persona');
+       return redirect()->route('consulta')->with('success', 'Se ha actualizado la persona');
     }
 
     public function updateIdPersona($oldId,$newId){

@@ -1,32 +1,31 @@
 <div class="z-3 position-fixed " style="max-width: 95%">
 
-    @session('success1')
+    @session('success')
         <div class="alert alert-success alert-dismissible" role="alert">
-            * {{ session('success1') }}
-
+            {{ session('success') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endsession
 
-    @session('error1')
+    @session('error')
         <div class="alert alert-danger alert-dismissible" role="alert">
-            * {{ session('error1') }}
+            {{ session('error') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endsession
 
 
 
-    @session('warning1')
+    @session('warning')
         <div class="alert alert-warning alert-dismissible" role="alert">
-            * {{ session('warning1') }}
+            {{ session('warning') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endsession
 
-    @session('info1')
+    @session('info')
         <div class="alert alert-info alert-dismissible" role="alert">
-            * {{ session('info1') }}
+            {{ session('info') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endsession

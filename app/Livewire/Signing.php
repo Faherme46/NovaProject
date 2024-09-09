@@ -36,7 +36,7 @@ class Signing extends Component
         ]);
 
 
-        session()->flash('success1','Firma Guardada Correctamente');
+        session()->flash('success','Firma Guardada Correctamente');
         return redirect()->route('asistencia.signs');
     }
     private function dataUrlToImage($dataUrl)

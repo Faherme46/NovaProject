@@ -85,14 +85,6 @@
                                 </a>
                             @endhasanyrole
                         @endif
-
-
-
-
-
-
-
-
                     </div>
                 </div>
 
@@ -100,73 +92,9 @@
         </div>
 
     @endauth
-
-
-
     <div class="mt-3 mx-3">
-
-
-
-        @if (session('success'))
-            <div class="alert alert-success alert-dismissible" role="alert">
-                {{ session('success') }}
-
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-        @if (session('error'))
-            <div class="alert alert-warning alert-dismissible" role="alert">
-                {{ session('error') }}
-
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-
-        @if ($errors->any())
-            <div class="alert alert-danger alert-dimissible" role="alert">
-                <div class="row justify-content-between">
-                    <div class="col-6">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-
-                    </div>
-                    <div class="col-1 offset-md-5">
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-
-                </div>
-
-            </div>
-        @endif
-
-        @if (session('warning'))
-            <div class="alert alert-warning alert-dismissible" role="alert">
-                {{ session('warning') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-
-        @if (session('info'))
-            <div class="alert alert-info alert-dismissible" role="alert">
-                {{ session('info') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
         @yield('content')
-
-
-
     </div>
-
-
-
-
-
-
-
     @livewireScripts
     <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('assets/js/app.js') }}"></script>

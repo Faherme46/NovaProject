@@ -34,7 +34,7 @@ class PrediosController extends Controller
                     'vota'=>$request->boolean('voto')
                 ]);
                 $predio->control[0]->setCoef();
-                return redirect()->route('consulta')->with('success1','Se ha actualizado el predio');
+                return redirect()->route('consulta')->with('success','Se ha actualizado el predio');
             } catch (\Throwable $th) {
                 return redirect()->route('consulta')->withErrors($th->getMessage());
             }

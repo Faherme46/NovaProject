@@ -17,6 +17,7 @@ use App\Models\Predio;
 
 use Carbon\Carbon;
 use DateTimeZone;
+
 class Asignacion extends Component
 {
     public $predioSelected = [];
@@ -100,14 +101,13 @@ class Asignacion extends Component
     #[On('add-poderdante')]
     public function addPoderdanteToList($poderdanteId)
     {
-        try {
-            $persona = Persona::findOrFail($poderdanteId);
+        $persona = Persona::find($poderdanteId);
+        if ($persona) {
             foreach ($persona->predios as  $predio) {
                 $this->addPredioToList($predio);
             }
-        } catch (\Throwable $th) {
-            session()->flash('error1', $th->getMessage());
         }
+
     }
 
     public function dropPredio($predioId)
@@ -157,16 +157,16 @@ class Asignacion extends Component
         }
     }
 
-    
+
 
     public function proofAsignacion()
     {
         $ids = [
-            1 =>4,
-            2 =>5,
-            3 =>31,
-            4 =>41,
-            5 =>51,
+            1 => 4,
+            2 => 5,
+            3 => 31,
+            4 => 41,
+            5 => 51,
             55 => 55,
             59 => 59,
             97 => 97,
@@ -183,7 +183,7 @@ class Asignacion extends Component
             $control = Control::find($key);
             $control->state = 1;
 
-            $predio=Predio::find($id);
+            $predio = Predio::find($id);
             $control->predios()->save($predio);
             $control->setCoef();
             $control->save();
@@ -199,7 +199,7 @@ class Asignacion extends Component
         $this->validate();
 
         if (!$this->predioSelected) {
-            return session()->flash('warning1', 'No hay predios para asignar');
+            return session()->flash('warning', 'No hay predios para asignar');
         }
 
         $control = Control::find($this->controlId);
@@ -208,15 +208,15 @@ class Asignacion extends Component
             $control->state = 1;
             $control->attachPredios($this->predioSelected);
             $control->setCoef();
-            $control->h_entrega= Carbon::now(new DateTimeZone('America/Bogota'))->second(0)->format('H:i');
+            $control->h_entrega = Carbon::now(new DateTimeZone('America/Bogota'))->second(0)->format('H:i');
             $control->save();
         } catch (\Exception $e) {
-            return  session()->flash('warning1', $e->getMessage());
+            return  session()->flash('warning', $e->getMessage());
         }
 
         session(['controlTurn' => $this->controlId + 1]);
         $this->cleanData();
-        session()->flash('success1', 'Predios Asignados con exito');
+        session()->flash('success', 'Predios Asignados con exito');
         return redirect()->route('asistencia.asignacion');
     }
 }

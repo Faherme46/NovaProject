@@ -103,7 +103,7 @@ class AllPredios extends Component
         if($this->Persona){
             $this->dispatch('showModalPersona',personaId:$id);
         }else{
-            session()->flash('error1','No fue encontrado');
+
         }
     }
 
@@ -115,7 +115,7 @@ class AllPredios extends Component
         if($this->Predio){
             $this->dispatch('showModalPredio',predioId:$id);
         }else{
-            session()->flash('error1','No fue encontrado');
+            $this->addError('error','No fue encontrado');
         }
 
     }
@@ -128,7 +128,7 @@ class AllPredios extends Component
         if($this->Control){
             $this->dispatch('showModalControl');
         }else{
-            session()->flash('error1','No fue encontrado');
+            $this->addError('error','No fue encontrado');
         }
     }
 

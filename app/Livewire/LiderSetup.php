@@ -70,28 +70,26 @@ class LiderSetup extends Component
             if (!$this->asamblea->h_inicio) {
 
                 $this->started = true;
-                if (cache('inRegistro')) {
+                if ($this->asamblea->registro) {
                     cache(['predios_init' =>  Predio::whereHas('control')->count(),
                     'quorum_init' => Control::whereNotIn('state', [3, 4])->sum('sum_coef'),
                     'asamblea' => $this->asamblea
-
                 ]);
                     Predio::whereHas('control')->update(['quorum_start' => true]);
                 }
                 $this->asamblea->h_inicio = $time;
                 $this->asamblea->save();
-                session()->flash('info1', 'Se ha iniciado la asamblea en: ' . $time);
+                session()->flash('info', 'Se ha iniciado la asamblea en: ' . $time);
             } else {
-                session()->flash('warning1', 'Ya se establecio el inicio en: ' . $this->asamblea->h_inicio);
+                session()->flash('warning', 'Ya se establecio el inicio en: ' . $this->asamblea->h_inicio);
             }
         } catch (\Exception $e) {
-            session()->flash('error1', $e->getMessage());
+            $this->addError('error',$e->getMessage());
         }
     }
 
     public function terminar()
     {
-
         try {
 
             $time = Carbon::now(new DateTimeZone('America/Bogota'))->second(0);
@@ -99,7 +97,7 @@ class LiderSetup extends Component
 
                 if (cache('inRegistro')) {
 
-                    Predio::whereHas('control', function ($query) use ($time) {
+                    Predio::whereHas('controlcito', function ($query) use ($time) {
                         $query->where('state', 1);
                     })->update(['quorum_end' => true]);
                     Control::whereHas('predios')->update(['h_recibe' => $time->format('H:i')]);
@@ -112,13 +110,13 @@ class LiderSetup extends Component
                 $this->asamblea->h_cierre = $time;
                 $this->asamblea->save();
                 $this->finished = true;
-                session()->flash('info1', 'Se ha terminado la asamblea en: ' . $time);
+                session()->flash('info', 'Se ha terminado la asamblea en: ' . $time);
             } else {
-                session()->flash('warning1', 'Ya se establecio el cierre en: ' . $this->asamblea->h_cierre);
+                session()->flash('warning', 'Ya se establecio el cierre en: ' . $this->asamblea->h_cierre);
             }
         } catch (\Exception $e) {
             //throw $th;
-            session()->flash('error1', $e->getMessage());
+            $this->addError('error',$e->getMessage());
         }
     }
 }

@@ -91,7 +91,7 @@ class Consulta extends Component
     }
     public function mount()
     {
-        
+
         $this->tiposId=Persona::distinct()->pluck('tipo_id');
         $this->maxControls = Cache::get('controles');
     }
@@ -332,7 +332,7 @@ class Consulta extends Component
     public function updatedTab($value)
     {
         if ($this->changes) {
-            session()->flash('warning1', 'No se han guardado los cambios');
+            session()->flash('warning', 'No se han guardado los cambios');
             $this->tab = $this->previousTab;
             return;
         } else {
@@ -351,7 +351,7 @@ class Consulta extends Component
     {
         $this->validation();
         if (!$this->changes) {
-            session()->flash('warning1', 'No hay cambios para guardar');
+            session()->flash('warning', 'No hay cambios para guardar');
             return;
         }
         try {
@@ -394,7 +394,7 @@ class Consulta extends Component
     }
     public function success()
     {
-        session()->flash('success1', 'Guardado');
+        session()->flash('success', 'Guardado');
         $this->cleanData(1);
         $this->dispatch('refresh-predios');
     }

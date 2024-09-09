@@ -127,9 +127,9 @@ class AsambleaController extends Controller
         if($asamblea){
             $asamblea->update($request->all());
             cache(['asamblea'=>$asamblea]);
-            return back()->with('success1', 'Asamblea actualizada con éxito.');
+            return back()->with('success', 'Asamblea actualizada con éxito.');
         }else{
-            return back()->with('error1', 'No se encontro la asamblea')->withInput();
+            return back()->withErrors('No se encontro la asamblea')->withInput();
         }
 
     }

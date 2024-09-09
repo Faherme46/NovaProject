@@ -9,6 +9,7 @@ use App\Models\Persona;
 use App\Models\Control;
 use App\Models\PrediosPersona;
 use App\Models\Question;
+use App\Models\QuestionType;
 use App\Models\Result;
 
 use Database\Seeders\QuestionSeeder;
@@ -54,6 +55,7 @@ class SessionController extends Controller
         Result::truncate();
         PrediosPersona::truncate();
         Question::truncate();
+        QuestionType::truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         $seeder= new QuestionSeeder();
