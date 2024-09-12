@@ -15,9 +15,10 @@ class Control extends Model
 {
     use HasFactory;
 
-    protected $guarded=[];
-    public function asignacion(){
-        return ($this->state==1);
+    protected $guarded = [];
+    public function asignacion()
+    {
+        return ($this->state == 1);
     }
 
     public function predios()
@@ -30,59 +31,82 @@ class Control extends Model
     }
 
 
-    public function retirar(){
-        $this->state=3;
+    public function retirar()
+    {
+        $this->state = 3;
         $this->setCoef();
         $this->predios()->delete();
-        $this->cc_asistente=null;
+        $this->cc_asistente = null;
         $this->save();
     }
 
-    public function isAbsent(){
-        if($this->state==2 || $this->state==5){
+    public function isAbsent()
+    {
+        if ($this->state == 2 || $this->state == 5) {
             return true;
         }
         return false;
     }
-    public function changeState($value){
-        $this->state=$value;
-        if($value==5){
-            $this->h_recibe=Carbon::now(new DateTimeZone('America/Bogota'));
+    public function changeState($value)
+    {
+        $this->state = $value;
+        if ($value == 5) {
+            $this->h_recibe = Carbon::now(new DateTimeZone('America/Bogota'));
         }
         $this->save();
     }
 
-    public function ausentar(){
-        $this->state=2;
+    public function ausentar()
+    {
+        $this->state = 2;
         $this->save();
     }
 
     public function setCoef()
     {
-        $this->sum_coef_can = $this->predios()->where('vota',true)->sum('coeficiente');
+        $this->sum_coef_can = $this->predios()->where('vota', true)->sum('coeficiente');
         $this->sum_coef = $this->predios()->sum('coeficiente');
-        $this->predios_vote= $this->predios()->where('vota',true)->count();
+        $this->predios_vote = $this->predios()->where('vota', true)->count();
         return $this->save();
     }
 
-    public function getPrediosCan(){
-        return $this->predios()->where('vota',true)->count();
+    public function getPrediosCan()
+    {
+        return $this->predios()->where('vota', true)->count();
     }
 
-    public function attachPredios($arrayPredios){
+    #agrega predios desde un array de predios
+    public function attachPredios($arrayPredios)
+    {
         foreach ($arrayPredios as $predio) {
             $this->predios()->save($predio);
         }
+        $this->setCoef();
         return $this;
     }
 
-    public function getStateTxt(){
-        $states=[
-            1=>'Activo',
-            2=> 'Ausente',
-            3=> 'Retirado',
-            4=> 'No Asignado',
-            5=> 'Entregado'
+
+    #elimina predios desde un array de predios
+    public function deletePredios($prediosArray)
+    {
+        foreach ($prediosArray as $predio) {
+            if ($predio->control_id == $this->id) {
+                $predio->control_id = null;
+                $predio->save();
+            }
+            # code...
+        }
+        $this->setCoef();
+    }
+
+    public function getStateTxt()
+    {
+        $states = [
+            1 => 'Activo',
+            2 => 'Ausente',
+            3 => 'Retirado',
+            4 => 'No Asignado',
+            5 => 'Entregado'
         ];
 
         return $states[$this->state];

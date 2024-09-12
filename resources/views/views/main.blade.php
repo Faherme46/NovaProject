@@ -1,4 +1,5 @@
 <div>
+    <x-alerts/>
     <div class="row justify-content-center px-5">
 
         @foreach ($panels as $panel)

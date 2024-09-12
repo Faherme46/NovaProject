@@ -41,12 +41,7 @@ class SessionController extends Controller
     {
 
 
-        Cache::forget('asamblea');
-        Cache::forget('asistentes_end');
-        Cache::forget('quorum_end');
-
-        Cache::forget('predios_init');
-        Cache::forget('quorum_init');
+        Cache::flush();     
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         Session::truncate();
         Predio::truncate();

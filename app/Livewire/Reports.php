@@ -34,7 +34,9 @@ class Reports extends Component
     public $questionIsValid;
     public $ordenDia='';
     public $allQuestionsVerified = false;
+    public $asambleaVerified=true;
     public $viewGeneral = 1;
+
 
     public function mount()
     {
@@ -134,16 +136,25 @@ class Reports extends Component
 
     public function setQuestionsVerified()
     {
-        if ($this->questions->isEmpty()) {
+        $attributes = $this->asamblea->getAttributes(); // Obtiene todos los atributos
+
+        // Verifica si todos los campos tienen valor
+        $this->asambleaVerified = true;
+        foreach ($attributes as $key => $value) {
+            if (is_null($value)&&$key!='siganture'&&$key!='ordenDia') {
+                
+                $this->asambleaVerified = false; // Al menos un campo es null
+                break;
+            }
+        }
+        if (!$this->questions->isEmpty()) {
             return $this->allQuestionsVerified = false;
         }
         $nullResults = $this->questions->whereNull('resultTxt')->whereNotIn('type', [5, 6]);
 
-        if ($nullResults->isEmpty()) {
-            $this->allQuestionsVerified = true;
-        } else {
-            $this->allQuestionsVerified = false;
-        }
+        $this->allQuestionsVerified = (bool) !$nullResults->isEmpty();
+
+
     }
 
     public function storeQuestion()

@@ -32,14 +32,14 @@
                                         Referencia:
                                     </span>
                                     <input type="text" class="form-control fs-5 " value="{{ $asamblea->referencia }}"
-                                        name="referencia" required>
+                                        name="referencia">
                                 </div>
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">
                                         Tipo:
                                     </span>
                                     <input type="text" class="form-control fs-5 " value="{{ $asamblea->tipo }}"
-                                        name="tipo" required>
+                                        name="tipo">
                                     <span class="input-group-text">
                                         Controles:
                                     </span>
@@ -72,13 +72,22 @@
                                     </span>
 
                                     <input type="time" class="form-control fs-5 " value="{{ $asamblea->h_inicio }}"
-                                        name="h_inicio" required>
+                                        name="h_inicio">
                                     <span class="input-group-text">
                                         Hora Cierre
                                     </span>
                                     <input type="time" class="form-control fs-5 " value="{{ $asamblea->h_cierre }}"
-                                        name="h_cierre" required>
+                                        name="h_cierre">
                                 </div>
+                                @if($asamblea->registro)
+                                <div class="form-group">
+                                    <input type="checkbox" class="btn-check" id="sign" name="signature"
+                                        value="1" @checked($asamblea->signature)>
+                                    <label class="btn btn-outline-primary" for="sign">
+                                        Firma electronica
+                                    </label>
+                                </div>
+                                @endif
                             </div>
                         </form>
                     </div>
@@ -105,8 +114,8 @@
 
 
                 <div class="col-3">
-                    <form action="{{route('gestion.report.docs')}}" method="GET" class="px-3" id="formReport"
-                    target="_blank">
+                    <form action="{{ route('gestion.report.docs') }}" method="GET" class="px-3" id="formReport"
+                        target="_blank">
                         @csrf
                         <div class="card">
                             <div class="card-body px-0">
@@ -114,10 +123,14 @@
                                     <div class="text-danger text-center mt-2">
                                         <small>No se han hecho votaciones</small>
                                     </div>
-                                @endif
-                                @if (!$allQuestionsVerified)
+                                @elseif (!$allQuestionsVerified)
                                     <div class="text-danger text-center mt-2">
                                         <small>Hay votaciones sin resultado</small>
+                                    </div>
+                                @endif
+                                @if (!$this->asambleaVerified)
+                                    <div class="text-danger text-center mt-2">
+                                        <small>Faltan campos en la asamblea</small>
                                     </div>
                                 @endif
 
@@ -138,7 +151,7 @@
                                         </div>
                                     </button>
                                     <button type="button" class="btn btn-info p-1 mt-2" @disabled(!$asamblea || !$allQuestionsVerified)
-                                    wire:click='verifyForm'>
+                                        wire:click='verifyForm'>
                                         <div class="card ">
                                             <div
                                                 class="card-body d-flex align-items-center p-1 justify-content-center">
@@ -148,7 +161,7 @@
                                         </div>
                                     </button>
                                     <button type="button" class="btn btn-danger p-1 mt-2" data-bs-toggle=modal
-                                        data-bs-target=#modalDeleteSession {{--@disabled(!$asamblea || !$report)--}}>
+                                        data-bs-target=#modalDeleteSession {{-- @disabled(!$asamblea || !$report) --}}>
                                         <div class="card ">
                                             <div
                                                 class="card-body d-flex align-items-center p-1 justify-content-center">
@@ -200,7 +213,7 @@
                 <div class="modal-content">
                     <div class="modal-body">
                         <div class="d-flex justify-content-center align-items-center">
-                            @if(cache('report',false))
+                            @if (cache('report', false))
                                 <h2>
                                     <span class="badge text-bg-success"><i class="bi bi-check2-square"></i></span>
                                     El informe se ha generado Correctamente

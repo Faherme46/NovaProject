@@ -39,7 +39,7 @@ class Asignacion extends Component
     public function mount()
     {
         $this->controlId = session('controlTurn');
-        $this->maxControls = Cache::get('controles');
+        $this->maxControls = cache('asamblea')['controles'];
     }
 
     #[Layout('layout.asistencia')]

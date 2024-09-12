@@ -53,6 +53,13 @@ class AllPredios extends Component
     public function render()
     {
         // Inicializa la consulta base
+
+
+        return view('views.registro.all-predios');
+    }
+
+
+    public function search(){
         $query = Predio::query();
 
         // Aplica los filtros condicionalmente
@@ -74,11 +81,7 @@ class AllPredios extends Component
 
         // Ejecuta la consulta y obtiene los resultados
         $this->prediosAll = $query->get();
-
-        return view('views.registro.all-predios');
     }
-
-
     public function dispatchPredio($id){
         $this->dispatch('add-predio', predioId: $id);
     }

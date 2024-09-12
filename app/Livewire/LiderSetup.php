@@ -63,20 +63,21 @@ class LiderSetup extends Component
 
     public function iniciar()
     {
-
+        if ($this->allControls->isEmpty()) {
+            return $this->addError('error','No se han registrado controles');
+        }
         try {
 
             $time = Carbon::now(new DateTimeZone('America/Bogota'))->second(0);
             if (!$this->asamblea->h_inicio) {
 
                 $this->started = true;
-                if ($this->asamblea->registro) {
-                    cache(['predios_init' =>  Predio::whereHas('control')->count(),
-                    'quorum_init' => Control::whereNotIn('state', [3, 4])->sum('sum_coef'),
-                    'asamblea' => $this->asamblea
-                ]);
-                    Predio::whereHas('control')->update(['quorum_start' => true]);
-                }
+                cache(['predios_init' =>  Predio::whereHas('control')->count()]);
+                cache(['quorum_init' => Control::whereNotIn('state', [3, 4])->sum('sum_coef')]);
+                cache(['asamblea' => $this->asamblea]);
+
+                Predio::whereHas('control')->update(['quorum_start' => true]);
+
                 $this->asamblea->h_inicio = $time;
                 $this->asamblea->save();
                 session()->flash('info', 'Se ha iniciado la asamblea en: ' . $time);
@@ -84,29 +85,28 @@ class LiderSetup extends Component
                 session()->flash('warning', 'Ya se establecio el inicio en: ' . $this->asamblea->h_inicio);
             }
         } catch (\Exception $e) {
-            $this->addError('error',$e->getMessage());
+            $this->addError('error', $e->getMessage());
         }
     }
 
     public function terminar()
     {
+        
         try {
 
             $time = Carbon::now(new DateTimeZone('America/Bogota'))->second(0);
-            if ($this->asamblea->h_cierre == null) {
+            if (!$this->asamblea->h_cierre) {
 
-                if (cache('inRegistro')) {
 
-                    Predio::whereHas('controlcito', function ($query) use ($time) {
-                        $query->where('state', 1);
-                    })->update(['quorum_end' => true]);
-                    Control::whereHas('predios')->update(['h_recibe' => $time->format('H:i')]);
-                    cache([
-                        'asistentes_end' =>  Predio::where('quorum_end', true)->count(),
-                        'quorum_end' => Control::whereNotIn('state', [1])->sum('sum_coef'),
-                        'asamblea' => $this->asamblea
-                    ]);
-                }
+
+                Predio::whereHas('control', function ($query) use ($time) {
+                    $query->where('state', 1);
+                })->update(['quorum_end' => true]);
+                Control::whereHas('predios')->update(['h_recibe' => $time->format('H:i')]);
+                cache([ 'predios_end' =>  Predio::where('quorum_end', true)->count()]);
+                cache(['quorum_end' => Control::whereNotIn('state', [1])->sum('sum_coef')]);
+                cache(['asamblea' => $this->asamblea]);
+
                 $this->asamblea->h_cierre = $time;
                 $this->asamblea->save();
                 $this->finished = true;
@@ -116,7 +116,7 @@ class LiderSetup extends Component
             }
         } catch (\Exception $e) {
             //throw $th;
-            $this->addError('error',$e->getMessage());
+            $this->addError('error', $e->getMessage());
         }
     }
 }

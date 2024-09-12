@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\isAsambleaEnd;
 use Illuminate\Support\Facades\Route;
 
 
@@ -16,6 +17,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PersonasController;
 use App\Http\Controllers\QuestionsController;
 use App\Http\Controllers\ReportController;
+use App\Http\Middleware\isAsambleaInit;
 use App\Livewire\PresentQuestion;
 use App\Livewire\Votacion;
 use App\Livewire\LiderSetup;
@@ -53,27 +55,27 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::get('users/import', [UsersController::class, 'importUsers'])->name('users.import');
     Route::get('gestion/asamblea', LiderSetup::class)->name('gestion.asamblea');
 
-    Route::get('votacion', Votacion::class)->name('votacion');
+    Route::get('votacion', Votacion::class)->name('votacion')->middleware(isAsambleaEnd::class)->middleware(isAsambleaInit::class);
     Route::get('questions/show',PresentQuestion::class)->name('questions.show');
 
     Route::post('predios/update', [PrediosController::class, 'updatePredio'])->name('predios.update');
     Route::post('personas/update', [PersonasController::class, 'updatePersona'])->name('personas.update');
-    Route::post('questions/create',[QuestionsController::class,'createQuestion'])->name('questions.create');
+    Route::post('questions/create',[QuestionsController::class,'createQuestion'])->name('questions.create')->middleware(isAsambleaEnd::class)->middleware(isAsambleaInit::class);
 
 
 
 });
 
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Admin|Lider|Operario')]], function () {
-    Route::get('/asistencia/asignacion', Asignacion::class)->name('asistencia.asignacion');
+    Route::get('/asistencia/asignacion', Asignacion::class)->name('asistencia.asignacion')->middleware(isAsambleaEnd::class);
 
-    Route::get('/asistencia/registrar', Registrar::class)->name('asistencia.registrar');
+    Route::get('/asistencia/registrar', Registrar::class)->name('asistencia.registrar')->middleware(isAsambleaEnd::class);
     Route::get('/consulta', Consulta::class)->name('consulta');
     Route::get('/entregar', Entregar::class)->name('entregar');
     Route::get('/', Main::class)->name('home')->withoutMiddleware(EnsureAsambleaOn::class);
-    Route::post('/gestion/saveSign', [FileController::class,'saveSignImg'])->name('gestion.sign.save');
-    Route::get('/asistencia/firmas', Signs::class)->name('asistencia.signs');
-    Route::get('/asistencia/firmando', Signing::class)->name('asistencia.signing');
+    Route::post('/gestion/saveSign', [FileController::class,'saveSignImg'])->name('gestion.sign.save')->middleware(isAsambleaEnd::class);
+    Route::get('/asistencia/firmas', Signs::class)->name('asistencia.signs')->middleware(isAsambleaEnd::class);
+    Route::get('/asistencia/firmando', Signing::class)->name('asistencia.signing')->middleware(isAsambleaEnd::class);
 });
 //rutas para registro
 
@@ -85,3 +87,4 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('users.logout')-
 
 //rutas de prueba
 Route::get('/proofAsignacion', [Asignacion::class, 'proofAsignacion'])->name('proofAsignacion');
+Route::get('proofQuestion',[FileController::class,'exportAllQuestions']);

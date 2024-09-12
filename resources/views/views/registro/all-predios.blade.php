@@ -4,20 +4,20 @@
     <div class="card-header row g-1">
         @if ($asamblea['registro'])
             <div class="col-3">
-                <input wire:model.live='searchId' type="text" id="searchId" name="cc_propietario" class="form-control"
+                <input wire:model.live='searchId' wire:keypress='search' type="text" id="searchId" name="cc_propietario" class="form-control"
                     placeholder="Propietario" onkeypress="return onlyNumbers(event)" onclick="this.select()">
             </div>
         @endif
 
         <div class="col-2">
-            <select wire:model.live='descriptor1' class="form-control" name="descriptor1" id="">
+            <select wire:model.live='descriptor1' wire:keypress='search' class="form-control" name="descriptor1" id="">
                 @foreach ($distincts['descriptor1'] as $item)
                     <option value="{{ $item }}">{{ $item }}</option>
                 @endforeach
             </select>
         </div>
         <div class="col-1">
-            <select wire:model.live='numeral1' class="form-control" name="numeral1" id="">
+            <select wire:model.live='numeral1' wire:change='search' class="form-control" name="numeral1" id="">
                 <option value="">#</option>
                 @foreach ($distincts['numeral1'] as $item)
                     <option value="{{ $item }}">{{ $item }}</option>
@@ -25,7 +25,7 @@
             </select>
         </div>
         <div class="col-3">
-            <select class="form-control" name="descriptor2" id="">
+            <select class="form-control" name="descriptor2" id="" wire:select='search'>
 
                 @foreach ($distincts['descriptor2'] as $item)
                     <option value="{{ $item }}">{{ $item }}</option>
@@ -33,7 +33,7 @@
             </select>
         </div>
         <div class="col-2">
-            <input wire:model.live='numeral2' type="text" class="form-control" placeholder="#"
+            <input wire:model.live='numeral2' type="text" wire:keypress='search' class="form-control" placeholder="#"
                 onkeypress="return onlyNumbers(event)" maxlength="5" onclick="this.select()">
         </div>
         <div class="col-1 ms-auto">

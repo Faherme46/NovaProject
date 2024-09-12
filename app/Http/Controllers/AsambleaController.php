@@ -40,6 +40,7 @@ class AsambleaController extends Controller
 
     public function store(Request $request)
     {
+
         // Obtener los datos originales del request
         $input = $request->all();
 
@@ -76,11 +77,7 @@ class AsambleaController extends Controller
                 $this->sessionController->setSession($asamblea->id_asamblea, $asamblea->folder);
                 $data = [
                     'id_asamblea'   => $asamblea->id_asamblea,
-                    'asambleaOn'    => true,
                     'inRegistro'    => $asamblea->registro,
-                    'controles'     => $asamblea->controles,
-                    'name_asamblea' => $asamblea->name,
-                    'client_name'=>$asamblea->folder,
                     'asamblea'=>$asamblea
                 ];
 
@@ -117,15 +114,15 @@ class AsambleaController extends Controller
             'fecha' => 'required|date',
             'hora' => 'required',
             'controles' => 'required',
-            'h_inicio'=>'required',
-            'h_cierre'=>'required',
-            'referencia'=>'required',
-            'tipo'=>'required'
         ],$messages);
 
         $asamblea = Asamblea::find($request->id_asamblea);
         if($asamblea){
             $asamblea->update($request->all());
+            if (!$request->signature) {
+                $asamblea->signature=false;
+                $asamblea->save();
+            }
             cache(['asamblea'=>$asamblea]);
             return back()->with('success', 'Asamblea actualizada con éxito.');
         }else{

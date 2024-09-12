@@ -49,7 +49,7 @@ class Signs extends Component
         if($this->tratamientoPublico){
             $this->persona->controls()->update(['t_publico' => 1]);
         }else{
-            $this->persona->controls()->update(['t_publico' => 0]);
+            $this->persona->controls()->update(['t_publico' =>0]);
         }
 
 

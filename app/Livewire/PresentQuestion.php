@@ -211,7 +211,6 @@ class PresentQuestion extends Component
 
     public function createResults()
     {
-
         $valuesCoef = [
             'A'      => 0,
             'B'      => 0,
@@ -236,26 +235,62 @@ class PresentQuestion extends Component
         ];
         $availableOptions = $this->question->getAvailableOptions();
 
-        foreach ($this->controlsAssigned as $id => $control) {
-            if ($control->isAbsent()) {
-                $valuesCoef['absent'] += $control->sum_coef_can;
-                $valuesNom['absent']  += $control->getPrediosCan();
-            } else {
-                if (array_key_exists($id, $this->votes)) {
-                    $vote = $this->votes[$id];
-                    if (in_array($vote, $availableOptions)) {
-                        $valuesCoef[$vote] += $control->sum_coef_can;
-                        $valuesNom[$vote] += $control->getPrediosCan();
-                    } else {
-                        $valuesCoef['nule'] += $control->sum_coef_can;
-                        $valuesNom['nule'] += $control->getPrediosCan();
-                    }
+        if ( $this->question->type==5) {
+            foreach ($this->controlsAssigned as $id => $control) {
+                if ($control->isAbsent()) {
+                    $valuesCoef['absent'] += $control->sum_coef_can;
+                    $valuesNom['absent']  += $control->getPrediosCan();
+                    $control->t_publico=0;
                 } else {
-                    $valuesCoef['abstainted'] += $control->sum_coef_can;
-                    $valuesNom['abstainted']  += $control->getPrediosCan();
+                    if (array_key_exists($id, $this->votes)) {
+                        $vote = $this->votes[$id];
+                        if ($vote=='A') {
+                            $valuesCoef[$vote] += $control->sum_coef_can;
+                            $valuesNom[$vote] += $control->getPrediosCan();
+                            $control->t_publico=1;
+                        } else if($vote=='B'){
+                            $valuesCoef[$vote] += $control->sum_coef_can;
+                            $valuesNom[$vote] += $control->getPrediosCan();
+                            $control->t_publico=0;
+                        }else{
+                            $valuesCoef['nule'] += $control->sum_coef_can;
+                            $valuesNom['nule'] += $control->getPrediosCan();
+                            $control->t_publico=0;
+                        }
+                    } else {
+                        $valuesCoef['abstainted'] += $control->sum_coef_can;
+                        $valuesNom['abstainted']  += $control->getPrediosCan();
+                        $control->t_publico=0;
+                    }
+                }
+                $control->save();
+            }
+        }else{
+            foreach ($this->controlsAssigned as $id => $control) {
+                if ($control->isAbsent()) {
+                    $valuesCoef['absent'] += $control->sum_coef_can;
+                    $valuesNom['absent']  += $control->getPrediosCan();
+                } else {
+                    if (array_key_exists($id, $this->votes)) {
+                        $vote = $this->votes[$id];
+                        if (in_array($vote, $availableOptions)) {
+                            $valuesCoef[$vote] += $control->sum_coef_can;
+                            $valuesNom[$vote] += $control->getPrediosCan();
+                        } else {
+                            $valuesCoef['nule'] += $control->sum_coef_can;
+                            $valuesNom['nule'] += $control->getPrediosCan();
+                        }
+                    } else {
+                        $valuesCoef['abstainted'] += $control->sum_coef_can;
+                        $valuesNom['abstainted']  += $control->getPrediosCan();
+                    }
                 }
             }
         }
+
+
+
+
 
         try {
             $resultNom = Result::create([

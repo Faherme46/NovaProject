@@ -1,7 +1,6 @@
 @extends('layout.app')
-
-
 @section('content')
+    <x-alerts/>
     <div class="mt-5">
 
         <div class="row d-flex justify-content-center align-items-center ">

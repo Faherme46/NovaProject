@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\ResultExport;
 use App\Exports\VotesExport;
 use App\Http\Controllers\Controller;
-
+use App\Models\Question;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -15,8 +15,11 @@ use Maatwebsite\Excel\Facades\Excel;
 
 
 
+
 class FileController extends Controller
 {
+    public $numberPrefab;
+
 
     public function getFolders()
     {
@@ -41,7 +44,7 @@ class FileController extends Controller
 
     public function getQuestionFolderPath($questionId, $title)
     {
-        $questionName = ($questionId - 12) . '_' . $title;
+        $questionName = ($questionId - cache('questionsPrefabCount',13)) . '_' . $title;
         $parentFolderName = $this->getAsambleaFolderPath();
         $newFolderPath = $parentFolderName . '/Preguntas/' . $questionName;
 
@@ -74,7 +77,7 @@ class FileController extends Controller
     public function getOnlyQuestionPath($questionId, $title)
     {
 
-        $questionName = ($questionId - 12) . '_' . $title;
+        $questionName = ($questionId - cache('questionsPrefabCount',13)) . '_' . $title;
         $parentFolderName = Cache::get('name_asamblea');
         $newFolderPath = $parentFolderName . '/Preguntas/' . $questionName;
 
@@ -88,7 +91,7 @@ class FileController extends Controller
         $asambleaName = Cache::get('name_asamblea', '');
         $parent_path = $this->getQuestionFolderPath($questionId, $title); // Ruta donde se guardará la imagen
         $output_path =  $parent_path . '/' . $name . '.png';
-        $localPath = ($questionId - 12) . '/' . $name . '.png';
+        $localPath = ($questionId - cache('questionsPrefabCount',13)) . '/' . $name . '.png';
 
         $combined =  array_merge($labels, array_map('strval', $values));
         // Crear un array con los datos
@@ -141,6 +144,7 @@ class FileController extends Controller
         $path = $this->getOnlyQuestionPath($questionId, $title);
         // Sort the data by key (Control) alphabetically
         ksort($votos);
+
         $export = new VotesExport($votos);
         return Excel::store($export, $path . '/votos.xlsx', 'externalAsambleas');
     }
@@ -152,6 +156,8 @@ class FileController extends Controller
         $export = new ResultExport($question);
         return Excel::store($export, $path . '/resultados.xlsx', 'externalAsambleas');
     }
+
+  
 
 
     public function importConf(): int
@@ -170,5 +176,5 @@ class FileController extends Controller
     }
 
 
-    
+
 }

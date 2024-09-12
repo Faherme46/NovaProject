@@ -3,7 +3,7 @@
 namespace App\Providers;
 use App\Http\Controllers\AsambleaController;
 use App\Http\Controllers\sessionController;
-
+use App\Models\Question;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Maatwebsite\Excel\ExcelServiceProvider;
@@ -30,7 +30,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
 
-
+        
 
         View::composer('*', function ($view) {
             $statesCollect = State::all();

@@ -29,8 +29,7 @@ class ReportController extends Controller
         $this->asamblea = Asamblea::find(cache('id_asamblea'));
         // $this->predios = Predio::where('id', '<', 12)->get();
         $this->predios = Predio::where('id','<',10)->get();
-        $this->questions = Question::whereNot('prefab')->get();
-        dd($this->questions);
+        $this->questions = Question::where('prefab',false)->get();
 
         $this->variables += [
             'registro' => cache('inRegistro'),

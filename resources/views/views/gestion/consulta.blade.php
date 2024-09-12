@@ -1,16 +1,9 @@
 <div>
-
+    <x-alerts/>
     <div class="col-12">
         <div class="card px-0 ">
             <div class="card-header pb-0 no-bottom-round">
-                <div class=" d-flex justify-content-between px-2 ">
-                    <div class="col-1">
-                        <button class="btn btn-danger" wire:click='cleanData(1)'>
-                            <i class='bi bi-trash-fill '></i>
-                        </button>
-                    </div>
-
-
+                <div class=" d-flex justify-content-center px-2 ">
                     <div class="col-auto ">
                         <div class="btn-group " role="group" aria-label="Basic radio toggle button group">
                             <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off"
@@ -31,9 +24,6 @@
                             @endif
                         </div>
                     </div>
-
-
-
                 </div>
             </div>
             @if ($tab == 4)
@@ -120,8 +110,9 @@
                                     <div class=" col-4">
                                         @if ($tab != 4)
                                             <input type="text"
-                                                class="form-control bg-success-subtle  @error('controlIdL') is-invalid @enderror  @error('controlId') is-invalid @enderror"
-                                                wire:model.live='controlIdL' value="controlIdL" placeholder="Control"
+                                                class="form-control bg-success-subtle
+                                                @error('controlIdL') is-invalid @enderror  @error('controlId') is-invalid @enderror"
+                                                wire:model.live.debounce.900ms='controlIdL' value="controlIdL" placeholder="Control"
                                                 onkeypress="return onlyNumbers(event)" maxlength="3">
 
                                         @endif
@@ -182,15 +173,16 @@
                                 <span class="btn-dark w-100 py-0 mb-4 ps-2 text-center ">
                                     <i class="bi bi-shuffle fs-1 "></i>
                                 </span>
+
                                 <div class="card p-2 mt-5 ">
-                                    <button class="btn btn-warning ps-2 mb-3 py-0" wire:click='undo'>
+                                    <button class="btn btn-danger p-0 mb-3 text-center" wire:click='cleanData(1)'>
+                                        <i class='bi bi-trash-fill fs-4 '></i>
+                                    </button>
+                                    <button class="btn btn-warning mb-3 p-0 text-center" wire:click='undo'>
                                         <i class="bi bi-arrow-counterclockwise fs-4 "></i>
                                     </button>
-                                    <button class="btn btn-primary ps-2 mb-3 py-0" wire:click='exchange'>
-                                        <i class="bi bi-arrow-left-right fs-4 "></i>
-                                    </button>
 
-                                    <button class="btn btn-primary ps-1 mb-0 py-0" wire:click='toRightAll'>
+                                    <button class="btn btn-primary  mb-0 py-0 ps-1" wire:click='toRightAll'>
                                         <i class="bi bi-box-arrow-in-right fs-4 "></i>
                                     </button>
                                 </div>
@@ -214,7 +206,7 @@
                                     <div class=" col-4">
                                         <input type="text"
                                             class="form-control bg-success-subtle  @error('controlIdR') is-invalid @enderror  @error('controlId') is-invalid @enderror"
-                                            wire:model.live='controlIdR' placeholder="Control"
+                                            wire:model.live.debounce.900ms='controlIdR' placeholder="Control"
                                             @if ($tab != 1) hidden @endif
                                             onkeypress="return onlyNumbers(event)" maxlength="3">
                                     </div>

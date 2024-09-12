@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Question;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
@@ -37,7 +38,7 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-
+            cache(['questionsPrefabCount'=>Question::where('prefab',true)->count()]);
             return redirect()->intended(route('home'))->with('success','Inicio de sesion exitoso');
         } else {
             return back()->withErrors('El usuario o contraseña no son validos');

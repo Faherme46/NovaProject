@@ -116,8 +116,8 @@
             const touch = e.touches[0] || e.changedTouches[0];
             const rect = canvas.getBoundingClientRect();
             console.log(touch)
-            offsetX = touch.clientX - rect.left + window.scrollX ;
-            offsetY = touch.clientY - rect.top + window.scrollY ;
+            offsetX = touch.clientX - rect.left ;
+            offsetY = touch.clientY - rect.top ;
         } else {
             offsetX = e.offsetX;
             offsetY = e.offsetY;
