@@ -3,6 +3,9 @@
 @import url('../fonts/fonts.css');
 
 
+@import url('./_custom.css');
+
+
 *,
 ::before,
 ::after {
@@ -273,7 +276,15 @@ a {
 .w-40 {
     width: 40% !important;
 }
-
+.w-10 {
+    width: 10% !important;
+}
+.w-15 {
+    width: 15% !important;
+}
+.w-20 {
+    width: 20% !important;
+}
 
 
 .non-disabled {

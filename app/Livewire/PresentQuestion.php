@@ -383,8 +383,8 @@ class PresentQuestion extends Component
     }
 
 
-    public function proof1()
+    public function connectDevice()
     {
-        dd($this->votes);
+        $this->dispatch('connect-device');
     }
 }

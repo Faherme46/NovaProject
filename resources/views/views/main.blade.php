@@ -1,5 +1,6 @@
 <div>
     <x-alerts/>
+    <button class="btn" wire:click='proof'>Prppf</button>
     <div class="row justify-content-center px-5">
 
         @foreach ($panels as $panel)
@@ -315,6 +316,10 @@
             $('#modalFilePredios').modal('hide');
             $('#modalFilePersonas').modal('hide');
             $('#modalFilePersonas').modal('show');
+        });
+
+        Livewire.on('proofConect', (event) => {
+            console.log('in')
         });
 
     });

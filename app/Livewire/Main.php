@@ -78,7 +78,7 @@ class Main extends Component
                 'visible'=> ($this->role=='Admin'),
                 'enabled'=>cache('asamblea',false)  ,
             ],[
-                "directives"=> 'data-bs-toggle=modal data-bs-target=#modalDeleteSession @disabled(!$asambleaOn)',
+                "directives"=> 'onclick=location.href="/setup";',
                 'icon'=> 'bi-palette',
                 'title'=> 'Configurar Diseño',
                 'body'=> 'Colores, tamaños y fuentes',
@@ -157,5 +157,10 @@ class Main extends Component
                 'enabled'=>(cache('asamblea'))?cache('asamblea')['signature']:false,
             ],
         ];
+    }
+
+
+    public function proof(){
+        $this->dispatch('proofConect');
     }
 }

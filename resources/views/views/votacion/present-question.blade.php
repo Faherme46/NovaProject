@@ -29,7 +29,7 @@
                             <h1 class="mb-0 text-uppercase super-large-text " id="title" >{{$question->title}}</h1>
                         </div>
                         <div class="col-1 mx-2">
-                            <button type="submit" class="btn btn-primary" wire:click='voting' >
+                            <button type="submit" class="btn btn-primary" wire:click='voting'  >
                                 <i class="bi bi-clipboard-check-fill fs-3"  ></i>
                             </button>
                         </div>
@@ -86,7 +86,7 @@
     </div>
 </div>
 <script>
-    
+
     document.addEventListener('DOMContentLoaded', function() {
       const textElement = document.getElementById('title');
 

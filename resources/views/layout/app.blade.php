@@ -16,8 +16,12 @@
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <title>Nova</title>
     <link rel="icon" href="{{ asset('favicon.ico') }}">
+    <style>
+        :root {
+            --primary-color: #524a28; // Valor por defecto
+        }
+    </style>
     {{-- Bootstrap CSS --}}
-    <link href='{{ asset('assets/scss/custom.css') }}' rel='stylesheet'>
     {{-- Fuente de iconos --}}
     <link href='{{ asset('vendor/bootstrap-icons/font/bootstrap-icons.min.css') }}' rel='stylesheet'>
 
@@ -31,7 +35,22 @@
     <script src="{{ asset('assets/js/popper.js') }}"></script>
 
 
-
+    <style>
+        :root {
+            --header-height: 3rem;
+            --nav-width: 68px;
+            --first-color: #4723D9;
+            --primary: #4723D9;
+            --first-color-light: #AFA5D9;
+            --white-color-txt: #F7F6FB;
+            --white-color: #c8beef;
+            --black-color: #151515;
+            --darkblue-color: #010152;
+            --body-font: 'Nunito', sans-serif;
+            --secondary-color: #bfbfbf;
+            --z-fixed: 100
+        }
+    </style>
     <link rel="stylesheet" href="{{ asset('assets/scss/app.scss') }}">
 </head>
 
@@ -50,10 +69,10 @@
                         @hasrole('Admin')
                             <i class='bi bi-gear-fill nav_logo-icon'></i>
                             <span class="nav_logo-name">Gestion</span> </a>
-                        @else
-                            <i class='bi bi-house-fill nav_logo-icon'></i>
-                            <span class="nav_logo-name">Home</span> </a>
-                        @endhasrole
+                    @else
+                        <i class='bi bi-house-fill nav_logo-icon'></i>
+                        <span class="nav_logo-name">Home</span> </a>
+                    @endhasrole
 
 
                     <div class="nav_list">

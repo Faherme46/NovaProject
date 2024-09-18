@@ -28,6 +28,7 @@ use App\Livewire\Registrar;
 use App\Livewire\Asignacion;
 use App\Livewire\Entregar;
 use App\Livewire\JobStatus;
+use App\Livewire\Setup;
 use App\Livewire\Signing;
 use App\Livewire\Signs;
 
@@ -39,6 +40,7 @@ use App\Livewire\Signs;
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Admin')]], function () {
     Route::delete('/session/destroy', [SessionController::class, 'destroyAll'])->name('session.destroy');
     Route::get('gestion/informes', Reports::class)->name('gestion.report');
+    Route::get('setup', Setup::class)->name('setup.main');
     Route::get('gestion/informes/Informe', [ReportController::class,'createReport'])->name('gestion.report.docs');
     Route::post('/predios/import', [PrediosController::class, 'import'])->name('predios.import');
     Route::post('questions/setResult', [QuestionsController::class,   'setResult'])->name('questions.setResult');
