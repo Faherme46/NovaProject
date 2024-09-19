@@ -10,11 +10,9 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 use Maatwebsite\Excel\Facades\Excel;
-
-
-
-
+use Throwable;
 
 class FileController extends Controller
 {
@@ -62,7 +60,7 @@ class FileController extends Controller
         if (!file_exists($externalFolderPath)) {
             mkdir($externalFolderPath, 0755, true);
         }
-        $asambleaName = Cache::get('name_asamblea');
+        $asambleaName = cache('asamblea')['name'];
 
         $asambleaFolderPath = $externalFolderPath . '/' . $asambleaName;
         // Verifica si la carpeta existe
@@ -78,7 +76,7 @@ class FileController extends Controller
     {
 
         $questionName = ($questionId - cache('questionsPrefabCount',13)) . '_' . $title;
-        $parentFolderName = Cache::get('name_asamblea');
+        $parentFolderName = cache('asamblea')['name'];
         $newFolderPath = $parentFolderName . '/Preguntas/' . $questionName;
 
         return $newFolderPath;
@@ -88,41 +86,33 @@ class FileController extends Controller
     {
         // Datos para el gráfico
 
-        $asambleaName = Cache::get('name_asamblea', '');
+        $asambleaName = cache('asamblea')['name'];
+
         $parent_path = $this->getQuestionFolderPath($questionId, $title); // Ruta donde se guardará la imagen
         $output_path =  $parent_path . '/' . $name . '.png';
+
         $localPath = ($questionId - cache('questionsPrefabCount',13)) . '/' . $name . '.png';
 
-        $combined =  array_merge($labels, array_map('strval', $values));
         // Crear un array con los datos
         $data = [
-            $title,
-            json_encode($combined),
-            $output_path
+            'title'=>$title,
+            'output'=>$output_path,
+            'labels'=>$labels,
+            'values'=>$values,
+            'nameAsamblea'=>$asambleaName
         ];
-        $args = '';
 
-        foreach ($data as $value) {
-            $args .= ' ' . escapeshellarg($value);
-        }
 
-        // dd($args);
-        // Convertir el array a JSON
 
-        // $json_data =  escapeshellarg($datos);
-        // Ejecutar el script de Python
-        $py_path = env('PYTHON_PATH');
-        $scriptPath = config('filesystems.disks.scripts.root') . '/create_plot.py';
-        $scriptPath = str_replace('\\', '/', $scriptPath);
-        $command = escapeshellcmd("$py_path $scriptPath $args " . escapeshellarg($asambleaName));
-        // Ejecutar el comando y capturar la salida y errores
-
-        $output = shell_exec($command . ' 2>&1');
-        if ($output != '200') {
-            throw new Exception('Problemas al crear las Graficas: ' . $output);
-        } else {
+        $jsonData=json_encode($data);
+        try {
+            $response=Http::post('http://localhost:5000/create-plot', $data);
             return $this->loadImage($output_path, $localPath);
+        } catch (Throwable $th) {
+            throw new Exception('Error al conectar con el servidor python');
         }
+
+
     }
 
     public function loadImage($sourcePath, $destinationPath)
@@ -134,7 +124,7 @@ class FileController extends Controller
 
             return $destinationPath;
         } else {
-            dd('algo muy malo ha sucedido');
+
             throw new Exception('File does not exist');
         }
     }
@@ -157,7 +147,7 @@ class FileController extends Controller
         return Excel::store($export, $path . '/resultados.xlsx', 'externalAsambleas');
     }
 
-  
+
 
 
     public function importConf(): int

@@ -15,7 +15,7 @@ class Control extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+
     public function asignacion()
     {
         return ($this->state == 1);

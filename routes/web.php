@@ -58,7 +58,7 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::get('gestion/asamblea', LiderSetup::class)->name('gestion.asamblea');
 
     Route::get('votacion', Votacion::class)->name('votacion')->middleware(isAsambleaEnd::class)->middleware(isAsambleaInit::class);
-    Route::get('questions/show',PresentQuestion::class)->name('questions.show');
+    Route::get('questions/show/{questionId}',PresentQuestion::class)->name('questions.show');
 
     Route::post('predios/update', [PrediosController::class, 'updatePredio'])->name('predios.update');
     Route::post('personas/update', [PersonasController::class, 'updatePersona'])->name('personas.update');

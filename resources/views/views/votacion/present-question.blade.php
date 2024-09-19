@@ -1,4 +1,5 @@
 <div>
+    <x-alerts/>
     <style>
         .list-group-item.active::before {
             content: none;

@@ -1,4 +1,5 @@
 <div class="col-12">
+    <x-alerts/>
     <div class="card mt-2">
         <div class="card-header d-flex justify-content-between align-items-center">
             <div class="col-2">
@@ -12,10 +13,10 @@
                 </h1>
             </div>
             <div class="col-2 justify-content-end d-flex">
-                <button class="btn btn-warning py-0 rounded-3 me-2" wire:click='connectDevice'>
+                <button class="btn btn-warning py-0 rounded-3 me-2" wire:click='proof'>
                     Green
                 </button>
-                <button class="btn btn-info py-0 rounded-3 me-2" wire:click='proofGenerateResults'>
+                <button class="btn btn-info py-0 rounded-3 me-2" wire:click='updateVotes'>
                     Generar
                 </button>
                 <button class="btn btn-warning py-0 rounded-3 me-2" wire:click='playPause({{ !$stopped }})'>
@@ -70,8 +71,6 @@
 @script
     <script>
         $wire.on('modal-show', async () => {
-
-
             await $wire.sleep(1);
             $('#modalConfirm').modal('toggle');
         });
@@ -89,13 +88,11 @@
             startTimer();
         });
 
-
-
         function startTimer() {
             timeInterval = setInterval(() => {
                 $wire.decrement()
             }, 1000)
         }
     </script>
-   
+
 @endscript

@@ -16,11 +16,6 @@
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <title>Nova</title>
     <link rel="icon" href="{{ asset('favicon.ico') }}">
-    <style>
-        :root {
-            --primary-color: #524a28; // Valor por defecto
-        }
-    </style>
     {{-- Bootstrap CSS --}}
     {{-- Fuente de iconos --}}
     <link href='{{ asset('vendor/bootstrap-icons/font/bootstrap-icons.min.css') }}' rel='stylesheet'>

@@ -278,12 +278,12 @@ class Votacion extends Component
         try {
             $question = Question::create([
                 'title' => strtoupper($this->questionTitle),
-                'optionA' => strtoupper($this->questionOptions['A']),
-                'optionB' => strtoupper($this->questionOptions['B']),
-                'optionC' => strtoupper($this->questionOptions['C']),
-                'optionD' => strtoupper($this->questionOptions['D']),
-                'optionE' => strtoupper($this->questionOptions['E']),
-                'optionF' => strtoupper($this->questionOptions['F']),
+                'optionA' => ($this->questionOptions['A'])?strtoupper($this->questionOptions['A']):null,
+                'optionB' => ($this->questionOptions['B'])?strtoupper($this->questionOptions['B']):null,
+                'optionC' => ($this->questionOptions['C'])?strtoupper($this->questionOptions['C']):null,
+                'optionD' => ($this->questionOptions['D'])?strtoupper($this->questionOptions['D']):null,
+                'optionE' => ($this->questionOptions['E'])?strtoupper($this->questionOptions['E']):null,
+                'optionF' => ($this->questionOptions['F'])?strtoupper($this->questionOptions['F']):null,
                 'prefab' => (false),
                 'isValid' => ($this->questionType==6)?0:1,
                 'coefGraph' => (bool)$this->questionCoefChart,
@@ -293,7 +293,7 @@ class Votacion extends Component
                 'type' => $this->questionType
             ]);
 
-            return redirect()->route('questions.show')->with('question_id',$question->id);
+            return redirect()->route('questions.show',['questionId'=>$question->id]);
         } catch (\Throwable $th) {
             return $this->addError('questionCreate',$th->getMessage());
         }

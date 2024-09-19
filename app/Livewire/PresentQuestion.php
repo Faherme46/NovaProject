@@ -10,8 +10,13 @@ use App\Models\Control;
 use App\Models\Result;
 
 use App\Http\Controllers\FileController;
+use App\Models\General;
 use App\Models\Question;
+use App\Models\Vote;
+use Exception;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
+use Throwable;
 
 class PresentQuestion extends Component
 {
@@ -20,7 +25,6 @@ class PresentQuestion extends Component
     public $seconds;
     public $chartCoef;
     public $chartNom;
-    public $inResults;
 
     public $stopped = false;
     public $colors = [
@@ -37,22 +41,24 @@ class PresentQuestion extends Component
     public $votes = [];
 
 
-    public function mount()
+    public function mount($questionId)
     {
-        $this->reset('inVoting', 'seconds', 'countdown', 'votes');
+        $this->reset('inVoting', 'seconds', 'countdown', 'votes','chartNom','inCoefResult','votes','controlsAssigned');
 
         // $this->question = Question::find(19);
-        $this->question = Question::find(session('question_id'));
-
         if (!$this->question) {
-            return redirect()->route('home')->with('error', 'Nada para mostrar');
+            $this->question = Question::find($questionId);
+
+            if (!$this->question) {
+                return redirect()->route('votacion')->with('error', 'La pregunta no fue encontrada');
+            }
         }
+
 
         $this->controls = Control::all()->pluck('id')->toArray();
         $this->dispatch('full-screen-in');
         $this->inCoefResult = $this->question->coefGraph;
         $this->setControlsAssigned();
-
 
         // $this->chartNom=Storage::disk('results')->url('images/results/10/nominalChart.png');
 
@@ -61,7 +67,7 @@ class PresentQuestion extends Component
     public function render()
     {
         if ($this->inVoting == 1) {
-            return view('views.votacion.voting');
+            return view(view: 'views.votacion.voting');
         } elseif ($this->inVoting == 2) {
             return view('views.votacion.present-question');
         } elseif ($this->inVoting == 3) {
@@ -71,10 +77,15 @@ class PresentQuestion extends Component
 
     public function voting()
     {
-        $this->seconds = $this->question->seconds;
-        $this->updateCountdown();
-        $this->dispatch('start-timer');
-        $this->inVoting = 1;
+        $response=$this->handleVoting('run-votes');
+        if($response){
+            sleep(2);
+            $this->seconds = $this->question->seconds;
+            $this->updateCountdown();
+            $this->dispatch('start-timer');
+            $this->inVoting = 1;
+        }
+
     }
 
     public function inResults()
@@ -85,20 +96,17 @@ class PresentQuestion extends Component
 
         foreach ($this->question->results as $result) {
 
-            $this->setImageUrl($result, $quorum);
+                $this->setImageUrl($result, $quorum);
+
         }
     }
-    /**
-     * @suppress P1013
-     */
+
     public function setImageUrl($result, $quorum)
     {
         try {
             $path = $this->setChart($result, $quorum);
 
             $urlImg = Storage::disk('results')->url('images/results/' . $path);
-
-
 
             // dd($urlImg);
             if ($result->isCoef) {
@@ -109,7 +117,7 @@ class PresentQuestion extends Component
                 $result->chartPath = $path;
             }
             $result->save();
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             $this->addError('error',$th->getMessage());
         }
     }
@@ -162,6 +170,7 @@ class PresentQuestion extends Component
 
     public function updateCountdown()
     {
+        $this->updateVotes();
         $minutes = floor($this->seconds / 60);
         $seconds = $this->seconds % 60;
         $this->countdown = sprintf('%02d:%02d', $minutes, $seconds);
@@ -184,7 +193,10 @@ class PresentQuestion extends Component
 
         $this->dispatch('closeModal');
         $this->playPause(true);
-        $this->createResults();
+        if($this->handleVoting('stop-votes')){
+            $this->createResults();
+        }
+
     }
 
     public function stopVote()
@@ -271,12 +283,15 @@ class PresentQuestion extends Component
                     $valuesCoef['absent'] += $control->sum_coef_can;
                     $valuesNom['absent']  += $control->getPrediosCan();
                 } else {
+
                     if (array_key_exists($id, $this->votes)) {
+
                         $vote = $this->votes[$id];
                         if (in_array($vote, $availableOptions)) {
                             $valuesCoef[$vote] += $control->sum_coef_can;
                             $valuesNom[$vote] += $control->getPrediosCan();
                         } else {
+
                             $valuesCoef['nule'] += $control->sum_coef_can;
                             $valuesNom['nule'] += $control->getPrediosCan();
                         }
@@ -287,11 +302,6 @@ class PresentQuestion extends Component
                 }
             }
         }
-
-
-
-
-
         try {
             $resultNom = Result::create([
                 'question_id' => $this->question->id,
@@ -325,24 +335,22 @@ class PresentQuestion extends Component
 
             $fileController->exportResult($this->question);
             $fileController->exportVotes($this->votes, $this->question->id, $this->question->title);
-        } catch (\Throwable $th) {
-            dd('Error ', $th->getMessage());
+        } catch (Throwable $th) {
+            $this->addError('Error',$th->getMessage());
         }
-
-
         $this->inResults();
     }
 
 
     public function goBack()
     {
-        $this->reset();
-        return redirect()->route('votacion');
+        $this->mount($this->question->id);
+        $this->dispatch('$refresh');
     }
 
     public function goPresent()
     {
-        $this->mount();
+        $this->mount($this->question->id);
         $this->dispatch('$refresh');
     }
 
@@ -382,9 +390,34 @@ class PresentQuestion extends Component
         }
     }
 
-
-    public function connectDevice()
-    {
-        $this->dispatch('connect-device');
+    public function proof(){
+        dd($this->votes);
     }
+
+    public function updateVotes(){
+        $this->votes=Vote::pluck('vote', 'control')->toArray();
+    }
+    public function handleVoting($action)
+    {
+        $pythonUrl=General::where('key','PYTHON_URL')->first();
+        $pythonUrl=($pythonUrl)?$pythonUrl:'http://127.0.0.1:5000';
+        try {
+            $response=Http::get($pythonUrl.'/'.$action);
+            return True;
+        } catch (Throwable $th) {
+            $this->addError('Error','Error al conectar con el servidor python: '.$th->getMessage());
+            return False;
+        }
+    }
+
+
+    public function getOut(){
+        Vote::truncate();
+        return redirect()->route('votacion')->with('success','Resultado almacenado correctamente');
+    }
+
+
+
+
+
 }
