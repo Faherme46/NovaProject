@@ -42,7 +42,7 @@
 
 
     </div>
-    <div class="card-body table-responsive table-fixed-header table-h100 px-0">
+    <div class="card-body table-responsive table-fixed-header table-h100 px-0 pt-0">
 
         <table class="table">
 

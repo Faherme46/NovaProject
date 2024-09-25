@@ -35,8 +35,8 @@
         <div class="alert alert-danger alert-dimissible d-flex" role="alert">
             <div class="col-11">
 
-                @foreach ($errors->all() as $error)
-                    <p class="mb-0">{{ $error }}</p>
+                @foreach ($errors->all() as  $error)
+                    <p class="mb-0">{{ $error }}</p> <br>
                 @endforeach
 
             </div>

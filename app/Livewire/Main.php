@@ -160,7 +160,5 @@ class Main extends Component
     }
 
 
-    public function proof(){
-        $this->dispatch('proofConect');
-    }
+    
 }

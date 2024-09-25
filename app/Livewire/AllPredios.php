@@ -44,9 +44,11 @@ class AllPredios extends Component
     public function clean()
     {
         // Restablece las variables de búsqueda
-        $this->reset(['descriptor1','descriptor2','numeral2','numeral1','searchId']);
-        $this->dispatch('$refresh');
+        $this->reset();
+
         $this->mount();
+        $this->dispatch('$refresh');
+        $this->render();
         // Actualiza la colección de predios para mostrar todos los disponibles
 
     }

@@ -105,9 +105,7 @@ class PresentQuestion extends Component
     {
         try {
             $path = $this->setChart($result, $quorum);
-
             $urlImg = Storage::disk('results')->url('images/results/' . $path);
-
             // dd($urlImg);
             if ($result->isCoef) {
                 $this->chartCoef = $urlImg;

@@ -1,5 +1,5 @@
 <div>
-    <x-alerts/>
+    <x-alerts />
     <div class="col-12">
         <div class="card px-0 ">
             <div class="card-header pb-0 no-bottom-round">
@@ -83,8 +83,8 @@
                         <form wire:submit="searchPersona('CC')" class="d-flex">
                             <input class="me-2 form-control @error('noFound') is-invalid @enderror" type="text"
                                 onkeypress="return onlyNumbers(event)" maxlength="12"
-                                wire:keydown.enter="searchPersona('CC')" wire:model='cedulaSearch'
-                                placeholder="Cedula" wire:keypress='$refresh'>
+                                wire:keydown.enter="searchPersona('CC')" wire:model='cedulaSearch' placeholder="Cedula"
+                                wire:keypress='$refresh'>
                             <button type="submit" class="btn btn-primary">
                                 <i class="bi bi-search"></i>
                             </button>
@@ -109,17 +109,17 @@
                                     </div>
                                     <div class=" col-4">
                                         @if ($tab != 4)
-                                            <input type="text"
+                                            <input type="number"
                                                 class="form-control bg-success-subtle
                                                 @error('controlIdL') is-invalid @enderror  @error('controlId') is-invalid @enderror"
-                                                wire:model.live.debounce.900ms='controlIdL' value="controlIdL" placeholder="Control"
+                                                wire:model.live.debounce.900ms='controlIdL'
+                                                value="{{ $controlIdL }}" placeholder="Control"
                                                 onkeypress="return onlyNumbers(event)" maxlength="3">
-
                                         @endif
 
                                     </div>
                                 </div>
-                                <div class="card-body table-responsive table-fixed-header px-0">
+                                <div class="card-body table-responsive table-fixed-header px-0 pt-0">
                                     <table class="w-100 table mb-0 ">
 
                                         <tbody>
@@ -133,7 +133,7 @@
 
                                                     <td>
                                                         @if ($tab < 3)
-                                                            <button class="btn p-0"
+                                                            <button type="button" class="btn p-0"
                                                                 wire:click="toRight({{ $predio->id }})">
                                                                 <i class='bi bi-arrow-right-square-fill'></i>
                                                             </button>
@@ -175,14 +175,17 @@
                                 </span>
 
                                 <div class="card p-2 mt-5 ">
-                                    <button class="btn btn-danger p-0 mb-3 text-center" wire:click='cleanData(1)'>
+                                    <button type="button" class="btn btn-danger p-0 mb-3 text-center"
+                                        wire:click='cleanData(1)'>
                                         <i class='bi bi-trash-fill fs-4 '></i>
                                     </button>
-                                    <button class="btn btn-warning mb-3 p-0 text-center" wire:click='undo'>
+                                    <button type="button" class="btn btn-warning mb-3 p-0 text-center"
+                                        wire:click='undo'>
                                         <i class="bi bi-arrow-counterclockwise fs-4 "></i>
                                     </button>
 
-                                    <button class="btn btn-primary  mb-0 py-0 ps-1" wire:click='toRightAll'>
+                                    <button type="button" class="btn btn-primary  mb-0 py-0 ps-1"
+                                        wire:click='toRightAll'>
                                         <i class="bi bi-box-arrow-in-right fs-4 "></i>
                                     </button>
                                 </div>
@@ -206,12 +209,12 @@
                                     <div class=" col-4">
                                         <input type="text"
                                             class="form-control bg-success-subtle  @error('controlIdR') is-invalid @enderror  @error('controlId') is-invalid @enderror"
-                                            wire:model.live.debounce.900ms='controlIdR' placeholder="Control"
-                                            @if ($tab != 1) hidden @endif
+                                            wire:model.live.debounce.900ms='controlIdR' value="{{ $controlIdR }}"
+                                            placeholder="Control" @if ($tab != 1) hidden @endif
                                             onkeypress="return onlyNumbers(event)" maxlength="3">
                                     </div>
                                 </div>
-                                <div class="card-body table-responsive table-fixed-header px-0">
+                                <div class="card-body table-responsive table-fixed-header px-0 pt-0">
 
 
                                     <table class="w-100 table mb-0 ">
@@ -225,7 +228,7 @@
 
                                                     <td>
                                                         @if ($tab == 2)
-                                                            <button class="btn p-0"
+                                                            <button type="button" class="btn p-0"
                                                                 wire:click="toLeft({{ $predio->id }})">
                                                                 <i class='bi bi-arrow-left-square-fill'></i>
                                                             </button>
@@ -275,7 +278,7 @@
                                     @hasanyrole('Admin|Lider')
                                         <div class="d-flex align-items-center ">
                                             @if ($changes)
-                                                <button class="btn mt-1 p-0 me-2"
+                                                <button type="button" class="btn mt-1 p-0 me-2"
                                                     wire:click='undoPredioChanges({{ $Predio->id }})'>
                                                     <i class="bi bi-arrow-counterclockwise fs-6 "></i>
                                                 </button>
@@ -296,30 +299,30 @@
                                     name="formPredio">
                                     @csrf
                                     <div class="card-body pt-3 px-2 d-flex justify-content-center">
-                                        <div class="col-5 @if (!$asamblea['registro']) mx-auto @endif me-4">
+                                        <div class="col-3 @if (!$asamblea['registro']) mx-auto @endif me-4">
                                             <ul class="list-group list-group-flush">
                                                 <li
                                                     class="list-group-item d-flex align-items-center justify-content-between">
-                                                    <h5 class="mb-0">
+                                                    <h6 class="mb-0">
                                                         Id:
-                                                    </h5>
-                                                    <input type="text" class="form-control w-50"
+                                                    </h6>
+                                                    <input type="text" class="form-control w-70"
                                                         value="{{ $Predio->id }}" readonly name="id">
 
                                                 </li>
 
                                                 <li
                                                     class="list-group-item d-flex align-items-center justify-content-between">
-                                                    <h5 class="mb-0">Coef:</h5>
-                                                    <input type="text" class="form-control w-50"
+                                                    <h6 class="mb-0">Coef:</h6>
+                                                    <input type="text" class="form-control w-70"
                                                         onkeypress="return onlyNumbers(event)" name="coef"
                                                         value="{{ $Predio->coeficiente }}" @readonly(!$changes)>
                                                 </li>
                                                 <li
                                                     class="list-group-item d-flex align-items-center justify-content-between">
-                                                    <h5 class="mb-0">Control:</h5>
-                                                    <input type="text" class="form-control w-50" disabled
-                                                        value="{{ $Predio->control ? $Predio->control->id : 'Sin Asignar' }}">
+                                                    <h6 class="mb-0">Control:</h6>
+                                                    <input type="text" class="form-control w-50 ms-1" disabled
+                                                        value="{{ $Predio->control ? $Predio->control->id : '-' }}">
                                                 </li>
                                                 <li
                                                     class="list-group-item d-flex align-items-center justify-content-center">
@@ -333,25 +336,35 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                        <div class="col-6 ">
+                                        <div class="col-8 ">
                                             @if ($asamblea['registro'])
-                                                <ul class="list-group list-group ">
-                                                    <li class="list-group-item bg-primary
+                                                <ul class="list-group list-group w-100">
+                                                    <li
+                                                        class="list-group-item bg-primary
                                                         d-flex justify-content-between align-items-center">
                                                         <h5 class="mb-0 bx-w"><strong>Propietarios</strong> </h5>
-
+                                                        <button type="button" class="mb-0 btn py-0 px-1"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#addPropietarioModal">
+                                                            <i class='bi bi-plus-circle-fill bx-w'></i>
+                                                        </button>
                                                     </li>
                                                     @foreach ($Predio->personas as $persona)
-                                                        <li class="list-group-item d-flex justify-content-between">
+                                                        <li
+                                                            class="list-group-item d-flex justify-content-between w-100">
 
-                                                            <button class="mb-0 w-75 btn p-0"
-                                                            wire:click='searchPersona({{$persona->id}})'>
-                                                                {{ $persona->nombre }}{{ $persona->apellido }}
-
+                                                            <button type="button"
+                                                                class="mb-0 w-75  btn p-0 text-left"
+                                                                wire:click='searchPersona({{ $persona->id }})'>
+                                                                {{ $persona->nombre }} {{ $persona->apellido }}
                                                             </button>
                                                             <p class="mb-0">{{ $persona->id }}</p>
-
-
+                                                            <button type="button"
+                                                                class="mb-0 btn btn-danger py-0 px-1"
+                                                                wire:click='setPropietarioToDrop({{$persona}})'
+                                                                @disabled($count = $Predio->personas->count() < 2)>
+                                                                <i class='bi bi-trash bx-w'></i>
+                                                            </button>
                                                         </li>
                                                     @endforeach
 
@@ -386,7 +399,67 @@
 
     </div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="addPropietarioModal" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Añadir propietario</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
 
+                    <div class="mb-3 d-flex  ">
+                        <div class="col-8 me-1 ">
+                            <input class="me-2 form-control" type="text" onkeypress="return onlyNumbers(event)"
+                                maxlength="12" id="cedula" name="cedula" wire:model='cedulaPersonita'
+                                placeholder="Cédula">
+                        </div>
+                        <div class="col">
+                            <button type="button" class="btn btn-primary" wire:click='searchPersonita'
+                                data-bs-dismiss="modal">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        @if ($personaFound)
+                            <h5>{{ $personaFound }}</h5>
+                        @endif
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                        wire:click='addPropietario'>Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="dropPersonaModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Desea quitar definitivamente este
+                        propietario?</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {{$nameToDrop}}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
+                        wire:click='dropPropietario'> Quitar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <script type="text/javascript">
     function submitformPersona() {
@@ -396,4 +469,16 @@
     function submitformPredio() {
         document.formPredio.submit();
     }
+
+
 </script>
+@script
+    <script>
+        $wire.on('reloadModalAddPropietario', () => {
+            $('#addPropietarioModal').modal('show');
+        });
+        $wire.on('dropPersonaModalShow', () => {
+            $('#dropPersonaModal').modal('show');
+        });
+    </script>
+@endscript
