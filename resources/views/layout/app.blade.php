@@ -58,48 +58,51 @@
     @auth
         <div class="l-navbar" id="nav-bar">
             <nav class="nav">
-                <div>
-                    <a href="{{ route('home') }}" class="nav_logo">
-
-                        @hasrole('Admin')
-                            <i class='bi bi-gear-fill nav_logo-icon'></i>
-                            <span class="nav_logo-name">Gestion</span> </a>
-                    @else
+                <div class="nav_list">
+                    <a href="{{ route('home') }}" class="nav_link" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                        data-bs-title="Menu Principal">
                         <i class='bi bi-house-fill nav_logo-icon'></i>
-                        <span class="nav_logo-name">Home</span> </a>
-                    @endhasrole
+                    </a>
 
-
-                    <div class="nav_list">
-
-
-                        @if ($asamblea)
-                            @if ($asamblea['registro'])
-                                <a href="{{ route('asistencia.registrar') }}" class="nav_link ">
-                                    <i class='bi bi-person-check-fill nav_icon'></i> <span class="nav_name">Registro</span>
-                                </a>
-                            @else
-                                <a href="{{ route('asistencia.asignacion') }}" class="nav_link">
-                                    <i class='bi bi-building-check nav_icon'></i> <span class="nav_name">Asignar</span>
-                                </a>
-                            @endif
-
-                            <a href="{{ route('consulta') }}" class="nav_link">
-                                <i class='bi bi-info-circle-fill nav_icon'></i> <span class="nav_name">Consulta</span>
+                    @if ($asamblea)
+                        @if ($asamblea['registro'])
+                            <a href="{{ route('asistencia.registrar') }}" class="nav_link"
+                            data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Registro">
+                                <i class='bi bi-person-check-fill nav_icon'></i>
                             </a>
-                            <a href="{{ route('entregar') }}" class="nav_link">
-                                <i class='bi bi-door-closed-fill nav_icon'></i> <span class="nav_name">Entregar</span>
+                        @else
+                            <a href="{{ route('asistencia.asignacion') }}" class="nav_link"
+                            data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Asignacion">
+                                <i class='bi bi-building-check nav_icon'></i>
                             </a>
-                            @hasanyrole('Admin|Lider')
-                                <a href="{{ route('votacion') }}" class="nav_link">
-                                    <i class='bi bi-question-circle-fill nav_icon'></i> <span class="nav_name">Votacion</span>
-                                </a>
-                                <a href="{{ route('gestion.asamblea') }}" class="nav_link">
-                                    <i class='bi bi-ui-checks-grid nav_icon'></i> <span class="nav_name">Asignaciones</span>
-                                </a>
-                            @endhasanyrole
                         @endif
-                    </div>
+
+                        <a href="{{ route('consulta') }}" class="nav_link"
+                        data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Consulta">
+                            <i class='bi bi-info-circle-fill nav_icon'></i>
+                        </a>
+                        <a href="{{ route('entregar') }}" class="nav_link"
+                        data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Entrega">
+                            <i class='bi bi-door-closed-fill nav_icon'></i>
+                        </a>
+                        @hasanyrole('Admin|Lider')
+                            <a href="{{ route('votacion') }}" class="nav_link"
+                            data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Votaciones">
+                                <i class='bi bi-question-circle-fill nav_icon'></i>
+                            </a>
+                            <a href="{{ route('gestion.asamblea') }}" class="nav_link"
+                            data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Control">
+                                <i class='bi bi-ui-checks-grid nav_icon'></i>
+                            </a>
+                        @endhasanyrole
+                    @endif
+                </div>
+                <div class="nav-logo">
+                    <a class="nav_link" href="#" data-bs-placement="bottom" data-bs-title="Cerrar sesion"
+                    data-bs-toggle="modal" data-bs-target="#logOutModal">
+                        <i class="bi bi-box-arrow-left  nav_icon fs-4"></i>
+                        Logout
+                    </a>
                 </div>
 
             </nav>
@@ -109,10 +112,27 @@
     <div class="mt-3 mx-3">
         @yield('content')
     </div>
+    <!-- Button trigger modal -->
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="logOutModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">¿Desea cerrar sesión?</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <a href="{{route('users.logout')}}" class="btn btn-warning"  >Continuar</a>
+        </div>
+      </div>
+    </div>
+  </div>
     @livewireScripts
     <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('assets/js/app.js') }}"></script>
 </body>
-<script></script>
 
 </html>

@@ -148,8 +148,6 @@ class FileController extends Controller
     }
 
 
-
-
     public function importConf(): int
     {
         $path = storage_path('conf.json');
@@ -165,6 +163,14 @@ class FileController extends Controller
         Storage::disk('externalAsambleas')->put($path, $output);
     }
 
-
+    public function exportTables(){
+        $prediosController= new \App\Http\Controllers\PrediosController;
+        $personasController = new \App\Http\Controllers\PersonasController;
+        $asambleaName = cache('asamblea')['name'];
+        $ret1 =$prediosController->export($asambleaName);
+        $ret2 =$personasController->export($asambleaName);
+        $ret3 =$personasController->exportRelation($asambleaName);
+        return $ret1&&$ret2&&$ret3;
+    }
 
 }

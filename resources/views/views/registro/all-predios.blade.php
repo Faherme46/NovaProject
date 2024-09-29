@@ -2,6 +2,7 @@
 
 
     <div class="card-header row g-1">
+        <button type="button" class="btn btn-danger" wire:click='Proof'> proof</button>
         @if ($asamblea['registro'])
             <div class="col-3">
                 <input wire:model.live='searchId' wire:keypress='search' type="text" id="searchId" name="cc_propietario" class="form-control"

@@ -97,20 +97,20 @@ class Votacion extends Component
     {
         if ($value) {
             if (in_array($this->questionType, [2, 6, 7])) {
-                $id = 'optionF';
+                $id = 'F';
             } elseif ($this->questionType == 3) {
-                $id = 'optionE';
+                $id = 'E';
             } elseif ($this->questionType == 4) {
-                $id = 'optionB';
+                $id = 'B';
             }
             $this->dispatch('setWhite', myId: $id);
         } else {
             if ($this->questionType == 2 || $this->questionType == 6) {
-                $id = 'optionF';
+                $id = 'F';
             } elseif ($this->questionType == 3) {
-                $id = 'optionE';
+                $id = 'E';
             } elseif ($this->questionType == 4) {
-                $id = 'optionB';
+                $id = 'B';
             }
             $this->dispatch('setNone', myId: $id);
         }

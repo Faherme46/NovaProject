@@ -1,8 +1,8 @@
 <div>
     <div class="d-flex align-items-center">
-        <button class="bg-white rounded-circle border-0" wire:click='ver'>
-            <i class="bi bi-arrow-clockwise bx-b mt-1" style="font-size: 22px" ></i>
-        </button>
-        <h2 class="ms-2 mb-0 bx-w">Quorum: {{$quorum}}</h2>
+        <button type="button" class="ms-2 mb-0 bx-w btn fs-2 " wire:click='ver'
+        data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Recargar">
+        Quorum: {{$quorum}}
+    </button>
     </div>
 </div>

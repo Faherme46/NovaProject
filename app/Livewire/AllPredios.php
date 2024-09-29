@@ -142,5 +142,8 @@ class AllPredios extends Component
         $this->dispatch('$refresh');
     }
 
+    public function Proof(){
+        dd($this->prediosAll);
+    }
 
 }

@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Http\Controllers\FileController;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 
@@ -91,7 +92,7 @@ class LiderSetup extends Component
 
     public function terminar()
     {
-        
+
         try {
 
             $time = Carbon::now(new DateTimeZone('America/Bogota'))->second(0);
@@ -106,7 +107,9 @@ class LiderSetup extends Component
                 cache([ 'predios_end' =>  Predio::where('quorum_end', true)->count()]);
                 cache(['quorum_end' => Control::whereNotIn('state', [1])->sum('sum_coef')]);
                 cache(['asamblea' => $this->asamblea]);
-
+                $fileController= new FileController;
+                $fileController->exportTables();
+                
                 $this->asamblea->h_cierre = $time;
                 $this->asamblea->save();
                 $this->finished = true;

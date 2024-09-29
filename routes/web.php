@@ -90,3 +90,5 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('users.logout')-
 //rutas de prueba
 Route::get('/proofAsignacion', [Asignacion::class, 'proofAsignacion'])->name('proofAsignacion');
 Route::get('proofQuestion',[FileController::class,'exportAllQuestions']);
+Route::get('proofExport',[FileController::class,'exportTables']);
+

@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\PrediosExport;
 use App\Http\Controllers\Controller;
 
 use App\Models\Predio;
 use Illuminate\Http\Request;
 
 use App\Models\Control;
+use Maatwebsite\Excel\Facades\Excel;
+
 class PrediosController extends Controller
 {
 
@@ -42,6 +45,11 @@ class PrediosController extends Controller
             session('warning1','El predio no fue encontrado');
             return redirect()->route('consulta');
         }
+    }
+
+    public function export($route){
+        $export = new PrediosExport();
+        return Excel::store($export, $route . '/predios.xlsx', 'externalAsambleas');
     }
 
 

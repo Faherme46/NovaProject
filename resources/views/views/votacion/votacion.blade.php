@@ -87,20 +87,20 @@
                         </div>
                     </div>
                     <div class="card-body d-flex ">
-                        <table class="table table-bordered border-black ">
+                        <table class="table table-bordered ">
                             <tr>
                                 <th class="text-center">
                                     <input type="text" class="custom-input text-center " size="1"
                                         value="A" disabled>
                                 </th>
                                 <td>
-                                    <input type="text" class="custom-input resettable w-100" id="optionA"
+                                    <input type="text" class="custom-input  resettable w-100" id="optionA"
                                         wire:model.live='questionOptions.A' @readonly(!in_array($questionType, [2, 6]))>
                                 </td>
                             </tr>
                             <tr>
                                 <th class="text-center">
-                                    <input type="text" class="custom-input " size="1" value="B"
+                                    <input type="text" class="custom-input text-center text-center" size="1" value="B"
                                         disabled>
                                 </th>
                                 <td>
@@ -110,7 +110,7 @@
                             </tr>
                             <tr>
                                 <th class="text-center">
-                                    <input type="text" class="custom-input " size="1" value="C"
+                                    <input type="text" class="custom-input text-center " size="1" value="C"
                                         disabled>
                                 </th>
                                 <td>
@@ -120,7 +120,7 @@
                             </tr>
                             <tr>
                                 <th class="text-center">
-                                    <input type="text" class="custom-input " size="1" value="D"
+                                    <input type="text" class="custom-input text-center " size="1" value="D"
                                         disabled>
                                 </th>
                                 <td>
@@ -130,7 +130,7 @@
                             </tr>
                             <tr>
                                 <th class="text-center">
-                                    <input type="text" class="custom-input" size="1" value="E"
+                                    <input type="text" class="custom-input text-center" size="1" value="E"
                                         disabled>
                                 </th>
                                 <td>
@@ -140,7 +140,7 @@
                             </tr>
                             <tr>
                                 <th class="text-center">
-                                    <input type="text" class="custom-input " size="1" value="F"
+                                    <input type="text" class="custom-input text-center " size="1" value="F"
                                         disabled>
                                 </th>
                                 <td>
@@ -298,12 +298,13 @@
 
         $wire.on('setWhite', (event) => {
             let id = event.myId
-            input = document.getElementById(id);
-            input.value = 'En Blanco'
+            input = document.getElementById('option'+id);
+            $wire.questionOptions[id]='Blanco'
+            input.value = 'Blanco'
         });
         $wire.on('setNone', (event) => {
             let id = event.myId
-            input = document.getElementById(id);
+            input = document.getElementById('option'+id);
             input.value = ''
         });
 
