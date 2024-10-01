@@ -24,13 +24,13 @@ class AllPredios extends Component
 
     public $Control;
 
-    public $iconButton='bi-plus-circle-fill';
+    public $consulta;
     public function mount()
     {
 
         $url=url()->current();
         if ($url=='http://nova.local/consulta'){
-            $this->iconButton='bi-question-circle-fill';
+            $this->consulta=true;
         }
         $this->distincts = [
             'descriptor1' => Predio::distinct()->pluck('descriptor1'),

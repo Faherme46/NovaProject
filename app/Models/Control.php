@@ -18,7 +18,7 @@ class Control extends Model
 
     public function asignacion()
     {
-        return ($this->state == 1);
+        return ($this->state != 4 );
     }
 
     public function predios()

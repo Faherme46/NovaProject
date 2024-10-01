@@ -42,4 +42,8 @@ class Persona extends Model
         return $this->hasOne(Signature::class);
     }
 
+    public function fullName(){
+        return $this->nombre.' '.$this->apellido;
+    }
+
 }

@@ -3,26 +3,26 @@
     <div class="col-12">
         <div class="card px-0 ">
             <div class="card-header pb-0 no-bottom-round">
-                <div class=" d-flex justify-content-center px-2 ">
-                    <div class="col-auto ">
-                        <div class="btn-group " role="group" aria-label="Basic radio toggle button group">
-                            <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off"
-                                wire:model.live='tab' value='1'>
-                            <label class="btn btn-outline-primary d-flex" for="btnradio1">Cambiar Control</label>
+                <div class=" d-flex justify-content-center ">
 
-                            <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off"
-                                wire:model.live='tab' value='2'>
-                            <label class="btn btn-outline-primary" for="btnradio2">Retirar Predios</label>
-
-                            <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off"
-                                wire:model.live='tab' value='3'>
-                            <label class="btn btn-outline-primary" for="btnradio3">Consultar Predios</label>
-                            @if ($asamblea['registro'])
-                                <input type="radio" class="btn-check" name="btnradio" id="btnradio4"
-                                    autocomplete="off" wire:model.live='tab' value='4'>
-                                <label class="btn btn-outline-primary" for="btnradio4">Consultar Personas</label>
-                            @endif
-                        </div>
+                    <div class="btn-group w-auto" role="group">
+                        <input type="radio" class="btn-check" name="btnradio" id="btnradio1" wire:model.live='tab'
+                            value='1'>
+                        <label class="btn btn-outline-primary d-flex" for="btnradio1">Cambiar Control</label>
+                        <input type="radio" class="btn-check" name="btnradio" id="btnradio2" wire:model.live='tab'
+                            value='2'>
+                        <label class="btn btn-outline-primary" for="btnradio2">Retirar Predios</label>
+                        <input type="radio" class="btn-check" name="btnradio" id="btnradio3" wire:model.live='tab'
+                            value='3'>
+                        <label class="btn btn-outline-primary" for="btnradio3">Consultar Predios</label>
+                        @if ($asamblea['registro'])
+                            <input type="radio" class="btn-check" name="btnradio" id="btnradio4" autocomplete="off"
+                                wire:model.live='tab' value='4'>
+                            <label class="btn btn-outline-primary" for="btnradio4">Consultar Personas</label>
+                        @endif
+                        <input type="radio" class="btn-check" name="btnradio" id="btnradio5" wire:model.live='tab'
+                            value='5'>
+                        <label class="btn btn-outline-primary" for="btnradio5">Consultar Control</label>
                     </div>
                 </div>
             </div>
@@ -30,8 +30,7 @@
                 <div class="card-header d-flex justify-content-between bg-body">
 
                     @if ($Persona)
-                        <form action="{{ route('personas.update') }}" method="post" id="updatePersona"
-                            name="formPersona">
+                        <form action="{{ route('personas.update') }}" method="post" id="updatePersona">
                             @csrf
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item d-flex align-items-center justify-content-between">
@@ -92,9 +91,10 @@
                     @endif
                 </div>
             @endif
-            <div class="card-body">
-                <div class="row g-1">
-                    @if ($tab != 3)
+            <div class="card-body px-1 ">
+
+                @if ($tab != 3 && $tab != 5)
+                    <div class="row g-1">
                         <div class="col-5">
                             <div class="card p-0">
                                 <div class="card-header d-flex align-items-center justify-content-between">
@@ -119,7 +119,7 @@
 
                                     </div>
                                 </div>
-                                <div class="card-body table-responsive table-fixed-header px-0 pt-0">
+                                <div class="card-body table-responsive table-fixed-header table-50 px-0 pt-0">
                                     <table class="w-100 table mb-0 ">
 
                                         <tbody>
@@ -154,18 +154,7 @@
                                     </table>
                                 </div>
 
-                                <div class="card-footer justify-content-between d-flex">
-                                    <div class="col-7 align-content-center">
-                                        @if ($asamblea['registro'] && $nameL)
-                                            <p class="mb-0">{{ $nameL }}</p>
-                                        @endif
-                                    </div>
-                                    <div class="col-5">
-                                        <input class="form-control d-inline-block " name="sum_coef"
-                                            value="{{ $sumCoefL }}" id="sumCoef" readonly>
-                                    </div>
 
-                                </div>
                             </div>
                         </div>
                         <div class="col-1 align-items-center mb-auto  mx-auto">
@@ -214,7 +203,7 @@
                                             onkeypress="return onlyNumbers(event)" maxlength="3">
                                     </div>
                                 </div>
-                                <div class="card-body table-responsive table-fixed-header px-0 pt-0">
+                                <div class="card-body table-responsive table-fixed-header table-50 px-0 pt-0">
 
 
                                     <table class="w-100 table mb-0 ">
@@ -253,21 +242,12 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="card-footer justify-content-between d-flex">
-                                    <div class="col-7 align-content-center">
-                                        @if ($asamblea['registro'] && $nameR)
-                                            <p class="mb-0">{{ $nameR }}</p>
-                                        @endif
-                                    </div>
-                                    <div class="col-5">
-                                        <input class="form-control d-inline-block " name="sum_coef"
-                                            value="{{ $sumCoefR }}" id="sumCoef" readonly>
-                                    </div>
 
-                                </div>
                             </div>
                         </div>
-                    @elseif($tab == 3)
+                    </div>
+                @elseif($tab == 3)
+                    <div class="row g-1">
                         @if ($Predio)
                             <div class="card">
                                 <div class="card-header d-flex align-items-center justify-content-between">
@@ -361,7 +341,7 @@
                                                             <p class="mb-0">{{ $persona->id }}</p>
                                                             <button type="button"
                                                                 class="mb-0 btn btn-danger py-0 px-1"
-                                                                wire:click='setPropietarioToDrop({{$persona}})'
+                                                                wire:click='setPropietarioToDrop({{ $persona }})'
                                                                 @disabled($count = $Predio->personas->count() < 2)>
                                                                 <i class='bi bi-trash bx-w'></i>
                                                             </button>
@@ -378,18 +358,91 @@
                         @else
                             Debe elegir un predio
                         @endif
+                    </div>
+                @elseif ($tab == 5)
+                    <div class="card border-black w-80 p-0 mx-auto">
+                        <div class="card-header">
+                            <form wire:submit="searchControl()" method="POST"
+                                class="d-flex w-100 justify-content-center">
+                                <input class="me-2 w-15 form-control @error('noFound') is-invalid @enderror"
+                                    type="text" onkeypress="return onlyNumbers(event)" maxlength="2"
+                                    wire:keydown.enter="searchControl()" wire:model='controlIdSearch'
+                                    placeholder="Control" wire:keypress='$refresh'>
+                                <button type="submit" class="btn btn-primary me-2 p-0 px-1">
+                                    <i class="bi bi-search fs-5"></i>
+                                </button>
+                                @if ($Control)
+                                    <button type="button" class="btn btn-danger p-0 px-1" wire:click='dropControl'>
+                                        <i class="bi bi-x-circle bx-w fs-5 "></i>
+                                    </button>
+                                @endif
+                            </form>
+                        </div>
+                        <div class=" card-body p-0 table-responsive table-fixed-header table-50 ">
 
+                            <table class="table table-bordered m-0 ">
+                                <thead>
+                                    <th>Id</th>
+                                    <th>Predio</th>
+                                    <th>Coef.</th>
+                                    <th>Voto</th>
+                                </thead>
+                                <tbody>
+                                    @if ($Control)
+                                        @if ($Control->state == 4)
+                                            <tr class="">
+                                                <td colspan="4">Control No asignado</td>
+                                            </tr>
+                                        @elseif($Control->state == 3)
+                                            <tr class="">
+                                                <td colspan="4">Control Retirado</td>
+                                            </tr>
+                                        @else
+                                            @foreach ($Control->predios as $p)
+                                                <tr>
+                                                    <td class="pe-0">{{ $p->id }}</td>
+                                                    <td>{{ $p->getFullName() }}</td>
+                                                    <td>{{ $p->coeficiente }}</td>
+                                                    <td class="{{ $p->vota ? '' : 'text-danger' }}">
+                                                        {{ $p->vota ? 'SI' : 'No' }}</td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
+                                    @else
+                                        <tr class="text-muted">
+                                            <td class="text-muted">#</td>
+                                            <td class="text-muted">Torre * Apartamento ###</td>
+                                            <td class="text-muted">0,0000</td>
+                                            <td class="text-muted">No</td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                                <tfoot class="position-sticky bottom-0 table-active">
+                                    <td class="text-end bold"> </td>
+                                    <td>Total Votacion: {{ $Control ? $Control->sum_coef_can : 0 }}</td>
+                                    <td class="">{{ $Control ? $Control->sum_coef : 0 }}</td>
+
+                                    <td>{{ $Control ? $Control->predios_vote : 0 }}</td>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    @if ($asamblea['registro'] && $Control)
+                        <div class="d-flex mt-2 align-items-center justify-content-center">
+                            <span class="bold fs-5 me-2">Asistente: </span>
+                            <span> {{ $Control->persona ? $Control->persona->fullName() : '-' }} </span>
+                        </div>
                     @endif
 
 
+                @endif
 
-                </div>
             </div>
             @if ($changes)
                 <div class="card-footer text-end">
                     <button class="btn btn-success bx-w" id="btn-{{ $tabNames[$tab] }}" type="button"
-                        @if ($tab == 3) onclick="submitformPredio()" @elseif ($tab == 4) onclick="submitformPersona()" @endif
-                        @if ($tab == 1) wire:click='storeInChange'  @elseif($tab == 2) wire:click='storeDetach' @endif>
+                        @if ($tab == 3) onclick="submitformPredio()" @elseif ($tab == 4) onclick="submitformPersona()"
+                        @elseif ($tab == 1) wire:click='storeInChange'  @elseif($tab == 2) wire:click='storeDetach' @endif>
                         Guardar
                     </button>
             @endif
@@ -450,7 +503,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    {{$nameToDrop}}
+                    {{ $nameToDrop }}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -463,15 +516,14 @@
 </div>
 <script type="text/javascript">
     function submitformPersona() {
-        document.formPersona.submit();
+        formPersonaInfo = document.getElementById('updatePersona')
+        formPersonaInfo.submit();
     }
 
     function submitformPredio() {
-        formPredioInfo=document.getElementById('updatePredio')
+        formPredioInfo = document.getElementById('updatePredio')
         formPredioInfo.submit();
     }
-
-
 </script>
 @script
     <script>

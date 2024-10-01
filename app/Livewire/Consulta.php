@@ -28,18 +28,21 @@ class Consulta extends Component
     public $maxControls;
     public $tab = 1;
     public $tabNames = [
-        1 => 'Cambiar',
-        2 => 'Retirar',
-        3 => 'Predio',
-        4 => 'Personas'
+
+        1 => 'Cambiar Control',
+        2 => 'Retirar Control',
+        3 => 'ConsultarPredio',
+        4 => 'ConsultarPersonas',
+        5 => 'Consultar Control',
     ];
 
     public $tiposId = [];
 
 
     public $previousTab;
-    public $Predio = null;
-    public $Persona = null;
+    public $Predio ;
+    public $Persona ;
+    public $Control;
 
     public $cedulaPersonita;
     public $personaFound;
@@ -47,8 +50,6 @@ class Consulta extends Component
     public $messageL = 'Sin Predios';
     public $messageR = 'Sin Predios';
 
-    public $nameL;
-    public $nameR;
 
 
     public $controlRInvalid = false;
@@ -94,8 +95,6 @@ class Consulta extends Component
             'sumCoefL',
             'controlRInvalid',
             'controlLInvalid',
-            'nameR',
-            'nameL',
             'Predio',
             'Persona'
         ]);
@@ -104,7 +103,7 @@ class Consulta extends Component
     }
     public function mount()
     {
-
+        $this->tab=5;
         $this->tiposId = Persona::distinct()->pluck('tipo_id');
         $this->maxControls = cache('asamblea')['controles'];
     }
@@ -226,15 +225,12 @@ class Consulta extends Component
                 $this->controlLInvalid = false;
                 $predios = $control->predios;
                 if ($left) {
-                    $this->nameL = (cache('inRegistro')) ? $control->persona->nombre : '';
                     $this->messageL = $this->messages[$control->state];
                     foreach ($predios as $predio) {
                         $this->prediosL[$predio->id] = $predio;
                     }
                 } else {
-                    $this->nameR = (cache('inRegistro')) ? $control->persona->nombre : '';
                     $this->messageL = $this->messages[$control->state];
-                    $this->nameL = (cache('inRegistro')) ? $control->persona->nombre : '';
                     foreach ($predios as $predio) {
                         $this->prediosR[$predio->id] = $predio;
                     }
@@ -286,21 +282,21 @@ class Consulta extends Component
             }
         }
     }
+    //todo borrar si no hace nada
+    // public function toLeftAll()
+    // {
 
-    public function toLeftAll()
-    {
-
-        $this->validation();
-        $this->changes = true;
-        try {
-            foreach ($this->prediosR as $key => $predio) {
-                $this->prediosL[$key] = $predio;
-            }
-            $this->reset('prediosR');
-        } catch (\Throwable $th) {
-            $this->addError('error', '3 ' . $th->getMessage());
-        }
-    }
+    //     $this->validation();
+    //     $this->changes = true;
+    //     try {
+    //         foreach ($this->prediosR as $key => $predio) {
+    //             $this->prediosL[$key] = $predio;
+    //         }
+    //         $this->reset('prediosR');
+    //     } catch (\Throwable $th) {
+    //         $this->addError('error', '3 ' . $th->getMessage());
+    //     }
+    // }
 
     public function toRightAll()
     {
@@ -457,14 +453,13 @@ class Consulta extends Component
     }
 
 
-    public function exchange()
-    {
-        $auxL = $this->controlIdL;
-
-        $auxR = $this->controlIdR;
-        $this->setControlL($auxR);
-        $this->setControlR($auxL);
+    public function searchControl(){
+        $this->Control=Control::find($this->controlIdSearch);
+        if (!$this->Control) {
+            $this->addError('noFound','No se encontro el control');
+        }
     }
+
 
 
 
@@ -539,4 +534,10 @@ class Consulta extends Component
         $this->ccToDrop = $persona['id'];
         $this->dispatch('dropPersonaModalShow');
     }
+
+    public function dropControl(){
+        $this->reset('Control','controlIdSearch');
+    }
+
+
 }

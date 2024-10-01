@@ -18,6 +18,7 @@ class PrediosController extends Controller
 
 
     public function updatePredio(Request $request){
+
         $messages = [
             'coef.required' => 'El campo coeficiente es obligatorio.',
             'id.required' => 'El campo id es obligatorio.',
@@ -29,6 +30,7 @@ class PrediosController extends Controller
         ], $messages);
 
         $predio=Predio::find($request->id);
+
         if ($predio) {
 
             try {
@@ -36,8 +38,8 @@ class PrediosController extends Controller
                     'coeficiente'=>$request->coef,
                     'vota'=>$request->boolean('voto')
                 ]);
-                if($predio->control[0]){
-                    $predio->control[0]->setCoef();
+                if($predio->control){
+                    $predio->control->setCoef();
                 }
                 return redirect()->route('consulta')->with('success','Se ha actualizado el predio');
             } catch (\Throwable $th) {

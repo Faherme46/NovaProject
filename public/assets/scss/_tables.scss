@@ -24,23 +24,34 @@
 
 .table-responsive {
     padding: 0;
-    padding-inline:0.5rem;
+    padding-inline: 0.5rem;
     padding-bottom: 0rem;
     position: relative;
-    height: 33vh; /* Ajusta según sea necesario */
+    min-height: 33vh;
+    max-height: 33vh;
+    /* Ajusta según sea necesario */
     overflow: auto;
 }
 
+.table-50 {
+    max-height: 50vh;
+}
 
-.table-fixed-header thead th,.table-fixed-header tfoot td {
+
+.table-fixed-header thead th,
+.table-fixed-header tfoot td {
     position: sticky;
     top: 0;
-    z-index: 1; /* Para asegurarse de que el encabezado se superponga */
+    z-index: 1;
+    /* Para asegurarse de que el encabezado se superponga */
 }
+
+
 .table-fixed-header tfoot th {
     position: sticky;
     bottom: 0;
-    z-index: 1; /* Asegúrate de que el pie se superponga */
+    z-index: 1;
+    /* Asegúrate de que el pie se superponga */
 }
 
 .table-fixed-header tbody td {
@@ -49,10 +60,10 @@
 }
 
 
-.table-h100{
-    height: 75vh;
+.table-h100 {
+    max-height: 75vh;
 }
 
-.highlight{
-    background-color: rgba(150,150,150,.3);
+.highlight {
+    background-color: rgba(150, 150, 150, .3);
 }

@@ -15,6 +15,7 @@ use App\Imports\PersonasImport;
 use App\Models\Predio;
 use App\Models\Persona;
 use App\Models\Control;
+use App\Models\PrediosPersona;
 
 class PersonasController extends Controller
 {
@@ -94,7 +95,7 @@ class PersonasController extends Controller
                 Control::where('cc_asistente', $oldId)->update(['cc_asistente' => $newId]);
 
                 // Actualizar el ID en la tabla predios (si aplica)
-                Predio::where('cc_propietario', $oldId)->update(['cc_propietario' => $newId]);
+                PrediosPersona::where('persona_id', $oldId)->update(['persona_id' => $newId]);
                 Predio::where('cc_apoderado', $oldId)->update(['cc_apoderado' => $newId]);
                 DB::statement('SET FOREIGN_KEY_CHECKS=1;');
                 return $persona;

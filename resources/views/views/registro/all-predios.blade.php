@@ -5,13 +5,15 @@
         {{-- <button type="button" class="btn btn-danger" wire:click='Proof'> proof</button> --}}
         @if ($asamblea['registro'])
             <div class="col-3">
-                <input wire:model.live='searchId' wire:keypress='search' type="text" id="searchId" name="cc_propietario" class="form-control"
-                    placeholder="Propietario" onkeypress="return onlyNumbers(event)" onclick="this.select()">
+                <input wire:model.live='searchId' wire:keypress='search' type="text" id="searchId" name="cc_propietario"
+                    class="form-control" placeholder="Propietario" onkeypress="return onlyNumbers(event)"
+                    onclick="this.select()">
             </div>
         @endif
 
         <div class="col-2">
-            <select wire:model.live='descriptor1' wire:keypress='search' class="form-control" name="descriptor1" id="">
+            <select wire:model.live='descriptor1' wire:keypress='search' class="form-control" name="descriptor1"
+                id="">
                 @foreach ($distincts['descriptor1'] as $item)
                     <option value="{{ $item }}">{{ $item }}</option>
                 @endforeach
@@ -48,8 +50,8 @@
         <table class="table">
 
             <thead>
-                <th>Añadir</th>
-                <th class="ps-4">Predio</th>
+                <th class="text-center">Añadir</th>
+                <th class="ps-4 text-center">Predio</th>
                 @if ($asamblea['registro'])
                     <th>Propietario</th>
                 @else
@@ -72,14 +74,15 @@
                         <tr>
                             <td>
                                 <button wire:click="dispatchPredio({{ $predio->id }})" class="btn pt-0 pb-0 mb-0">
-                                    <i class='bi {{ $iconButton }} '></i>
+                                    <i
+                                        class='bi {{ $consulta ? 'bi-question-circle-fill' : 'bi-plus-circle-fill' }} '></i>
                                 </button>
                             </td>
                     @endif
                     <td>
                         <span class="btn py-0 " wire:dblclick='showPredio({{ $predio->id }})'
                             wire:click='dispatchPredio({{ $predio->id }})'>
-                            {{ $predio->getFullName()}}
+                            {{ $predio->getFullName() }}
                         </span>
                     </td>
 
@@ -87,11 +90,14 @@
                     @if ($asamblea['registro'])
                         <td>
                             @foreach ($predio->personas as $persona)
-                                <button type="button" class="btn p-0"
-                                    wire:click='dispatchPersona({{ $persona->id }})'
-                                    wire:confirm='¿Deseas cambiar el Asistente?'>
-                                    <i class="bi bi-person-fill"></i>
-                                </button>
+                                @if (!$consulta)
+                                    <button type="button" class="btn p-0"
+                                        wire:click='dispatchPersona({{ $persona->id }})'
+                                        wire:confirm='¿Deseas cambiar el Asistente?'>
+                                        <i class="bi bi-person-fill"></i>
+                                    </button>
+                                @endif
+
 
                                 <button class="btn p-0 mb-0" wire:dblclick='showPersona({{ $persona->id }})'
                                     wire:click='dispatchPoderdante({{ $persona->id }})'>
@@ -298,8 +304,7 @@
     </div> --}}
 
     {{-- Modal Control --}}
-    <div class="modal fade" id="modalControl" tabindex="-1" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="modalControl" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 @isset($Control)
