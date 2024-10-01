@@ -68,12 +68,18 @@ class UsersController extends Controller
                 'passwordTxt' => $request->password
             ])->assignRole($request->role);
 
-            return back()->with('success', 'usuario creado correctamente');
+            return back()->with('success', 'Usuario creado correctamente');
         } catch (Exception $e) {
             return back()->withErrors($e->getMessage())->withInput();
         }
     }
 
+    public function deleteUser(Request $request){
+        $id=$request->id;
+        $user = User::findOrFail($id);
+        $user->delete();
+        return back()->with('success','Usuario eliminado con exito');
+    }
     public function importUsers()
     {
         try {

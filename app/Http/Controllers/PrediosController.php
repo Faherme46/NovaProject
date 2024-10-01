@@ -28,21 +28,23 @@ class PrediosController extends Controller
             'id' => ['required'],
         ], $messages);
 
-
         $predio=Predio::find($request->id);
         if ($predio) {
+
             try {
                 $predio->update([
                     'coeficiente'=>$request->coef,
                     'vota'=>$request->boolean('voto')
                 ]);
-                $predio->control[0]->setCoef();
+                if($predio->control[0]){
+                    $predio->control[0]->setCoef();
+                }
                 return redirect()->route('consulta')->with('success','Se ha actualizado el predio');
             } catch (\Throwable $th) {
                 return redirect()->route('consulta')->withErrors($th->getMessage());
             }
         }else{
-            session('warning1','El predio no fue encontrado');
+            session('warning','El predio no fue encontrado');
             return redirect()->route('consulta');
         }
     }

@@ -28,6 +28,7 @@ use App\Livewire\Registrar;
 use App\Livewire\Asignacion;
 use App\Livewire\Entregar;
 use App\Livewire\JobStatus;
+use App\Livewire\ListUsers;
 use App\Livewire\Setup;
 use App\Livewire\Signing;
 use App\Livewire\Signs;
@@ -52,9 +53,11 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::resource('asambleas', AsambleaController::class)->withoutMiddleware(EnsureAsambleaOn::class);
 
 
-    Route::get('/users', [UsersController::class, 'index'])->name('users.index')->withoutMiddleware([EnsureAsambleaOn::class]);;
+    Route::get('/users', ListUsers::class)->name('users.index')->withoutMiddleware([EnsureAsambleaOn::class]);;
     Route::post('users/create', [UsersController::class, 'createUser'])->name('users.create');
     Route::get('users/import', [UsersController::class, 'importUsers'])->name('users.import');
+    Route::delete('users/delete', [UsersController::class, 'deleteUser'])->name('users.delete');
+
     Route::get('gestion/asamblea', LiderSetup::class)->name('gestion.asamblea');
 
     Route::get('votacion', Votacion::class)->name('votacion')->middleware(isAsambleaEnd::class)->middleware(isAsambleaInit::class);

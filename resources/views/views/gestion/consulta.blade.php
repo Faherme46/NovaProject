@@ -387,7 +387,7 @@
             </div>
             @if ($changes)
                 <div class="card-footer text-end">
-                    <button class="btn btn-success bx-w" id="btn-{{ $tabNames[$tab] }}" type="submit"
+                    <button class="btn btn-success bx-w" id="btn-{{ $tabNames[$tab] }}" type="button"
                         @if ($tab == 3) onclick="submitformPredio()" @elseif ($tab == 4) onclick="submitformPersona()" @endif
                         @if ($tab == 1) wire:click='storeInChange'  @elseif($tab == 2) wire:click='storeDetach' @endif>
                         Guardar
@@ -467,7 +467,8 @@
     }
 
     function submitformPredio() {
-        document.formPredio.submit();
+        formPredioInfo=document.getElementById('updatePredio')
+        formPredioInfo.submit();
     }
 
 

@@ -260,13 +260,16 @@ class Registrar extends Component
         session(['controlTurn' => strval($this->controlId + 1)]);
         //control Uso
 
-
+        $prediosToAsign=[];
+        foreach ($this->predioSelected as $value) {
+            $prediosToAsign[]=$this->prediosAvailable[$value];
+        }
         try {
 
             if ($option){
 
                 $controlH = $this->asistenteControls[$this->controlH];
-                $controlH->attachPredios($this->prediosAvailable);
+                $controlH->attachPredios($prediosToAsign);
                 $controlH->setCoef();
             }else{
                 if ($control->asignacion()) {
@@ -275,7 +278,7 @@ class Registrar extends Component
                     return session()->flash('warning', 'El control ya esta en uso');
                 };
                 $control->cc_asistente = $this->cedula;
-                $control->attachPredios($this->prediosAvailable);
+                $control->attachPredios($prediosToAsign);
                 $control->setCoef();
                 $control->h_entrega= Carbon::now(new DateTimeZone('America/Bogota'))->second(0)->format('H:i');
 

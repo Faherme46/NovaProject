@@ -75,7 +75,7 @@
                         </button>
                     </div>
                 </div>
-                <div class="card-body table-responsive table-fixed-header">
+                <div class="card-body table-responsive table-fixed-header pt-0">
 
                     <table class="table">
                         <thead>
@@ -117,6 +117,8 @@
             <div class="card ">
                 <div class="card-header d-flex">
                     <div class="col-10">
+
+                        <p>Control</p>
                         @if ($asistenteControls)
                             <form id="formPredios" class="row g-3" wire:submit='asignar(1)' method="GET">
                                 <div class=" col-2 ">
@@ -164,12 +166,12 @@
                     </div>
 
                 </div>
-                <div class="card-body table-responsive table-fixed-header">
+                <div class="card-body table-responsive table-fixed-header p-0">
                     <table class="table">
                         <thead>
                             <tr>
 
-                                <th>A/P</th>
+                                <th class="">A/P</th>
                                 <th>Predio</th>
                                 <th>Coef.</th>
                                 <th>
@@ -280,7 +282,7 @@
         </div>
     </div>
 
-    
+
 
 
 </div>

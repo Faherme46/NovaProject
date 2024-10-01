@@ -2,7 +2,7 @@
 
 
     <div class="card-header row g-1">
-        <button type="button" class="btn btn-danger" wire:click='Proof'> proof</button>
+        {{-- <button type="button" class="btn btn-danger" wire:click='Proof'> proof</button> --}}
         @if ($asamblea['registro'])
             <div class="col-3">
                 <input wire:model.live='searchId' wire:keypress='search' type="text" id="searchId" name="cc_propietario" class="form-control"
@@ -103,7 +103,7 @@
                     @else
                         <td>{{ $predio->coeficiente }}</td>
                     @endif
-                    <td>{{ $predio->vota ? 'SI' : 'No' }}</td>
+                    <td class="text-center">{{ $predio->vota ? 'SI' : 'No' }}</td>
                     </tr>
                 @empty
                     <tr>
@@ -136,6 +136,7 @@
         </div>
     </div>
     <!-- Modal Persona -->
+    {{--
     <div class="modal fade" id="modalPersona" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -229,7 +230,7 @@
         </div>
     </div>
     <!-- Modal Predio -->
-    <div class="modal fade" id="modalPredio" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+     <div class="modal fade" id="modalPredio" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 @isset($Predio)
@@ -294,7 +295,7 @@
 
             </div>
         </div>
-    </div>
+    </div> --}}
 
     {{-- Modal Control --}}
     <div class="modal fade" id="modalControl" tabindex="-1" aria-labelledby="exampleModalLabel"

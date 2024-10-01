@@ -131,7 +131,7 @@ class Consulta extends Component
         }
         $this->sumCoefL = $suma;
     }
-//todo borrar si no hacen nada
+    //todo borrar si no hacen nada
     // public function addPredioToR($predio)
     // {
     //     $this->prediosR[$predio->id] = $predio;
@@ -184,13 +184,13 @@ class Consulta extends Component
     public function updatedControlIdR($value)
     {
         $this->handleUpdate($value, false);
-        $this->controlIdR=$value;
+        $this->controlIdR = $value;
         return;
     }
     public function updatedControlIdL($value)
     {
         $this->handleUpdate($value, true);
-        $this->controlIdL=$value;
+        $this->controlIdL = $value;
         return;
     }
 
@@ -220,21 +220,24 @@ class Consulta extends Component
         if (!$control) {
             return null;
         }
-        if ($control->state !=3) {
-            $this->controlLInvalid = false;
-            $predios = $control->predios;
-            if ($left) {
-                $this->nameL = (cache('inRegistro')) ? $control->persona->nombre : '';
-                $this->messageL = $this->messages[$control->state];
-                foreach ($predios as $predio) {
-                    $this->prediosL[$predio->id] = $predio;
-                }
-            } else {
-                $this->nameR = (cache('inRegistro')) ? $control->persona->nombre : '';
-                $this->messageL = $this->messages[$control->state];
-                $this->nameL = (cache('inRegistro')) ? $control->persona->nombre : '';
-                foreach ($predios as $predio) {
-                    $this->prediosR[$predio->id] = $predio;
+        if ($control->state != 3) {
+
+            if ($control->state != 4) {
+                $this->controlLInvalid = false;
+                $predios = $control->predios;
+                if ($left) {
+                    $this->nameL = (cache('inRegistro')) ? $control->persona->nombre : '';
+                    $this->messageL = $this->messages[$control->state];
+                    foreach ($predios as $predio) {
+                        $this->prediosL[$predio->id] = $predio;
+                    }
+                } else {
+                    $this->nameR = (cache('inRegistro')) ? $control->persona->nombre : '';
+                    $this->messageL = $this->messages[$control->state];
+                    $this->nameL = (cache('inRegistro')) ? $control->persona->nombre : '';
+                    foreach ($predios as $predio) {
+                        $this->prediosR[$predio->id] = $predio;
+                    }
                 }
             }
             return $control;
@@ -261,7 +264,7 @@ class Consulta extends Component
             unset($this->prediosR[$predioId]);
         } catch (\Throwable $th) {
             if ($th->getCode() != 0) {
-                $this->addError('error', '1 '.$th->getMessage());
+                $this->addError('error', '1 ' . $th->getMessage());
             }
         }
     }
@@ -279,7 +282,7 @@ class Consulta extends Component
             unset($this->prediosL[$predioId]);
         } catch (\Throwable $th) {
             if ($th->getCode() != 0) {
-                $this->addError('error', '2 '.$th->getMessage());
+                $this->addError('error', '2 ' . $th->getMessage());
             }
         }
     }
@@ -295,7 +298,7 @@ class Consulta extends Component
             }
             $this->reset('prediosR');
         } catch (\Throwable $th) {
-            $this->addError('error', '3 '.$th->getMessage());
+            $this->addError('error', '3 ' . $th->getMessage());
         }
     }
 
@@ -312,10 +315,10 @@ class Consulta extends Component
             foreach ($this->prediosL as $key => $predio) {
                 $this->prediosR[$key] = $predio;
             }
-            $this->messageL='Se retirará el control';
+            $this->messageL = 'Se retirará el control';
             $this->reset('prediosL');
         } catch (\Throwable $th) {
-            $this->addError('error', '4 '.$th->getMessage());
+            $this->addError('error', '4 ' . $th->getMessage());
         }
     }
 
@@ -402,7 +405,7 @@ class Consulta extends Component
             }
             $this->success();
         } catch (\Throwable $th) {
-            $this->addError('error', '5 '.$th->getMessage());
+            $this->addError('error', '5 ' . $th->getMessage());
         }
     }
     public function success()
@@ -433,7 +436,7 @@ class Consulta extends Component
         }
         try {
             if ($this->prediosL) {
-                $controlL->predios()->sync(array_keys($this->prediosL));
+                $controlL->deletePredios($this->prediosR);
                 $controlL->setCoef();
                 $controlL->save();
             } else {
@@ -441,7 +444,7 @@ class Consulta extends Component
             }
             $this->success();
         } catch (\Throwable $th) {
-            $this->addError('error', '6 '.$th->getMessage());
+            $this->addError('error', '6 ' . $th->getMessage());
         }
     }
     public function searchPredio($predioId)
@@ -503,33 +506,37 @@ class Consulta extends Component
     }
 
 
-    public function searchPersonita(){
-        $personita=Persona::find($this->cedulaPersonita);
+    public function searchPersonita()
+    {
+        $personita = Persona::find($this->cedulaPersonita);
         if ($personita) {
-           $this->personaFound=$personita->nombre.' '.$personita->apellido;
-        }else{
-            $this->personaFound='No se encontraron resultados';
+            $this->personaFound = $personita->nombre . ' ' . $personita->apellido;
+        } else {
+            $this->personaFound = 'No se encontraron resultados';
         }
         $this->dispatch('reloadModalAddPropietario');
     }
 
-    public function addPropietario(){
+    public function addPropietario()
+    {
         $this->Predio->personas()->attach($this->cedulaPersonita);
-        $this->reset('cedulaPersonita','personaFound');
+        $this->reset('cedulaPersonita', 'personaFound');
         session()->flash('success', 'Propietario agregado');
     }
 
 
-    public function dropPropietario(){
+    public function dropPropietario()
+    {
         $this->Predio->personas()->detach($this->ccToDrop);
         session()->flash('warning', 'Propietario Eliminado');
     }
 
     public $nameToDrop;
     public $ccToDrop;
-    public function setPropietarioToDrop($persona){
-        $this->nameToDrop=$persona['nombre'].' '.$persona['apellido'];
-        $this->ccToDrop=$persona['id'];
+    public function setPropietarioToDrop($persona)
+    {
+        $this->nameToDrop = $persona['nombre'] . ' ' . $persona['apellido'];
+        $this->ccToDrop = $persona['id'];
         $this->dispatch('dropPersonaModalShow');
     }
 }
