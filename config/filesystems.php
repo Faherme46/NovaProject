@@ -54,12 +54,18 @@ return [
 
         'externalClientes' => [
             'driver' => 'local',
-            'root' => 'C:/Asambleas/Clientes',
+            'root' => env('MAIN_FOLDER_PATH').'Clientes',
             'throw' => false,
         ],
         'externalAsambleas' => [
             'driver' => 'local',
-            'root' => 'C:/Asambleas/Asambleas',
+            'root' => env('MAIN_FOLDER_PATH').'Asambleas',
+            'throw' => false,
+        ],
+
+        'externalUsers' => [
+            'driver' => 'local',
+            'root' => env('MAIN_FOLDER_PATH'),
             'throw' => false,
         ],
         'scripts' => [

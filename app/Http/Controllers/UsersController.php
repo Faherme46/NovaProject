@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\UserExport;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -16,10 +17,6 @@ use Exception;
 
 class UsersController extends Controller
 {
-    public function index()
-    {
-        return view('views.gestion.createUser');
-    }
 
     public function createUser(Request $request)
     {
@@ -65,9 +62,10 @@ class UsersController extends Controller
                 'telefono' => $request->telefono,
                 'username' => $request->username,
                 'password' => Hash::make($request->password),
-                'passwordTxt' => $request->password
+                'passwordTxt' => $request->password,
+                'roleTxt'=>$request->role
             ])->assignRole($request->role);
-
+            $this->exportUsers();
             return back()->with('success', 'Usuario creado correctamente');
         } catch (Exception $e) {
             return back()->withErrors($e->getMessage())->withInput();
@@ -78,13 +76,14 @@ class UsersController extends Controller
         $id=$request->id;
         $user = User::findOrFail($id);
         $user->delete();
+        $this->exportUsers();
         return back()->with('success','Usuario eliminado con exito');
     }
     public function importUsers()
     {
         try {
             Excel::import(new UsersImport, 'C:/Asambleas/usuarios.xlsx');
-            return redirect()->route('users.index')->with('success','Archivo importado correctamente');
+            return redirect()->back()->with('success','Archivo importado correctamente');
         } catch (ValidationException $e) {
             // Manejar excepciones específicas de validación de Excel
             $failures = $e->failures();
@@ -98,4 +97,25 @@ class UsersController extends Controller
             return back()->withErrors($e->getMessage());
         }
     }
+
+    public function exportUsers(){
+
+        try {
+            $export = new UserExport();
+            $excel=Excel::store($export,'usuarios.xlsx','externalUsers');
+            return redirect()->back();
+        } catch (ValidationException $e) {
+            // Manejar excepciones específicas de validación de Excel
+            $failures = $e->failures();
+            return back()->withErrors('Error: ' . $failures[1]);
+            //Excepcion por archivo inexistente
+        } catch (\Illuminate\Contracts\Filesystem\FileNotFoundException $e) {
+            return back()->withErrors('Error: No se encontró la hoja de cálculo');
+        } catch (Exception $e) {
+
+            // Manejar cualquier otra excepción
+            return back()->withErrors($e->getMessage());
+        }
+    }
+
 }

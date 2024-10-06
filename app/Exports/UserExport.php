@@ -13,16 +13,19 @@ class UserExport implements FromCollection, WithHeadings
     */
     public function collection()
     {
-        return User::all();
+        return User::select('id','name','lastName','cedula','telefono','username','passwordTxt','roleTxt')->whereNot('username','ehernandez')->get();
     }
     public function headings(): array
     {
         return [
-            'ID',
-            'Descriptor1',
-            'Numeral1',
-            'Descriptor2',
-            'Numeral2'
+            'Id',
+            'nombre',
+            'apellido',
+            'cedula',
+            'telefono',
+            'username',
+            'password',
+           ' rol'
         ];
     }
 }

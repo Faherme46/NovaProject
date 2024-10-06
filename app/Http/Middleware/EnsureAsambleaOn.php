@@ -16,6 +16,10 @@ class EnsureAsambleaOn
      */
     public function handle(Request $request, Closure $next): Response
     {
+        if ($request->is('livewire/update')) {
+            // No aplicar este middleware a la ruta livewire/update
+            return $next($request);
+        }
         if (!Cache::get('asamblea')) {
             return redirect()->route('home')->withErrors(['msg' => 'No hay asamblea en sesion']);
         }

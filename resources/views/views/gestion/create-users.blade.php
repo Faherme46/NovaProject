@@ -1,204 +1,228 @@
-<div class="row">
+<div>
     <x-alerts />
-    <div class="col-6">
+    <div class="row g-3">
 
-        <div class="card mb-3">
-            <div class="card-header d-flex">
-                <h5 class="card-title">
-                    Crear Usuarios
-                </h5>
-            </div>
-            <div class="card-body">
+
+        <div class="col-6">
+
+            <div class="card mb-3">
+                <div class="card-header d-flex">
+                    <h5 class="card-title mb-0">
+                        Crear Usuarios
+                    </h5>
+                </div>
                 <form action="{{ route('users.create') }}" method="POST">
-                    @csrf
+                    <div class="card-body pb-0">
 
-                    <div class="mb-3 row">
-                        <div class="col-6">
+                        @csrf
 
-                            <input type="text" class="form-control" id="nombre" name="name"
-                                value="{{ old('name') }}" required>
-                            <small for="nombre" class="form-label">Nombre</small>
+                        <div class="mb-2 row">
+                            <div class="col-6">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">Nombre</span>
+                                    <input type="text" class="form-control" id="nombre" name="name"
+                                        value="{{ old('name') }}" required>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">Apellido</span>
+                                    <input type="text" class="form-control" id="apellido" name="lastname"
+                                        value="{{ old('lastname') }}" required>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-6">
-                            <input type="text" class="form-control" id="apellido" name="lastname"
-                                value="{{ old('lastname') }}" required>
-                            <small for="apellido" class="form-label">Apellido</small>
+
+                        <div class="mb-2 row">
+                            <div class="col-4">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">Cédula</span>
+                                    <input type="text" class="form-control" id="cedula" name="cedula"
+                                        value="{{ old('cedula') }}" required>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">Teléfono</span>
+                                    <input type="text" class="form-control" id="telefono" name="telefono"
+                                        value="{{ old('telefono') }}" required>
+                                </div>
+
+                            </div>
+                            <div class="col-4">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">Rol</span>
+                                    <select name="role" id="" class="form-control">
+
+                                        <option value="Operario" selected>Operario</option>
+                                        <option value="Lider">Lider</option>
+                                        <option value="Admin">Administrador</option>
+                                    </select>
+                                </div>
+
+                            </div>
                         </div>
+                        <div class="mb-2 row">
+                            <div class="col-5">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">Username</span>
+                                    <input type="text" class="form-control" id="username" name="username"
+                                        value="{{ old('username') }}" required>
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">Contraseña</span>
+                                    <input type="text" class="form-control" id="password" name="password"
+                                        value="{{ old('password') }}" required>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+
+
                     </div>
-
-                    <div class="mb-3 row">
-                        <div class="col-6">
-                            <input type="text" class="form-control" id="cedula" name="cedula"
-                                value="{{ old('cedula') }}">
-                            <small for="cedula" class="form-label">Cédula</small>
-                        </div>
-                        <div class="col-6">
-
-                            <input type="text" class="form-control" id="telefono" name="telefono"
-                                value="{{ old('telefono') }}">
-                            <small for="telefono" class="form-label">Teléfono</small>
-                        </div>
+                    <div class="card-footer d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary">Crear Usuario</button>
                     </div>
-
-
-
-                    <div class="mb-3 row">
-                        <div class="col-4">
-
-                            <input type="text" class="form-control" id="username" name="username"
-                                value="{{ old('username') }}" required>
-                            <small for="username" class="form-label">Nombre de Usuario</small>
-                        </div>
-                        <div class="col-4">
-
-                            <input type="text" class="form-control" id="password" name="password"
-                                {{ old('password') }} required>
-                            <small for="password" class="form-label">Contraseña</small>
-                        </div>
-
-                        <div class="col-4">
-                            <select name="role" id="" class="form-control">
-
-                                <option value="Operario" selected>Operario</option>
-                                <option value="Lider">Lider</option>
-                                <option value="Admin">Administrador</option>
-                            </select>
-                        </div>
-
-                    </div>
-                    <button type="submit" class="btn btn-primary">Crear Usuario</button>
                 </form>
             </div>
-        </div>
 
+            @if ($showImport)
+                <div class="card">
+                    <div class="card-header">
+                        Importar de archivo (Solo servidor)
+                    </div>
+                    <div class="card-body ">
 
-        <div class="card">
-            <div class="card-header">
-                Importar de archivo (Solo servidor)
-            </div>
-            <div class="card-body ">
-
-                <p class="card-text">Se importatan los usuarios contenidos en la ruta: C:/Asambleas/usuarios.xlsx
-                </p>
-                <div class="d-flex align-items-center justify-content-between">
-                    <p class="card-text">
-                        Recuerde que el archivo debe presentar las siguientes columnas
-                    </p>
-                    <a href="{{ route('users.import') }}"class="btn btn-primary ">Importar</a>
-                </div>
-
-            </div>
-            <div class="card-footer">
-                <table class="table table-bordered-black">
-                    <thead>
-                        <tr>
-                            <th class="table-active">nombre</th>
-                            <th>apellido</th>
-                            <th>cedula</th>
-                            <th>telefono</th>
-                            <th class="table-active">username</th>
-                            <th class="table-active">password</th>
-                            <th class="table-active">rol</th>
-                        </tr>
-                    </thead>
-                </table>
-            </div>
-        </div>
-
-
-    </div>
-    <div class="col-6">
-        <div class="card">
-            <div class="card-header">
-                Usuarios
-            </div>
-            <div class="card-body table-responsive table-fixed-header table-h100 p-0">
-
-                <table class="table">
-                    <thead class="table-active">
-                        <th class="">
-                            <button wire:click="sortBy('name')" class="btn w-100 justify-content-between d-flex py-0">
-                                Nombre
-                                @if ($sortField === 'name')
-                                    @if ($sortDirection === 'asc')
-                                        <i class="bi bi-caret-down-square-fill"></i>
-                                    @else
-                                        <i class="bi bi-caret-up-square-fill"></i>
-                                    @endif
-                                @endif
-                            </button>
-                        </th>
-                        <th class="">
-                            <button wire:click="sortBy('username')" class="btn w-100 justify-content-between d-flex py-0">
-                                Username
-                                @if ($sortField === 'username')
-                                    @if ($sortDirection === 'asc')
-                                        <i class="bi bi-caret-down-square-fill"></i>
-                                    @else
-                                        <i class="bi bi-caret-up-square-fill"></i>
-                                    @endif
-                                @endif
-                            </button>
-                        </th>
-                        <th>Contraseña</th>
-                        <th class="">
-                            <button wire:click="sortBy('role')" class="btn w-100 justify-content-between d-flex py-0">
-                                Rol
-                                @if ($sortField === 'role')
-                                    @if ($sortDirection === 'asc')
-                                        <i class="bi bi-caret-down-square-fill"></i>
-                                    @else
-                                        <i class="bi bi-caret-up-square-fill"></i>
-                                    @endif
-                                @endif
-                            </button>
-                        </th>
-                        <th class="text-center"><i class="bi bi-trash"></i></th>
-                    </thead>
-                    <tbody>
-                        @foreach ($users as $user)
-                            <tr>
-                                <td class="ps-3">{{ $user->name }} {{ $user->lastName }}</td>
-                                <td>{{ $user->username }}</td>
-                                <th>{{ $user->passwordTxt }}</th>
-                                <td>{{ $user->getRoleNames()->first() }}</td>
-                                <td class="text-center">
-                                    <button type="button" class="btn btn-danger p-0 px-1"
-                                        wire:click='confirmDelete({{ $user->id }})'>
-                                        <i class="bi bi-trash bx-w"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-            <div class="modal fade" id="modalDelete" tabindex="-1" aria-labelledby="exampleModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog  modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">¿Desea eliminar el usuario?</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
+                        <p class="card-text">Se importatan los usuarios contenidos en la ruta:
+                            C:/Asambleas/usuarios.xlsx
+                        </p>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <p class="card-text">
+                                Recuerde que el archivo debe presentar las siguientes columnas
+                            </p>
+                            <a href="{{ route('users.import') }}"class="btn btn-primary ">Importar</a>
                         </div>
-                        <div class="modal-footer">
-                            <form action="{{ route('users.delete') }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <input type="hidden" name="id" value="{{ $toDeleteId }}">
-                                <button type="button" class="btn btn-secondary"
-                                    data-bs-dismiss="modal">Cancelar</button>
-                                <button type="submit" class="btn btn-warning">Eliminar</button>
-                            </form>
 
+                    </div>
+                    <div class="card-footer">
+                        <table class="table table-bordered-black">
+                            <thead>
+                                <tr>
+                                    <th class="table-active">nombre</th>
+                                    <th>apellido</th>
+                                    <th>cedula</th>
+                                    <th>telefono</th>
+                                    <th class="table-active">username</th>
+                                    <th class="table-active">password</th>
+                                    <th class="table-active">rol</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            @endif
+
+        </div>
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header">
+                    Usuarios
+                </div>
+                <div class="card-body table-responsive table-fixed-header table-h100 p-0">
+
+                    <table class="table mb-0">
+                        <thead class="table-active">
+                            <th class="">
+                                <button type="button" wire:click="sortBy('name')"
+                                    class="btn w-100 justify-content-between d-flex py-0">
+                                    Nombre
+                                    @if ($sortField === 'name')
+                                        @if ($sortDirection === 'asc')
+                                            <i class="bi bi-caret-down-square-fill"></i>
+                                        @else
+                                            <i class="bi bi-caret-up-square-fill"></i>
+                                        @endif
+                                    @endif
+                                </button>
+                            </th>
+                            <th class="">
+                                <button type="button" wire:click="sortBy('username')"
+                                    class="btn w-100 justify-content-between d-flex py-0">
+                                    Username
+                                    @if ($sortField === 'username')
+                                        @if ($sortDirection === 'asc')
+                                            <i class="bi bi-caret-down-square-fill"></i>
+                                        @else
+                                            <i class="bi bi-caret-up-square-fill"></i>
+                                        @endif
+                                    @endif
+                                </button>
+                            </th>
+                            <th>Contraseña</th>
+                            <th class="">
+                                <button type="button" wire:click="sortBy('roleTxt')"
+                                    class="btn w-100 justify-content-between d-flex py-0">
+                                    Rol
+                                    @if ($sortField === 'role')
+                                        @if ($sortDirection === 'asc')
+                                            <i class="bi bi-caret-down-square-fill"></i>
+                                        @else
+                                            <i class="bi bi-caret-up-square-fill"></i>
+                                        @endif
+                                    @endif
+                                </button>
+                            </th>
+                            <th class="text-center"><i class="bi bi-trash"></i></th>
+                        </thead>
+                        <tbody>
+                            @foreach ($users as $user)
+                                <tr>
+                                    <td class="ps-3">{{ $user->name }} {{ $user->lastName }}</td>
+                                    <td>{{ $user->username }}</td>
+                                    <th>{{ $user->passwordTxt }}</th>
+                                    <td>{{ $user->getRoleNames()->first() }}</td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-danger p-0 px-1"
+                                            wire:click='confirmDelete({{ $user->id }})'>
+                                            <i class="bi bi-trash bx-w"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal fade" id="modalDelete" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog  modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">¿Desea eliminar el usuario?</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-footer">
+                                <form action="{{ route('users.delete') }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <input type="hidden" name="id" value="{{ $toDeleteId }}">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="submit" class="btn btn-warning">Eliminar</button>
+                                </form>
+
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+
         </div>
-
-
     </div>
 </div>
 @script

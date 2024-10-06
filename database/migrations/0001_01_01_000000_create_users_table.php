@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('passwordTxt');
             $table->string('cedula')->nullable();
             $table->string('telefono')->nullable();
+            $table->string('roleTxt');
             $table->timestamps();
         });
 

@@ -5,15 +5,14 @@
         <div class="col-12 ">
             @foreach ($controls as $control)
                 <button class="btn {{ $colors[$control->state] }} mb-2 me-2 fs-3"
-                    @if ($control->state != 4) wire:click='confirm({{ $control->id }})' @endif>
+                    @if ($control->state != 4 && $control->state != 3) wire:click='confirm({{ $control->id }})' @endif>
                     {{ $control->id }}
                 </button>
             @endforeach
         </div>
     </div>
 
-    <div class="modal fade " id="modalConfirm" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal fade " id="modalConfirm" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">

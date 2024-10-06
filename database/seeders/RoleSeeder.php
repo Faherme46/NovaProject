@@ -53,6 +53,7 @@ class RoleSeeder extends Seeder
             'passwordTxt' => 'ehernandez',
             'lastName' => 'hernandez',
             'name' => 'emilton',
+            'roleTxt'=>'Admin'
             ])->assignRole([$admin]);
 
 

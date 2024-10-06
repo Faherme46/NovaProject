@@ -53,10 +53,10 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::resource('asambleas', AsambleaController::class)->withoutMiddleware(EnsureAsambleaOn::class);
 
 
-    Route::get('/users', ListUsers::class)->name('users.index')->withoutMiddleware([EnsureAsambleaOn::class]);;
-    Route::post('users/create', [UsersController::class, 'createUser'])->name('users.create');
-    Route::get('users/import', [UsersController::class, 'importUsers'])->name('users.import');
-    Route::delete('users/delete', [UsersController::class, 'deleteUser'])->name('users.delete');
+    Route::get('/users', ListUsers::class)->name('users.index')->withoutMiddleware([EnsureAsambleaOn::class]);
+    Route::post('users/create', [UsersController::class, 'createUser'])->name('users.create')->withoutMiddleware([EnsureAsambleaOn::class]);;
+    Route::get('users/import', [UsersController::class, 'importUsers'])->name('users.import')->withoutMiddleware([EnsureAsambleaOn::class]);
+    Route::delete('users/delete', [UsersController::class, 'deleteUser'])->name('users.delete')->withoutMiddleware([EnsureAsambleaOn::class]);;
 
     Route::get('gestion/asamblea', LiderSetup::class)->name('gestion.asamblea');
 
@@ -82,7 +82,7 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::get('/asistencia/firmas', Signs::class)->name('asistencia.signs')->middleware(isAsambleaEnd::class);
     Route::get('/asistencia/firmando', Signing::class)->name('asistencia.signing')->middleware(isAsambleaEnd::class);
 });
-//rutas para registro
+//rutas para livewire
 
 
 //Rutas de autenticacion

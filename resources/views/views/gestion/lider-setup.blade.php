@@ -23,7 +23,7 @@
                         <tbody>
                             <tr>
                                 <td class="text-end">Fecha:</td>
-                                <td>{{ $asamblea['fecha']}} </td>
+                                <td>{{ $asamblea['fecha'] }} </td>
                             </tr>
                             <tr>
                                 <td class="text-end">Hora:</td>
@@ -77,10 +77,14 @@
         </div>
         <div class="col-8">
             <div class="card">
-                <div class="card-header">
+                <div class="card-header d-flex align-items-center justify-content-between">
                     <h2 class="card-title mb-0">Asignaciones</h2>
+                    <span wire:click='$refresh' class=" btn text-bg-secondary rounded-circle fs-5 px-2 pt-1 pb-0"
+                        data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Recargar">
+                        <i class="bi bi-arrow-clockwise"></i>
+                    </span>
                 </div>
-                <div class="card-body table-responsive table-fixed-header table-h100 px-0">
+                <div class="card-body table-responsive table-fixed-header table-h100 p-0">
                     <table class="table mb-0 table-striped-columns">
                         <thead>
                             <tr class="">
@@ -116,10 +120,12 @@
                                     <td>{{ $control->sum_coef }}</td>
                                     <td>{{ $control->sum_coef_can }}</td>
                                     <td>
-                                        <span class="badge p-1 fs-6 {{ $colors[$control->state] }}">{{ $control->getStateTxt() }}</span>
+                                        <span
+                                            class="badge p-1 fs-6 {{ $colors[$control->state] }}">{{ $control->getStateTxt() }}</span>
                                     </td>
                                     <td>
-                                        <span class="badge p-1 fs-6 text-bg-info">{{($control->t_publico)?'Publico':'Privado'}}</span>
+                                        <span
+                                            class="badge p-1 fs-6 text-bg-info">{{ $control->t_publico ? 'Publico' : 'Privado' }}</span>
                                     </td>
                                 </tr>
                             @empty

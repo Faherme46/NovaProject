@@ -68,8 +68,9 @@
                     <div class="d-flex align-items-baseline ">
 
                         <input placeholder="cedula" onkeypress="return onlyNumbers(event)" type="text"
-                            name="cedulaPropietario" id="cc" class="form-control" placeholder=""
-                            aria-describedby="helpId" wire:model='ccPoderdante' onclick="this.select()" />
+                            name="cedulaPropietario" id="cc" class="form-control"
+                            wire:keypress.enter='addPoderdante' aria-describedby="helpId" wire:model='ccPoderdante'
+                            onclick="this.select()" />
                         <button type="submit" class="btn ms-1 btn-primary" wire:click='addPoderdante'>
                             <i class='bi bi-arrow-right-circle-fill'></i>
                         </button>
@@ -115,52 +116,44 @@
         {{-- asignar --}}
         <div class="col-12 ">
             <div class="card ">
-                <div class="card-header d-flex">
-                    <div class="col-10">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center">
 
-                        <p>Control</p>
+                        <span class="mb-0  text-muted">Control</span>
                         @if ($asistenteControls)
-                            <form id="formPredios" class="row g-3" wire:submit='asignar(1)' method="GET">
-                                <div class=" col-2 ">
-                                    <select name="control" id="id_control_selected" wire:model="controlH"
-                                        wire:change='changePredios' class="form-control" required>
-                                        @foreach ($asistenteControls as $control)
-                                            <option value="{{ $control->id }}">
-                                                {{ $control->id }} </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-2">
-                                    <button type="submit" class="btn btn-primary">
-                                        Agregar
-                                    </button>
-                                </div>
-                                <div class="col-1">
-                                    <button type="button" class="btn btn-primary" wire:click="resetControl">
-                                        <i class='bi bi-plus-circle-fill '></i>
-                                    </button>
-                                </div>
+                            <form id="formPredios" class="d-flex w-auto" wire:submit='asignar(1)' method="GET">
+
+                                <select name="control" id="id_control_selected" wire:model="controlH"
+                                    wire:change='changePredios' class="form-control me-1" required>
+                                    @foreach ($asistenteControls as $control)
+                                        <option value="{{ $control->id }}">
+                                            {{ $control->id }} </option>
+                                    @endforeach
+                                </select>
+                                <button type="submit" class="btn btn-primary ms-1">
+                                    Agregar
+                                </button>
+                                <button type="button" class="btn btn-primary" wire:click="resetControl">
+                                    <i class='bi bi-plus-circle-fill '></i>
+                                </button>
                             </form>
                         @else
-                            <form id="formPredios" class="row g-3" wire:submit='asignar(0)' method="GET">
-                                <div class=" col-2 ">
-                                    <select name="control" id="id_control" class="form-control" required
+                            <form id="formPredios" class=" d-flex" wire:submit='asignar(0)' method="GET">
+                                    <select name="control" id="id_control" class="form-control ms-2" required
                                         wire:model="controlId">
                                         @foreach ($controlIds as $control)
                                             <option value="{{ $control }}" @selected($control == $controlId)>
                                                 {{ $control }} </option>
                                         @endforeach
                                     </select>
-                                </div>
-                                <div class="col-2">
-                                    <button type="submit" class="btn btn-primary">
+                                    <button type="submit" class="btn btn-primary ms-2">
                                         Asignar
                                     </button>
-                                </div>
                             </form>
                         @endif
                     </div>
-                    <div class="col-2 text-right">
+                    <div class="d-flex text-right align-items-center w-30">
+                        <span class="me-2">Coef. </span>
                         <input class="form-control" name="sum_coef" value="{{ $sumCoef }}" id="sumCoef"
                             readonly></input>
                     </div>

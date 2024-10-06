@@ -34,9 +34,12 @@ class Entregar extends Component
     }
 
     public function change($value){
+
         $control=Control::find($this->controlId);
+        
         $control->changeState($value);
         $this->inModal=false;
+
         return redirect()->to('/entregar');
     }
 
