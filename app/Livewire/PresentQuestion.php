@@ -4,7 +4,6 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use Livewire\Attributes\Layout;
-use Livewire\Attributes\On;
 
 use App\Models\Control;
 use App\Models\Result;
@@ -13,7 +12,6 @@ use App\Http\Controllers\FileController;
 use App\Models\General;
 use App\Models\Question;
 use App\Models\Vote;
-use Exception;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Throwable;
@@ -343,12 +341,14 @@ class PresentQuestion extends Component
     public function goBack()
     {
         $this->mount($this->question->id);
+
         $this->dispatch('$refresh');
     }
 
     public function goPresent()
     {
         $this->mount($this->question->id);
+        $this->handleVoting('stop-votes');
         $this->dispatch('$refresh');
     }
 

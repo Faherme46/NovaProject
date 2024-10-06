@@ -1,7 +1,7 @@
 <div>
     <x-alerts />
-    <div class="row mt-3 g-3 justify-content-center">
-        <div class="col-auto w-50 align-items-center ">
+    <div class="row mt-3 g-3 w-100">
+        <div class="col-8 align-items-center ">
             <form wire:submit='createQuestion' id="form">
                 @csrf
 
@@ -180,7 +180,7 @@
                 </div>
             </form>
         </div>
-        <div class="col-4 ms-2">
+        <div class="col-4 ">
 
             <div class="card">
 

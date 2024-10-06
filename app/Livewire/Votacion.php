@@ -6,8 +6,10 @@ use Livewire\Component;
 use Livewire\Attributes\Layout;
 
 use App\Models\Control;
+use App\Models\General;
 use App\Models\Question;
-
+use Illuminate\Support\Facades\Http;
+use Throwable;
 
 class Votacion extends Component
 {
@@ -238,6 +240,9 @@ class Votacion extends Component
     public function createQuestion()
     {
         $this->resetErrorBag();
+        if(!$this->verifyDevice()){
+            return;
+        }
         //Se requiere un titulo a la pregunta'
         $error=0;
         if(!$this->questionTitle){
@@ -298,4 +303,21 @@ class Votacion extends Component
             return $this->addError('questionCreate',$th->getMessage());
         }
     }
+    public function verifyDevice()
+    {
+        $pythonUrl=General::where('key','PYTHON_URL')->first();
+        $pythonUrl=($pythonUrl)?$pythonUrl:'http://127.0.0.1:5000';
+        try {
+            $response=Http::get($pythonUrl.'/verify-device');
+            if($response->status()!=200){
+                $this->addError('Error','El dispositivo HID no se encontro conectado al servidor');
+                return false;
+            };
+
+            return True;
+        } catch (Throwable $th) {
+            $this->addError('Error','Error al conectar con el servidor python: '.$th->getMessage());
+        }
+    }
 }
+
