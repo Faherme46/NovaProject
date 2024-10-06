@@ -9,15 +9,15 @@ $vhostsContent = @"
     ServerName nova.local
 </VirtualHost>
 
-<VirtualHost *:80>
-    DocumentRoot "C:/xampp/htdocs"
-    ServerName localhost
-</VirtualHost>
+##<VirtualHost *:80>
+    ##DocumentRoot "C:/xampp/htdocs"
+    ##ServerName localhost
+##</VirtualHost>
 "@
 
 # Contenido a agregar al archivo hosts
 $hostsContent = "127.0.0.1 nova.local `n127.0.0.1 localhost"
-
+Pause
 # Verificar y agregar el contenido al archivo httpd-vhosts.conf si no existe
 if (-not (Get-Content $vhostsPath | Select-String -Pattern "ServerName nova.local")) {
     Add-Content -Path $vhostsPath -Value $vhostsContent
@@ -25,7 +25,7 @@ if (-not (Get-Content $vhostsPath | Select-String -Pattern "ServerName nova.loca
 } else {
     Write-Host "La configuración ya existe en httpd-vhosts.conf"
 }
-
+Pause
 # Verificar y agregar el contenido al archivo hosts si no existe
 if (-not (Get-Content $hostsPath | Select-String -Pattern "nova.local")) {
     Add-Content -Path $hostsPath -Value "`n$hostsContent"
@@ -38,4 +38,5 @@ if (-not (Get-Content $hostsPath | Select-String -Pattern "nova.local")) {
 $apachePath = "C:\xampp\apache\bin\httpd.exe"
 Start-Process -NoNewWindow -Wait -FilePath $apachePath -ArgumentList "-k restart"
 Write-Host "Apache reiniciado"
+Pause                                                                                                                      
 
