@@ -44,7 +44,6 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::get('setup', Setup::class)->name('setup.main');
     Route::get('gestion/informes/Informe', [ReportController::class,'createReport'])->name('gestion.report.docs');
     Route::post('/predios/import', [PrediosController::class, 'import'])->name('predios.import');
-    Route::post('questions/setResult', [QuestionsController::class,   'setResult'])->name('questions.setResult');
     Route::post('gestion/asamblea/update', [AsambleaController::class,'updateAsamblea'])->name('asamblea.update');
 });
 
@@ -65,7 +64,6 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
 
     Route::post('predios/update', [PrediosController::class, 'updatePredio'])->name('predios.update');
     Route::post('personas/update', [PersonasController::class, 'updatePersona'])->name('personas.update');
-    Route::post('questions/create',[QuestionsController::class,'createQuestion'])->name('questions.create')->middleware(isAsambleaEnd::class)->middleware(isAsambleaInit::class);
 
 
 

@@ -246,28 +246,28 @@ class PresentQuestion extends Component
         if ( $this->question->type==5) {
             foreach ($this->controlsAssigned as $id => $control) {
                 if ($control->isAbsent()) {
-                    $valuesCoef['absent'] += $control->sum_coef_can;
-                    $valuesNom['absent']  += $control->getPrediosCan();
+                    $valuesCoef['absent'] += $control->sum_coef;
+                    $valuesNom['absent']  += $control->predios->count();
                     $control->t_publico=0;
                 } else {
                     if (array_key_exists($id, $this->votes)) {
                         $vote = $this->votes[$id];
                         if ($vote=='A') {
-                            $valuesCoef[$vote] += $control->sum_coef_can;
-                            $valuesNom[$vote] += $control->getPrediosCan();
+                            $valuesCoef[$vote] += $control->sum_coef;
+                            $valuesNom[$vote] += $control->predios->count();
                             $control->t_publico=1;
                         } else if($vote=='B'){
-                            $valuesCoef[$vote] += $control->sum_coef_can;
-                            $valuesNom[$vote] += $control->getPrediosCan();
+                            $valuesCoef[$vote] += $control->sum_coef;
+                            $valuesNom[$vote] += $control->predios->count();
                             $control->t_publico=0;
                         }else{
-                            $valuesCoef['nule'] += $control->sum_coef_can;
-                            $valuesNom['nule'] += $control->getPrediosCan();
+                            $valuesCoef['nule'] += $control->sum_coef;
+                            $valuesNom['nule'] += $control->predios->count();
                             $control->t_publico=0;
                         }
                     } else {
-                        $valuesCoef['abstainted'] += $control->sum_coef_can;
-                        $valuesNom['abstainted']  += $control->getPrediosCan();
+                        $valuesCoef['abstainted'] += $control->predios->count;
+                        $valuesNom['abstainted']  += $control->predios->count();
                         $control->t_publico=0;
                     }
                 }
@@ -295,6 +295,8 @@ class PresentQuestion extends Component
                         $valuesCoef['abstainted'] += $control->sum_coef_can;
                         $valuesNom['abstainted']  += $control->getPrediosCan();
                     }
+                    $valuesCoef['abstainted'] += ($control->sum_coef - $control->sum_coef_can);
+                    $valuesNom['abstainted']  +=  ($control->predios->count() - $control->getPrediosCan());
                 }
             }
         }

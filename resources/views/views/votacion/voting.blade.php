@@ -2,10 +2,16 @@
     <x-alerts/>
     <div class="card mt-2">
         <div class="card-header d-flex justify-content-between align-items-center">
-            <div class="col-2">
-                <button class="btn btn-primary px-1 rounded-3" wire:click='goPresent'>
-                    <i class="bi bi-arrow-left-circle-fill fs-3"></i>
-                </button>
+            <div class="col-4">
+                <div class="d-flex">
+                    <button class="btn btn-primary  rounded-3 me-2" wire:click='goPresent'>
+                        <i class="bi bi-arrow-left-circle-fill fs-3"></i>
+                    </button>
+                    <button type="submit" class="btn btn-primary" >
+                        <i class="bi bi-card-list fs-3"></i>
+                    </button>
+                </div>
+
             </div>
             <div class="col-2">
                 <h1 class="mb-0">
@@ -66,8 +72,26 @@
             </div>
         </div>
     </div>
+
+      <!-- Modal -->
+      <div class="modal fade" id="optionsModal" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              ...
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
 </div>
-<script></script>
 @script
     <script>
         $wire.on('modal-show', async () => {

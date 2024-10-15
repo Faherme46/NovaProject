@@ -383,7 +383,7 @@
                             <table class="table table-bordered m-0 ">
                                 <thead>
                                     <th>Id</th>
-                                    <th>Predio</th>
+                                    <th colspan="2">Predio</th>
                                     <th>Coef.</th>
                                     <th>Voto</th>
                                 </thead>
@@ -391,17 +391,17 @@
                                     @if ($Control)
                                         @if ($Control->state == 4)
                                             <tr class="">
-                                                <td colspan="4">Control No asignado</td>
+                                                <td colspan="5">Control No asignado</td>
                                             </tr>
                                         @elseif($Control->state == 3)
                                             <tr class="">
-                                                <td colspan="4">Control Retirado</td>
+                                                <td colspan="5">Control Retirado</td>
                                             </tr>
                                         @else
                                             @foreach ($Control->predios as $p)
                                                 <tr>
                                                     <td class="pe-0">{{ $p->id }}</td>
-                                                    <td>{{ $p->getFullName() }}</td>
+                                                    <td colspan="2">{{ $p->getFullName() }}</td>
                                                     <td>{{ $p->coeficiente }}</td>
                                                     <td class="{{ $p->vota ? '' : 'text-danger' }}">
                                                         {{ $p->vota ? 'SI' : 'No' }}</td>
@@ -411,7 +411,7 @@
                                     @else
                                         <tr class="text-muted">
                                             <td class="text-muted">#</td>
-                                            <td class="text-muted">Torre * Apartamento ###</td>
+                                            <td class="text-muted" colspan="2">Torre * Apartamento ###</td>
                                             <td class="text-muted">0,0000</td>
                                             <td class="text-muted">No</td>
                                         </tr>
@@ -419,6 +419,7 @@
                                 </tbody>
                                 <tfoot class="position-sticky bottom-0 table-active">
                                     <td class="text-end bold"> </td>
+                                    <td>Total Predios:  {{ $Control ? $Control->predios->count() : 0 }}</td>
                                     <td>Total Votacion: {{ $Control ? $Control->sum_coef_can : 0 }}</td>
                                     <td class="">{{ $Control ? $Control->sum_coef : 0 }}</td>
 

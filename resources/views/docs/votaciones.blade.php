@@ -63,7 +63,7 @@
     <footer>
 
         <div class="text-end txt-small">
-            Informe de Asistencia Bosque del Hato (25feb24).xlsx
+            Informe de Asistencia {{$asamblea->name}}
         </div>
 
     </footer>

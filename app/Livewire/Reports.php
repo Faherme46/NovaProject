@@ -150,7 +150,7 @@ class Reports extends Component
         if ($this->questions->isEmpty()) {
             return $this->allQuestionsVerified = false;
         }
-        $nullResults = $this->questions->whereNull('resultTxt')->whereNotIn('type', [5, 6]);
+        $nullResults = $this->questions->whereNull('resultTxt')->where('isValid')->whereNotIn('type', [5, 6]);
         $this->allQuestionsVerified = ($nullResults->isEmpty());
 
 
@@ -168,7 +168,7 @@ class Reports extends Component
     }
 
     public function verifyForm(){
-        if ($this->questions->whereNull('resultTxt')->isNotEmpty()) {
+        if ($this->questions->whereNull('resultTxt')->where('isValid')->isNotEmpty()) {
 
             return session()->flash('warning','Todas las preguntas deben tener resultado');
         }

@@ -148,6 +148,7 @@ class Registrar extends Component
             ]);
 
             $this->dispatch('hideModal');
+            session()->flash('success','Asistente creado exitosamente');
         } catch (\Exception $e) {
             return back()->withCookie('error' . $e->getMessage());
         }

@@ -65,14 +65,14 @@ td {
 }
 
 .border-darkblue, .table-general td{
-    border: solid 0.5px var(--darkblue-color);
+    border: solid 0.5px darkblue;
 }
 
 .border-black-1{
     border: solid 0.5px var(--black-color);
 }
 .bg-darkblue{
-    background-color: var(--darkblue-color);
+    background-color: darkblue;
 }
 
 
@@ -82,7 +82,7 @@ td {
 
 .table-anexos td{
 
-    border: solid 0.1pt var(--black-color);
+    border: solid 0.1pt #202020;
     text-align: center;
     text-decoration: none;
 }

@@ -2,6 +2,7 @@
 
 namespace App\Imports;
 
+use App\Models\Persona;
 use App\Models\Predio;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -16,12 +17,20 @@ class PredioWithRegistro implements ToModel, WithHeadingRow
      */
     public function model(array $row)
     {
+        $keys = ['descriptor1', 'numeral1', 'descriptor2', 'numeral2', 'coeficiente', 'novota',
+        'cc_propietario', 'cc_apoderado', 'nombre_ap', 'apellido_ap'];
+        foreach ($keys as $key) {
+
+            if (!array_key_exists($key, $row)) {
+                throw new \Exception('La columna "' . $key . '" es obligatoria');
+            }
+        }
         $personas = $row['cc_propietario'];
         $cleanedString = preg_replace('/[^0-9;]+/', '', $personas);
         $personasArray = explode(';', $cleanedString);
 
 
-        $predio =Predio::create([
+        $predio = Predio::create([
             'descriptor1' => $row['descriptor1'],
             'numeral1' => $row['numeral1'],
             'descriptor2' => $row['descriptor2'],
@@ -32,6 +41,19 @@ class PredioWithRegistro implements ToModel, WithHeadingRow
         ]);
         $predio->personas()->attach($personasArray);
         $predio->save();
+        if( $row['cc_apoderado']){
+            if(!$row['nombre_ap']){
+                throw new \Exception("Se requiere 'nombre_ap' para '" . $row['cc_apoderado'] . "' en {$predio->getFullName()}");
+            }
+            $apoderado = Persona::create([
+                'id' => $row['cc_apoderado'],
+                'tipo_id' => 'CC',
+                'nombre' => strtoupper($row['nombre_ap']),
+                'apellido' => strtoupper($row['apellido_ap'])
+            ]);
+            $apoderado->save();
+        }
+
         return $predio;
     }
 }

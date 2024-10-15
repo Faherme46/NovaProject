@@ -19,7 +19,7 @@ use App\Imports\PrediosImport;
 
 use App\Imports\PredioWithRegistro;
 use App\Imports\UsersImport;
-
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Validators\ValidationException;
 
@@ -97,7 +97,7 @@ class AsambleaController extends Controller
             return redirect()->route('home')->withErrors($e->getMessage());
         }
 
-        return redirect()->route('home')->with('success', 'Asamblea creada con éxito.');
+        return redirect()->route('home')->with('success', 'Asamblea creada con éxito, documentos importados.');
     }
 
 
@@ -168,6 +168,13 @@ class AsambleaController extends Controller
         try {
             $externalFilePathPredios = 'C:/Asambleas/Clientes/'.$file.'/predios.xlsx';
             $externalFilePathPersonas= 'C:/Asambleas/Clientes/'.$file.'/personas.xlsx';
+
+            if (!file_exists($externalFilePathPersonas)) {
+                throw new FileNotFoundException("El archivo no se encontró en la ruta: {$externalFilePathPersonas}");
+            }
+            if (!file_exists($externalFilePathPredios)) {
+                throw new FileNotFoundException("El archivo no se encontró en la ruta: {$externalFilePathPredios}");
+            }
             if ($registro){
                 Excel::import(new PersonasImport,$externalFilePathPersonas);
                 Excel::import(new PredioWithRegistro,$externalFilePathPredios);
@@ -184,7 +191,7 @@ class AsambleaController extends Controller
             throw new \Exception('Error: '.$failures[1]);
             //Excepcion por archivo inexistente
         } catch (\Illuminate\Contracts\Filesystem\FileNotFoundException $e) {
-            throw new \Exception('Error: No se encontró una de las hojas de cálculo');
+            throw new \Exception('Error: No se encontró una de las hojas de cálculo '.$e->getMessage());
         } catch (\Exception $e) {
 
             // Manejar cualquier otra excepción

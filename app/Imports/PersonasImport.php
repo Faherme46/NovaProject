@@ -15,11 +15,18 @@ class PersonasImport implements ToModel,WithHeadingRow
     */
     public function model(array $row)
     {
+        $keys = ['cc_propietario','tipo_id','nombre','apellido'];
+        foreach ($keys as $key) {
+
+            if (!array_key_exists($key, $row)) {
+                throw new \Exception('La columna "' . $key . '" es obligatoria');
+            }
+        }
         return new Persona([
             'id'=>$row['cc_propietario'],
             'tipo_id'=>$row['tipo_id'],
-            'nombre'=>strtoupper($row['nombre_p']),
-            'apellido'=>strtoupper($row['apellido_p'])
+            'nombre'=>strtoupper($row['nombre']),
+            'apellido'=>strtoupper($row['apellido'])
         ]);
     }
 }

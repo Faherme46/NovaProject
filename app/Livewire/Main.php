@@ -67,7 +67,7 @@ class Main extends Component
                 "directives"=> 'data-bs-toggle=modal data-bs-target=#modalCreateAsamblea @disabled($asambleaOn)',
                 'icon'=> 'bi-sliders',
                 'title'=> 'Programar',
-                'body'=> 'Configurar y programar una asamblea',
+                'body'=> 'Importar los archivos en este dispositivo',
                 'visible'=> ($this->role=='Admin'),
                 'enabled'=>!(cache('asamblea',false)),
             ],[
@@ -160,5 +160,5 @@ class Main extends Component
     }
 
 
-    
+
 }

@@ -264,7 +264,7 @@ class Votacion extends Component
             $this->addError('questionTitle','Al menos uno de los campos debe tener un valor.');
             $error=1;
         }
-        $quorum=Control::where('state', 1)->sum('sum_coef_can');
+        $quorum=Control::where('state', 1)->sum('sum_coef');
         if($quorum<=0){
             $this->addError('questionTitle','No se han registrado asistentes');
             $error=1;
@@ -310,13 +310,13 @@ class Votacion extends Component
         try {
             $response=Http::get($pythonUrl.'/verify-device');
             if($response->status()!=200){
-                $this->addError('Error','El dispositivo HID no se encontro conectado al servidor');
+                $this->addError('Error','El dispositivo HID no se encontro conectado al servidor, por favor conectelo e inicie Quiz Freedom');
                 return false;
             };
 
             return True;
         } catch (Throwable $th) {
-            $this->addError('Error','Error al conectar con el servidor python: '.$th->getMessage());
+            $this->addError('Error','Error al conectar con el servidor python ');
         }
     }
 }

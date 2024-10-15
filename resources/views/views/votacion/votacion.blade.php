@@ -305,6 +305,7 @@
         $wire.on('setNone', (event) => {
             let id = event.myId
             input = document.getElementById('option'+id);
+              $wire.questionOptions[id]=''
             input.value = ''
         });
 

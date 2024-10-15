@@ -119,25 +119,27 @@
                 <div class="card-header d-flex align-items-center justify-content-between">
                     <div class="d-flex align-items-center">
 
-                        <span class="mb-0  text-muted">Control</span>
+
                         @if ($asistenteControls)
+                        <span class="mb-0 me-2 text-muted">Control Asignado</span>
                             <form id="formPredios" class="d-flex w-auto" wire:submit='asignar(1)' method="GET">
 
                                 <select name="control" id="id_control_selected" wire:model="controlH"
-                                    wire:change='changePredios' class="form-control me-1" required>
+                                    wire:change='changePredios' class="form-control " required>
                                     @foreach ($asistenteControls as $control)
                                         <option value="{{ $control->id }}">
                                             {{ $control->id }} </option>
                                     @endforeach
                                 </select>
-                                <button type="submit" class="btn btn-primary ms-1">
+                                <button type="submit" class="btn btn-primary mx-2">
                                     Agregar
                                 </button>
-                                <button type="button" class="btn btn-primary" wire:click="resetControl">
+                                <button type="button" class="btn btn-primary " wire:click="resetControl">
                                     <i class='bi bi-plus-circle-fill '></i>
                                 </button>
                             </form>
                         @else
+                        <span class="mb-0 me-2 text-muted">Control </span>
                             <form id="formPredios" class=" d-flex" wire:submit='asignar(0)' method="GET">
                                     <select name="control" id="id_control" class="form-control ms-2" required
                                         wire:model="controlId">

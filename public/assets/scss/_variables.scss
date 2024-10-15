@@ -1,7 +1,7 @@
 /* para registrar variables y colores globales */
 
 
-
+$darkblue-color: darkblue;
 $theme-colors-text: (
   "primary": #4723D9,
   "secondary": $secondary-text-emphasis,
@@ -12,4 +12,6 @@ $theme-colors-text: (
   "light": $light-text-emphasis,
   "dark": $dark-text-emphasis,
 );
+
+
 @import './custom.css';

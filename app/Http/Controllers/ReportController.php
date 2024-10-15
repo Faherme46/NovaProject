@@ -69,13 +69,13 @@ class ReportController extends Controller
                 ];
                 $this->variables += [
                     'anexos' => $anexos,
-                    'firstFooter' => 'Los datos utilizados por TECNOVIS para la elaboración de los
+                    'firstFooter' => "Los datos utilizados por TECNOVIS para la elaboración de los
                                     Anexos relacionados en este informe
                                     (incluye los cálculos para las votaciones),
                                     y que comprende la lista de delegados,
                                     tiene como base la información suministrada
-                                    por la Administración de Bosque del Hato a TECNOVIS,
-                                    para el desarrollo de esta Asamblea.'
+                                    por la Administración de {$this->asamblea->folder} a TECNOVIS,
+                                    para el desarrollo de esta Asamblea."
                 ];
                 $this->createDocument('index-registro');
 
