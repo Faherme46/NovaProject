@@ -28,7 +28,7 @@ class ReportController extends Controller
         $this->variables['quorum'] = Control::whereNotIn('state', [4, 3])->sum('sum_coef');
         $this->asamblea = Asamblea::find(cache('id_asamblea'));
         // $this->predios = Predio::where('id', '<', 12)->get();
-        $this->predios = Predio::where('id','<',10)->get();
+        $this->predios = Predio::all();
         $this->questions = Question::where('prefab',false)->get();
 
         $this->variables += [
@@ -103,14 +103,15 @@ class ReportController extends Controller
                 mkdir($filePath, 0755, true);
             }
             $output = $this->mergePdf();
-
             $fileController->exportPdf($this->asamblea->name . '/Informe/Informe.pdf', $output);
 
 
             return response($output, 200)
                 ->header('Content-Type', 'application/pdf')
-                ->header('Content-Disposition', 'inline; filename="Informe.pdf"');;
+                ->header('Content-Disposition', 'inline; filename="Informe.pdf"');
         } catch (\Throwable $th) {
+            dd($th);
+            return back()->withErrors('error',$th->getMessage());
         }
     }
     public function createDocument($name)

@@ -56,8 +56,8 @@ class UsersController extends Controller
         // Crear el nuevo usuario
         try {
             User::create([
-                'name' => $request->name,
-                'lastname' => $request->lastname,
+                'name' => ucwords(strtolower($request->name)),
+                'lastname' => ucwords(strtolower($request->lastname)),
                 'cedula' => $request->cedula,
                 'telefono' => $request->telefono,
                 'username' => $request->username,

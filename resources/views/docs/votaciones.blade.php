@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <style>
-        {!! file_get_contents(public_path('\assets\scss\custom.css')) !!} {!! file_get_contents(public_path('\assets\scss\_variables.scss')) !!} {!! file_get_contents(public_path('\assets\scss\docs.scss')) !!} @page {
+        {!! file_get_contents(public_path('\assets\scss\_custom.css')) !!} {!! file_get_contents(public_path('\assets\scss\_variables.scss')) !!} {!! file_get_contents(public_path('\assets\scss\docs.scss')) !!} @page {
             margin: 65mm 25mm 20mm;
         }
 
@@ -72,14 +72,14 @@
 
         @foreach ($questions as $q)
             <div class="myh-100 ">
-                <h4 class="w-100 bg-darkblue text-light text-center mb-3 py-2">
+                <h4 class="w-100 bg-darkblue  text-center mb-3 py-2">
                     ÍTEM {{ $q->id - 13 }}
                 </h4>
                 <table class="w-100 mb-4">
                     <thead>
                         <tr class="bg-darkblue  ">
                             <td colspan="4">
-                                <h4 class="w-100 text-center py-1     text-light">
+                                <h4 class="w-100 text-center py-1 ">
                                     {{ $q->title }}
                                 </h4>
                             </td>
@@ -153,7 +153,7 @@
                     @endif
                 </div>
                 @if ($q->type != 1)
-                    <h4 class="w-100 bg-darkblue text-light text-center mb-3 py-2">
+                    <h4 class="w-100 bg-darkblue  text-center mb-3 py-2">
                         {{ $q->resultTxt }}
                     </h4>
                 @endif

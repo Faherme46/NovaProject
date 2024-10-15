@@ -36,7 +36,7 @@
             border: 1px wheat solid;
         }
 
-        {!! file_get_contents(public_path('\assets\scss\custom.css')) !!} {!! file_get_contents(public_path('\assets\scss\_variables.scss')) !!} {!! file_get_contents(public_path('\assets\scss\docs.scss')) !!}
+        {!! file_get_contents(public_path('\assets\scss\_custom.css')) !!} {!! file_get_contents(public_path('\assets\scss\_variables.scss')) !!} {!! file_get_contents(public_path('\assets\scss\docs.scss')) !!}
     </style>
 
     <title>Document</title>
@@ -94,7 +94,7 @@
     </footer>
     <div class="body ">
         <table class="table table-bordered border-black-1 table-anexos fs-10">
-            <thead class="bg-darkblue text-light text-center">
+            <thead class="bg-darkblue  text-center">
                 <tr>
                     <th class="p-0 pb-1" colspan="2">Predio</th>
                     <th class="p-0">Coeficiente </th>

@@ -38,7 +38,7 @@
             padding: 0; /* Opcional: Elimina el padding si no lo necesitas */
         }
 
-        {!! file_get_contents(public_path('\assets\scss\custom.css')) !!} {!! file_get_contents(public_path('\assets\scss\_variables.scss')) !!} {!! file_get_contents(public_path('\assets\scss\docs.scss')) !!}
+        {!! file_get_contents(public_path('\assets\scss\_custom.css')) !!} {!! file_get_contents(public_path('\assets\scss\_variables.scss')) !!} {!! file_get_contents(public_path('\assets\scss\docs.scss')) !!}
     </style>
 
     <title>Document</title>

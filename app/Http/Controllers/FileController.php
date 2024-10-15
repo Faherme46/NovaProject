@@ -72,10 +72,10 @@ class FileController extends Controller
         return $asambleaFolderPath;
     }
 
-    public function getOnlyQuestionPath($questionId, $title)
+    public function getOnlyQuestionPath($questionId, $title): string
     {
-
-        $questionName = ($questionId - cache('questionsPrefabCount',13)) . '_' . $title;
+        $questionCount=Question::where('prefab',true)->count();
+        $questionName = ($questionId - $questionCount) . '_' . $title;
         $parentFolderName = cache('asamblea')['name'];
         $newFolderPath = $parentFolderName . '/Preguntas/' . $questionName;
 
@@ -167,7 +167,7 @@ class FileController extends Controller
         $prediosController= new \App\Http\Controllers\PrediosController;
         $personasController = new \App\Http\Controllers\PersonasController;
         $asambleaName = cache('asamblea')['name'];
-        
+
         $ret1 =$prediosController->export($asambleaName);
         $ret2 =$personasController->export($asambleaName);
         $ret3 =$personasController->exportRelation($asambleaName);

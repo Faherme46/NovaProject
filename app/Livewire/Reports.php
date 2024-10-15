@@ -142,17 +142,16 @@ class Reports extends Component
         $this->asambleaVerified = true;
         foreach ($attributes as $key => $value) {
             if (is_null($value)&&$key!='siganture'&&$key!='ordenDia') {
-                
+
                 $this->asambleaVerified = false; // Al menos un campo es null
                 break;
             }
         }
-        if (!$this->questions->isEmpty()) {
+        if ($this->questions->isEmpty()) {
             return $this->allQuestionsVerified = false;
         }
         $nullResults = $this->questions->whereNull('resultTxt')->whereNotIn('type', [5, 6]);
-
-        $this->allQuestionsVerified = (bool) !$nullResults->isEmpty();
+        $this->allQuestionsVerified = ($nullResults->isEmpty());
 
 
     }
