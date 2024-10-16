@@ -41,17 +41,22 @@ class PredioWithRegistro implements ToModel, WithHeadingRow
         ]);
         $predio->personas()->attach($personasArray);
         $predio->save();
+
         if( $row['cc_apoderado']){
-            if(!$row['nombre_ap']){
-                throw new \Exception("Se requiere 'nombre_ap' para '" . $row['cc_apoderado'] . "' en {$predio->getFullName()}");
+            $personaX=Persona::find($row['cc_apoderado']);
+            if(!$personaX){
+                if(!$row['nombre_ap']){
+                    throw new \Exception("Se requiere 'nombre_ap' para '" . $row['cc_apoderado'] . "' en {$predio->getFullName()}");
+                }
+                $apoderado = Persona::create([
+                    'id' => $row['cc_apoderado'],
+                    'tipo_id' => 'CC',
+                    'nombre' => strtoupper($row['nombre_ap']),
+                    'apellido' => strtoupper($row['apellido_ap'])
+                ]);
+                $apoderado->save();
             }
-            $apoderado = Persona::create([
-                'id' => $row['cc_apoderado'],
-                'tipo_id' => 'CC',
-                'nombre' => strtoupper($row['nombre_ap']),
-                'apellido' => strtoupper($row['apellido_ap'])
-            ]);
-            $apoderado->save();
+
         }
 
         return $predio;
