@@ -35,7 +35,7 @@ class PredioWithRegistro implements ToModel, WithHeadingRow
             'numeral1' => $row['numeral1'],
             'descriptor2' => $row['descriptor2'],
             'numeral2' => $row['numeral2'],
-            'cc_apoderado' => $row['apoderado'],
+            'cc_apoderado' => $row['cc_apoderado'],
             'coeficiente' => $row['coeficiente'],
             'vota' => !$row['novota']
         ]);
