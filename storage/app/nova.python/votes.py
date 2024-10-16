@@ -6,8 +6,8 @@ import sys
 import os
 
 # Listar dispositivos HID conectados
-for device in hid.enumerate():
-    print(f"Device:{device['product_string']} Vendor ID: {device['vendor_id']}, Product ID: {device['product_id']}")
+# for device in hid.enumerate():
+#     print(f"Device:{device['product_string']} Vendor ID: {device['vendor_id']}, Product ID: {device['product_id']}")
 
 def connectDB():
     # Conectarse a la base de datos

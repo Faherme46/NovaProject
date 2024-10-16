@@ -1,7 +1,6 @@
 from flask import Flask,jsonify,render_template,request
 import hid
 import time
-import mysql.connector
 import subprocess
 import matplotlib
 matplotlib.use('Agg')
