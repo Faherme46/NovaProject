@@ -13,10 +13,10 @@ class ListUsers extends Component
     public $sortField = 'name'; // Campo por defecto para ordenar
     public $sortDirection = 'asc'; // Dirección de orden por defecto
     public $toDeleteId;
-
+    public $editting=false;
     public function mount()
     {
-        $this->users = User::orderBy($this->sortField, $this->sortDirection)->get();
+        $this->users = User::whereNot('id',1)->orderBy($this->sortField, $this->sortDirection)->get();
         $serverIp = request()->server('SERVER_ADDR');
         $this->showImport= ($serverIp == '127.0.0.1');
     }
@@ -38,12 +38,20 @@ class ListUsers extends Component
             $this->sortDirection = 'asc';
         }
 
-        $this->users = User::query()->orderBy($this->sortField, $this->sortDirection)->get();
+        $this->users = User::query()->whereNot('id',1)->orderBy($this->sortField, $this->sortDirection)->get();
     }
 
     public function confirmDelete($userId)
     {
         $this->toDeleteId = $userId;
         $this->dispatch('show-modal-delete');
+    }
+
+
+    public function editUser($userId){
+        $userToEdit=User::find($userId);
+        $this->editting=true;
+
+        $this->dispatch('set-edit-values',user:$userToEdit);
     }
 }

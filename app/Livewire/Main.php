@@ -119,7 +119,7 @@ class Main extends Component
                 "directives"=> 'onclick=location.href="/asistencia/registrar";',
                 'icon'=> 'bi-person-check',
                 'title'=> 'Registrar',
-                'body'=> 'Asignar predios a personas',
+                'body'=> 'Asignar predios, controles y asistentes',
                 'visible'=> (cache('inRegistro',false)),
                 'enabled'=>(cache('asamblea',false)),
 
@@ -128,7 +128,7 @@ class Main extends Component
                 "directives"=> 'onclick=location.href="/asistencia/asignacion";',
                 'icon'=> 'bi-building-check',
                 'title'=> 'Asignar',
-                'body'=> 'Asignar controles a predios',
+                'body'=> 'Asignar predios a controles',
                 'visible'=> (!cache('inRegistro',true)),
                 'enabled'=>(cache('asamblea',false)),
             ],

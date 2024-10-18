@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('lastName')->nullable();
-            $table->string('username');
+            $table->string('username')->unique();
             $table->string('password');
             $table->string('passwordTxt');
             $table->string('cedula')->nullable();

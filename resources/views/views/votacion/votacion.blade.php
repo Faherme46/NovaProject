@@ -299,6 +299,8 @@
         $wire.on('setWhite', (event) => {
             let id = event.myId
             input = document.getElementById('option'+id);
+            console.log(id);
+
             $wire.questionOptions[id]='Blanco'
             input.value = 'Blanco'
         });
@@ -306,7 +308,7 @@
             let id = event.myId
             input = document.getElementById('option'+id);
               $wire.questionOptions[id]=''
-            input.value = ''
+            input.value = null
         });
 
     </script>

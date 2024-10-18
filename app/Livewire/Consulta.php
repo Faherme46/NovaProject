@@ -387,10 +387,11 @@ class Consulta extends Component
             }
 
             if (!$controlR->asignacion()) {
+                $controlR->state = 1;
                 if (cache('asamblea')['registro']) {
                     $controlR->cc_asistente = ($controlL->cc_asistente) ? $controlL->cc_asistente : null;
-                    $controlR->state = 1;
                 }
+
             }
 
             $controlL->deletePredios($this->prediosR);

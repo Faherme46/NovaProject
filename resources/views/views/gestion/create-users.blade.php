@@ -1,9 +1,9 @@
 <div>
-    <x-alerts />
-    <div class="row g-3">
 
+    <div class="d-flex me-3">
+        <x-alerts />
 
-        <div class="col-6">
+        <div class="col-7 me-3">
 
             <div class="card mb-3">
                 <div class="card-header d-flex">
@@ -11,37 +11,41 @@
                         Crear Usuarios
                     </h5>
                 </div>
-                <form action="{{ route('users.create') }}" method="POST">
+                <form action="{{ route($editting ? 'users.update' : 'users.create') }}" method="POST">
                     <div class="card-body pb-0">
 
                         @csrf
+                        <input type="text" class="form-control" id="idUser" name="idUser" hidden >
+                        @if ($editting)
 
+                            <input type="hidden" class="form-control" id="role" name="role" value="Operario" hidden>
+                        @endif
                         <div class="mb-2 row">
                             <div class="col-6">
                                 <div class="input-group mb-3">
                                     <span class="input-group-text">Nombre</span>
-                                    <input type="text" class="form-control" id="nombre" name="name"
+                                    <input type="text" class="form-control" id="name" name="name"
                                         value="{{ old('name') }}" required>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="input-group mb-3">
                                     <span class="input-group-text">Apellido</span>
-                                    <input type="text" class="form-control" id="apellido" name="lastname"
+                                    <input type="text" class="form-control" id="lastname" name="lastname"
                                         value="{{ old('lastname') }}" required>
                                 </div>
                             </div>
                         </div>
 
                         <div class="mb-2 row">
-                            <div class="col-4">
+                            <div class="col-5">
                                 <div class="input-group mb-3">
                                     <span class="input-group-text">Cédula</span>
                                     <input type="text" class="form-control" id="cedula" name="cedula"
                                         value="{{ old('cedula') }}" required>
                                 </div>
                             </div>
-                            <div class="col-4">
+                            <div class="col-5">
                                 <div class="input-group mb-3">
                                     <span class="input-group-text">Teléfono</span>
                                     <input type="text" class="form-control" id="telefono" name="telefono"
@@ -49,28 +53,17 @@
                                 </div>
 
                             </div>
-                            <div class="col-4">
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text">Rol</span>
-                                    <select name="role" id="" class="form-control">
 
-                                        <option value="Operario" selected>Operario</option>
-                                        <option value="Lider">Lider</option>
-                                        <option value="Admin">Administrador</option>
-                                    </select>
-                                </div>
-
-                            </div>
                         </div>
                         <div class="mb-2 row">
-                            <div class="col-5">
+                            <div class="col-6">
                                 <div class="input-group mb-3">
                                     <span class="input-group-text">Username</span>
                                     <input type="text" class="form-control" id="username" name="username"
-                                        value="{{ old('username') }}" required>
+                                        value="{{ old('username') }}" required @readonly($editting)>
                                 </div>
                             </div>
-                            <div class="col-5">
+                            <div class="col-6">
                                 <div class="input-group mb-3">
                                     <span class="input-group-text">Contraseña</span>
                                     <input type="text" class="form-control" id="password" name="password"
@@ -84,8 +77,19 @@
 
 
                     </div>
-                    <div class="card-footer d-flex justify-content-end">
-                        <button type="submit" class="btn btn-primary">Crear Usuario</button>
+                    <div class="card-footer d-flex justify-content-between">
+
+                        <div class="input-group ms-3 w-30 ">
+                            <span class="input-group-text bg-primary text-light">Rol</span>
+                            <select name="role" id="role" class="form-control" wire:click.prevent=''>
+
+                                <option value="Operario" selected>Operario</option>
+                                <option value="Lider">Lider</option>
+                                <option value="Admin">Administrador</option>
+                            </select>
+                        </div>
+                        <button type="submit"
+                            class="btn btn-primary">{{ $editting ? 'Guardar Cambios' : 'Crear Usuario' }}</button>
                     </div>
                 </form>
             </div>
@@ -127,7 +131,7 @@
             @endif
 
         </div>
-        <div class="col-6">
+        <div class="col-5">
             <div class="card">
                 <div class="card-header">
                     Usuarios
@@ -176,6 +180,7 @@
                                     @endif
                                 </button>
                             </th>
+                            <th class="text-center"><i class="bi bi-pencil"></i></th>
                             <th class="text-center"><i class="bi bi-trash"></i></th>
                         </thead>
                         <tbody>
@@ -185,6 +190,12 @@
                                     <td>{{ $user->username }}</td>
                                     <th>{{ $user->passwordTxt }}</th>
                                     <td>{{ $user->getRoleNames()->first() }}</td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-warning p-0 px-1"
+                                            wire:click='editUser({{ $user->id }})'>
+                                            <i class="bi bi-pencil bx-b"></i>
+                                        </button>
+                                    </td>
                                     <td class="text-center">
                                         <button type="button" class="btn btn-danger p-0 px-1"
                                             wire:click='confirmDelete({{ $user->id }})'>
@@ -230,6 +241,17 @@
         $wire.on('show-modal-delete', () => {
             $('#modalDelete').modal('hide');
             $('#modalDelete').modal('show');
+        });
+
+        $wire.on('set-edit-values', (event) => {
+            $('#lastname').val(event.user.lastName);
+            $('#name').val(event.user.name);
+            $('#cedula').val(event.user.cedula);
+            $('#telefono').val(event.user.telefono);
+            $('#username').val(event.user.username);
+            $('#password').val(event.user.passwordTxt);
+            $('#role').val(event.user.roleTxt);
+            $('#idUser').val(event.user.id);
         });
     </script>
 @endscript

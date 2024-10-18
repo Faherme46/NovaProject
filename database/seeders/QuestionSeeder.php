@@ -29,8 +29,8 @@ class QuestionSeeder extends Seeder
             'optionB' => '',
             'optionC' => '',
             'optionD' => 'Aprobado',
-            'optionE' => '',
-            'optionF' => 'No Aprobado',
+            'optionE' => 'No Aprobado',
+            'optionF' => '',
             'prefab' => true,
             'type' => 3
         ]);
@@ -40,30 +40,30 @@ class QuestionSeeder extends Seeder
             'optionB' => '',
             'optionC' => '',
             'optionD' => 'Aprobado',
-            'optionE' => '',
-            'optionF' => 'No Aprobado',
+            'optionE' => 'No Aprobado',
+            'optionF' => '',
             'prefab' => true,
             'type' => 3
         ]);
         Question::create([
             'title' => 'Aprobacion de Presupuestos',
-            'optionA' => '',
+           'optionA' => '',
             'optionB' => '',
             'optionC' => '',
             'optionD' => 'Aprobado',
-            'optionE' => '',
-            'optionF' => 'No Aprobado',
+            'optionE' => 'No Aprobado',
+            'optionF' => '',
             'prefab' => true,
             'type' => 3
         ]);
         Question::create([
             'title' => 'Aprobacion del Acta',
-            'optionA' => '',
+           'optionA' => '',
             'optionB' => '',
             'optionC' => '',
             'optionD' => 'Aprobado',
-            'optionE' => '',
-            'optionF' => 'No Aprobado',
+            'optionE' => 'No Aprobado',
+            'optionF' => '',
             'prefab' => true,
             'type' => 3
         ]);
@@ -147,8 +147,8 @@ class QuestionSeeder extends Seeder
         Question::create([
             'title' => 'Proposicion',
             'optionA' => 'SI',
-            'optionB' => '',
-            'optionC' => 'NO',
+            'optionB' => 'NO',
+            'optionC' => '',
             'optionD' => '',
             'optionE' => '',
             'optionF' => '',

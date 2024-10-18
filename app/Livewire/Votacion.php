@@ -97,22 +97,37 @@ class Votacion extends Component
 
     public function updatedquestionWhite($value)
     {
-        if ($value) {
+        // dd($this->questionWhite);
+        $count = 0;
+        foreach ($this->questionOptions as $value) {
+            if ($value) {
+                $count++;
+            }
+        }
+        $options = ['A', 'B', 'C', 'D', 'E', 'F'];
+        if ($this->questionWhite) {
             if (in_array($this->questionType, [2, 6, 7])) {
-                $id = 'F';
+
+                $id = $options[$count];
             } elseif ($this->questionType == 3) {
-                $id = 'E';
+                $id = 'F';
             } elseif ($this->questionType == 4) {
-                $id = 'B';
+                $id = 'C';
             }
             $this->dispatch('setWhite', myId: $id);
+
         } else {
             if ($this->questionType == 2 || $this->questionType == 6) {
-                $id = 'F';
+                foreach ($this->questionOptions as $key => $value) {
+                    if($value=='Blanco'){
+                        $id=$key;
+                    }
+                }
+                
             } elseif ($this->questionType == 3) {
-                $id = 'E';
+                $id = 'F';
             } elseif ($this->questionType == 4) {
-                $id = 'B';
+                $id = 'C';
             }
             $this->dispatch('setNone', myId: $id);
         }
@@ -122,7 +137,7 @@ class Votacion extends Component
     {
         $this->resetErrorBag();
         $this->reset(['questionOptions', 'questionWhite']);
-
+        $this->questionWhite = false;
         if ($this->questionId == 12) {
 
             switch ($value) {
@@ -154,15 +169,15 @@ class Votacion extends Component
                         'B' => '',
                         'C' => '',
                         'D' => 'Aprobado',
-                        'E' => '',
-                        'F' => 'No Aprobado',
+                        'E' => 'No Aprobado',
+                        'F' => '',
                     ];
                     break;
                 case 4:
                     $this->questionOptions = [
                         'A' => 'Si ',
-                        'B' => '',
-                        'C' => 'No',
+                        'B' => 'No',
+                        'C' => '',
                         'D' => '',
                         'E' => '',
                         'F' => '',
@@ -229,7 +244,8 @@ class Votacion extends Component
         $this->questionWhite = false;
     }
 
-    public function isOneOptionAlmost($questionOptions){
+    public function isOneOptionAlmost($questionOptions)
+    {
         foreach ($this->questionOptions as $key => $value) {
             if ($value) {
                 return true;
@@ -240,39 +256,39 @@ class Votacion extends Component
     public function createQuestion()
     {
         $this->resetErrorBag();
-        if(!$this->verifyDevice()){
+        if (!$this->verifyDevice()) {
             return;
         }
         //Se requiere un titulo a la pregunta'
-        $error=0;
-        if(!$this->questionTitle){
-            $this->addError('questionTitle','Se requiere el titulo de la pregunta');
-            $error=1;
+        $error = 0;
+        if (!$this->questionTitle) {
+            $this->addError('questionTitle', 'Se requiere el titulo de la pregunta');
+            $error = 1;
         }
         //Se requiere un tipo de la pregunta'
-        if(!$this->questionType){
-            $this->addError('questionTitle','Se requiere el tipo de la pregunta');
-            $error=1;
+        if (!$this->questionType) {
+            $this->addError('questionTitle', 'Se requiere el tipo de la pregunta');
+            $error = 1;
         }
-        if(!$this->questionCoefChart){
-            $this->addError('questionTitle','Debe definir si la pregunta es por Coeficiente o nominal');
-            $error=1;
+        if (!$this->questionCoefChart) {
+            $this->addError('questionTitle', 'Debe definir si la pregunta es por Coeficiente o nominal');
+            $error = 1;
         }
 
-        if(!$this->isOneOptionAlmost($this->questionOptions)){
+        if (!$this->isOneOptionAlmost($this->questionOptions)) {
 
-            $this->addError('questionTitle','Al menos uno de los campos debe tener un valor.');
-            $error=1;
+            $this->addError('questionTitle', 'Al menos uno de los campos debe tener un valor.');
+            $error = 1;
         }
-        $quorum=Control::where('state', 1)->sum('sum_coef');
-        if($quorum<=0){
-            $this->addError('questionTitle','No se han registrado asistentes');
-            $error=1;
+        $quorum = Control::where('state', 1)->sum('sum_coef');
+        if ($quorum <= 0) {
+            $this->addError('questionTitle', 'No se han registrado asistentes');
+            $error = 1;
         }
-        $seconds= $this->secs+($this->mins*60);
-        if($seconds<=0){
-            $this->addError('questionTitle','El tiempo debe ser mayor a 0');
-            $error=1;
+        $seconds = $this->secs + ($this->mins * 60);
+        if ($seconds <= 0) {
+            $this->addError('questionTitle', 'El tiempo debe ser mayor a 0');
+            $error = 1;
         }
 
         if ($error) {
@@ -283,41 +299,40 @@ class Votacion extends Component
         try {
             $question = Question::create([
                 'title' => strtoupper($this->questionTitle),
-                'optionA' => ($this->questionOptions['A'])?strtoupper($this->questionOptions['A']):null,
-                'optionB' => ($this->questionOptions['B'])?strtoupper($this->questionOptions['B']):null,
-                'optionC' => ($this->questionOptions['C'])?strtoupper($this->questionOptions['C']):null,
-                'optionD' => ($this->questionOptions['D'])?strtoupper($this->questionOptions['D']):null,
-                'optionE' => ($this->questionOptions['E'])?strtoupper($this->questionOptions['E']):null,
-                'optionF' => ($this->questionOptions['F'])?strtoupper($this->questionOptions['F']):null,
+                'optionA' => ($this->questionOptions['A']) ? strtoupper($this->questionOptions['A']) : null,
+                'optionB' => ($this->questionOptions['B']) ? strtoupper($this->questionOptions['B']) : null,
+                'optionC' => ($this->questionOptions['C']) ? strtoupper($this->questionOptions['C']) : null,
+                'optionD' => ($this->questionOptions['D']) ? strtoupper($this->questionOptions['D']) : null,
+                'optionE' => ($this->questionOptions['E']) ? strtoupper($this->questionOptions['E']) : null,
+                'optionF' => ($this->questionOptions['F']) ? strtoupper($this->questionOptions['F']) : null,
                 'prefab' => (false),
-                'isValid' => ($this->questionType==6)?0:1,
+                'isValid' => ($this->questionType == 6) ? 0 : 1,
                 'coefGraph' => (bool)$this->questionCoefChart,
                 'quorum' => $quorum,
                 'predios' => Control::where('state', 1)->sum('predios_vote'),
-                'seconds' =>$seconds,
+                'seconds' => $seconds,
                 'type' => $this->questionType
             ]);
 
-            return redirect()->route('questions.show',['questionId'=>$question->id]);
+            return redirect()->route('questions.show', ['questionId' => $question->id]);
         } catch (\Throwable $th) {
-            return $this->addError('questionCreate',$th->getMessage());
+            return $this->addError('questionCreate', $th->getMessage());
         }
     }
     public function verifyDevice()
     {
-        $pythonUrl=General::where('key','PYTHON_URL')->first();
-        $pythonUrl=($pythonUrl)?$pythonUrl:'http://127.0.0.1:5000';
+        $pythonUrl = General::where('key', 'PYTHON_URL')->first();
+        $pythonUrl = ($pythonUrl) ? $pythonUrl : 'http://127.0.0.1:5000';
         try {
-            $response=Http::get($pythonUrl.'/verify-device');
-            if($response->status()!=200){
-                $this->addError('Error','El dispositivo HID no se encontro conectado al servidor, por favor conectelo e inicie Quiz Freedom');
+            $response = Http::get($pythonUrl . '/verify-device');
+            if ($response->status() != 200) {
+                $this->addError('Error', 'El dispositivo HID no se encontro conectado al servidor, por favor conectelo e inicie Quiz Freedom');
                 return false;
             };
 
             return True;
         } catch (Throwable $th) {
-            $this->addError('Error','Error al conectar con el servidor python ');
+            $this->addError('Error', 'Error al conectar con el servidor python ');
         }
     }
 }
-
