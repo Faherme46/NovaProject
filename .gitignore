@@ -3,6 +3,8 @@
 /public/build
 /public/hot
 /storage/*.key
+/scripts/nova.python/venv
+/scripts/nova.python/__pycache__
 /vendor
 .env
 .env.backup
