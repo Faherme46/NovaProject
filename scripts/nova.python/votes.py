@@ -174,7 +174,8 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         print("Interrupción recibida 1, deteniendo el script.")
     except Exception as e:
-        print("Interrupción recibida 2, deteniendo el script." + e)
+        print("ERROR:" )
+        print(e)
 
     finally:
         os.remove(pid_file)
