@@ -3,7 +3,6 @@
 @import url('../fonts/fonts.css');
 
 
-@import url('./_custom.css');
 
 
 *,
@@ -348,3 +347,9 @@ a {
     border: 1px solid var(--black-color);
     border-bottom: 3px solid var(--black-color);
 }
+
+
+.pointer{
+    cursor: pointer !important;
+}
+

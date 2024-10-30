@@ -14,39 +14,215 @@
     </style>
     <x-alerts />
     <div class="container">
-        <div class="card">
-            <div class="card-header">
-                <h4 class="mb-0">
-                    Tema de color
-                </h4>
-            </div>
 
-            <div class="card-body d-flex justify-content-between">
-                @foreach ($themes as $t)
-                    <input type="radio" class="btn-check  " name="{{ $t['color'] }}" >
-                    <label class="btn btn-outline d-flex w-15" for="radio{{ $t['color'] }}" style="" >
-                        <span class="btn " style="  width: 30px; height: 30px; background-color:{{ $t['rgb'] }}">
-                        </span>
-                        <h4 class="mb-0 ms-2">{{ $t['color'] }}
-                        </h4>
-                    </label>
-                @endforeach
-            </div>
-        </div>
-        <div class="row mt-5">
-            <div class="col-4">
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="mb-0">
-                            Tamaño de Fuente
-                        </h4>
-                    </div>
-                    <div class="card-body">
+        <div class="row mt-3">
+            <div class="card px-0">
+                <div class="row g-0">
+                    <div class="col-4 bg-body-tertiary border-end">
+                        <div class="card-body">
+                            <div class="list-group pe-0 border mt-3" style="max-height: 50vh; overflow-y: auto;">
+                                @foreach ($titles as $id => $t)
+                                    <button type="button"
+                                        class="list-group-item list-group-item-action fs-5
+                                    @if ($tab == $id) active @endif"
+                                        wire:click='setTab({{ $id }})'>
+                                        {{ $t }}
+                                    </button>
+                                @endforeach
 
-                        <input type="range" class="form-range" min="0" max="22" id="customRange2">
+                            </div>
+                        </div>
                     </div>
+                    <div class="col-8">
+                        <div class="card-header">
+                            <h4 class="mb-0">
+                                {{ $titles[$tab] }}
+                            </h4>
+                        </div>
+                        <div class="card-body">
+                            @if ($tab == 1)
+                                <div class="row justify-content-center">
+                                    @foreach ($themes as $t)
+                                        <input type="radio" class="btn-check  " name="radio{{ $t['color'] }}"
+                                            value="{{ $t['id'] }}" wire:model.change='themeId'
+                                            id="radio{{ $t['color'] }}">
+                                        <label class="btn btn-outline d-flex col-3" for="radio{{ $t['color'] }}"
+                                            style="">
+                                            <span class="btn "
+                                                style="  width: 30px; height: 30px; background-color:{{ $t['rgb'] }}">
+                                            </span>
+                                            <h4 class="mb-0 ms-2">{{ $t['color'] }}
+                                            </h4>
+                                        </label>
+                                    @endforeach
+                                </div>
+                            @elseif ($tab == 3)
+                                <form action="{{ route('question.update') }}" method="post" class="form">
+                                    @csrf
+                                    @if ($selectedQuestion)
+                                        <input type="hidden" name="id">
+                                    @endif
+                                    <div class=" mt-2 justify-content-between d-flex align-items-center">
+                                        <span class="d-flex align-content-center">
+                                            <div class="dropdown  ">
+                                                <button class="btn btn-outline-primary dropdown-toggle fs-5"
+                                                    type="button" data-bs-toggle="dropdown">
+                                                    Preguntas
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    @foreach ($questionsPrefab as $question)
+                                                        <li>
+                                                            <a class="dropdown-item d-flex align-items-center
+                                                        @if ($selectedQuestion ? $question->id == $selectedQuestion->id : false) active @endif"
+                                                                wire:click='setQuestion({{ $question->id }})'>
+                                                                {{ $question->title }}
+                                                            </a>
+                                                        </li>
+                                                    @endforeach
+
+                                                </ul>
+                                            </div>
+                                            <i class="   bi bi-plus-circle-fill ms-4 fs-2 text-primary pointer"
+                                                wire:click='newQuestion'></i>
+                                            @if ($selectedQuestion)
+                                                <i class="bi bi-trash-fill ms-4 fs-2 text-danger pointer"
+                                                    data-bs-toggle=modal data-bs-target=#modalDeleteQuestion></i>
+                                            @endif
+
+                                        </span>
+                                        <button class="btn btn-primary text-light form-control w-15 fs-5 px-3 ms-5">
+                                            Guardar
+                                        </button>
+
+
+                                    </div>
+                                    <div class="row gy-2 align-items-center mt-2">
+                                        <div class="col-10">
+                                            <div class="input-group">
+                                                <div class="input-group-text fs-5">Título</div>
+                                                <input type="text" class="form-control" id="title" name="title"
+                                                    @readonly($selectedQuestion)>
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div class="dropdown ">
+                                                <button class="btn btn-outline-primary dropdown-toggle fs-5"
+                                                    type="button" data-bs-toggle="dropdown">
+                                                    Tipo
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    @foreach ($questionTypes as $type)
+                                                        <li>
+                                                            <a class="dropdown-item d-flex align-items-center"
+                                                                wire:click='setQuestion({{ $type->id }})'>
+                                                                {{ $type->name }}
+                                                            </a>
+                                                        </li>
+                                                    @endforeach
+
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="input-group">
+                                                <div class="input-group-text ">A</div>
+                                                <input type="text" class="form-control" id="optionA"
+                                                    name="optionA">
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="input-group">
+                                                <div class="input-group-text ">B</div>
+                                                <input type="text" class="form-control" id="optionB"
+                                                    name="optionB">
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="input-group">
+                                                <div class="input-group-text ">C</div>
+                                                <input type="text" class="form-control" id="optionC"
+                                                    name="optionC">
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="input-group">
+                                                <div class="input-group-text ">D</div>
+                                                <input type="text" class="form-control" id="optionD"
+                                                    name="optionD">
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="input-group">
+                                                <div class="input-group-text ">E</div>
+                                                <input type="text" class="form-control" id="optionE"
+                                                    name="optionE">
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="input-group">
+                                                <div class="input-group-text ">F</div>
+                                                <input type="text" class="form-control" id="optionF"
+                                                    name="optionF">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            @endif
+
+                        </div>
+                    </div>
+
+
                 </div>
             </div>
         </div>
     </div>
+
+
+    @if ($tab == 2)
+        <div class="modal fade" tabindex="-1" id="modalDeleteQuestion" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">¿Desea eliminar la pregunta?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-footer justify-content-end align-items-center">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+
+
+                        <button type="button" class="btn btn-danger " wire:click='deleteQuestion'>
+                            Eliminar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
 </div>
+@script
+    <script>
+        $wire.on('set-question', (event) => {
+            $('#title').val(event.question.title)
+            $('#optionA').val(event.question.optionA)
+            $('#optionB').val(event.question.optionB)
+            $('#optionC').val(event.question.optionC)
+            $('#optionD').val(event.question.optionD)
+            $('#optionE').val(event.question.optionE)
+            $('#optionF').val(event.question.optionF)
+        });
+        $wire.on('new-question', (event) => {
+            $('#title').val('')
+            $('#optionA').val('')
+            $('#optionB').val('')
+            $('#optionC').val('')
+            $('#optionD').val('')
+            $('#optionE').val('')
+            $('#optionF').val('')
+        });
+        $wire.on('close-delete-modal', () => {
+            $('#modalDeleteQuestion').modal('hide');
+        });
+    </script>
+@endscript

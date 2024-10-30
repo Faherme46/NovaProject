@@ -30,7 +30,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
 
-        
+
 
         View::composer('*', function ($view) {
             $statesCollect = State::all();
@@ -45,7 +45,8 @@ class AppServiceProvider extends ServiceProvider
                 [
                     'asamblea' => $asamblea,
                     'registro' => ($asamblea) ? $asamblea['registro'] : false,
-                    'states' => $states
+                    'states' => $states,
+                    'themeId'=> cache('themeId',5)
                 ]
             );
         });

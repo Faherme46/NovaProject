@@ -10,14 +10,15 @@ use App\Http\Middleware\EnsureAsambleaOn;
 
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\AsambleaController;
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\PrediosController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PersonasController;
-use App\Http\Controllers\QuestionsController;
 use App\Http\Controllers\ReportController;
 use App\Http\Middleware\isAsambleaInit;
+use App\Http\Middleware\isLogged;
 use App\Livewire\PresentQuestion;
 use App\Livewire\Votacion;
 use App\Livewire\LiderSetup;
@@ -27,7 +28,6 @@ use App\Livewire\Consulta;
 use App\Livewire\Registrar;
 use App\Livewire\Asignacion;
 use App\Livewire\Entregar;
-use App\Livewire\JobStatus;
 use App\Livewire\ListUsers;
 use App\Livewire\Setup;
 use App\Livewire\Signing;
@@ -45,6 +45,9 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::get('gestion/informes/Informe', [ReportController::class,'createReport'])->name('gestion.report.docs');
     Route::post('/predios/import', [PrediosController::class, 'import'])->name('predios.import');
     Route::post('gestion/asamblea/update', [AsambleaController::class,'updateAsamblea'])->name('asamblea.update');
+    Route::post('question/update', [Controller::class,'updateQuestion'])->name('question.update');
+    Route::post('question/prefab/create', [Controller::class,'createPrefabQuestion'])->name('question.prefab.create');
+
 });
 
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Admin|Lider')]], function () {
@@ -84,7 +87,7 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
 
 
 //Rutas de autenticacion
-Route::get('/login', [LoginController::class, 'logView'])->name('login')->withoutMiddleware(ValidateLogin::class)->withoutMiddleware(EnsureAsambleaOn::class);
+Route::get('/login', [LoginController::class, 'logView'])->name('login')->middleware(isLogged::class)->withoutMiddleware(ValidateLogin::class)->withoutMiddleware(EnsureAsambleaOn::class);
 Route::post('/login', [LoginController::class, 'authenticate'])->name('users.authenticate')->withoutMiddleware(ValidateLogin::class)->withoutMiddleware(EnsureAsambleaOn::class);;
 Route::get('/logout', [LoginController::class, 'logout'])->name('users.logout')->withoutMiddleware(EnsureAsambleaOn::class);
 

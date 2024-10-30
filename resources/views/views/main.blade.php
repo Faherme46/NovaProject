@@ -62,7 +62,7 @@
                         </div>
 
 
-                        <div class="form-group col-4">
+                        <div class="form-group col-5">
                             <label for="hora">Hora</label>
                             <input type="time" class="form-control" id="hora" name="hora" required>
                         </div>
@@ -317,7 +317,7 @@
             $('#modalFilePersonas').modal('show');
         });
 
-        
+
 
     });
 </script>

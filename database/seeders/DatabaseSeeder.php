@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\General;
 use Illuminate\Database\Seeder;
 
 use App\Models\State;
@@ -20,6 +22,7 @@ class DatabaseSeeder extends Seeder
         State::create(['id'=>3,'value'=>'Retirado']);
         State::create(['id'=>5,'value'=>'Entregado']);
         State::create(['id'=>4,'value'=>'Unsigned']);
+        General::create(['key'=>'themeId','value'=>'5']);
         $this->call(RoleSeeder::class);
         $this->call(QuestionSeeder::class);
     }

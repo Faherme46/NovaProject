@@ -1,2 +1,4 @@
 /public
+/nova.python/venv
+/nova.python/_pycache_
 !.gitignore
