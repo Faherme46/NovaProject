@@ -30,9 +30,7 @@
         :root {
             --header-height: 3rem;
             --nav-width: 68px;
-            --first-color: #4723D9;
-            --primary: #4723D9;
-            --first-color-light: #AFA5D9;
+
             --white-color-txt: #F7F6FB;
             --white-color: #c8beef;
             --black-color: #151515;
@@ -42,7 +40,80 @@
             --z-fixed: 100
         }
     </style>
-    <link rel="stylesheet" href="{{ asset('assets/scss/app.scss') }}">
+    @switch($themeId)
+        @case(1)
+        <link rel="stylesheet" href="{{ asset('assets/scss/orange.css') }}">
+            <style>
+                :root {
+                    --first-color: #e45801;
+                    --first-color-light: #ffa600;
+                }
+            </style>
+        @break
+
+        @case(2)
+        <link rel="stylesheet" href="{{ asset('assets/scss/cyan.css') }}">
+            <style>
+                :root {
+                    --first-color: #3ab4ff;
+                    --first-color-light: #caebff;
+                }
+            </style>
+        @break
+
+        @case(3)
+        <link rel="stylesheet" href="{{ asset('assets/scss/teal.css') }}">
+            <style>
+                :root {
+                    --first-color: #00a976;
+                    --first-color-light: #dcfdf3;
+                }
+            </style>
+        @break
+
+        @case(4)
+        <link rel="stylesheet" href="{{ asset('assets/scss/pink.css') }}">
+            <style>
+
+                :root {
+                    --first-color: #ff7cbe;
+                    --first-color-light: #ffc9e4;
+                }
+            </style>
+        @break
+
+        @case(5)
+        <link rel="stylesheet" href="{{ asset('assets/scss/indigo.css') }}">
+            <style>
+                :root {
+                    --first-color: #4723D9;
+                    --first-color-light: #AFA5D9;
+                }
+            </style>
+        @break
+
+        @case(6)
+        <link rel="stylesheet" href="{{ asset('assets/scss/blue.css') }}">
+            <style>
+                :root {
+                    --first-color: #3c80fd;
+                    --first-color-light: #99bdff;
+                }
+            </style>
+        @break
+        @case(7)
+        <link rel="stylesheet" href="{{ asset('assets/scss/crimson.css') }}">
+            <style>
+                :root {
+                    --first-color: #a03a3a;
+                    --first-color-light: #be9191;
+                }
+            </style>
+        @break
+
+
+        @default
+    @endswitch
 </head>
 
 
