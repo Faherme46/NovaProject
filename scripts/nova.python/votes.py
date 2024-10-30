@@ -172,9 +172,9 @@ if __name__ == "__main__":
                 myFlag=1
 
     except KeyboardInterrupt:
-        print("Interrupción recibida, deteniendo el script.")
+        print("Interrupción recibida 1, deteniendo el script.")
     except Exception as e:
-        print("Interrupción recibida, deteniendo el script.")
+        print("Interrupción recibida 2, deteniendo el script." + e)
 
     finally:
         os.remove(pid_file)
