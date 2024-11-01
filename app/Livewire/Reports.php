@@ -9,7 +9,6 @@ use Carbon\Carbon;
 use App\Jobs\GeneratePdf;
 
 use App\Models\Control;
-use App\Models\Predio;
 use App\Models\Question;
 use Illuminate\Support\Facades\Http;
 
