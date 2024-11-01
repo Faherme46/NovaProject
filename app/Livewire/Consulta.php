@@ -396,7 +396,7 @@ class Consulta extends Component
 
             $controlL->deletePredios($this->prediosR);
             $controlR->attachPredios($this->prediosR);
-
+            $controlL->setCoef();
             if (!$this->prediosL) {
                 $controlL->retirar();
             }
@@ -437,6 +437,7 @@ class Consulta extends Component
                 $controlL->setCoef();
                 $controlL->save();
             } else {
+                $controlL->setCoef();
                 $controlL->retirar();
             }
             $this->success();

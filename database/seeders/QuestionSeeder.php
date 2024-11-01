@@ -21,7 +21,6 @@ class QuestionSeeder extends Seeder
         QuestionType::create(['name' => 'Aprobacion']);
         QuestionType::create(['name' => 'SI/NO']);
         QuestionType::create(['name' => 'TD']);
-        QuestionType::create(['name' => 'Prueba']);
 
         Question::create([
             'title' => 'Aprobacion de estados Financieros',
@@ -164,7 +163,7 @@ class QuestionSeeder extends Seeder
             'optionE' => '',
             'optionF' => '',
             'prefab' => true,
-            'type' => 6
+            'type' => 2
         ]);
 
 

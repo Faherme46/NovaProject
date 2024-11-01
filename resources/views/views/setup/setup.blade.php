@@ -56,117 +56,115 @@
                                         </label>
                                     @endforeach
                                 </div>
-                            @elseif ($tab == 3)
-                                <form action="{{ route('question.update') }}" method="post" class="form">
-                                    @csrf
-                                    @if ($selectedQuestion)
-                                        <input type="hidden" name="id">
-                                    @endif
-                                    <div class=" mt-2 justify-content-between d-flex align-items-center">
-                                        <span class="d-flex align-content-center">
-                                            <div class="dropdown  ">
-                                                <button class="btn btn-outline-primary dropdown-toggle fs-5"
-                                                    type="button" data-bs-toggle="dropdown">
-                                                    Preguntas
-                                                </button>
-                                                <ul class="dropdown-menu">
-                                                    @foreach ($questionsPrefab as $question)
-                                                        <li>
-                                                            <a class="dropdown-item d-flex align-items-center
-                                                        @if ($selectedQuestion ? $question->id == $selectedQuestion->id : false) active @endif"
-                                                                wire:click='setQuestion({{ $question->id }})'>
-                                                                {{ $question->title }}
-                                                            </a>
-                                                        </li>
-                                                    @endforeach
+                            @elseif ($tab == 2)
+                                @csrf
+                                <div class=" mt-2 justify-content-between d-flex align-items-center">
+                                    <span class="d-flex align-content-center">
+                                        <div class="dropdown  ">
+                                            <button class="btn btn-outline-primary dropdown-toggle fs-5" type="button"
+                                                data-bs-toggle="dropdown">
+                                                Preguntas
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                @foreach ($questionsPrefab as $question)
+                                                    <li>
+                                                        <a class="dropdown-item d-flex align-items-center
+                                                        @if ($selectedQuestion['id'] == $question->id) active @endif"
+                                                            wire:click='setQuestion({{ $question->id }})'>
+                                                            {{ $question->title }}
+                                                        </a>
+                                                    </li>
+                                                @endforeach
 
-                                                </ul>
-                                            </div>
-                                            <i class="   bi bi-plus-circle-fill ms-4 fs-2 text-primary pointer"
-                                                wire:click='newQuestion'></i>
-                                            @if ($selectedQuestion)
-                                                <i class="bi bi-trash-fill ms-4 fs-2 text-danger pointer"
-                                                    data-bs-toggle=modal data-bs-target=#modalDeleteQuestion></i>
-                                            @endif
+                                            </ul>
+                                        </div>
+                                        <i class="   bi bi-plus-circle-fill ms-4 fs-2 text-primary pointer"
+                                            wire:click='newQuestion'></i>
+                                        @if ($selectedQuestion['id'])
+                                            <i class="bi bi-trash-fill ms-4 fs-2 text-danger pointer"
+                                                data-bs-toggle=modal data-bs-target=#modalDeleteQuestion></i>
+                                        @endif
 
-                                        </span>
-                                        <button class="btn btn-primary text-light form-control w-15 fs-5 px-3 ms-5">
-                                            Guardar
-                                        </button>
+                                    </span>
+                                    <button class="btn btn-primary text-light form-control w-15 fs-5 px-3 ms-5"
+                                        type="button" wire:click='storeQuestion'>
+                                        Guardar
+                                    </button>
 
 
-                                    </div>
-                                    <div class="row gy-2 align-items-center mt-2">
-                                        <div class="col-10">
-                                            <div class="input-group">
-                                                <div class="input-group-text fs-5">Título</div>
-                                                <input type="text" class="form-control" id="title" name="title"
-                                                    @readonly($selectedQuestion)>
-                                            </div>
-                                        </div>
-                                        <div class="col-2">
-                                            <div class="dropdown ">
-                                                <button class="btn btn-outline-primary dropdown-toggle fs-5"
-                                                    type="button" data-bs-toggle="dropdown">
-                                                    Tipo
-                                                </button>
-                                                <ul class="dropdown-menu">
-                                                    @foreach ($questionTypes as $type)
-                                                        <li>
-                                                            <a class="dropdown-item d-flex align-items-center"
-                                                                wire:click='setQuestion({{ $type->id }})'>
-                                                                {{ $type->name }}
-                                                            </a>
-                                                        </li>
-                                                    @endforeach
-
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="input-group">
-                                                <div class="input-group-text ">A</div>
-                                                <input type="text" class="form-control" id="optionA"
-                                                    name="optionA">
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="input-group">
-                                                <div class="input-group-text ">B</div>
-                                                <input type="text" class="form-control" id="optionB"
-                                                    name="optionB">
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="input-group">
-                                                <div class="input-group-text ">C</div>
-                                                <input type="text" class="form-control" id="optionC"
-                                                    name="optionC">
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="input-group">
-                                                <div class="input-group-text ">D</div>
-                                                <input type="text" class="form-control" id="optionD"
-                                                    name="optionD">
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="input-group">
-                                                <div class="input-group-text ">E</div>
-                                                <input type="text" class="form-control" id="optionE"
-                                                    name="optionE">
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="input-group">
-                                                <div class="input-group-text ">F</div>
-                                                <input type="text" class="form-control" id="optionF"
-                                                    name="optionF">
-                                            </div>
+                                </div>
+                                <div class="row gy-2 align-items-center mt-2">
+                                    <div class="col-10">
+                                        <div class="input-group">
+                                            <div class="input-group-text fs-5">Título</div>
+                                            <input type="text" class="form-control" id="title" name="title"
+                                                wire:model.live='selectedQuestion.title'>
                                         </div>
                                     </div>
-                                </form>
+                                    <div class="col-2">
+                                        <div class="dropdown ">
+                                            <button class="btn btn-outline-primary dropdown-toggle fs-5" type="button"
+                                                data-bs-toggle="dropdown">
+                                                Tipo
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                @foreach ($questionTypes as $type)
+                                                    <li>
+                                                        <a class="dropdown-item d-flex align-items-center
+                                                            @if ($selectedQuestion['type'] == $type->id) active @endif"
+                                                            wire:click='changeType({{ $type->id }})'
+                                                            @disabled(true)>
+                                                            {{ $type->name }}
+                                                        </a>
+                                                    </li>
+                                                @endforeach
+
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="input-group">
+                                            <div class="input-group-text ">A</div>
+                                            <input type="text" class="form-control" id="optionA" name="optionA"
+                                                wire:model.live='selectedQuestion.optionA' @readonly(in_array($selectedQuestion['type'], [1, 3, 4, 5]))>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="input-group">
+                                            <div class="input-group-text ">B</div>
+                                            <input type="text" class="form-control" id="optionB" name="optionB"
+                                                wire:model.live='selectedQuestion.optionB' @readonly(in_array($selectedQuestion['type'], [1, 3, 4, 5]))>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="input-group">
+                                            <div class="input-group-text ">C</div>
+                                            <input type="text" class="form-control" id="optionC" name="optionC"
+                                                wire:model.live='selectedQuestion.optionC' @readonly(in_array($selectedQuestion['type'], [1, 3, 4, 5]))>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="input-group">
+                                            <div class="input-group-text ">D</div>
+                                            <input type="text" class="form-control" id="optionD" name="optionD"
+                                                wire:model.live='selectedQuestion.optionD' @readonly(in_array($selectedQuestion['type'], [1, 3, 4, 5]))>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="input-group">
+                                            <div class="input-group-text ">E</div>
+                                            <input type="text" class="form-control" id="optionE" name="optionE"
+                                                wire:model.live='selectedQuestion.optionE' @readonly(in_array($selectedQuestion['type'], [1, 3, 4, 5]))>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="input-group">
+                                            <div class="input-group-text ">F</div>
+                                            <input type="text" class="form-control" id="optionF" name="optionF"
+                                                wire:model.live='selectedQuestion.optionF' @readonly(in_array($selectedQuestion['type'], [1, 3, 4, 5]))>
+                                        </div>
+                                    </div>
+                                </div>
                             @endif
 
                         </div>
@@ -203,24 +201,6 @@
 </div>
 @script
     <script>
-        $wire.on('set-question', (event) => {
-            $('#title').val(event.question.title)
-            $('#optionA').val(event.question.optionA)
-            $('#optionB').val(event.question.optionB)
-            $('#optionC').val(event.question.optionC)
-            $('#optionD').val(event.question.optionD)
-            $('#optionE').val(event.question.optionE)
-            $('#optionF').val(event.question.optionF)
-        });
-        $wire.on('new-question', (event) => {
-            $('#title').val('')
-            $('#optionA').val('')
-            $('#optionB').val('')
-            $('#optionC').val('')
-            $('#optionD').val('')
-            $('#optionE').val('')
-            $('#optionF').val('')
-        });
         $wire.on('close-delete-modal', () => {
             $('#modalDeleteQuestion').modal('hide');
         });

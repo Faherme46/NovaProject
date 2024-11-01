@@ -53,7 +53,6 @@ class PrediosController extends Controller
 
     public function export($route){
         $export = new PrediosExport();
-        dd($route   );
         return Excel::store($export, $route . '/predios.xlsx', 'externalAsambleas');
     }
 
