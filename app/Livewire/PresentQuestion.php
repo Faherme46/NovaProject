@@ -286,8 +286,8 @@ class PresentQuestion extends Component
 
                         $vote = $this->votes[$id];
                         if (in_array($vote, $availableOptions)) {
-                            $valuesCoef[$vote] += $control->sum_coef_can;
-                            $valuesNom[$vote] += $control->getPrediosCan();
+                            $valuesCoef['option'.$vote] += $control->sum_coef_can;
+                            $valuesNom['option'.$vote] += $control->getPrediosCan();
                         } else {
 
                             $valuesCoef['nule'] += $control->sum_coef_can;
