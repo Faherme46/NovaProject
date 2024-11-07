@@ -20,6 +20,7 @@ return new class extends Migration
             $table->double('optionD')->nullable();
             $table->double('optionE')->nullable();
             $table->double('optionF')->nullable();
+            $table->double('total')->nullable();
             $table->double('abstainted');
             $table->double('absent');
             $table->double('nule');

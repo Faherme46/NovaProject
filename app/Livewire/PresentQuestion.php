@@ -219,24 +219,25 @@ class PresentQuestion extends Component
 
     public function createResults()
     {
+        $options = ['optionA', 'optionB', 'optionC', 'optionD', 'optionE', 'optionF'];
         $valuesCoef = [
-            'A'      => 0,
-            'B'      => 0,
-            'C'      => 0,
-            'D'      => 0,
-            'E'      => 0,
-            'F'      => 0,
+            'optionA'      => 0,
+            'optionB'      => 0,
+            'optionC'      => 0,
+            'optionD'      => 0,
+            'optionE'      => 0,
+            'optionF'      => 0,
             'nule'     => 0,
             'absent'    => 0,
             'abstainted' => 0,
         ];
         $valuesNom = [
-            'A'      => 0,
-            'B'      => 0,
-            'C'      => 0,
-            'D'      => 0,
-            'E'      => 0,
-            'F'      => 0,
+            'optionA'      => 0,
+            'optionB'      => 0,
+            'optionC'      => 0,
+            'optionD'      => 0,
+            'optionE'      => 0,
+            'optionF'      => 0,
             'nule'     => 0,
             'absent'    => 0,
             'abstainted' => 0,
@@ -248,17 +249,18 @@ class PresentQuestion extends Component
                 if ($control->isAbsent()) {
                     $valuesCoef['absent'] += $control->sum_coef;
                     $valuesNom['absent']  += $control->predios->count();
+
                     $control->t_publico=0;
                 } else {
                     if (array_key_exists($id, $this->votes)) {
                         $vote = $this->votes[$id];
                         if ($vote=='A') {
-                            $valuesCoef[$vote] += $control->sum_coef;
-                            $valuesNom[$vote] += $control->predios->count();
+                            $valuesCoef['option'.$vote] += $control->sum_coef;
+                            $valuesNom['option'.$vote] += $control->predios->count();
                             $control->t_publico=1;
                         } else if($vote=='B'){
-                            $valuesCoef[$vote] += $control->sum_coef;
-                            $valuesNom[$vote] += $control->predios->count();
+                            $valuesCoef['option'.$vote] += $control->sum_coef;
+                            $valuesNom['option'.$vote] += $control->predios->count();
                             $control->t_publico=0;
                         }else{
                             $valuesCoef['nule'] += $control->sum_coef;
@@ -300,33 +302,23 @@ class PresentQuestion extends Component
                 }
             }
         }
+        $totalCoef=0;
+        foreach ($valuesCoef as $value) {
+            $totalCoef+=$value;
+        }
+        $totalNom=0;
+        foreach ($valuesNom as $value) {
+            $totalNom+=$value;
+        }
         try {
-            $resultNom = Result::create([
-                'question_id' => $this->question->id,
-                'optionA'    => $valuesNom['A'],
-                'optionB'    => $valuesNom['B'],
-                'optionC'    => $valuesNom['C'],
-                'optionD'    => $valuesNom['D'],
-                'optionE'    => $valuesNom['E'],
-                'optionF'    => $valuesNom['F'],
-                'abstainted' => $valuesNom['abstainted'],
-                'absent'     => $valuesNom['absent'],
-                'nule'       => $valuesNom['nule'],
-                'isCoef' => false
-            ]);
-            $resultCoef = Result::create([
-                'question_id' => $this->question->id,
-                'optionA'    => $valuesCoef['A'],
-                'optionB'    => $valuesCoef['B'],
-                'optionC'    => $valuesCoef['C'],
-                'optionD'    => $valuesCoef['D'],
-                'optionE'    => $valuesCoef['E'],
-                'optionF'    => $valuesCoef['F'],
-                'abstainted' => $valuesCoef['abstainted'],
-                'absent'     => $valuesCoef['absent'],
-                'nule'  =>   $valuesCoef['nule'],
-                'isCoef' => true
-            ]);
+            $valuesNom['question_id']=$this->question->id;
+            $valuesNom['isCoef']=false;
+            $valuesNom['total']=$totalNom;
+            $resultNom = Result::create($valuesNom);
+            $valuesCoef['question_id']=$this->question->id;
+            $valuesCoef['isCoef']=true;
+            $valuesCoef['total']=$totalCoef;
+            $resultCoef = Result::create($valuesCoef);
 
 
             $fileController=new FileController;

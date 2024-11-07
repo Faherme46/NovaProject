@@ -96,3 +96,4 @@ Route::get('/proofAsignacion', [Asignacion::class, 'proofAsignacion'])->name('pr
 Route::get('proofQuestion',[FileController::class,'exportAllQuestions']);
 Route::get('proofExport',[FileController::class,'exportTables']);
 
+//Route::get('proofExport',[PrediosController::class,'export']);

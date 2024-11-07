@@ -51,9 +51,11 @@ class PrediosController extends Controller
         }
     }
 
-    public function export($route){
+    //todo cambiar asambleaName por route
+    public function export($route=null){
+        $asambleaName = cache('asamblea')['name'];
         $export = new PrediosExport();
-        return Excel::store($export, $route . '/predios.xlsx', 'externalAsambleas');
+        return Excel::store($export, $asambleaName . '/predios.xlsx', 'externalAsambleas');
     }
 
 

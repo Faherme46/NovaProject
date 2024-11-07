@@ -42,26 +42,31 @@
                     </div>
                 </div>
 
-                <div class="card-body d-flex">
+                <div class="card-body d-flex justify-content-center">
+                    @if ($question['type'] == 1)
+                    <h1 class="mb-0">PUEDE SELECCIONAR CUALQUIER OPCION</h1>
+                    @else
+                        <ul class="list-group ">
+                            @foreach ($options as $op)
+                                @if ($question['option' . $op])
+                                    <li class="list-group-item  bg-primary text-light dark">
+                                        <h1 class="mb-0 super-large-text ">{{ $op }}</h1>
+                                    </li>
+                                @endif
+                            @endforeach
+                        </ul>
+                        <ul class="list-group w-100 ">
+                            @foreach ($options as $op)
+                                @if ($question['option' . $op])
+                                    <li class="list-group-item light first">
+                                        <h1 class="mb-0 text-uppercase super-large-text">{{ $question['option' . $op] }}
+                                            &nbsp;</h1>
+                                    </li>
+                                @endif
+                            @endforeach
+                        </ul>
+                    @endif
 
-                    <ul class="list-group ">
-                        @foreach ($options as $op)
-                            @if ($question['option' . $op])
-                                <li class="list-group-item  bg-primary text-light dark">
-                                    <h1 class="mb-0 super-large-text ">{{ $op }}</h1>
-                                </li>
-                            @endif
-                        @endforeach
-                    </ul>
-                    <ul class="list-group w-100 ">
-                        @foreach ($options as $op)
-                            @if ($question['option' . $op])
-                            <li class="list-group-item light first">
-                                <h1 class="mb-0 text-uppercase super-large-text">{{ $question['option' . $op] }} &nbsp;</h1>
-                            </li>
-                            @endif
-                        @endforeach
-                    </ul>
                 </div>
 
             </div>

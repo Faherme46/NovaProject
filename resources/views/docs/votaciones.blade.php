@@ -63,50 +63,50 @@
     <footer>
 
         <div class="text-end txt-small">
-            Informe de Asistencia {{$asamblea->name}}
+            Informe de Asistencia {{ $asamblea->name }}
         </div>
 
     </footer>
 
     <div class="body">
 
-        @foreach ($questions as $q)
+        @foreach ($questions as $key => $q)
             <div class="myh-100 ">
-                <h4 class="w-100 bg-darkblue  text-center mb-3 py-2">
-                    ÍTEM {{ $q->id - 13 }}
+                <h4 class="w-100 bg-darkblue  text-center mb-3 py-2 text-light">
+                    ÍTEM {{ $key+1}}
                 </h4>
-                <table class="w-100 mb-4">
-                    <thead>
+                <table class="w-100 mb-4 table">
+                    <thead class="table-active">
                         <tr class="bg-darkblue  ">
                             <td colspan="4">
-                                <h4 class="w-100 text-center py-1 ">
+                                <h4 class="w-100 text-center py-1 mb-0 text-light">
                                     {{ $q->title }}
                                 </h4>
                             </td>
                         </tr>
-                        <tr class="table-active">
 
-                            <th>
-                                Opción
-                            </th>
-                            <th>
-                                Votos
-                            </th>
-                            <th>
-                                Coeficiente
-                            </th>
-                            <th>
-                                Descripción
-                            </th>
-                        </tr>
                     </thead>
                     <tbody>
+                        <tr class="bg-secondary-subtle">
+                            <td >
+                                <b>Opción</b>
+                            </td>
+                            <td >
+                                <b>Votos</b>
+                            </td>
+                            <td >
+                                <b>Coeficiente</b>
+                            </td>
+                            <td >
+                                <b>Descripción</b>
+                            </td>
+                        </tr>
                         @foreach ($options as $option)
                             @if ($q['option' . $option])
                                 <tr>
                                     <td>{{ $option }}</td>
-                                    <td>{{ $q->resultNom['option' . $option] }}</td>
-                                    <td>{{ $q->resultCoef['option' . $option] }}</td>
+                                    <td class="text-center">{{ $q->resultNom['option' . $option] }}</td>
+                                    <td class="text-center">{{ sprintf('%.4f',$q->resultCoef['option' . $option]) }}</td>
                                     <td>{{ $q['option' . $option] }}</td>
                                 </tr>
                             @endif
@@ -117,16 +117,16 @@
                             <td>
                                 Abstención
                             </td>
-                            <td>{{ $q->resultNom->abstainted }}</td>
-                            <td>{{ $q->resultCoef->abstainted }}</td>
+                            <td class="text-center">{{ $q->resultNom->abstainted }}</td>
+                            <td class="text-center">{{ sprintf('%.4f',$q->resultCoef->abstainted) }}</td>
                             <td></td>
                         </tr>
                         <tr>
                             <td>
                                 Ausencia
                             </td>
-                            <td>{{ $q->resultNom->absent }}</td>
-                            <td>{{ $q->resultCoef->absent }}</td>
+                            <td class="text-center">{{ $q->resultNom->absent }}</td>
+                            <td class="text-center">{{ sprintf('%.4f',$q->resultCoef->absent) }}</td>
                             <td></td>
                         </tr>
                         <tr>
@@ -137,8 +137,14 @@
                                     Nulo
                                 @endif
                             </td>
-                            <td>{{ $q->resultNom->nule }}</td>
-                            <td>{{ $q->resultCoef->nule }}</td>
+                            <td class="text-center">{{ $q->resultNom->nule }}</td>
+                            <td class="text-center">{{ sprintf('%.4f',$q->resultCoef->nule) }}</td>
+                            <td></td>
+                        </tr>
+                        <tr class="bg-secondary-subtle">
+                            <td ><b>TOTAL</b></td>
+                            <td class="text-center">{{ $q->resultNom->total}}</td>
+                            <td class="text-center">{{ sprintf('%.4f', $q->resultCoef->total)}}</td>
                             <td></td>
                         </tr>
                     </tbody>
@@ -153,7 +159,7 @@
                     @endif
                 </div>
                 @if ($q->type != 1)
-                    <h4 class="w-100 bg-darkblue  text-center mb-3 py-2">
+                    <h4 class="w-100 bg-darkblue text-light text-center mb-3 py-2">
                         {{ $q->resultTxt }}
                     </h4>
                 @endif

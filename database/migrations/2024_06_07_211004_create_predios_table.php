@@ -13,17 +13,16 @@ return new class extends Migration
     {
         Schema::create('predios', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('cc_apoderado')->nullable();
-            $table->unsignedBigInteger('control_id')->nullable();
-            $table->boolean('quorum_start')->default(false);
-            $table->boolean('quorum_end')->default(false);
-            
             $table->string('descriptor1');
             $table->string('numeral1');
             $table->string('descriptor2');
             $table->string('numeral2');
             $table->float('coeficiente');
             $table->boolean('vota');
+            $table->unsignedBigInteger('control_id')->nullable();
+            $table->boolean('quorum_start')->default(false);
+            $table->boolean('quorum_end')->default(false);
+            $table->unsignedBigInteger('cc_apoderado')->nullable();
             $table->timestamps();
             $table->foreign('cc_apoderado')->references('id')->on('personas');
             $table->foreign('control_id')->references('id')->on('controls');

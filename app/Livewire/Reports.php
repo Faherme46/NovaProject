@@ -131,6 +131,9 @@ class Reports extends Component
     public function setView($value)
     {
         $this->viewGeneral = $value;
+        if ($value==1) {
+            return redirect()->route('gestion.report');
+        }
     }
 
     public function setQuestionsVerified()
@@ -149,7 +152,7 @@ class Reports extends Component
         if ($this->questions->isEmpty()) {
             return $this->allQuestionsVerified = false;
         }
-        $nullResults = $this->questions->whereNull('resultTxt')->where('isValid')->whereNotIn('type', [5, 6]);
+        $nullResults = $this->questions->whereNull('resultTxt')->where('isValid')->whereNotIn('type',[1,5])->whereNotIn('type', [5, 6]);
         $this->allQuestionsVerified = ($nullResults->isEmpty());
 
 
@@ -167,7 +170,7 @@ class Reports extends Component
     }
 
     public function verifyForm(){
-        if ($this->questions->whereNull('resultTxt')->where('isValid')->isNotEmpty()) {
+        if ($this->questions->whereNull('resultTxt')->where('isValid')->whereNotIn('type',[1,5])->isNotEmpty()) {
 
             return session()->flash('warning','Todas las preguntas deben tener resultado');
         }

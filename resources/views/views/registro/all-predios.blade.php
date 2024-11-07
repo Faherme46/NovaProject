@@ -74,13 +74,12 @@
                         <tr>
                             <td>
                                 <button wire:click="dispatchPredio({{ $predio->id }})" class="btn pt-0 pb-0 mb-0">
-                                    <i
-                                        class='bi {{ $consulta ? 'bi-question-circle-fill' : 'bi-plus-circle-fill' }} '></i>
+                                    <i class='bi {{$consulta?'bi-question-circle-fill':'bi-plus-circle-fill'}}'></i>
                                 </button>
                             </td>
                     @endif
-                    <td>
-                        <span class="btn py-0 " wire:dblclick='showPredio({{ $predio->id }})'
+                    <td class="align-items-center ">
+                        <span class="btn py-0 h-100 d-flex" wire:dblclick='showPredio({{ $predio->id }})'
                             wire:click='dispatchPredio({{ $predio->id }})'>
                             {{ $predio->getFullName() }}
                         </span>

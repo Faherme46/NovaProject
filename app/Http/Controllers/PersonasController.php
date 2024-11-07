@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Exports\PersonasExport;
-use App\Exports\PrediosPersonasExport;
 use Illuminate\Support\Facades\DB;
 
 use App\Http\Controllers\Controller;
@@ -112,8 +111,5 @@ class PersonasController extends Controller
         $export = new PersonasExport();
         return Excel::store($export, $route . '/personas.xlsx', 'externalAsambleas');
     }
-    public function exportRelation($route){
-        $export = new PrediosPersonasExport();
-        return Excel::store($export, $route . '/prediosPersonas.xlsx', 'externalAsambleas');
-    }
+    
 }

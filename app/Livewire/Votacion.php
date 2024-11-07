@@ -123,7 +123,7 @@ class Votacion extends Component
                         $id=$key;
                     }
                 }
-                
+
             } elseif ($this->questionType == 3) {
                 $id = 'F';
             } elseif ($this->questionType == 4) {
@@ -274,12 +274,14 @@ class Votacion extends Component
             $this->addError('questionTitle', 'Debe definir si la pregunta es por Coeficiente o nominal');
             $error = 1;
         }
+        if($this->questionType==2){
+            if (!$this->isOneOptionAlmost($this->questionOptions)) {
 
-        if (!$this->isOneOptionAlmost($this->questionOptions)) {
-
-            $this->addError('questionTitle', 'Al menos uno de los campos debe tener un valor.');
-            $error = 1;
+                $this->addError('questionTitle', 'Al menos uno de los campos debe tener un valor.');
+                $error = 1;
+            }
         }
+
         $quorum = Control::where('state', 1)->sum('sum_coef');
         if ($quorum <= 0) {
             $this->addError('questionTitle', 'No se han registrado asistentes');

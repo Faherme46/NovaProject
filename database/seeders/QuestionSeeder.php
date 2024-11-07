@@ -133,7 +133,7 @@ class QuestionSeeder extends Seeder
             'type' => 2
         ]);
         Question::create([
-            'title' => 'Quorum',
+            'title' => 'Verificación de Quorum',
             'optionA' => '',
             'optionB' => '',
             'optionC' => '',

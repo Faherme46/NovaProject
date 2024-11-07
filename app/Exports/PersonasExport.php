@@ -17,10 +17,10 @@ class PersonasExport implements FromCollection,WithHeadings{
     public function headings(): array
     {
         return [
-            'Tipo documento',
-            'Documento',
-            'Nombres',
-            'Apellidos'
+            'tipo_id',
+            'cc_propietario',
+            'nombres',
+            'apellidos'
         ];
     }
 }

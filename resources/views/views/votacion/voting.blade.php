@@ -19,12 +19,7 @@
                 </h1>
             </div>
             <div class="col-2 justify-content-end d-flex">
-                <button class="btn btn-warning py-0 rounded-3 me-2" wire:click='proof'>
-                    Green
-                </button>
-                <button class="btn btn-info py-0 rounded-3 me-2" wire:click='updateVotes'>
-                    Generar
-                </button>
+
                 <button class="btn btn-warning py-0 rounded-3 me-2" wire:click='playPause({{ !$stopped }})'>
 
                     @if ($stopped)
@@ -44,7 +39,7 @@
                 @foreach ($controls as $control)
                     <span
                         class="btn  ms-0 mb-1 me-0 fs-2
-                    @if (array_key_exists($control, $votes)) btn-primary
+                    @if (array_key_exists($control, $votes)&& array_key_exists($control, $controlsAssigned)) btn-primary
                     @elseif(array_key_exists($control, $controlsAssigned)) btn-secondary @else btn-black @endif ">
                         {{ $control < 10 ? '0' : '' }}{{ $control }}
                     </span>

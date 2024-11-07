@@ -8,9 +8,7 @@ use Livewire\Attributes\Layout;
 
 use App\Models\Control;
 use App\Models\Asamblea;
-use App\Models\Persona;
 use App\Models\Predio;
-use Illuminate\Support\Facades\Cache;
 use Carbon\Carbon;
 use DateTimeZone;
 
@@ -98,8 +96,6 @@ class LiderSetup extends Component
             $time = Carbon::now(new DateTimeZone('America/Bogota'))->second(0);
             if (!$this->asamblea->h_cierre) {
 
-
-
                 Predio::whereHas('control', function ($query) use ($time) {
                     $query->where('state', 1);
                 })->update(['quorum_end' => true]);
@@ -107,9 +103,9 @@ class LiderSetup extends Component
                 cache([ 'predios_end' =>  Predio::where('quorum_end', true)->count()]);
                 cache(['quorum_end' => Control::whereNotIn('state', [1])->sum('sum_coef')]);
                 cache(['asamblea' => $this->asamblea]);
+
                 $fileController= new FileController;
                 $fileController->exportTables();
-                
                 $this->asamblea->h_cierre = $time;
                 $this->asamblea->save();
                 $this->finished = true;
@@ -117,9 +113,10 @@ class LiderSetup extends Component
             } else {
                 session()->flash('warning', 'Ya se establecio el cierre en: ' . $this->asamblea->h_cierre);
             }
+
         } catch (\Exception $e) {
             //throw $th;
-            $this->addError('error', $e->getMessage());
+            $this->addError('error', 'hello: '. $e->getMessage());
         }
     }
 }

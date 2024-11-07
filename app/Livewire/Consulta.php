@@ -40,12 +40,15 @@ class Consulta extends Component
 
 
     public $previousTab;
-    public $Predio ;
-    public $Persona ;
+    public $Predio;
+    public $Persona;
     public $Control;
 
     public $cedulaPersonita;
-    public $personaFound;
+    public $namePersonita;
+    public $lastNamePersonita;
+    public $tipoId = 'CC';
+    public $personaFound = null;
 
     public $messageL = 'Sin Predios';
     public $messageR = 'Sin Predios';
@@ -96,14 +99,16 @@ class Consulta extends Component
             'controlRInvalid',
             'controlLInvalid',
             'Predio',
-            'Persona'
+            'Persona',
+            'controlIdSearch',
+            'Control'
         ]);
         $this->mount();
         $this->dispatch('$refresh');
     }
     public function mount()
     {
-        $this->tab=5;
+        $this->tab = 5;
         $this->tiposId = Persona::distinct()->pluck('tipo_id');
         $this->maxControls = cache('asamblea')['controles'];
     }
@@ -391,7 +396,6 @@ class Consulta extends Component
                 if (cache('asamblea')['registro']) {
                     $controlR->cc_asistente = ($controlL->cc_asistente) ? $controlL->cc_asistente : null;
                 }
-
             }
 
             $controlL->deletePredios($this->prediosR);
@@ -409,6 +413,7 @@ class Consulta extends Component
     {
         session()->flash('success', 'Cambios Guardados');
         $this->cleanData(1);
+
         $this->dispatch('refresh-predios');
     }
 
@@ -455,10 +460,11 @@ class Consulta extends Component
     }
 
 
-    public function searchControl(){
-        $this->Control=Control::find($this->controlIdSearch);
+    public function searchControl()
+    {
+        $this->Control = Control::find($this->controlIdSearch);
         if (!$this->Control) {
-            $this->addError('noFound','No se encontro el control');
+            $this->addError('noFound', 'No se encontro el control');
         }
     }
 
@@ -509,13 +515,16 @@ class Consulta extends Component
         if ($personita) {
             $this->personaFound = $personita->nombre . ' ' . $personita->apellido;
         } else {
-            $this->personaFound = 'No se encontraron resultados';
+
+            $this->dispatch('addPropietarioModalHide');
+            $this->dispatch('crearPropietarioModalShow');
         }
-        $this->dispatch('reloadModalAddPropietario');
+        $this->dispatch('addPropietarioModalShow');
     }
 
     public function addPropietario()
     {
+
         $this->Predio->personas()->attach($this->cedulaPersonita);
         $this->reset('cedulaPersonita', 'personaFound');
         session()->flash('success', 'Propietario agregado');
@@ -537,9 +546,31 @@ class Consulta extends Component
         $this->dispatch('dropPersonaModalShow');
     }
 
-    public function dropControl(){
-        $this->reset('Control','controlIdSearch');
+    public function dropControl()
+    {
+        $this->reset('Control', 'controlIdSearch');
     }
 
+    public function creaPersona()
+    {
 
+        $this->dispatch('addPropietarioModalHide');
+        try {
+            Persona::create(
+                [
+                    'id' => $this->cedulaPersonita,
+                    'tipo_id' => $this->tipoId,
+                    'nombre' => strtoupper($this->namePersonita),
+                    'apellido' => strtoupper($this->lastNamePersonita)
+                ]
+            );
+            session()->flash('success', 'Persona creada y agregada correctamente');
+            $this->dispatch('crearPropietarioModalHide');
+            $this->reset('namePersonita', 'lastNamePersonita');
+            $this->addPropietario();
+        } catch (\Throwable $th) {
+            $this->addError('error', 'Error al crear la persona: ' . $th->getMessage());
+        }
+        $this->dispatch('crearPropietarioModalHide');
+    }
 }

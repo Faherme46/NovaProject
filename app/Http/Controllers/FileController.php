@@ -170,8 +170,7 @@ class FileController extends Controller
 
         $ret1 =$prediosController->export($asambleaName);
         $ret2 =$personasController->export($asambleaName);
-        $ret3 =$personasController->exportRelation($asambleaName);
-        return $ret1&&$ret2&&$ret3;
+        return $ret1&&$ret2;
     }
 
 }

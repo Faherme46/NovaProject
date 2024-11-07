@@ -45,22 +45,13 @@ class ResultExport implements FromArray, ShouldAutoSize, WithStyles
             ['Quorum: ', $this->question->quorum, $this->question->predios],
             ['', '', ''],
         ];
-        $totalCoef = 0;
-        $totalNom = 0;
-        foreach ($options as $option) {
-            if ($this->question->$option !== null) {
-                $array[] = [$this->question->$option, strval($resultCoef->$option), strval($resultNom->$option)];
-                $totalCoef += $resultCoef->$option;
-                $totalNom += $resultNom->$option;
-            }
-        }
+
         $array[] = ['Ausente:', strval($resultCoef->absent), strval($resultNom->absent)];
         $array[] = ['Abstencion:', strval($resultCoef->abstainted), strval($resultNom->abstainted)];
         $array[] = ['Nulo:', strval($resultCoef->nule), strval($resultNom->nule)];
 
-        $totalCoef += $resultCoef->absent + $resultCoef->abstainted + $resultCoef->nule;
-        $totalNom += $resultNom->absent + $resultNom->abstainted + $resultNom->nule;
-        $array[] = ['Total', $totalCoef, $totalNom];
+
+        $array[] = ['Total', $resultCoef->total, $resultNom->total];
 
         return $array;
     }

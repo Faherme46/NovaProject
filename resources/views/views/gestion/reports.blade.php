@@ -96,8 +96,12 @@
                 @if ($asamblea['registro'])
                     <div class="col-3">
                         <div class="card px-0">
-                            <div class="card-header d-flex justify-content-between align-items-center">
+                            <div class="card-header d-flex justify-content-between align-items-center pb-0">
+                                <span>
                                 <h5 class="card-title mb-0">Orden del dia</h5>
+                                <small class="text-muted mb-0">(Sin números)</small>
+                                </span>
+
                                 <button type="button" class="btn btn-primary p-1 px-2" id="saveOrdenDia"
                                     wire:click='saveOrdenDia'>
                                     <i class="bi bi-floppy-fill"></i>
@@ -119,7 +123,7 @@
                         @csrf
                         <div class="card">
                             <div class="card-body px-0">
-                                @if ($this->questions->isEmpty())
+                                @if ($questions->isEmpty())
                                     <div class="text-danger text-center mt-2">
                                         <small>No se han hecho votaciones</small>
                                     </div>
@@ -128,7 +132,7 @@
                                         <small>Hay votaciones sin resultado</small>
                                     </div>
                                 @endif
-                                @if (!$this->asambleaVerified)
+                                @if (!$asambleaVerified)
                                     <div class="text-danger text-center mt-2">
                                         <small>Faltan campos en la asamblea</small>
                                     </div>
@@ -141,7 +145,7 @@
                                 @endif --}}
                                 <div class="row justify-content-center px-4 mt-3">
                                     <button type="button" class="btn btn-success p-1" wire:click='setView(0)'
-                                        @disabled($this->questions->isEmpty())>
+                                        @disabled($questions->isEmpty())>
                                         <div class="card ">
                                             <div
                                                 class="card-body d-flex align-items-center p-1 justify-content-center">
@@ -224,12 +228,16 @@
                                     <span class="visually-hidden">Cargando...</span>
                                 </div>
                                 <div>
-                                    <p class="mb-0">El informe se está generando.<br>
+                                    <p class="mb-0">El informe se está generando en una nueva página.<br>
                                         Este proceso puede tardar unos minutos, por favor espere.</p>
                                 </div>
                             @endif
 
                         </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                            aria-label="Close">Cerrar</button>
                     </div>
                 </div>
             </div>

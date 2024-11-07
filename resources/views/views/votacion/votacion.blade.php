@@ -86,64 +86,64 @@
                             <label class="form-check-label fw-bolder fs-5 ms-3" for="switchBlanco">Blanco</label>
                         </div>
                     </div>
-                    <div class="card-body d-flex ">
-                        <table class="table table-bordered ">
+                    <div class="card-body d-flex p-0">
+                        <table class="table table-bordered mb-0">
                             <tr>
-                                <th class="text-center">
+                                <td class="text-center p-0">
                                     <input type="text" class="custom-input text-center " size="1"
                                         value="A" disabled>
-                                </th>
-                                <td>
+                                </td>
+                                <td class="py-0">
                                     <input type="text" class="custom-input  resettable w-100" id="optionA"
                                         wire:model.live='questionOptions.A' @readonly(!in_array($questionType, [2, 6]))>
                                 </td>
                             </tr>
                             <tr>
-                                <th class="text-center">
+                                <th class="text-center p-0">
                                     <input type="text" class="custom-input text-center text-center" size="1" value="B"
                                         disabled>
                                 </th>
-                                <td>
+                                <td class="py-0">
                                     <input type="text" class="custom-input  resettable w-100" id="optionB"
                                         wire:model.live='questionOptions.B' @readonly(!in_array($questionType, [2, 6]))>
                                 </td>
                             </tr>
                             <tr>
-                                <th class="text-center">
+                                <th class="text-center p-0">
                                     <input type="text" class="custom-input text-center " size="1" value="C"
                                         disabled>
                                 </th>
-                                <td>
+                                <td class="py-0">
                                     <input type="text" class="custom-input  resettable w-100" id="optionC"
                                         wire:model.live='questionOptions.C' @readonly(!in_array($questionType, [2, 6]))>
                                 </td>
                             </tr>
                             <tr>
-                                <th class="text-center">
+                                <th class="text-center p-0">
                                     <input type="text" class="custom-input text-center " size="1" value="D"
                                         disabled>
                                 </th>
-                                <td>
+                                <td class="py-0">
                                     <input type="text" class="custom-input resettable w-100" id="optionD"
                                         wire:model.live='questionOptions.D' @readonly(!in_array($questionType, [2, 6]))>
                                 </td>
                             </tr>
                             <tr>
-                                <th class="text-center">
+                                <th class="text-center p-0">
                                     <input type="text" class="custom-input text-center" size="1" value="E"
                                         disabled>
                                 </th>
-                                <td>
+                                <td class="py-0">
                                     <input type="text" class="custom-input  resettable w-100" id="optionE"
                                         wire:model.live='questionOptions.E' @readonly(!in_array($questionType, [2, 6]))>
                                 </td>
                             </tr>
                             <tr>
-                                <th class="text-center">
+                                <th class="text-center p-0">
                                     <input type="text" class="custom-input text-center " size="1" value="F"
                                         disabled>
                                 </th>
-                                <td>
+                                <td class="py-0">
                                     <input type="text" class="custom-input w-100 resettable w-100" id="optionF"
                                         wire:model.live='questionOptions.F' @readonly(!in_array($questionType, [2, 6]))
                                         wire:keydown='disableWhite'>

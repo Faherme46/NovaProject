@@ -91,7 +91,7 @@
                     @endif
                 </div>
             @endif
-            <div class="card-body px-1 ">
+            <div class="card-body p-0 ">
 
                 @if ($tab != 3 && $tab != 5)
                     <div class="row g-1">
@@ -247,120 +247,108 @@
                         </div>
                     </div>
                 @elseif($tab == 3)
-                    <div class="row g-1">
-                        @if ($Predio)
-                            <div class="card">
-                                <div class="card-header d-flex align-items-center justify-content-between">
-                                    <h5 class="card-title mb-0 ">{{ $Predio->descriptor1 }}
-                                        {{ $Predio->numeral1 }}
-                                        {{ $Predio->descriptor2 }} {{ $Predio->numeral2 }}
-                                    </h5>
-                                    @hasanyrole('Admin|Lider')
-                                        <div class="d-flex align-items-center ">
-                                            @if ($changes)
-                                                <button type="button" class="btn mt-1 p-0 me-2"
-                                                    wire:click='undoPredioChanges({{ $Predio->id }})'>
-                                                    <i class="bi bi-arrow-counterclockwise fs-6 "></i>
-                                                </button>
-                                            @endif
+                    @if ($Predio)
 
-                                            <h5 class="card-title mb-0 pt-1 me-3">
-                                                Cambios
-                                            </h5>
+                        <div class="card-header d-flex align-items-center justify-content-between">
+                            <h5 class="card-title mb-0 ">{{ $Predio->descriptor1 }}
+                                {{ $Predio->numeral1 }}
+                                {{ $Predio->descriptor2 }} {{ $Predio->numeral2 }}
+                            </h5>
+                            @hasanyrole('Admin|Lider')
+                                <div class="d-flex align-items-center ">
+                                    @if ($changes)
+                                        <button type="button" class="btn mt-1 p-0 me-2"
+                                            wire:click='undoPredioChanges({{ $Predio->id }})'>
+                                            <i class="bi bi-arrow-counterclockwise fs-6 "></i>
+                                        </button>
+                                    @endif
+
+                                    <h5 class="card-title mb-0 pt-1 me-3">
+                                        Cambios
+                                    </h5>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input scaled-switch-15" type="checkbox" role="switch"
+                                            id="changeSwitch" wire:model.live='changes'>
+                                    </div>
+                                </div>
+                            @endhasanyrole
+
+                        </div>
+                        <form action="{{ route('predios.update') }}" method="post" id="updatePredio"
+                            name="formPredio">
+                            @csrf
+                            <div class="card-body pt-3 px-2 d-flex justify-content-center">
+                                <div class="col-3 @if (!$asamblea['registro']) mx-auto @endif me-4">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item d-flex align-items-center justify-content-between">
+                                            <h6 class="mb-0">
+                                                Id:
+                                            </h6>
+                                            <input type="text" class="form-control w-70"
+                                                value="{{ $Predio->id }}" readonly name="id">
+
+                                        </li>
+
+                                        <li class="list-group-item d-flex align-items-center justify-content-between">
+                                            <h6 class="mb-0">Coef:</h6>
+                                            <input type="text" class="form-control w-70"
+                                                onkeypress="return onlyNumbers(event)" name="coef"
+                                                value="{{ $Predio->coeficiente }}" @readonly(!$changes)>
+                                        </li>
+                                        <li class="list-group-item d-flex align-items-center justify-content-between">
+                                            <h6 class="mb-0">Control:</h6>
+                                            <input type="text" class="form-control w-50 ms-1" disabled
+                                                value="{{ $Predio->control ? $Predio->control->id : '-' }}">
+                                        </li>
+                                        <li class="list-group-item d-flex align-items-center justify-content-center">
+                                            <h5 class="mb-0 me-2">Voto:</h5>
                                             <div class="form-check form-switch">
                                                 <input class="form-check-input scaled-switch-15" type="checkbox"
-                                                    role="switch" id="changeSwitch" wire:model.live='changes'>
+                                                    role="switch" id="votoSwitch" name="voto"
+                                                    @checked($Predio->vota) @disabled(!$changes)>
                                             </div>
-                                        </div>
-                                    @endhasanyrole
-
+                                        </li>
+                                    </ul>
                                 </div>
-                                <form action="{{ route('predios.update') }}" method="post" id="updatePredio"
-                                    name="formPredio">
-                                    @csrf
-                                    <div class="card-body pt-3 px-2 d-flex justify-content-center">
-                                        <div class="col-3 @if (!$asamblea['registro']) mx-auto @endif me-4">
-                                            <ul class="list-group list-group-flush">
-                                                <li
-                                                    class="list-group-item d-flex align-items-center justify-content-between">
-                                                    <h6 class="mb-0">
-                                                        Id:
-                                                    </h6>
-                                                    <input type="text" class="form-control w-70"
-                                                        value="{{ $Predio->id }}" readonly name="id">
-
-                                                </li>
-
-                                                <li
-                                                    class="list-group-item d-flex align-items-center justify-content-between">
-                                                    <h6 class="mb-0">Coef:</h6>
-                                                    <input type="text" class="form-control w-70"
-                                                        onkeypress="return onlyNumbers(event)" name="coef"
-                                                        value="{{ $Predio->coeficiente }}" @readonly(!$changes)>
-                                                </li>
-                                                <li
-                                                    class="list-group-item d-flex align-items-center justify-content-between">
-                                                    <h6 class="mb-0">Control:</h6>
-                                                    <input type="text" class="form-control w-50 ms-1" disabled
-                                                        value="{{ $Predio->control ? $Predio->control->id : '-' }}">
-                                                </li>
-                                                <li
-                                                    class="list-group-item d-flex align-items-center justify-content-center">
-                                                    <h5 class="mb-0 me-2">Voto:</h5>
-                                                    <div class="form-check form-switch">
-                                                        <input class="form-check-input scaled-switch-15"
-                                                            type="checkbox" role="switch" id="votoSwitch"
-                                                            name="voto" @checked($Predio->vota)
-                                                            @disabled(!$changes)>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="col-8 ">
-                                            @if ($asamblea['registro'])
-                                                <ul class="list-group list-group w-100">
-                                                    <li
-                                                        class="list-group-item bg-primary
+                                <div class="col-8 ">
+                                    @if ($asamblea['registro'])
+                                        <ul class="list-group list-group w-100">
+                                            <li
+                                                class="list-group-item bg-primary
                                                         d-flex justify-content-between align-items-center">
-                                                        <h5 class="mb-0 bx-w"><strong>Propietarios</strong> </h5>
-                                                        <button type="button" class="mb-0 btn py-0 px-1"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#addPropietarioModal">
-                                                            <i class='bi bi-plus-circle-fill bx-w'></i>
-                                                        </button>
-                                                    </li>
-                                                    @foreach ($Predio->personas as $persona)
-                                                        <li
-                                                            class="list-group-item d-flex justify-content-between w-100">
+                                                <h5 class="mb-0 bx-w"><strong>Propietarios</strong> </h5>
+                                                <button type="button" class="mb-0 btn py-0 px-1"
+                                                    data-bs-toggle="modal" data-bs-target="#addPropietarioModal">
+                                                    <i class='bi bi-plus-circle-fill bx-w'></i>
+                                                </button>
+                                            </li>
+                                            @foreach ($Predio->personas as $persona)
+                                                <li class="list-group-item d-flex justify-content-between w-100">
 
-                                                            <button type="button"
-                                                                class="mb-0 w-75  btn p-0 text-left"
-                                                                wire:click='searchPersona({{ $persona->id }})'>
-                                                                {{ $persona->nombre }} {{ $persona->apellido }}
-                                                            </button>
-                                                            <p class="mb-0">{{ $persona->id }}</p>
-                                                            <button type="button"
-                                                                class="mb-0 btn btn-danger py-0 px-1"
-                                                                wire:click='setPropietarioToDrop({{ $persona }})'
-                                                                @disabled($count = $Predio->personas->count() < 2)>
-                                                                <i class='bi bi-trash bx-w'></i>
-                                                            </button>
-                                                        </li>
-                                                    @endforeach
+                                                    <button type="button" class="mb-0 w-75  btn p-0 text-left"
+                                                        wire:click='searchPersona({{ $persona->id }})'>
+                                                        {{ $persona->nombre }} {{ $persona->apellido }}
+                                                    </button>
+                                                    <p class="mb-0">{{ $persona->id }}</p>
+                                                    <button type="button" class="mb-0 btn btn-danger py-0 px-1"
+                                                        wire:click='setPropietarioToDrop({{ $persona }})'
+                                                        @disabled($count = $Predio->personas->count() < 2)>
+                                                        <i class='bi bi-trash bx-w'></i>
+                                                    </button>
+                                                </li>
+                                            @endforeach
 
-                                                </ul>
-                                            @endif
-                                        </div>
+                                        </ul>
+                                    @endif
+                                </div>
 
-                                    </div>
-                                </form>
                             </div>
-                        @else
-                            Debe elegir un predio
-                        @endif
-                    </div>
+                        </form>
+                    @else
+                        <p class="mb-0 p-1">Debe elegir un predio</p>
+                    @endif
                 @elseif ($tab == 5)
-                    <div class="card border-black w-80 p-0 mx-auto">
+                    <div class="card border-black w-80 p-0 mx-auto my-3">
                         <div class="card-header">
                             <form wire:submit="searchControl()" method="POST"
                                 class="d-flex w-100 justify-content-center">
@@ -378,9 +366,9 @@
                                 @endif
                             </form>
                         </div>
-                        <div class=" card-body p-0 table-responsive table-fixed-header table-50 ">
+                        <div class=" card-body p-0  table-responsive table-fixed-header table-50 ">
 
-                            <table class="table table-bordered m-0 ">
+                            <table class="table table-bordered my-0 ">
                                 <thead>
                                     <th>Id</th>
                                     <th colspan="2">Predio</th>
@@ -419,7 +407,7 @@
                                 </tbody>
                                 <tfoot class="position-sticky bottom-0 table-active">
                                     <td class="text-end bold"> </td>
-                                    <td>Total Predios:  {{ $Control ? $Control->predios->count() : 0 }}</td>
+                                    <td>Total Predios: {{ $Control ? $Control->predios->count() : 0 }}</td>
                                     <td>Total Votacion: {{ $Control ? $Control->sum_coef_can : 0 }}</td>
                                     <td class="">{{ $Control ? $Control->sum_coef : 0 }}</td>
 
@@ -453,7 +441,7 @@
 
     </div>
 
-    <!-- Modal -->
+    <!-- Modal agregar propietario-->
     <div class="modal fade" id="addPropietarioModal" data-bs-backdrop="static" data-bs-keyboard="false"
         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -468,7 +456,7 @@
                         <div class="col-8 me-1 ">
                             <input class="me-2 form-control" type="text" onkeypress="return onlyNumbers(event)"
                                 maxlength="12" id="cedula" name="cedula" wire:model='cedulaPersonita'
-                                placeholder="Cédula">
+                                placeholder="Cédula" >
                         </div>
                         <div class="col">
                             <button type="button" class="btn btn-primary" wire:click='searchPersonita'
@@ -485,14 +473,74 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
-                        wire:click='addPropietario'>Guardar</button>
+                    @if ($personaFound)
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                            wire:click='addPropietario'>
+                            Guardar
+                        </button>
+                    @endif
+
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Modal crear propietario-->
+    <div class="modal fade" id="crearPropietarioModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">No esta registrado</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form wire:submit="creaPersona">
+                    <div class="modal-body">
 
+                        <div class=" row g-3 d-flex">
+                            <div class="col-2">
+                                <select class="form-control" name="tipo_id" wire:model="tipoId">
+                                    <option value="CC" selected>CC</option>
+                                    <option value="CE">CE</option>
+                                    <option value="NIT">NIT</option>
+                                </select>
+                            </div>
+                            <div class="col-5">
+                                <input type="text" name="cedula" class="form-control" onclick="this.select()"
+                                    value="{{ $cedulaPersonita }}" onkeypress="return onlyNumbers(event)"
+                                    maxlength="12" wire:model='cedulaPersonita' required />
+                                <small id="helpId" class="text-muted">Cedula</small>
+                            </div>
+
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" name="nombre" id="txtName" class="form-control"
+                                onclick="this.select()" onkeypress="return noNumbers(event)"
+                                wire:model='namePersonita' />
+                            <div>
+                                @error('name')
+                                    <span class="error">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <small id="helpId" class="text-muted">Nombre</small>
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" name="apellido" id="txtApellido" class="form-control"
+                                onclick="this.select()" value="{{ old('apellido') }}" wire:model='lastNamePersonita'
+                                placeholder="" />
+                            <small id="helpId" class="text-muted">Apellido</small>
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Crear</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <!-- Modal -->
     <div class="modal fade" id="dropPersonaModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -514,6 +562,7 @@
             </div>
         </div>
     </div>
+
 </div>
 <script type="text/javascript">
     function submitformPersona() {
@@ -528,11 +577,21 @@
 </script>
 @script
     <script>
-        $wire.on('reloadModalAddPropietario', () => {
+        $wire.on('addPropietarioModalShow', () => {
             $('#addPropietarioModal').modal('show');
+        });
+        $wire.on('addPropietarioModalHide', () => {
+            $('#addPropietarioModal').modal('hide');
         });
         $wire.on('dropPersonaModalShow', () => {
             $('#dropPersonaModal').modal('show');
+        });
+        $wire.on('crearPropietarioModalShow', (event) => {
+            $('#crearPropietarioModal').modal('show');
+        });
+
+        $wire.on('crearPropietarioModalHide', (event) => {
+            $('#crearPropietarioModal').modal('hide');
         });
     </script>
 @endscript

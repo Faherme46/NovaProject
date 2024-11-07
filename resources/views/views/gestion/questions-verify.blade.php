@@ -6,7 +6,7 @@
     @if (!$questions->isEmpty())
         <div class="col-4">
             <div class="row  justify-content-center">
-                <button type="button" class="btn btn-success p-0 my-1 w-45 " wire:click='setView(1  )'>
+                <button type="button" class="btn btn-success p-0 my-1 w-45 " wire:click='setView(1)'>
                     <div class="card ">
                         <div class="card-body d-flex align-items-center p-1 justify-content-center">
                             <i class="bi bi-arrow-bar-left" style="font-size:40px"></i>
