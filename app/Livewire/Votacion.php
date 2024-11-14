@@ -294,12 +294,12 @@ class Votacion extends Component
             Vote::truncate();
             $question = Question::create([
                 'title' => strtoupper($this->questionTitle),
-                'optionA' => ($this->questionOptions['A']) ? strtoupper($this->questionOptions['A']) : null,
-                'optionB' => ($this->questionOptions['B']) ? strtoupper($this->questionOptions['B']) : null,
-                'optionC' => ($this->questionOptions['C']) ? strtoupper($this->questionOptions['C']) : null,
-                'optionD' => ($this->questionOptions['D']) ? strtoupper($this->questionOptions['D']) : null,
-                'optionE' => ($this->questionOptions['E']) ? strtoupper($this->questionOptions['E']) : null,
-                'optionF' => ($this->questionOptions['F']) ? strtoupper($this->questionOptions['F']) : null,
+                'optionA' => ($this->questionOptions['A']) ? strtoupper(rtrim($this->questionOptions['A'])) : null,
+                'optionB' => ($this->questionOptions['B']) ? strtoupper(rtrim($this->questionOptions['B'])) : null,
+                'optionC' => ($this->questionOptions['C']) ? strtoupper(rtrim($this->questionOptions['C'])) : null,
+                'optionD' => ($this->questionOptions['D']) ? strtoupper(rtrim($this->questionOptions['D'])) : null,
+                'optionE' => ($this->questionOptions['E']) ? strtoupper(rtrim($this->questionOptions['E'])) : null,
+                'optionF' => ($this->questionOptions['F']) ? strtoupper(rtrim($this->questionOptions['F'])) : null,
                 'prefab' => (false),
                 'isValid' => ($this->questionType == 6) ? 0 : 1,
                 'coefGraph' => (bool)$this->questionCoefChart,

@@ -55,7 +55,7 @@ class PresentQuestion extends Component
             if ($lenTitle < 25) {
                 $this->sizeTitle = 5.2;
             } else if ($lenTitle < 35) {
-                $this->sizeTitle = 4;
+                $this->sizeTitle = 3.8;
             } else if ($lenTitle < 100) {
                 $this->sizeTitle = 3;
             } else {
@@ -81,8 +81,8 @@ class PresentQuestion extends Component
                         $this->sizeOptions = 7;
                         $this->sizeHeads = 7;
                     }else{
-                        $this->sizeOptions = 5;
-                        $this->sizeHeads = 5;
+                        $this->sizeOptions = 4.7;
+                        $this->sizeHeads = 4.7;
                     }
                 } else if ($maxOptions <= 30) {
                     $this->sizeOptions = 4.5;
@@ -95,9 +95,10 @@ class PresentQuestion extends Component
                     $this->sizeHeads = 5;
                 }
             }
+
         }
 
-
+        $this->inResults();
         $this->controls = Control::all()->pluck('id')->toArray();
         $this->dispatch('full-screen-in');
         $this->inCoefResult = $this->question->coefGraph;
@@ -176,13 +177,19 @@ class PresentQuestion extends Component
                 $values[] = $result->$option;
             }
         }
-
+        if($quorum){
+            $additionalOptions = [
+                'nule' => 'PRESENTE'
+            ];
+        }else{
+            $additionalOptions = [
+                'abstainted' => 'ABSTENCION',
+                'absent' => 'AUSENTE',
+                'nule' => 'NULO'
+            ];
+        }
         // Agregar abstained, absent y nule con sus etiquetas en español
-        $additionalOptions = [
-            'abstainted' => 'ABSTENCION',
-            'absent' => 'AUSENTE',
-            'nule' => ($quorum) ? 'PRESENTE' : 'NULO'
-        ];
+
 
         foreach ($additionalOptions as $key => $label) {
             $labels[] = $label;
