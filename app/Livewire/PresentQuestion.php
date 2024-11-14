@@ -18,12 +18,14 @@ use Throwable;
 
 class PresentQuestion extends Component
 {
+    public $sizeOptions = 7;
+    public $sizeHeads = 7;
+    public $sizeTitle = 3.5;
     public $question;
     public $countdown;
     public $seconds;
     public $chartCoef;
     public $chartNom;
-
     public $stopped = false;
     public $colors = [
         1 => 'btn-black',       //sin asignacion
@@ -37,18 +39,61 @@ class PresentQuestion extends Component
     public $inCoefResult = true;
 
     public $votes = [];
-
+    public $options = ['optionA', 'optionB', 'optionC', 'optionD', 'optionE', 'optionF'];
 
     public function mount($questionId)
     {
-        $this->reset('inVoting', 'seconds', 'countdown', 'votes','chartNom','inCoefResult','votes','controlsAssigned');
+        $this->reset('inVoting', 'seconds', 'countdown', 'votes', 'chartNom', 'inCoefResult', 'votes', 'controlsAssigned');
 
         // $this->question = Question::find(19);
         if (!$this->question) {
             $this->question = Question::find($questionId);
-
             if (!$this->question) {
                 return redirect()->route('votacion')->with('error', 'La pregunta no fue encontrada');
+            }
+            $lenTitle = strlen($this->question->title);
+            if ($lenTitle < 25) {
+                $this->sizeTitle = 5.2;
+            } else if ($lenTitle < 35) {
+                $this->sizeTitle = 4;
+            } else if ($lenTitle < 100) {
+                $this->sizeTitle = 3;
+            } else {
+                $this->sizeTitle = 2.5;
+            }
+
+            if ($this->question->type == 18) {
+                $this->sizeOptions = 7;
+            } else {
+
+                $numOptions = 0;
+                $lenOptions = [];
+                foreach ($this->options as $value) {
+                    $numOptions += ($this->question[$value]) ? 1 : 0;
+                    $lenOptions[$value] = strlen($this->question[$value]);
+                }
+                $maxOptions = max($lenOptions);
+                // dd($maxOptions);
+
+                if ($maxOptions <= 17) {
+
+                    if ($numOptions <= 4) {
+                        $this->sizeOptions = 7;
+                        $this->sizeHeads = 7;
+                    }else{
+                        $this->sizeOptions = 5;
+                        $this->sizeHeads = 5;
+                    }
+                } else if ($maxOptions <= 30) {
+                    $this->sizeOptions = 4.5;
+                    $this->sizeHeads = 5;
+                } else if ($maxOptions <= 60) {
+                    $this->sizeOptions = 3;
+                    $this->sizeHeads = 7;
+                } else {
+                    $this->sizeOptions = 2.3;
+                    $this->sizeHeads = 5;
+                }
             }
         }
 
@@ -75,15 +120,14 @@ class PresentQuestion extends Component
 
     public function voting()
     {
-        $response=$this->handleVoting('run-votes');
-        if($response){
+        $response = $this->handleVoting('run-votes');
+        if ($response) {
             sleep(2);
             $this->seconds = $this->question->seconds;
             $this->updateCountdown();
             $this->dispatch('start-timer');
             $this->inVoting = 1;
         }
-
     }
 
     public function inResults()
@@ -94,8 +138,7 @@ class PresentQuestion extends Component
 
         foreach ($this->question->results as $result) {
 
-                $this->setImageUrl($result, $quorum);
-
+            $this->setImageUrl($result, $quorum);
         }
     }
 
@@ -114,7 +157,7 @@ class PresentQuestion extends Component
             }
             $result->save();
         } catch (Throwable $th) {
-            $this->addError('error',$th->getMessage());
+            $this->addError('error', $th->getMessage());
         }
     }
 
@@ -126,8 +169,8 @@ class PresentQuestion extends Component
         $values = [];
 
         // Agregar las opciones A-F si tienen valor
-        $options = ['optionA', 'optionB', 'optionC', 'optionD', 'optionE', 'optionF'];
-        foreach ($options as $option) {
+
+        foreach ($this->options as $option) {
             if ($this->question->$option !== null) {
                 $labels[] = $this->question->$option;
                 $values[] = $result->$option;
@@ -136,9 +179,9 @@ class PresentQuestion extends Component
 
         // Agregar abstained, absent y nule con sus etiquetas en español
         $additionalOptions = [
-            'abstainted' => 'Abstencion',
-            'absent' => 'Ausente',
-            'nule' => ($quorum) ? 'Presente' : 'Nulo'
+            'abstainted' => 'ABSTENCION',
+            'absent' => 'AUSENTE',
+            'nule' => ($quorum) ? 'PRESENTE' : 'NULO'
         ];
 
         foreach ($additionalOptions as $key => $label) {
@@ -146,7 +189,7 @@ class PresentQuestion extends Component
             $values[] = $result->$key;
         }
 
-        $fileController=new FileController;
+        $fileController = new FileController;
 
         $imageName = ($result->isCoef) ? 'coefChart' : 'nominalChart';
         $chart = $fileController->createChart($this->question->id, $this->question->title, $labels, $values, $imageName);
@@ -189,10 +232,9 @@ class PresentQuestion extends Component
 
         $this->dispatch('closeModal');
         $this->playPause(true);
-        if($this->handleVoting('stop-votes')){
+        if ($this->handleVoting('stop-votes')) {
             $this->createResults();
         }
-
     }
 
     public function stopVote()
@@ -219,7 +261,7 @@ class PresentQuestion extends Component
 
     public function createResults()
     {
-        $options = ['optionA', 'optionB', 'optionC', 'optionD', 'optionE', 'optionF'];
+
         $valuesCoef = [
             'optionA'      => 0,
             'optionB'      => 0,
@@ -244,38 +286,38 @@ class PresentQuestion extends Component
         ];
         $availableOptions = $this->question->getAvailableOptions();
 
-        if ( $this->question->type==5) {
+        if ($this->question->type == 5) {
             foreach ($this->controlsAssigned as $id => $control) {
                 if ($control->isAbsent()) {
                     $valuesCoef['absent'] += $control->sum_coef;
                     $valuesNom['absent']  += $control->predios->count();
 
-                    $control->t_publico=0;
+                    $control->t_publico = 0;
                 } else {
                     if (array_key_exists($id, $this->votes)) {
                         $vote = $this->votes[$id];
-                        if ($vote=='A') {
-                            $valuesCoef['option'.$vote] += $control->sum_coef;
-                            $valuesNom['option'.$vote] += $control->predios->count();
-                            $control->t_publico=1;
-                        } else if($vote=='B'){
-                            $valuesCoef['option'.$vote] += $control->sum_coef;
-                            $valuesNom['option'.$vote] += $control->predios->count();
-                            $control->t_publico=0;
-                        }else{
+                        if ($vote == 'A') {
+                            $valuesCoef['option' . $vote] += $control->sum_coef;
+                            $valuesNom['option' . $vote] += $control->predios->count();
+                            $control->t_publico = 1;
+                        } else if ($vote == 'B') {
+                            $valuesCoef['option' . $vote] += $control->sum_coef;
+                            $valuesNom['option' . $vote] += $control->predios->count();
+                            $control->t_publico = 0;
+                        } else {
                             $valuesCoef['nule'] += $control->sum_coef;
                             $valuesNom['nule'] += $control->predios->count();
-                            $control->t_publico=0;
+                            $control->t_publico = 0;
                         }
                     } else {
                         $valuesCoef['abstainted'] += $control->predios->count();
                         $valuesNom['abstainted']  += $control->predios->count();
-                        $control->t_publico=0;
+                        $control->t_publico = 0;
                     }
                 }
                 $control->save();
             }
-        }else if($this->question->type==1){
+        } else if ($this->question->type == 1) {
             foreach ($this->controlsAssigned as $id => $control) {
                 if ($control->isAbsent()) {
                     $valuesCoef['absent'] += $control->sum_coef;
@@ -286,14 +328,13 @@ class PresentQuestion extends Component
 
                         $valuesCoef['nule'] += $control->sum_coef;
                         $valuesNom['nule'] += $control->predios->count();
-
                     } else {
                         $valuesCoef['abstainted'] += $control->sum_coef;
                         $valuesNom['abstainted']  += $control->predios->count();
                     }
                 }
             }
-        }else{
+        } else {
             foreach ($this->controlsAssigned as $id => $control) {
                 if ($control->isAbsent()) {
                     $valuesCoef['absent'] += $control->sum_coef_can;
@@ -304,8 +345,8 @@ class PresentQuestion extends Component
 
                         $vote = $this->votes[$id];
                         if (in_array($vote, $availableOptions)) {
-                            $valuesCoef['option'.$vote] += $control->sum_coef_can;
-                            $valuesNom['option'.$vote] += $control->getPrediosCan();
+                            $valuesCoef['option' . $vote] += $control->sum_coef_can;
+                            $valuesNom['option' . $vote] += $control->getPrediosCan();
                         } else {
 
                             $valuesCoef['nule'] += $control->sum_coef_can;
@@ -320,31 +361,31 @@ class PresentQuestion extends Component
                 }
             }
         }
-        $totalCoef=0;
+        $totalCoef = 0;
         foreach ($valuesCoef as $value) {
-            $totalCoef+=$value;
+            $totalCoef += $value;
         }
-        $totalNom=0;
+        $totalNom = 0;
         foreach ($valuesNom as $value) {
-            $totalNom+=$value;
+            $totalNom += $value;
         }
         try {
-            $valuesNom['question_id']=$this->question->id;
-            $valuesNom['isCoef']=false;
-            $valuesNom['total']=$totalNom;
+            $valuesNom['question_id'] = $this->question->id;
+            $valuesNom['isCoef'] = false;
+            $valuesNom['total'] = $totalNom;
             $resultNom = Result::create($valuesNom);
-            $valuesCoef['question_id']=$this->question->id;
-            $valuesCoef['isCoef']=true;
-            $valuesCoef['total']=$totalCoef;
+            $valuesCoef['question_id'] = $this->question->id;
+            $valuesCoef['isCoef'] = true;
+            $valuesCoef['total'] = $totalCoef;
             $resultCoef = Result::create($valuesCoef);
-            $this->question->quorum=Control::where('state', 1)->sum('sum_coef');
-            $this->question->predios=Control::where('state', 1)->sum('predios_vote');
-            $fileController=new FileController;
+            $this->question->quorum = Control::where('state', 1)->sum('sum_coef');
+            $this->question->predios = Control::where('state', 1)->sum('predios_vote');
+            $fileController = new FileController;
 
             $fileController->exportResult($this->question);
             $fileController->exportVotes($this->votes, $this->question->id, $this->question->title);
         } catch (Throwable $th) {
-            $this->addError('Error',$th->getMessage());
+            $this->addError('Error', $th->getMessage());
         }
         $this->reset('votes');
         $this->inResults();
@@ -374,34 +415,32 @@ class PresentQuestion extends Component
         }
     }
 
-    public function proof(){
+    public function proof()
+    {
         dd($this->votes);
     }
 
-    public function updateVotes(){
-        $this->votes=Vote::pluck('vote', 'control')->toArray();
+    public function updateVotes()
+    {
+        $this->votes = Vote::pluck('vote', 'control')->toArray();
     }
     public function handleVoting($action)
     {
-        $pythonUrl=General::where('key','PYTHON_URL')->first();
-        $pythonUrl=($pythonUrl)?$pythonUrl:'http://127.0.0.1:5000';
+        $pythonUrl = General::where('key', 'PYTHON_URL')->first();
+        $pythonUrl = ($pythonUrl) ? $pythonUrl : 'http://127.0.0.1:5000';
         try {
-            $response=Http::get($pythonUrl.'/'.$action);
+            $response = Http::get($pythonUrl . '/' . $action);
             return True;
         } catch (Throwable $th) {
-            $this->addError('Error','Error al conectar con el servidor python: '.$th->getMessage());
+            $this->addError('Error', 'Error al conectar con el servidor python: ' . $th->getMessage());
             return False;
         }
     }
 
 
-    public function getOut(){
+    public function getOut()
+    {
         Vote::truncate();
-        return redirect()->route('votacion')->with('success','Resultado almacenado correctamente');
+        return redirect()->route('votacion')->with('success', 'Resultado almacenado correctamente');
     }
-
-
-
-
-
 }

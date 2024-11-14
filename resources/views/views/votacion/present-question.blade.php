@@ -33,9 +33,12 @@
                 <div class="card-header d-flex align-items-center   ">
 
                     <div class="col-11  text-center ms-2">
-                        <h1 class="mb-0 text-uppercase super-large-text " id="title">{{ $question->title }}</h1>
+                        <h1 class="mb-0 text-uppercase text-center lines-text-2 " id="title"
+                            style="font-size: {{ $sizeTitle }}rem;">
+                            {{$question->title}}
+                        </h1>
                     </div>
-                    <div class="col-1 mx-2">
+                    <div class="col-1 ms-3 me-2">
                         <button type="submit" class="btn btn-primary fs-4" wire:click='voting'>
                             VOTAR
                         </button>
@@ -44,23 +47,23 @@
 
                 <div class="card-body d-flex justify-content-center">
                     @if ($question['type'] == 1)
-                    <h1 class="mb-0">PUEDE SELECCIONAR CUALQUIER OPCION</h1>
+                        <h1 class="mb-0" style="font-size:{{ $sizeOptions - 4.5 }}rem ">PUEDE SELECCIONAR CUALQUIER
+                            OPCION</h1>
                     @else
-                        <ul class="list-group ">
-                            @foreach ($options as $op)
-                                @if ($question['option' . $op])
-                                    <li class="list-group-item  bg-primary text-light dark">
-                                        <h1 class="mb-0 super-large-text ">{{ $op }}</h1>
-                                    </li>
-                                @endif
-                            @endforeach
-                        </ul>
                         <ul class="list-group w-100 ">
                             @foreach ($options as $op)
                                 @if ($question['option' . $op])
-                                    <li class="list-group-item light first">
-                                        <h1 class="mb-0 text-uppercase super-large-text">{{ $question['option' . $op] }}
-                                            &nbsp;</h1>
+                                    <li class="list-group-item light first d-flex p-0">
+                                        <div class="col-1 bg-primary border-bottom border-3 text-light
+                                        border-white d-flex justify-content-center align-items-center">
+                                            <h1 class="mb-0  " style="font-size:{{ $sizeHeads }}rem ">
+                                                {{ $op }}</h1>
+                                        </div>
+                                        <div class="col-11 d-flex align-items-center justify-content-center">
+                                            <h1 class="mx-auto mb-0 text-uppercase lines-text-2 ms-2" style="font-size:{{ $sizeOptions }}rem ">
+                                                {{$question['option' . $op]}}
+                                            </h1>
+                                        </div>
                                     </li>
                                 @endif
                             @endforeach
@@ -73,18 +76,3 @@
         </div>
     </div>
 </div>
-</div>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const textElement = document.getElementById('title');
-
-        if (textElement.textContent.length > 15) {
-            textElement.classList.remove('super-large-text');
-            textElement.classList.add('medium-large-text');
-        }
-        if (textElement.textContent.length > 34) {
-            textElement.classList.remove('super-large-text');
-            textElement.classList.add('normal-large-text');
-        }
-    });
-</script>

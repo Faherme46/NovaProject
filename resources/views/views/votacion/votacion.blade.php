@@ -170,7 +170,6 @@
                             </div>
                             <div class="modal-footer justify-content-between align-items-center">
                                 <span class="badge m-0 text-bg-warning fs-6 ">Esta accion no se puede corregir</span>
-
                                 <button type="submit" class="btn btn-primary " data-bs-dismiss="modal">
                                     Presentar
                                 </button>

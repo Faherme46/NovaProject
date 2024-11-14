@@ -114,6 +114,7 @@
 
         @default
     @endswitch
+    <link rel="stylesheet" href="{{ asset('assets/scss/app.scss') }}">
 </head>
 
 

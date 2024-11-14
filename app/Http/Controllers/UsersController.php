@@ -54,15 +54,18 @@ class UsersController extends Controller
         }
         // Crear el nuevo usuario
         try {
-
-            $user=User::where('id',$request->idUser)->update([
+            $user=User::find($request->idUser);
+            $user->update([
                 'name' => ucwords(strtolower($request->name)),
                 'lastname' => ucwords(strtolower($request->lastname)),
                 'cedula' => $request->cedula,
                 'telefono' => $request->telefono,
                 'password' => Hash::make($request->password),
-                'passwordTxt' => $request->password
+                'passwordTxt' => $request->password,
+                'roleTxt'=>$request->role
             ]);
+            $user->assignRole($request->role);
+
             $this->exportUsers();
             return back()->with('success', 'Usuario actualizado correctamente');
         } catch (Exception $e) {

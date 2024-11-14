@@ -78,8 +78,19 @@ class Registrar extends Component
     public function cleanData($cedula)
     {
         $this->reset([
-            'asistente', 'name', 'lastName', 'ccPoderdante', 'sumCoef', 'controlId','asistenteControls','controlH',
-            'poderdantes', 'poderdantesIDs', 'prediosAvailable', 'predioSelected', 'selectAll'
+            'asistente',
+            'name',
+            'lastName',
+            'ccPoderdante',
+            'sumCoef',
+            'controlId',
+            'asistenteControls',
+            'controlH',
+            'poderdantes',
+            'poderdantesIDs',
+            'prediosAvailable',
+            'predioSelected',
+            'selectAll'
         ]);
         if ($cedula) {
             $this->reset(['cedula']);
@@ -87,13 +98,13 @@ class Registrar extends Component
         }
     }
 
-    public function search($persona=null)
+    public function search($persona = null)
     {
         $this->validate();
 
         $this->cleanData(0);
 
-        $this->asistente =($persona)?$persona: Persona::find($this->cedula);
+        $this->asistente = ($persona) ? $persona : Persona::find($this->cedula);
 
 
 
@@ -118,11 +129,12 @@ class Registrar extends Component
         }
     }
 
-    public function searchPersonaCC($cc,$name,$lastName){
+    public function searchPersonaCC($cc, $name, $lastName)
+    {
         $persona = Persona::find($this->cedula);
-        if($persona){
+        if ($persona) {
             $this->search($persona);
-        }else{
+        } else {
             try {
                 $this->asistente = Persona::create([
                     'tipo_id' => 'CC',
@@ -148,7 +160,7 @@ class Registrar extends Component
             ]);
 
             $this->dispatch('hideModal');
-            session()->flash('success','Asistente creado exitosamente');
+            session()->flash('success', 'Asistente creado exitosamente');
         } catch (\Exception $e) {
             return back()->withCookie('error' . $e->getMessage());
         }
@@ -182,8 +194,10 @@ class Registrar extends Component
     {
         foreach ($predios as $predio) {
             if (!array_key_exists($predio->id, $this->prediosAvailable) && !$predio->control) {
-                $this->prediosAvailable[$predio->id] = $predio;
-                $this->predioSelected[] = $predio->id;
+                if (!$predio->control) {
+                    $this->prediosAvailable[$predio->id] = $predio;
+                    $this->predioSelected[] = $predio->id;
+                }
             }
         }
         $this->setSumCoef();
@@ -261,18 +275,18 @@ class Registrar extends Component
         session(['controlTurn' => strval($this->controlId + 1)]);
         //control Uso
 
-        $prediosToAsign=[];
+        $prediosToAsign = [];
         foreach ($this->predioSelected as $value) {
-            $prediosToAsign[]=$this->prediosAvailable[$value];
+            $prediosToAsign[] = $this->prediosAvailable[$value];
         }
         try {
 
-            if ($option){
+            if ($option) {
 
                 $controlH = $this->asistenteControls[$this->controlH];
                 $controlH->attachPredios($prediosToAsign);
                 $controlH->setCoef();
-            }else{
+            } else {
                 if ($control->asignacion()) {
                     $this->getAvailableControls();
                     $this->controlId = reset($this->controlIds);
@@ -281,17 +295,15 @@ class Registrar extends Component
                 $control->cc_asistente = $this->cedula;
                 $control->attachPredios($prediosToAsign);
                 $control->setCoef();
-                $control->h_entrega= Carbon::now(new DateTimeZone('America/Bogota'))->second(0)->format('H:i');
+                $control->h_entrega = Carbon::now(new DateTimeZone('America/Bogota'))->second(0)->format('H:i');
 
                 $control->state = 1;
                 $control->save();
                 $control->persona()->update([
-                    'registered'=>true,
-                    'user_id'=>auth()->id()
+                    'registered' => true,
+                    'user_id' => auth()->id()
                 ]);
-
             }
-
         } catch (QueryException $e) {
             if ($e->errorInfo[1] == 1062) {
                 // Manejar la excepción específica de "Duplicate entry"
@@ -321,11 +333,15 @@ class Registrar extends Component
     #[On('add-predio')]
     public function addPredioToList($predioId)
     {
-        $this->validate();
         $predio = Predio::find($predioId);
         if ($predio) {
-            $this->prediosAvailable[$predioId] = $predio;
-            $this->predioSelected[] = $predioId;
+            if($predio->control){
+                $this->addError('error','Predio ya asignado al control '.$predio->control->id);
+            }else{
+                $this->prediosAvailable[$predioId] = $predio;
+                $this->predioSelected[] = $predioId;
+            }
+
         }
     }
 
@@ -347,8 +363,5 @@ class Registrar extends Component
         $this->search();
     }
 
-    public function changePredios(){
-
-    }
-
+    public function changePredios() {}
 }

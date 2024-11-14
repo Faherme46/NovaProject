@@ -65,7 +65,6 @@
                         <tr class="table-active">
                             <td>
                                 <button class="btn pt-0 pb-0 mb-0"
-                                    wire:dblclick='showControl({{ $predio->control->id }})'
                                     wire:click="dispatchControl({{ $predio->control->id }})">
                                     {{ $predio->control->id }}
                                 </button>
@@ -79,7 +78,7 @@
                             </td>
                     @endif
                     <td class="align-items-center ">
-                        <span class="btn py-0 h-100 d-flex" wire:dblclick='showPredio({{ $predio->id }})'
+                        <span class="btn py-0 h-100 d-flex"
                             wire:click='dispatchPredio({{ $predio->id }})'>
                             {{ $predio->getFullName() }}
                         </span>
@@ -98,7 +97,7 @@
                                 @endif
 
 
-                                <button class="btn p-0 mb-0" wire:dblclick='showPersona({{ $persona->id }})'
+                                <button class="btn p-0 mb-0" '
                                     wire:click='dispatchPoderdante({{ $persona->id }})'>
                                     {{ $persona->id }}
                                 </button>

@@ -64,7 +64,7 @@ class LiderSetup extends Component
     public function iniciar()
     {
         if ($this->allControls->isEmpty()) {
-            return $this->addError('error','No se han registrado controles');
+            return $this->addError('error', 'No se han registrado controles');
         }
         try {
 
@@ -73,9 +73,9 @@ class LiderSetup extends Component
 
                 $this->started = true;
                 cache(['predios_init' =>  Predio::whereHas('control')->count()]);
-                cache(['quorum_init' => Control::whereNotIn('state', [ 4])->sum('sum_coef')]);
+                cache(['quorum_init' => Control::whereNotIn('state', [4])->sum('sum_coef')]);
                 cache(['asamblea' => $this->asamblea]);
-                cache(['questionsPrefabCount'=>Question::where('prefab',true)->count()]);
+                cache(['questionsPrefabCount' => Question::where('prefab', true)->count()]);
                 Predio::whereHas('control')->update(['quorum_start' => true]);
                 $this->asamblea->h_inicio = $time;
                 $this->asamblea->save();
@@ -100,11 +100,11 @@ class LiderSetup extends Component
                     $query->where('state', 1);
                 })->update(['quorum_end' => true]);
                 Control::whereHas('predios')->update(['h_recibe' => $time->format('H:i')]);
-                cache([ 'predios_end' =>  Predio::where('quorum_end', true)->count()]);
+                cache(['predios_end' =>  Predio::where('quorum_end', true)->count()]);
                 cache(['quorum_end' => Control::whereNotIn('state', [1])->sum('sum_coef')]);
                 cache(['asamblea' => $this->asamblea]);
 
-                $fileController= new FileController;
+                $fileController = new FileController;
                 $fileController->exportTables();
                 $this->asamblea->h_cierre = $time;
                 $this->asamblea->save();
@@ -113,10 +113,27 @@ class LiderSetup extends Component
             } else {
                 session()->flash('warning', 'Ya se establecio el cierre en: ' . $this->asamblea->h_cierre);
             }
-
         } catch (\Exception $e) {
             //throw $th;
-            $this->addError('error', 'hello: '. $e->getMessage());
+            $this->addError('error', 'Error termianndo la asamblea: ' . $e->getMessage());
+        }
+    }
+
+    public function desterminar()
+    {
+        try {
+
+            $this->asamblea = Asamblea::find(cache('id_asamblea'));
+            cache(['predios_end' => -1]);
+            $this->asamblea->h_cierre = null;
+            $this->asamblea->save();
+            $this->finished = false;
+            session()->flash('info', 'Se volvio a abrir la asamblea');
+
+            return back();
+        } catch (\Exception $e) {
+            //throw $th;
+            $this->addError('error', 'Error: ' . $e->getMessage());
         }
     }
 }

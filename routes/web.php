@@ -64,7 +64,7 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::delete('users/delete', [UsersController::class, 'deleteUser'])->name('users.delete')->withoutMiddleware([EnsureAsambleaOn::class]);
 
     Route::get('gestion/asamblea', LiderSetup::class)->name('gestion.asamblea');
-
+    Route::get('desterminar',[LiderSetup::class,'desterminar']);
     Route::get('votacion', Votacion::class)->name('votacion')->middleware(isAsambleaEnd::class)->middleware(isAsambleaInit::class);
     Route::get('questions/show/{questionId}', PresentQuestion::class)->name('questions.show');
 

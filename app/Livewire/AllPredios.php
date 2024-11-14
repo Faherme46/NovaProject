@@ -100,30 +100,30 @@ class AllPredios extends Component
         $this->dispatch('set-control', controlId: $id);
     }
 
-    public function showPersona($id){
-        if(!$id){
-            return;
-        }
-        $this->Persona=Persona::find($id);
-        if($this->Persona){
-            $this->dispatch('showModalPersona',personaId:$id);
-        }else{
+    // public function showPersona($id){
+    //     if(!$id){
+    //         return;
+    //     }
+    //     $this->Persona=Persona::find($id);
+    //     if($this->Persona){
+    //         $this->dispatch('showModalPersona',personaId:$id);
+    //     }else{
 
-        }
-    }
+    //     }
+    // }
 
-    public function showPredio($id){
-        if(!$id){
-            return;
-        }
-        $this->Predio=Predio::find($id);
-        if($this->Predio){
-            $this->dispatch('showModalPredio',predioId:$id);
-        }else{
-            $this->addError('error','No fue encontrado');
-        }
+    // public function showPredio($id){
+    //     if(!$id){
+    //         return;
+    //     }
+    //     $this->Predio=Predio::find($id);
+    //     if($this->Predio){
+    //         $this->dispatch('showModalPredio',predioId:$id);
+    //     }else{
+    //         $this->addError('error','No fue encontrado');
+    //     }
 
-    }
+    // }
     #[On('find-control')]
     public function showControl($id){
         if(!$id){

@@ -207,9 +207,11 @@ a {
     font-size: 2rem;
 }
 
-.super-large-text {
-    font-size: 4rem;
-    /* Ajusta este valor según tus necesidades */
+.lines-text-2{
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .medium-large-text {

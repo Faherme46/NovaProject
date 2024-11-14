@@ -10,8 +10,8 @@
             5 => 'text-bg-danger', //entregado
         ];
     @endphp
-    <div class="row">
-        <div class="col-4">
+    <div class="row g-2">
+        <div class="col-3">
             <div class="card">
                 <div class="card-header">
                     <h2 class="card-title mb-0">{{ $asamblea['folder'] }}</h2>
@@ -63,19 +63,19 @@
                 </div>
                 <div class="card-footer d-flex align-items-center justify-content-center py-2">
 
-                    <button type="button" class="btn btn-success fs-5 px-4  me-2" wire:click='iniciar'
-                        @disabled($started || $finished)>
+                    <button type="button" class="btn {{(!$started)?'btn-outline-success':'btn-success'}} fs-5 px-4  me-2"
+                        wire:click='iniciar' @disabled($started || $finished)>
                         Iniciar
                     </button>
 
-                    <button type="button" class="btn btn-warning fs-5 " wire:click='terminar'
-                        @disabled(!$started || $finished)>
+                    <button type="button" class="btn {{(!$finished)?'btn-outline-warning':'btn-warning'}} fs-5 "
+                        data-bs-toggle="modal" data-bs-target="#modalTerminar" @disabled(!$started || $finished)>
                         Terminar
                     </button>
                 </div>
             </div>
         </div>
-        <div class="col-8">
+        <div class="col-9">
             <div class="card">
                 <div class="card-header d-flex align-items-center justify-content-between">
                     <h2 class="card-title mb-0">Asignaciones</h2>
@@ -143,5 +143,29 @@
             </div>
         </div>
 
+    </div>
+    <div class="modal fade" tabindex="-1" id="modalTerminar" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        Terminar la asamblea
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Asegurese de que la asamblea ha finalizado, a partir de este punto no se puede modificar
+                    información de registro o votación
+                </div>
+                <div class="modal-footer justify-content-between align-items-center">
+                    <span class="badge m-0 text-bg-warning fs-6 ">Esta accion no se puede corregir</span>
+
+                    <button type="submit" class="btn btn-primary " data-bs-dismiss="modal" wire:click='terminar'>
+                        Presentar
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

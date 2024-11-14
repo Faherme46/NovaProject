@@ -89,7 +89,7 @@ class Asignacion extends Component
 
     public function addPredioToList($predio)
     {
-
+        dd('elfos');
         if ($predio->control) {
             $this->control = $predio->control;
             $this->updatedControl();

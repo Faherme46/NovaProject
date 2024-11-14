@@ -8,6 +8,7 @@ use Livewire\Attributes\Layout;
 use App\Models\Control;
 use App\Models\General;
 use App\Models\Question;
+use App\Models\Vote;
 use Illuminate\Support\Facades\Http;
 use Throwable;
 
@@ -69,8 +70,8 @@ class Votacion extends Component
         $this->prediosVote = Control::whereIn('state', [1, 2])->sum('predios_vote');
         $this->controlsRegistered = Control::whereIn('state', [1, 2])->count();
         $this->controlsVote = Control::where('sum_coef_can', '!=', 0)->count();
-        $this->quorumVote = Control::whereNotIn('state', 4)->sum('sum_coef_can');
-        $this->quorumRegistered = Control::whereNotIn('state', 4)->sum('sum_coef');
+        $this->quorumVote = Control::whereNotIn('state', [4])->sum('sum_coef_can');
+        $this->quorumRegistered = Control::whereNotIn('state', [4])->sum('sum_coef');
     }
 
     public function setQuestion($questionId)
@@ -290,6 +291,7 @@ class Votacion extends Component
 
         //'No se han registrado controles'
         try {
+            Vote::truncate();
             $question = Question::create([
                 'title' => strtoupper($this->questionTitle),
                 'optionA' => ($this->questionOptions['A']) ? strtoupper($this->questionOptions['A']) : null,
