@@ -353,7 +353,7 @@
                             <form wire:submit="searchControl()" method="POST"
                                 class="d-flex w-100 justify-content-center">
                                 <input class="me-2 w-15 form-control @error('noFound') is-invalid @enderror"
-                                    type="text" onkeypress="return onlyNumbers(event)" maxlength="2"
+                                    type="text" onkeypress="return onlyNumbers(event)" maxlength="3"
                                     wire:keydown.enter="searchControl()" wire:model='controlIdSearch'
                                     placeholder="Control" wire:keypress='$refresh'>
                                 <button type="submit" class="btn btn-primary me-2 p-0 px-1">
@@ -366,10 +366,10 @@
                                 @endif
                             </form>
                         </div>
-                        <div class=" card-body p-0  table-responsive table-fixed-header table-50 ">
+                        <div class=" card-body p-0  table-responsive table-fixed-header table-70 ">
 
                             <table class="table table-bordered my-0 ">
-                                <thead>
+                                <thead class="table-active">
                                     <th>Id</th>
                                     <th colspan="2">Predio</th>
                                     <th>Coef.</th>

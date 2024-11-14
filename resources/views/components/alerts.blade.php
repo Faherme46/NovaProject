@@ -36,7 +36,7 @@
             <div class="col-11">
 
                 @foreach ($errors->all() as  $error)
-                    <p class="mb-0">{{ $error }}</p> <br>
+                    <h6 class="mb-0">{{ $error }}</h6>
                 @endforeach
 
             </div>

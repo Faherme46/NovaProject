@@ -9,6 +9,7 @@ use Livewire\Attributes\Layout;
 use App\Models\Control;
 use App\Models\Asamblea;
 use App\Models\Predio;
+use App\Models\Question;
 use Carbon\Carbon;
 use DateTimeZone;
 
@@ -38,7 +39,7 @@ class LiderSetup extends Component
 
     public function mount()
     {
-        $this->allControls = Control::whereNotIn('state', [4, 3])->get();
+        $this->allControls = Control::whereNotIn('state', [4])->get();
 
         $this->prediosRegistered = $this->allControls->sum(function ($control) {
             return $control->predios->count();
@@ -72,11 +73,10 @@ class LiderSetup extends Component
 
                 $this->started = true;
                 cache(['predios_init' =>  Predio::whereHas('control')->count()]);
-                cache(['quorum_init' => Control::whereNotIn('state', [3, 4])->sum('sum_coef')]);
+                cache(['quorum_init' => Control::whereNotIn('state', [ 4])->sum('sum_coef')]);
                 cache(['asamblea' => $this->asamblea]);
-
+                cache(['questionsPrefabCount'=>Question::where('prefab',true)->count()]);
                 Predio::whereHas('control')->update(['quorum_start' => true]);
-
                 $this->asamblea->h_inicio = $time;
                 $this->asamblea->save();
                 session()->flash('info', 'Se ha iniciado la asamblea en: ' . $time);

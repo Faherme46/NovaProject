@@ -33,7 +33,7 @@ class Control extends Model
 
     public function retirar()
     {
-        $this->state = 3;
+        $this->state = 4;
         $this->setCoef();
         $this->predios()->delete();
         $this->cc_asistente = null;
@@ -104,7 +104,6 @@ class Control extends Model
         $states = [
             1 => 'Activo',
             2 => 'Ausente',
-            3 => 'Retirado',
             4 => 'No Asignado',
             5 => 'Entregado'
         ];

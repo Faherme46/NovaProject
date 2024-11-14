@@ -1,12 +1,20 @@
 <div>
-    <h1>Entrega de Controles</h1>
+    <div class="d-flex align-items-center">
+        <h1 class="me-3">Entrega de Controles</h1>
+        <div class="d-flex">
+            <button type="button" wire:click='change(2)' class="btn py-0 px-1 me-2 fs-4 btn-info">Ausente</button>
+            <button type="button" wire:click='change(5)' class="btn py-0 px-1 me-2 fs-4 btn-danger">Entregado</button>
+            <button type="button" wire:click='change(1)' class="btn py-0 px-1 me-2 fs-4 btn-primary">Activo</button>
+        </div>
+    </div>
+
 
     <div class="card d-flex p-3 ">
         <div class="col-12 ">
             @foreach ($controls as $control)
                 <button class="btn {{ $colors[$control->state] }} mb-2 me-2 fs-3"
                     @if ($control->state != 4 && $control->state != 3) wire:click='confirm({{ $control->id }})' @endif>
-                    {{ $control->id }}
+                    {{ $control->id < 10 ? '0' : '' }}{{ $control->id }}
                 </button>
             @endforeach
         </div>

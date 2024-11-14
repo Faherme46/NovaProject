@@ -25,7 +25,7 @@
         </div>
     </div>
     <div class="card mt-2">
-
+        
         <div class="card-body pt-4 pb-3 px-0 mt-3">
 
             @if ($inCoefResult)

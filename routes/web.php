@@ -10,6 +10,7 @@ use App\Http\Middleware\EnsureAsambleaOn;
 
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\AsambleaController;
+use App\Http\Controllers\BackupController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\UsersController;
@@ -42,12 +43,14 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::delete('/session/destroy', [SessionController::class, 'destroyAll'])->name('session.destroy');
     Route::get('gestion/informes', Reports::class)->name('gestion.report');
     Route::get('setup', Setup::class)->name('setup.main');
-    Route::get('gestion/informes/Informe', [ReportController::class,'createReport'])->name('gestion.report.docs');
+    Route::get('gestion/informes/Informe', [ReportController::class, 'createReport'])->name('gestion.report.docs');
     Route::post('/predios/import', [PrediosController::class, 'import'])->name('predios.import');
-    Route::post('gestion/asamblea/update', [AsambleaController::class,'updateAsamblea'])->name('asamblea.update');
-    Route::post('question/update', [Controller::class,'updateQuestion'])->name('question.update');
-    Route::post('question/prefab/create', [Controller::class,'createPrefabQuestion'])->name('question.prefab.create');
+    Route::post('gestion/asamblea/update', [AsambleaController::class, 'updateAsamblea'])->name('asamblea.update');
+    Route::post('question/update', [Controller::class, 'updateQuestion'])->name('question.update');
+    Route::post('question/prefab/create', [Controller::class, 'createPrefabQuestion'])->name('question.prefab.create');
 
+    Route::get('/backup/download', [BackupController::class, 'downloadBackup']);
+    Route::post('/backup/restore', [BackupController::class, 'restoreBackup']);
 });
 
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Admin|Lider')]], function () {
@@ -63,13 +66,10 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::get('gestion/asamblea', LiderSetup::class)->name('gestion.asamblea');
 
     Route::get('votacion', Votacion::class)->name('votacion')->middleware(isAsambleaEnd::class)->middleware(isAsambleaInit::class);
-    Route::get('questions/show/{questionId}',PresentQuestion::class)->name('questions.show');
+    Route::get('questions/show/{questionId}', PresentQuestion::class)->name('questions.show');
 
     Route::post('predios/update', [PrediosController::class, 'updatePredio'])->name('predios.update');
     Route::post('personas/update', [PersonasController::class, 'updatePersona'])->name('personas.update');
-
-
-
 });
 
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Admin|Lider|Operario')]], function () {
@@ -79,7 +79,7 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::get('/consulta', Consulta::class)->name('consulta');
     Route::get('/entregar', Entregar::class)->name('entregar');
     Route::get('/', Main::class)->name('home')->withoutMiddleware(EnsureAsambleaOn::class);
-    Route::post('/gestion/saveSign', [FileController::class,'saveSignImg'])->name('gestion.sign.save')->middleware(isAsambleaEnd::class);
+    Route::post('/gestion/saveSign', [FileController::class, 'saveSignImg'])->name('gestion.sign.save')->middleware(isAsambleaEnd::class);
     Route::get('/asistencia/firmas', Signs::class)->name('asistencia.signs')->middleware(isAsambleaEnd::class);
     Route::get('/asistencia/firmando', Signing::class)->name('asistencia.signing')->middleware(isAsambleaEnd::class);
 });
@@ -93,7 +93,7 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('users.logout')-
 
 //rutas de prueba
 Route::get('/proofAsignacion', [Asignacion::class, 'proofAsignacion'])->name('proofAsignacion');
-Route::get('proofQuestion',[FileController::class,'exportAllQuestions']);
-Route::get('proofExport',[FileController::class,'exportTables']);
+Route::get('proofQuestion', [FileController::class, 'exportAllQuestions']);
+Route::get('proofExport', [FileController::class, 'exportTables']);
 
 //Route::get('proofExport',[PrediosController::class,'export']);

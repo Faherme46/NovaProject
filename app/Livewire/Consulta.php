@@ -31,7 +31,7 @@ class Consulta extends Component
 
         1 => 'Cambiar Control',
         2 => 'Retirar Control',
-        3 => 'ConsultarPredio',
+        3 => 'Consultar Predio',
         4 => 'ConsultarPersonas',
         5 => 'Consultar Control',
     ];
@@ -52,14 +52,9 @@ class Consulta extends Component
 
     public $messageL = 'Sin Predios';
     public $messageR = 'Sin Predios';
-
-
-
     public $controlRInvalid = false;
     public $controlLInvalid = false;
-
     public $changes = false;
-
     public $cedulaSearch;
     public $controlIdSearch;
 
@@ -75,7 +70,6 @@ class Consulta extends Component
         6 => 'Sin predios',
         5 => 'Control Entregado',
         4 => 'Control no asignado',
-        3 => 'Control retirado',
         2 => 'Control Ausente',
         1 => ''
     ];
@@ -224,7 +218,7 @@ class Consulta extends Component
         if (!$control) {
             return null;
         }
-        if ($control->state != 3) {
+
 
             if ($control->state != 4) {
                 $this->controlLInvalid = false;
@@ -242,17 +236,7 @@ class Consulta extends Component
                 }
             }
             return $control;
-        } else {
-            if ($left) {
-                $this->messageL = $this->messages[$control->state];
-                $this->controlLInvalid = true;
-            } else {
-                $this->messageR =  $this->messages[$control->state];
-                $this->controlRInvalid = true;
-            }
 
-            return null;
-        }
     }
 
 
@@ -467,26 +451,18 @@ class Consulta extends Component
             $this->addError('noFound', 'No se encontro el control');
         }
     }
-
-
-
-
     public function undoPredioChanges($id)
     {
         $this->searchPredio($id);
         $this->changes = false;
         $this->dispatch('$refresh');
     }
-
     public function undoPersonaChanges($id)
     {
         $this->changes = false;
     }
-
     public function searchPersona($personaId)
     {
-
-
         if (!$personaId) {
             return;
         }
@@ -553,7 +529,6 @@ class Consulta extends Component
 
     public function creaPersona()
     {
-
         $this->dispatch('addPropietarioModalHide');
         try {
             Persona::create(

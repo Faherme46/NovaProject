@@ -268,12 +268,30 @@ class PresentQuestion extends Component
                             $control->t_publico=0;
                         }
                     } else {
-                        $valuesCoef['abstainted'] += $control->predios->count;
+                        $valuesCoef['abstainted'] += $control->predios->count();
                         $valuesNom['abstainted']  += $control->predios->count();
                         $control->t_publico=0;
                     }
                 }
                 $control->save();
+            }
+        }else if($this->question->type==1){
+            foreach ($this->controlsAssigned as $id => $control) {
+                if ($control->isAbsent()) {
+                    $valuesCoef['absent'] += $control->sum_coef;
+                    $valuesNom['absent']  += $control->predios->count();
+                } else {
+
+                    if (array_key_exists($id, $this->votes)) {
+
+                        $valuesCoef['nule'] += $control->sum_coef;
+                        $valuesNom['nule'] += $control->predios->count();
+
+                    } else {
+                        $valuesCoef['abstainted'] += $control->sum_coef;
+                        $valuesNom['abstainted']  += $control->predios->count();
+                    }
+                }
             }
         }else{
             foreach ($this->controlsAssigned as $id => $control) {
@@ -319,8 +337,8 @@ class PresentQuestion extends Component
             $valuesCoef['isCoef']=true;
             $valuesCoef['total']=$totalCoef;
             $resultCoef = Result::create($valuesCoef);
-
-
+            $this->question->quorum=Control::where('state', 1)->sum('sum_coef');
+            $this->question->predios=Control::where('state', 1)->sum('predios_vote');
             $fileController=new FileController;
 
             $fileController->exportResult($this->question);
@@ -328,6 +346,7 @@ class PresentQuestion extends Component
         } catch (Throwable $th) {
             $this->addError('Error',$th->getMessage());
         }
+        $this->reset('votes');
         $this->inResults();
     }
 
@@ -345,33 +364,6 @@ class PresentQuestion extends Component
         $this->handleVoting('stop-votes');
         $this->dispatch('$refresh');
     }
-
-    public $auxId = 1;
-
-
-
-    public function proofGenerateResults()
-    {
-        $aux = [
-            1 => 'A',
-            2 => 'B',
-            4 => 'C',
-            8 => 'D',
-            16 => 'E',
-            32 => 'F',
-        ];
-        $options = [1, 2, 4, 8, 16, 32];
-        $auxId = $this->auxId;
-
-        if (array_key_exists($auxId, $this->controlsAssigned)) {
-            $control = $this->controlsAssigned[$auxId];
-            if (!$control->isAbsent()) {
-                $this->votes[$control->id] = $aux[$options[array_rand($options)]];
-            }
-        }
-        $this->auxId = array_rand($this->controlsAssigned);
-    }
-
 
 
     public function setControlsAssigned()

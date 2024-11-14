@@ -39,7 +39,7 @@ class Reports extends Component
 
     public function mount()
     {
-        $this->allControls = Control::whereNotIn('state', [4, 3])->get();
+        $this->allControls = Control::whereNotIn('state', [4])->get();
 
         $this->prediosRegistered = $this->allControls->sum(function ($control) {
             return $control->predios->count();

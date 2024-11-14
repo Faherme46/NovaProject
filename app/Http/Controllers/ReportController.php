@@ -25,7 +25,7 @@ class ReportController extends Controller
     public function __construct()
     {
         $this->variables['date'] = Carbon::now()->locale('es')->isoFormat('MMMM YYYY');
-        $this->variables['quorum'] = Control::whereNotIn('state', [4, 3])->sum('sum_coef');
+        $this->variables['quorum'] = Control::whereNotIn('state', [4])->sum('sum_coef');
         $this->asamblea = Asamblea::find(cache('id_asamblea'));
         $this->predios = Predio::where('id', '<', 12)->get();
         // $this->predios = Predio::all();

@@ -17,7 +17,6 @@ class Entregar extends Component
     public $colors=[
         1=>'btn-primary', //activo
         2=>'btn-info', //ausente
-        3=>'btn-warning', //retirado
         4=>'btn-black', //sin asignar
         5=>'btn-danger' //entregado
     ];
@@ -36,7 +35,7 @@ class Entregar extends Component
     public function change($value){
 
         $control=Control::find($this->controlId);
-        
+
         $control->changeState($value);
         $this->inModal=false;
 

@@ -129,7 +129,7 @@ class UsersController extends Controller
         } catch (ValidationException $e) {
             // Manejar excepciones específicas de validación de Excel
             $failures = $e->failures();
-            return back()->withErrors('Error: ' . $failures[1]);
+            return back()->withErrors('Error 2: ' . $failures[1]);
             //Excepcion por archivo inexistente
         } catch (\Illuminate\Contracts\Filesystem\FileNotFoundException $e) {
             return back()->withErrors('Error: No se encontró la hoja de cálculo');

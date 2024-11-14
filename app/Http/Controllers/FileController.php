@@ -8,7 +8,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Question;
 use Exception;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Maatwebsite\Excel\Facades\Excel;
 use Throwable;

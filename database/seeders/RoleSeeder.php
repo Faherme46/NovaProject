@@ -56,6 +56,15 @@ class RoleSeeder extends Seeder
             'roleTxt'=>'Admin'
             ])->assignRole([$admin]);
 
+            User::create([
+                'username' => 'german.gualdron',
+                'password' => 'Manch1n1',
+                'passwordTxt' => 'Manch1n1',
+                'lastName' => 'Gualdron',
+                'name' => 'German',
+                'roleTxt'=>'Admin'
+                ])->assignRole([$admin]);
+
 
     }
 }

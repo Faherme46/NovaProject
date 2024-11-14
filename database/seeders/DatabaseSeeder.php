@@ -19,9 +19,8 @@ class DatabaseSeeder extends Seeder
 
         State::create(['id'=>1,'value'=>'Activo']);
         State::create(['id'=>2,'value'=>'Ausente']);
-        State::create(['id'=>3,'value'=>'Retirado']);
-        State::create(['id'=>5,'value'=>'Entregado']);
         State::create(['id'=>4,'value'=>'Unsigned']);
+        State::create(['id'=>5,'value'=>'Entregado']);
         General::create(['key'=>'themeId','value'=>'5']);
         $this->call(RoleSeeder::class);
         $this->call(QuestionSeeder::class);
