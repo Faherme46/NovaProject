@@ -1,4 +1,4 @@
-<div>
+<div class="d-flex align-items-center">
     <x-alerts />
     <div class="row mt-3 g-3 w-100">
         <div class="col-8 align-items-center ">
@@ -95,57 +95,63 @@
                                 </td>
                                 <td class="py-0">
                                     <input type="text" class="custom-input  resettable w-100" id="optionA"
-                                        wire:model.live='questionOptions.A' @readonly(!in_array($questionType, [2, 6]))>
+                                        wire:model.live='questionOptions.A'
+                                        @readonly(!in_array($questionType, [2, 6])||in_array('optionA',$blockFields))>
                                 </td>
                             </tr>
                             <tr>
                                 <th class="text-center p-0">
-                                    <input type="text" class="custom-input text-center text-center" size="1" value="B"
-                                        disabled>
+                                    <input type="text" class="custom-input text-center text-center" size="1"
+                                        value="B" disabled>
                                 </th>
                                 <td class="py-0">
                                     <input type="text" class="custom-input  resettable w-100" id="optionB"
-                                        wire:model.live='questionOptions.B' @readonly(!in_array($questionType, [2, 6]))>
+                                        wire:model.live='questionOptions.B'
+                                        @readonly(!in_array($questionType, [2, 6])||in_array('optionB',$blockFields))>
                                 </td>
                             </tr>
                             <tr>
                                 <th class="text-center p-0">
-                                    <input type="text" class="custom-input text-center " size="1" value="C"
-                                        disabled>
+                                    <input type="text" class="custom-input text-center " size="1"
+                                        value="C" disabled>
                                 </th>
                                 <td class="py-0">
                                     <input type="text" class="custom-input  resettable w-100" id="optionC"
-                                        wire:model.live='questionOptions.C' @readonly(!in_array($questionType, [2, 6]))>
+                                        wire:model.live='questionOptions.C'
+                                        @readonly(!in_array($questionType, [2, 6])||in_array('optionC',$blockFields))>
                                 </td>
                             </tr>
                             <tr>
                                 <th class="text-center p-0">
-                                    <input type="text" class="custom-input text-center " size="1" value="D"
-                                        disabled>
+                                    <input type="text" class="custom-input text-center " size="1"
+                                        value="D" disabled>
                                 </th>
                                 <td class="py-0">
                                     <input type="text" class="custom-input resettable w-100" id="optionD"
-                                        wire:model.live='questionOptions.D' @readonly(!in_array($questionType, [2, 6]))>
+                                        wire:model.live='questionOptions.D'
+                                        @readonly(!in_array($questionType, [2, 6])||in_array('optionD',$blockFields))>
                                 </td>
                             </tr>
                             <tr>
                                 <th class="text-center p-0">
-                                    <input type="text" class="custom-input text-center" size="1" value="E"
-                                        disabled>
+                                    <input type="text" class="custom-input text-center" size="1"
+                                        value="E" disabled>
                                 </th>
                                 <td class="py-0">
                                     <input type="text" class="custom-input  resettable w-100" id="optionE"
-                                        wire:model.live='questionOptions.E' @readonly(!in_array($questionType, [2, 6]))>
+                                        wire:model.live='questionOptions.E'
+                                        @readonly(!in_array($questionType, [2, 6])||in_array('optionE',$blockFields))>
                                 </td>
                             </tr>
                             <tr>
                                 <th class="text-center p-0">
-                                    <input type="text" class="custom-input text-center " size="1" value="F"
-                                        disabled>
+                                    <input type="text" class="custom-input text-center " size="1"
+                                        value="F" disabled>
                                 </th>
                                 <td class="py-0">
                                     <input type="text" class="custom-input w-100 resettable w-100" id="optionF"
-                                        wire:model.live='questionOptions.F' @readonly(!in_array($questionType, [2, 6]))
+                                        wire:model.live='questionOptions.F'
+                                        @readonly(!in_array($questionType, [2, 6])||in_array('optionF',$blockFields))
                                         wire:keydown='disableWhite'>
                                 </td>
                             </tr>
@@ -179,82 +185,105 @@
                 </div>
             </form>
         </div>
-        <div class="col-4 ">
-
-            <div class="card">
-
-                <div class="card-body py-0 px-0">
-                    <table class="table mb-0">
-                        <thead>
-                            <tr class="table-active">
-                                <th></th>
-                                <th class="text-center">
-                                    <h5 class="card-title mb-0">Presentes</h5>
-                                </th>
-                                <th class="text-center">
-                                    <h5 class="card-title mb-0">Habilitados</h5>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="text-end align-content-center">
-                                    <h5 class="card-title mb-0">Quorum:</h5>
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control px-1 ms-2  "
-                                        wire:model='quorumRegistered'>
-                                </td>
-                                <td>
-                                    <input type="number " class="form-control px-1 ms-1 " wire:model='quorumVote'>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-end align-content-center">
-                                    <h5 class="card-title mb-0">Controles:</h5>
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control px-1 ms-2"
-                                        wire:model='controlsRegistered'>
-                                </td>
-                                <td>
-                                    <input type="number" class="form-control px-1 ms-1 " wire:model='controlsVote'>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-end align-content-center">
-                                    <h5 class="card-title mb-0">Predios:</h5>
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control px-1 ms-2"
-                                        wire:model='prediosRegistered'>
-                                </td>
-                                <td>
-                                    <input type="number " class="form-control px-1 ms-1 " wire:model='prediosVote'>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-
+        <div class="col-4 ps-3">
+            <div class="row g-3 d-flex justify-content-center">
+                @if ($questionType == 2)
+                    <div class="card px-0 mb-2 me-2 col-5 ">
+                        <div class="card-body d-flex align-items-center justify-content-center">
+                            <div class="form-check form-switch mb-0 align-items-center ">
+                                <label class="form-check-label fw-bolder fs-5 ms-3" for="switchBlanco">
+                                    Planchas
+                                </label>
+                                <input class="form-check-input scaled-switch-15 me-2" type="checkbox" role="switch"
+                                    wire:model.change='plancha'>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+                <div class="card px-0 col-6 mb-2">
+                    <div class="card-header py-1">
+                        <h4 class="card-title mb-0 text-center">Tiempo </h4>
+                    </div>
+                    <div class="card-body py-1 d-flex justify-content-center">
+                        <div class="col-1 d-flex flex-column mt-3 me-2">
+                            <button class="btn-arrow up" wire:click='increment(1)'></button>
+                            <button class="btn-arrow down" wire:click='decrement(1)'></button>
+                        </div>
+                        <div class="col-auto me-2">
+                            <h1 class="ff-clock medium-large-text">
+                                {{ $mins < 10 ? '0' : '' }}{{ $mins }}:{{ $secs < 10 ? '0' : '' }}{{ $secs }}
+                            </h1>
+                        </div>
+                        <div class="col-1 d-flex flex-column mt-3">
+                            <button class="btn-arrow up" wire:click='increment(0)'></button>
+                            <button class="btn-arrow down" wire:click='decrement(0)'></button>
+                        </div>
+                    </div>
                 </div>
+
+
             </div>
-            <div class="card px-0 w-50 mt-2">
-                <div class="card-header py-1">
-                    <h4 class="card-title mb-0 text-center">Tiempo </h4>
-                </div>
-                <div class="card-body py-1 d-flex justify-content-center">
-                    <div class="col-1 d-flex flex-column mt-3 me-2">
-                        <button class="btn-arrow up" wire:click='increment(1)'></button>
-                        <button class="btn-arrow down" wire:click='decrement(1)'></button>
-                    </div>
-                    <div class="col-auto me-2">
-                        <h1 class="ff-clock medium-large-text">
-                            {{ $mins < 10 ? '0' : '' }}{{ $mins }}:{{ $secs < 10 ? '0' : '' }}{{ $secs }}
-                        </h1>
-                    </div>
-                    <div class="col-1 d-flex flex-column mt-3">
-                        <button class="btn-arrow up" wire:click='increment(0)'></button>
-                        <button class="btn-arrow down" wire:click='decrement(0)'></button>
+            <div class="row">
+
+
+                <div class="card px-0">
+
+                    <div class="card-body p-0 px-0">
+                        <table class="table mb-0">
+                            <thead>
+                                <tr class="table-active">
+                                    <th></th>
+                                    <th class="text-center">
+                                        <h5 class="card-title mb-0">Presentes</h5>
+                                    </th>
+                                    <th class="text-center">
+                                        <h5 class="card-title mb-0">Habilitados</h5>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-end align-content-center">
+                                        <h5 class="card-title mb-0">Quorum:</h5>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control px-1 ms-2  "
+                                            wire:model='quorumRegistered'>
+                                    </td>
+                                    <td>
+                                        <input type="number " class="form-control px-1 ms-1 "
+                                            wire:model='quorumVote'>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-end align-content-center">
+                                        <h5 class="card-title mb-0">Controles:</h5>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control px-1 ms-2"
+                                            wire:model='controlsRegistered'>
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control px-1 ms-1 "
+                                            wire:model='controlsVote'>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-end align-content-center">
+                                        <h5 class="card-title mb-0">Predios:</h5>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control px-1 ms-2"
+                                            wire:model='prediosRegistered'>
+                                    </td>
+                                    <td>
+                                        <input type="number " class="form-control px-1 ms-1 "
+                                            wire:model='prediosVote'>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
                     </div>
                 </div>
             </div>
@@ -297,18 +326,17 @@
 
         $wire.on('setWhite', (event) => {
             let id = event.myId
-            input = document.getElementById('option'+id);
+            input = document.getElementById('option' + id);
             console.log(id);
 
-            $wire.questionOptions[id]='Blanco'
+            $wire.questionOptions[id] = 'Blanco'
             input.value = 'Blanco'
         });
         $wire.on('setNone', (event) => {
             let id = event.myId
-            input = document.getElementById('option'+id);
-              $wire.questionOptions[id]=''
+            input = document.getElementById('option' + id);
+            $wire.questionOptions[id] = ''
             input.value = null
         });
-
     </script>
 @endscript

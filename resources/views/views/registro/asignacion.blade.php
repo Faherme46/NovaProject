@@ -29,7 +29,7 @@
                                     </button>
                                 </div>
                             </div>
-                            <div class="card-body table-responsive table-fixed-header table-70">
+                            <div class="card-body table-responsive px-0 table-fixed-header table-70">
                                 <table class="w-100 table mb-0 ">
 
                                     <tbody>

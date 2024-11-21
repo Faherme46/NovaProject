@@ -7,7 +7,11 @@
                 <div class="card-header d-flex align-items-center justify-content-between">
                     <h5 class="card-title mb-0 ">Asistente</h5>
                     <div class="me-0">
-                        <button class="btn btn-danger" wire:click='cleanData(1)'>
+                        <button class="btn btn-danger" wire:click='cleanData(1)'
+
+                            data-bs-toggle="tooltip" data-bs-placement="top"
+                            data-bs-custom-class="custom-tooltip"
+                            data-bs-title="Limpiar Todo">
                             <i class='bi bi-trash-fill '></i>
                         </button>
                     </div>
@@ -76,9 +80,9 @@
                         </button>
                     </div>
                 </div>
-                <div class="card-body table-responsive table-fixed-header pt-0">
+                <div class="card-body table-responsive table-fixed-header pt-0 table-23 ">
 
-                    <table class="table">
+                    <table class="table ">
                         <thead>
                             <tr>
                                 <th>Nombre</th>
@@ -161,7 +165,7 @@
                     </div>
 
                 </div>
-                <div class="card-body table-responsive table-fixed-header p-0">
+                <div class="card-body table-responsive table-fixed-header table-45 p-0">
                     <table class="table">
                         <thead>
                             <tr>

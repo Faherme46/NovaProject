@@ -12,9 +12,7 @@
 
         </div>
 
-
-
-        <div class="btn-group" role="group">
+        <div class="btn-group" role="group" >
             <input type="radio" class="btn-check" wire:model='inCoefResult' value="0" wire:change='$refresh'
                 id="btnradio1">
             <label class="btn btn-outline-primary" for="btnradio1">Nominal</label>
@@ -23,14 +21,12 @@
                 id="btnradio2" checked>
             <label class="btn btn-outline-primary" for="btnradio2">Coeficiente</label>
         </div>
-        @if ($this->question->plancha)
-            <div class="d-flex">
-                <button wire:click='calculoPlanchas' class="btn me-1 fs-4  btn-primary py-0">
-                    Calcular
-                </button>
-            </div>
-        @endif
 
+        <div class="d-flex">
+            <button wire:click='calculoPlanchas' class="btn me-1 fs-4 btn-primary py-0">
+                Calcular
+            </button>
+        </div>
     </div>
     <div class="card mt-2">
 

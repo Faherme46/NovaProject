@@ -80,7 +80,7 @@ class PresentQuestion extends Component
                     if ($numOptions <= 4) {
                         $this->sizeOptions = 7;
                         $this->sizeHeads = 7;
-                    }else{
+                    } else {
                         $this->sizeOptions = 4.7;
                         $this->sizeHeads = 4.7;
                     }
@@ -95,10 +95,8 @@ class PresentQuestion extends Component
                     $this->sizeHeads = 5;
                 }
             }
-
         }
 
-        $this->inResults();
         $this->controls = Control::all()->pluck('id')->toArray();
         $this->dispatch('full-screen-in');
         $this->inCoefResult = $this->question->coefGraph;
@@ -122,6 +120,7 @@ class PresentQuestion extends Component
     public function voting()
     {
         $response = $this->handleVoting('run-votes');
+        $this->playPause(false);
         if ($response) {
             sleep(2);
             $this->seconds = $this->question->seconds;
@@ -133,14 +132,7 @@ class PresentQuestion extends Component
 
     public function inResults()
     {
-
         $this->inVoting = 3;
-        $quorum = $this->question->type == 1;
-
-        foreach ($this->question->results as $result) {
-
-            $this->setImageUrl($result, $quorum);
-        }
     }
 
     public function setImageUrl($result, $quorum)
@@ -177,11 +169,11 @@ class PresentQuestion extends Component
                 $values[] = $result->$option;
             }
         }
-        if($quorum){
+        if ($quorum) {
             $additionalOptions = [
                 'nule' => 'PRESENTE'
             ];
-        }else{
+        } else {
             $additionalOptions = [
                 'abstainted' => 'ABSTENCION',
                 'absent' => 'AUSENTE',
@@ -206,11 +198,13 @@ class PresentQuestion extends Component
 
     public function decrement()
     {
-        if ($this->seconds > 0) {
-            $this->seconds -= 1;
-            $this->updateCountdown();
-        } else {
-            $this->stopVote();
+        if (!$this->stopped) {
+            if ($this->seconds > 0) {
+                $this->seconds -= 1;
+                $this->updateCountdown();
+            } else {
+                $this->stopVote();
+            }
         }
     }
 
@@ -225,12 +219,6 @@ class PresentQuestion extends Component
 
     public function playPause($value = '')
     {
-
-        if (!$value) {
-            $this->dispatch('start-timer');
-        } else {
-            $this->dispatch('pause-timer');
-        }
         $this->stopped = (bool) $value;
     }
 
@@ -247,10 +235,9 @@ class PresentQuestion extends Component
     public function stopVote()
     {
         $this->stopped = true;
-        $this->dispatch('pause-timer');
-        $this->playPause(true);
-
         $this->dispatch('modal-show');
+        $this->dispatch('stopPolling');
+        $this->playPause(true);
         $this->dispatch('$refresh');
     }
 
@@ -380,13 +367,22 @@ class PresentQuestion extends Component
             $valuesNom['question_id'] = $this->question->id;
             $valuesNom['isCoef'] = false;
             $valuesNom['total'] = $totalNom;
-            $resultNom = Result::create($valuesNom);
+
             $valuesCoef['question_id'] = $this->question->id;
             $valuesCoef['isCoef'] = true;
             $valuesCoef['total'] = $totalCoef;
-            $resultCoef = Result::create($valuesCoef);
+            if($this->question->resultCoef){
+                $this->question->resultCoef->update($valuesCoef);
+                $this->question->resultNom->update($valuesNom);
+            }else{
+                $resultNom = Result::create($valuesNom);
+                $resultCoef = Result::create($valuesCoef);
+            }
+
+
             $this->question->quorum = Control::where('state', 1)->sum('sum_coef');
             $this->question->predios = Control::where('state', 1)->sum('predios_vote');
+
             $fileController = new FileController;
 
             $fileController->exportResult($this->question);
@@ -395,6 +391,9 @@ class PresentQuestion extends Component
             $this->addError('Error', $th->getMessage());
         }
         $this->reset('votes');
+        foreach ($this->question->results as $result) {
+            $this->setImageUrl($result, ($this->question->type == 1));
+        }
         $this->inResults();
     }
 

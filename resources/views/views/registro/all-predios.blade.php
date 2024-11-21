@@ -40,7 +40,13 @@
                 onkeypress="return onlyNumbers(event)" maxlength="5" onclick="this.select()">
         </div>
         <div class="col-1 ms-auto">
-            <button wire:click='clean' class=" btn btn-danger"><i class='bi bi-x-circle-fill '></i></button>
+            <button wire:click='clean' class=" btn btn-danger"
+
+            data-bs-toggle="tooltip" data-bs-placement="top"
+            data-bs-custom-class="custom-tooltip"
+            data-bs-title="Limpiar Busqueda">
+                <i class='bi bi-x-circle-fill '></i>
+            </button>
         </div>
 
 
@@ -73,13 +79,15 @@
                         <tr>
                             <td>
                                 <button wire:click="dispatchPredio({{ $predio->id }})" class="btn pt-0 pb-0 mb-0">
-                                    <i class='bi {{$consulta?'bi-question-circle-fill':'bi-plus-circle-fill'}}'></i>
+                                    <i
+                                        class='bi {{ $consulta ? 'bi-question-circle-fill' : 'bi-plus-circle-fill' }}'></i>
                                 </button>
                             </td>
                     @endif
                     <td class="align-items-center ">
-                        <span class="btn py-0 h-100 d-flex"
-                            wire:click='dispatchPredio({{ $predio->id }})'>
+                        <span class="btn py-0 h-100 d-flex" wire:click='dispatchPredio({{ $predio->id }})'
+                            data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip"
+                            data-bs-title="Añadir predio">
                             {{ $predio->getFullName() }}
                         </span>
                     </td>
@@ -91,14 +99,17 @@
                                 @if (!$consulta)
                                     <button type="button" class="btn p-0"
                                         wire:click='dispatchPersona({{ $persona->id }})'
-                                        wire:confirm='¿Deseas cambiar el Asistente?'>
+                                        wire:confirm='¿Deseas cambiar el Asistente?' data-bs-toggle="tooltip"
+                                        data-bs-placement="top" data-bs-custom-class="custom-tooltip"
+                                        data-bs-title="Cambiar Asistente">
                                         <i class="bi bi-person-fill"></i>
                                     </button>
                                 @endif
 
 
-                                <button class="btn p-0 mb-0" '
-                                    wire:click='dispatchPoderdante({{ $persona->id }})'>
+                                <button class="btn p-0 mb-0" wire:click='dispatchPoderdante({{ $persona->id }})'
+                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                    data-bs-custom-class="custom-tooltip" data-bs-title="Añadir Poderdante">
                                     {{ $persona->id }}
                                 </button>
                                 <br>
@@ -302,7 +313,8 @@
     </div> --}}
 
     {{-- Modal Control --}}
-    <div class="modal fade" id="modalControl" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    {{-- <div class="modal fade" id="modalControl" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 @isset($Control)
@@ -390,7 +402,7 @@
 
             </div>
         </div>
-    </div>
+    </div> --}}
 
 </div>
 <script>

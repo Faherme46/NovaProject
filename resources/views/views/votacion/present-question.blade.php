@@ -34,7 +34,7 @@
 
                     <div class="col-11  text-center ms-2">
                         <h1 class="mb-0 text-uppercase text-center lines-text-2 " id="title"
-                            style="font-size: {{ $sizeTitle }}rem;"data-bs-toggle="popover"
+                            style="font-size: {{ $sizeTitle }}rem;" data-bs-toggle="popover"
                             data-bs-content="{{$question->title}}">
                             {{$question->title}}
                         </h1>

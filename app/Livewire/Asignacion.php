@@ -40,6 +40,7 @@ class Asignacion extends Component
     {
         $this->controlId = session('controlTurn');
         $this->maxControls = cache('asamblea')['controles'];
+        $this->updatedControlId($this->controlId);
     }
 
     #[Layout('layout.asistencia')]
@@ -89,7 +90,7 @@ class Asignacion extends Component
 
     public function addPredioToList($predio)
     {
-        dd('elfos');
+
         if ($predio->control) {
             $this->control = $predio->control;
             $this->updatedControl();

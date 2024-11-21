@@ -28,6 +28,7 @@ return new class extends Migration
             $table->integer('seconds')->default(0);
             $table->string('resultTxt')->nullable();
             $table->boolean('coefGraph')->default(1);
+            $table->boolean('plancha')->default(false);
             $table->timestamps();
 
             $table->foreign('type')->references('id')->on('question_types');

@@ -114,8 +114,14 @@ class Main extends Component
                 'body'=> 'Crear y Presentar Votaciones',
                 'visible'=> true,
                 'enabled'=>($this->role!='Operario'&&(cache('asamblea',false))),
-            ],
-            [
+            ],[
+                "directives"=> 'onclick=location.href="/votacion/show";',
+                'icon'=> 'bi-patch-question',
+                'title'=> 'Ver Votaciones',
+                'body'=> 'Ver votaciones y resultados',
+                'visible'=> true,
+                'enabled'=>(cache('asamblea',false)),
+            ], [
                 "directives"=> 'onclick=location.href="/asistencia/registrar";',
                 'icon'=> 'bi-person-check',
                 'title'=> 'Registrar',

@@ -27,7 +27,8 @@ class Votacion extends Component
         'F' => '',
     ];
 
-
+    public $plancha = false;
+    public $numPlazasPlancha = 0;
     public $questionType = 0;
     public $questionCoefChart;
     //todo cambiar graph por chart
@@ -45,6 +46,13 @@ class Votacion extends Component
 
     public $mins = 2;
     public $secs = 0;
+    public $blockFields = [
+        'optionB',
+        'optionC',
+        'optionD',
+        'optionE',
+        'optionF'
+    ];
     public function mount()
     {
 
@@ -116,15 +124,13 @@ class Votacion extends Component
                 $id = 'C';
             }
             $this->dispatch('setWhite', myId: $id);
-
         } else {
             if ($this->questionType == 2 || $this->questionType == 6) {
                 foreach ($this->questionOptions as $key => $value) {
-                    if($value=='Blanco'){
-                        $id=$key;
+                    if ($value == 'Blanco') {
+                        $id = $key;
                     }
                 }
-
             } elseif ($this->questionType == 3) {
                 $id = 'F';
             } elseif ($this->questionType == 4) {
@@ -140,10 +146,9 @@ class Votacion extends Component
         $this->reset(['questionOptions', 'questionWhite']);
         $this->questionWhite = false;
         if ($this->questionId == 12) {
-
+            $this->plancha = false;
             switch ($value) {
                 case 1:
-
                     $this->questionOptions = [
                         'A' => '',
                         'B' => '',
@@ -152,6 +157,7 @@ class Votacion extends Component
                         'E' => '',
                         'F' => '',
                     ];
+
                     break;
                 case 2:
                     $this->questionOptions = [
@@ -162,6 +168,7 @@ class Votacion extends Component
                         'E' => '',
                         'F' => '',
                     ];
+
                     break;
                 case 3:
 
@@ -266,7 +273,7 @@ class Votacion extends Component
             $this->addError('questionTitle', 'Se requiere el tipo de la pregunta');
             $error = 1;
         }
-        if($this->questionType==2){
+        if ($this->questionType == 2) {
             if (!$this->isOneOptionAlmost($this->questionOptions)) {
 
                 $this->addError('questionTitle', 'Al menos uno de los campos debe tener un valor.');
@@ -288,12 +295,13 @@ class Votacion extends Component
         if ($error) {
             return;
         }
-
+        $forbidden = ['/', "\\", "*", '?', '"', ':', "<", ">", "|"];
         //'No se han registrado controles'
+        $newTitle = str_replace($forbidden, "", $this->questionTitle);
         try {
             Vote::truncate();
             $question = Question::create([
-                'title' => strtoupper($this->questionTitle),
+                'title' => strtoupper($newTitle),
                 'optionA' => ($this->questionOptions['A']) ? strtoupper(rtrim($this->questionOptions['A'])) : null,
                 'optionB' => ($this->questionOptions['B']) ? strtoupper(rtrim($this->questionOptions['B'])) : null,
                 'optionC' => ($this->questionOptions['C']) ? strtoupper(rtrim($this->questionOptions['C'])) : null,
@@ -328,6 +336,34 @@ class Votacion extends Component
             return True;
         } catch (Throwable $th) {
             $this->addError('Error', 'Error al conectar con el servidor python ');
+        }
+    }
+
+    public function  updatedPlancha($value)
+    {
+        $this->plancha = $value;
+        $this->questionOptions = [
+            'A' => 'Plancha 1',
+            'B' => 'Plancha 2',
+            'C' => '',
+            'D' => '',
+            'E' => '',
+            'F' => '',
+        ];
+    }
+
+    public function updatedQuestionOptions($value,$field)
+    {
+        $this->blockFields=[];
+        foreach ($this->questionOptions as $id => $option) {
+            if(!$option){
+                $this->blockFields[]='option'.$id;
+            }
+        }
+        array_shift($this->blockFields);
+
+        if ($this->questionType == 2) {
+
         }
     }
 }

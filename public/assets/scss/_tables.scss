@@ -30,17 +30,54 @@
     /* Ajusta según sea necesario */
     overflow: auto;
 }
-.table-33{
-    height: 33 !important;
-    max-height: 33vh;
+.table-20{
+    min-height: 20vh;
+    height: 20vh !important;
+    max-height: 20vh;
+}
+.table-23{
+    min-height: 22.5vh;
+    height: 22.5vh !important;
+    max-height: 22.5vh;
 }
 
+.table-25{
+    min-height: 25vh;
+    height: 25vh !important;
+    max-height: 25vh;
+}
+
+.table-30{
+    min-height: 30vh;
+    height: 30vh !important;
+    max-height: 30vh;
+}
+
+.table-33{
+    min-height: 33vh;
+    height: 33vh !important;
+    max-height: 33vh;
+}
+.table-40 {
+    min-height: 40vh;
+    height: 40vh !important;
+    max-height: 40vh;
+}
+
+.table-45 {
+    min-height: 45vh;
+    height: 45vh !important;
+    max-height: 45vh;
+}
+
+
 .table-50 {
-    height: 50 !important;
+    min-height: 50vh;
+    height: 50vh !important;
     max-height: 50vh;
 }
 .table-60 {
-    height: 60 !important;
+    height: 60vh !important;
     max-height: 60vh;
 }
 .table-70 {

@@ -4,8 +4,8 @@
 
     </style>
     <x-alerts />
-    <p wire:poll.1s='getPersona'>
-        {{$count}}
+    <p wire:poll.1s='getPersona' class="hidden">
+        
     </p>
 
     <div class="position-fixed z-2 top-0 start-0 px-4 pt-2 d-flex justify-content-between align-items-center">

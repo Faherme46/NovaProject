@@ -121,16 +121,29 @@ def create_plot(title, labels, values, output_path,nameAsamblea):
     if len(values) > 6:
         width = 20
         height = 9
-
     else:
         width = 15
         height = 7.5
 
-    if len(values)==1:
-        bar_width=0.3
+    if len(values) == 1:
+        bar_width = 0.3
     else:
-        bar_width=0.8
+        bar_width = 0.8
+
     fig, ax = plt.subplots(figsize=(width, height))
+    a, b = 'áéíóúüñÁÉÍÓÚÜ', 'aeiouunAEIOUU'
+    trans = str.maketrans(a, b)
+    for i in range(0, len(labels)):
+        s = labels[i]
+        labels[i] = s.translate(trans)
+    title = title.translate(trans)
+
+    # Ajustar el título si es demasiado largo
+    if len(title) > 60:
+        title = textwrap.fill(title[:135], width=90)  # Truncar y dividir en líneas
+        title_fontsize = 15 # Reducir el tamaño de fuente a un tercio
+    else:
+        title_fontsize = 28
 
     # Configuración de barras
     bars = ax.bar(labels, values, width=bar_width, color=['blue', 'orange', 'green', 'red', 'purple', 'cyan', 'saddlebrown', 'pink', 'lime'], edgecolor='black', zorder=3)
@@ -153,7 +166,7 @@ def create_plot(title, labels, values, output_path,nameAsamblea):
     ax.spines['right'].set_visible(False)
     ax.spines['left'].set_visible(True)
     ax.yaxis.set_visible(True)
-    ax.set_title(title, fontsize=28, pad=30)
+    ax.set_title(title, fontsize=title_fontsize, pad=30)
     ax.set_xlabel(nameAsamblea)
     ax.tick_params(axis='both', which='major', labelsize=20)
 

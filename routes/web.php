@@ -31,6 +31,7 @@ use App\Livewire\Asignacion;
 use App\Livewire\Entregar;
 use App\Livewire\ListUsers;
 use App\Livewire\Setup;
+use App\Livewire\ShowVotacion;
 use App\Livewire\Signing;
 use App\Livewire\Signs;
 
@@ -74,7 +75,7 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
 
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Admin|Lider|Operario')]], function () {
     Route::get('/asistencia/asignacion', Asignacion::class)->name('asistencia.asignacion')->middleware(isAsambleaEnd::class);
-
+    Route::get('/votacion/show',ShowVotacion::class)->name('votacion.show');
     Route::get('/asistencia/registrar', Registrar::class)->name('asistencia.registrar')->middleware(isAsambleaEnd::class);
     Route::get('/consulta', Consulta::class)->name('consulta');
     Route::get('/entregar', Entregar::class)->name('entregar');
