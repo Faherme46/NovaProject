@@ -23,10 +23,14 @@
                 id="btnradio2" checked>
             <label class="btn btn-outline-primary" for="btnradio2">Coeficiente</label>
         </div>
-        @if ($this->question->plancha)
+        @if ($this->plancha)
             <div class="d-flex">
-                <button wire:click='calculoPlanchas' class="btn me-1 fs-4  btn-primary py-0">
-                    Calcular
+                <button wire:click='toPlanchas' class="btn me-1 d-flex align-items-center fs-4 btn-success py-0">
+                    <h4 class="mb-0">
+                        SIGUIENTE
+                    </h4>
+
+                    <span class="bx-w"><i class="bi bi-caret-right-fill"></i></span>
                 </button>
             </div>
         @endif

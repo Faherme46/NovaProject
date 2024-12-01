@@ -103,7 +103,7 @@
                                 </span>
 
                                 <button type="button" class="btn btn-primary p-1 px-2" id="saveOrdenDia"
-                                    wire:click='saveOrdenDia'>
+                                    wire:click='saveOrdenDia'  data-bs-toggle="tooltip" data-bs-title="Guardar">
                                     <i class="bi bi-floppy-fill"></i>
                                 </button>
                             </div>
@@ -165,7 +165,7 @@
                                         </div>
                                     </button>
                                     <button type="button" class="btn btn-danger p-1 mt-2" data-bs-toggle=modal
-                                        data-bs-target=#modalDeleteSession {{-- @disabled(!$asamblea || !$report) --}}>
+                                        data-bs-target=#modalDeleteSession {{--@disabled(!$asamblea || !$report)--}}>
                                         <div class="card ">
                                             <div
                                                 class="card-body d-flex align-items-center p-1 justify-content-center">

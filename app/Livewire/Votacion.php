@@ -28,6 +28,7 @@ class Votacion extends Component
     ];
 
     public $plancha = false;
+    public $plazas = 0;
     public $numPlazasPlancha = 0;
     public $questionType = 0;
     public $questionCoefChart;
@@ -281,6 +282,14 @@ class Votacion extends Component
             }
         }
 
+        //si hay plancha se requiere el numero de plazas
+        if  ($this->plancha && !$this->plazas){
+            $this->addError('questionTitle', 'Se requiere el numero de plazas');
+            $error = 1;
+        }elseif ($this->plazas<0 || !is_int($this->plazas)) {
+            $this->addError('questionTitle', 'El numero de plaznas no es valido');
+        }
+
         $quorum = Control::where('state', 1)->sum('sum_coef');
         if ($quorum <= 0) {
             $this->addError('questionTitle', 'No se han registrado asistentes');
@@ -317,8 +326,13 @@ class Votacion extends Component
                 'type' => $this->questionType
             ]);
 
-            return redirect()->route('questions.show', ['questionId' => $question->id]);
-        } catch (\Throwable $th) {
+            $parametros=['questionId' => $question->id];
+            if($this->plancha){
+                $parametros['plancha']= $this->plancha;
+                $parametros['plazas']= $this->plazas;
+            }
+            return redirect()->route('questions.show', $parametros);
+        } catch (Throwable $th) {
             return $this->addError('questionCreate', $th->getMessage());
         }
     }

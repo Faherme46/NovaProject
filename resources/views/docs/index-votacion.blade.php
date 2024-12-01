@@ -35,6 +35,7 @@
             border-bottom: 0.5px solid whitesmoke;
         }
 
+
         td,th,tr{
     padding-top:0.5rem;
     padding-bottom: 0.5rem;
@@ -57,17 +58,20 @@
     <div class="body">
             <br><br>
             <h4 class="text-center">Contenido</h4>
-            <br><br><br>
+            <br><br>
             <div class="anexos">
                 <p>Resultados de las votaciones (Consultas)</p>
 
                 <ul>
                     @for ($i = 0; $i < count($anexos); $i++)
-                        <li>Anexo {{$i+1}} - {{$anexos[$i]}} </li>
+                        <li>
+                            ITEM {{$i+1}} - {{ ucfirst(strtolower($anexos[$i]))}}
+                        </li>
                     @endfor
                 </ul>
             </div>
             <hr>
+            <br>
             <br>
             <br>
             <br>
@@ -85,8 +89,8 @@
                 <tr>
                     <th class="bb-white text-light bold bg-darkblue text-end" >Tipo de Asamblea:</th>
                     <td class="ps-2" >{{$asamblea->tipo}}</td>
-                    <th class=" text-light bold bg-darkblue text-end">Fecha</th>
-                    <td class="ps-2">{{$asamblea->fecha}}</td>
+                    <th class=" text-light bold bg-darkblue text-end">Fecha:</th>
+                    <td class="ps-2">{{$dateString}}</td>
                 </tr>
             </table>
 

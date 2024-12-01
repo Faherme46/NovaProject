@@ -38,73 +38,41 @@ class PresentQuestion extends Component
     public $inVoting = 2;
     public $inCoefResult = true;
 
+
     public $votes = [];
     public $options = ['optionA', 'optionB', 'optionC', 'optionD', 'optionE', 'optionF'];
+    public $plancha = false;
+    public $plazas = false;
+    public $plazasCoef;
+    public $resultToUse;
+    public $valuesPlanchas;
 
-    public function mount($questionId)
+    public function mount($questionId, $plancha = false, $plazas = 0)
     {
         $this->reset('inVoting', 'seconds', 'countdown', 'votes', 'chartNom', 'inCoefResult', 'votes', 'controlsAssigned');
 
         // $this->question = Question::find(19);
         if (!$this->question) {
+
             $this->question = Question::find($questionId);
+            $this->plancha = $plancha;
+            $this->plazas = $plazas;
+            $this->setSizePresentation();
             if (!$this->question) {
                 return redirect()->route('votacion')->with('error', 'La pregunta no fue encontrada');
-            }
-            $lenTitle = strlen($this->question->title);
-            if ($lenTitle < 25) {
-                $this->sizeTitle = 5.2;
-            } else if ($lenTitle < 35) {
-                $this->sizeTitle = 3.8;
-            } else if ($lenTitle < 100) {
-                $this->sizeTitle = 3;
-            } else {
-                $this->sizeTitle = 2.5;
-            }
-
-            if ($this->question->type == 18) {
-                $this->sizeOptions = 7;
-            } else {
-
-                $numOptions = 0;
-                $lenOptions = [];
-                foreach ($this->options as $value) {
-                    $numOptions += ($this->question[$value]) ? 1 : 0;
-                    $lenOptions[$value] = strlen($this->question[$value]);
-                }
-                $maxOptions = max($lenOptions);
-                // dd($maxOptions);
-
-                if ($maxOptions <= 17) {
-
-                    if ($numOptions <= 4) {
-                        $this->sizeOptions = 7;
-                        $this->sizeHeads = 7;
-                    } else {
-                        $this->sizeOptions = 4.7;
-                        $this->sizeHeads = 4.7;
-                    }
-                } else if ($maxOptions <= 30) {
-                    $this->sizeOptions = 4.5;
-                    $this->sizeHeads = 5;
-                } else if ($maxOptions <= 60) {
-                    $this->sizeOptions = 3;
-                    $this->sizeHeads = 7;
-                } else {
-                    $this->sizeOptions = 2.3;
-                    $this->sizeHeads = 5;
-                }
             }
         }
 
         $this->controls = Control::all()->pluck('id')->toArray();
         $this->dispatch('full-screen-in');
         $this->inCoefResult = $this->question->coefGraph;
+        $this->plazasCoef = $this->question->coefGraph;
         $this->setControlsAssigned();
 
         // $this->chartNom=Storage::disk('results')->url('images/results/10/nominalChart.png');
-
     }
+
+
     #[Layout('layout.presentation')]
     public function render()
     {
@@ -114,6 +82,8 @@ class PresentQuestion extends Component
             return view('views.votacion.present-question');
         } elseif ($this->inVoting == 3) {
             return view('views.votacion.results');
+        } elseif ($this->inVoting == 4) {
+            return view('views.votacion.planchas');
         }
     }
 
@@ -132,7 +102,16 @@ class PresentQuestion extends Component
 
     public function inResults()
     {
+        $this->dispatch('modal-spinner-close');
         $this->inVoting = 3;
+    }
+    public function toPlanchas()
+    {
+
+
+        $this->resultToUse = ($this->inCoefResult) ? $this->question->resultCoef : $this->question->resultNom;
+        $this->calculatePlazas();
+        $this->inVoting = 4;
     }
 
     public function setImageUrl($result, $quorum)
@@ -150,7 +129,7 @@ class PresentQuestion extends Component
             }
             $result->save();
         } catch (Throwable $th) {
-            $this->addError('error', $th->getMessage());
+            $this->addError('error', 'ERROR 1'.$th->getMessage());
         }
     }
 
@@ -201,6 +180,7 @@ class PresentQuestion extends Component
         if (!$this->stopped) {
             if ($this->seconds > 0) {
                 $this->seconds -= 1;
+
                 $this->updateCountdown();
             } else {
                 $this->stopVote();
@@ -208,8 +188,10 @@ class PresentQuestion extends Component
         }
     }
 
+    public $proof=0;
     public function updateCountdown()
     {
+        $this->proof+=1;
         $this->updateVotes();
         $minutes = floor($this->seconds / 60);
         $seconds = $this->seconds % 60;
@@ -224,7 +206,6 @@ class PresentQuestion extends Component
 
     public function store()
     {
-
         $this->dispatch('closeModal');
         $this->playPause(true);
         if ($this->handleVoting('stop-votes')) {
@@ -371,15 +352,8 @@ class PresentQuestion extends Component
             $valuesCoef['question_id'] = $this->question->id;
             $valuesCoef['isCoef'] = true;
             $valuesCoef['total'] = $totalCoef;
-            if($this->question->resultCoef){
-                $this->question->resultCoef->update($valuesCoef);
-                $this->question->resultNom->update($valuesNom);
-            }else{
-                $resultNom = Result::create($valuesNom);
-                $resultCoef = Result::create($valuesCoef);
-            }
-
-
+            $resultNom = Result::updateOrCreate($valuesNom);
+            $resultCoef = Result::updateOrCreate($valuesCoef);
             $this->question->quorum = Control::where('state', 1)->sum('sum_coef');
             $this->question->predios = Control::where('state', 1)->sum('predios_vote');
 
@@ -388,7 +362,7 @@ class PresentQuestion extends Component
             $fileController->exportResult($this->question);
             $fileController->exportVotes($this->votes, $this->question->id, $this->question->title);
         } catch (Throwable $th) {
-            $this->addError('Error', $th->getMessage());
+            $this->addError('Error', 'ERROR 2'.$th->getMessage());
         }
         $this->reset('votes');
         foreach ($this->question->results as $result) {
@@ -400,14 +374,14 @@ class PresentQuestion extends Component
 
     public function goBack()
     {
-        $this->mount($this->question->id);
+        $this->mount($this->question->id, $this->plancha, $this->plazas);
 
         $this->dispatch('$refresh');
     }
 
     public function goPresent()
     {
-        $this->mount($this->question->id);
+        $this->mount($this->question->id, $this->plancha, $this->plazas);
         $this->handleVoting('stop-votes');
         $this->dispatch('$refresh');
     }
@@ -432,8 +406,8 @@ class PresentQuestion extends Component
     }
     public function handleVoting($action)
     {
-        $pythonUrl = General::where('key', 'PYTHON_URL')->first();
-        $pythonUrl = ($pythonUrl) ? $pythonUrl : 'http://127.0.0.1:5000';
+
+        $pythonUrl = env('PYTHON_PATH','http://127.0.0.1:5000');
         try {
             $response = Http::get($pythonUrl . '/' . $action);
             return True;
@@ -448,5 +422,118 @@ class PresentQuestion extends Component
     {
         Vote::truncate();
         return redirect()->route('votacion')->with('success', 'Resultado almacenado correctamente');
+    }
+
+
+    public function setSizePresentation()
+    {
+        $lenTitle = strlen($this->question->title);
+        if ($lenTitle < 25) {
+            $this->sizeTitle = 5.2;
+        } else if ($lenTitle < 35) {
+            $this->sizeTitle = 3.8;
+        } else if ($lenTitle < 80) {
+            $this->sizeTitle = 3;
+        } else if ($lenTitle < 140) {
+            $this->sizeTitle = 2.5;
+        } else if ($lenTitle < 180) {
+            $this->sizeTitle = 1.9;
+        }else{
+            $this->sizeTitle = 1.7;
+        }
+
+        if ($this->question->type == 18) {
+            $this->sizeOptions = 7;
+        } else {
+
+            $numOptions = 0;
+            $lenOptions = [];
+            foreach ($this->options as $value) {
+                $numOptions += ($this->question[$value]) ? 1 : 0;
+                $lenOptions[$value] = strlen($this->question[$value]);
+            }
+            $maxOptions = max($lenOptions);
+            // dd($maxOptions);
+
+            if ($maxOptions <= 17) {
+
+                if ($numOptions <= 4) {
+                    $this->sizeOptions = 7;
+                    $this->sizeHeads = 7;
+                } else {
+                    $this->sizeOptions = 4.7;
+                    $this->sizeHeads = 4.7;
+                }
+            } else if ($maxOptions <= 30) {
+                $this->sizeOptions = 4.5;
+                $this->sizeHeads = 5;
+            } else if ($maxOptions <= 60) {
+                $this->sizeOptions = 3;
+                $this->sizeHeads = 7;
+            } else {
+                $this->sizeOptions = 2.3;
+                $this->sizeHeads = 5;
+            }
+        }
+    }
+
+    public function updatePlazasCoef($value)
+    {
+        $this->resultToUse = ($value) ? $this->question->resultCoef : $this->question->resultNom;
+        $this->calculatePlazas();
+    }
+
+    public function calculatePlazas()
+    {
+        $total = 0;
+        $this->valuesPlanchas=[];
+        foreach ($this->options as $op) {
+            if ($this->question[$op] != 'BLANCO') {
+                $total += $this->resultToUse[$op];
+            }
+        }
+
+        $umbral = $total / $this->plazas;
+        if ($total <= 0) {
+            foreach ($this->options as $option) {
+                if ($this->question[$option] !== 'BLANCO') {
+                    $this->valuesPlanchas[$option] = 1;
+                }
+            }
+        } else {
+
+            foreach ($this->options as $option) {
+                if ($this->question[$option] !== 'BLANCO') {
+
+                    $this->valuesPlanchas[$option] = floor($this->resultToUse[$option] / $umbral);
+                } else {
+                    $this->valuesPlanchas[$option] = 0;
+                }
+            }
+
+
+            // Calcular residuos y asignar curules adicionales
+            $residuos = [];
+            $plazasRestantes = $this->plazas - array_sum($this->valuesPlanchas);
+
+            foreach ($this->options as $option) {
+                if ($this->question[$option] !== 'Blanco') {
+                    $residuos[$option] = $this->resultToUse[$option]-$umbral*$this->valuesPlanchas[$option];
+                }
+            }
+
+
+            // Ordenar opciones por residuos
+            arsort($residuos);
+            foreach (array_keys($residuos) as $option) {
+                if ($plazasRestantes > 0) {
+                    $this->valuesPlanchas[$option]+=1;
+                    $plazasRestantes--;
+                }
+            }
+            $this->valuesPlanchas['total']=$total;
+            $this->valuesPlanchas['umbral']=round($umbral,4);
+        }
+
     }
 }

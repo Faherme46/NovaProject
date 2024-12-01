@@ -34,8 +34,9 @@ class Control extends Model
     public function retirar()
     {
         $this->state = 4;
-        $this->setCoef();
+
         $this->predios()->delete();
+        $this->setCoef();
         $this->cc_asistente = null;
         $this->save();
     }

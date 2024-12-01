@@ -62,14 +62,14 @@
     </header>
 
     <div class="body">
-        @if (cache('ordenDia', ''))
+        @if ($ordenDia)
             <div class="page-break">
                 <br><br>
 
                 <h5 class="text-center title">
                     <h6>ANEXO {{ $index + 1 }} - {{ strtoupper($anexos[$index]) }}</h6>
                 </h5>
-                <br><br><br>
+                <br><br>
                 <div class="anexos">
                     <ul class="">
                         @for ($i = 0; $i < count($ordenDia); $i++)
@@ -84,8 +84,8 @@
                 <br>
                 <div class="anexos">
                     <ul>
-                        @foreach ($questions as $q)
-                            <li>Ítem {{ $q->id - 13 }} - {{ $q->title }} </li>
+                        @foreach ($questions as $key => $q)
+                            <li>Ítem {{ $key+1 }} - {{ $q->title }} </li>
                         @endforeach
                     </ul>
                 </div>
@@ -93,12 +93,12 @@
         @else
             <div class="">
 
-                <h6 class="text-center"><u>ANEXO {{ $index +1 }} - {{ strtoupper($anexos[$index ]) }}</u></h6>
+                <h6 class="text-center"><u>ANEXO {{ $index +1 }} - {{ strtoupper($anexos[$index+1 ]) }}</u></h6>
                 <br>
                 <div class="anexos">
                     <ul>
-                        @foreach ($questions as $q)
-                            <li>Ítem {{ $q->id - 13 }} - {{ $q->title }} </li>
+                        @foreach ($questions as $key => $q)
+                            <li>Ítem {{ $key+1}} - {{ $q->title }} </li>
                         @endforeach
                     </ul>
                 </div>
@@ -109,10 +109,6 @@
 
 
     </div>
-
-
-
-
 </body>
 
 </html>

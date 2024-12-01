@@ -1,4 +1,4 @@
-<div class="d-flex align-items-center">
+<div class="">
     <x-alerts />
     <div class="row mt-3 g-3 w-100">
         <div class="col-8 align-items-center ">
@@ -28,7 +28,7 @@
                             </ul>
                         </div>
 
-                        <input type="text" wire:model='questionTitle' class="form-control me-2" required>
+                        <textarea type="text" wire:model='questionTitle' class="form-control me-2" required></textarea>
                         <button type="button" class="btn btn-primary" @disabled(!$isQuestion) data-bs-toggle=modal
                             data-bs-target=#modalPresentQuestion>Presentar</button>
 
@@ -94,9 +94,10 @@
                                         value="A" disabled>
                                 </td>
                                 <td class="py-0">
-                                    <input type="text" class="custom-input  resettable w-100" id="optionA"
-                                        wire:model.live='questionOptions.A'
+                                    <input type="text" class="custom-input  resettable w-100" id="optionA" maxlength='254'
+                                        wire:model.live='questionOptions.A' rows="1"
                                         @readonly(!in_array($questionType, [2, 6])||in_array('optionA',$blockFields))>
+                                    </input>
                                 </td>
                             </tr>
                             <tr>
@@ -106,8 +107,9 @@
                                 </th>
                                 <td class="py-0">
                                     <input type="text" class="custom-input  resettable w-100" id="optionB"
-                                        wire:model.live='questionOptions.B'
+                                        wire:model.live='questionOptions.B' max="2"
                                         @readonly(!in_array($questionType, [2, 6])||in_array('optionB',$blockFields))>
+                                    </input>
                                 </td>
                             </tr>
                             <tr>
@@ -117,8 +119,9 @@
                                 </th>
                                 <td class="py-0">
                                     <input type="text" class="custom-input  resettable w-100" id="optionC"
-                                        wire:model.live='questionOptions.C'
+                                        wire:model.live='questionOptions.C' max="2"
                                         @readonly(!in_array($questionType, [2, 6])||in_array('optionC',$blockFields))>
+                                    </input>
                                 </td>
                             </tr>
                             <tr>
@@ -128,8 +131,8 @@
                                 </th>
                                 <td class="py-0">
                                     <input type="text" class="custom-input resettable w-100" id="optionD"
-                                        wire:model.live='questionOptions.D'
-                                        @readonly(!in_array($questionType, [2, 6])||in_array('optionD',$blockFields))>
+                                        wire:model.live='questionOptions.D' max="2"
+                                        @readonly(!in_array($questionType, [2, 6])||in_array('optionD',$blockFields))></input>
                                 </td>
                             </tr>
                             <tr>
@@ -139,8 +142,8 @@
                                 </th>
                                 <td class="py-0">
                                     <input type="text" class="custom-input  resettable w-100" id="optionE"
-                                        wire:model.live='questionOptions.E'
-                                        @readonly(!in_array($questionType, [2, 6])||in_array('optionE',$blockFields))>
+                                        wire:model.live='questionOptions.E' max="2"
+                                        @readonly(!in_array($questionType, [2, 6])||in_array('optionE',$blockFields))></input>
                                 </td>
                             </tr>
                             <tr>
@@ -150,9 +153,9 @@
                                 </th>
                                 <td class="py-0">
                                     <input type="text" class="custom-input w-100 resettable w-100" id="optionF"
-                                        wire:model.live='questionOptions.F'
+                                        wire:model.live='questionOptions.F' max="2"
                                         @readonly(!in_array($questionType, [2, 6])||in_array('optionF',$blockFields))
-                                        wire:keydown='disableWhite'>
+                                        wire:keydown='disableWhite'></input>
                                 </td>
                             </tr>
                         </table>
@@ -189,7 +192,7 @@
             <div class="row g-3 d-flex justify-content-center">
                 @if ($questionType == 2)
                     <div class="card px-0 mb-2 me-2 col-5 ">
-                        <div class="card-body d-flex align-items-center justify-content-center">
+                        <div class="card-header d-flex align-items-center justify-content-center">
                             <div class="form-check form-switch mb-0 align-items-center ">
                                 <label class="form-check-label fw-bolder fs-5 ms-3" for="switchBlanco">
                                     Planchas
@@ -198,6 +201,16 @@
                                     wire:model.change='plancha'>
                             </div>
                         </div>
+                        @if ($plancha)
+
+                        <div class="card-body d-flex align-items-center justify-content-center">
+                            <div class="input-group">
+                                <span class="input-group-text" >Plazas</span>
+                                <input type="number" class="form-control" wire:model='plazas'>
+                              </div>
+
+                        </div>
+                        @endif
                     </div>
                 @endif
                 <div class="card px-0 col-6 mb-2">

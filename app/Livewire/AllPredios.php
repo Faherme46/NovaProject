@@ -64,6 +64,7 @@ class AllPredios extends Component
     public function search(){
         $query = Predio::query();
 
+        
         // Aplica los filtros condicionalmente
         if ($this->searchId) {
             $query->where('cc_propietario', 'like', '%' . $this->searchId . '%');
@@ -75,6 +76,7 @@ class AllPredios extends Component
             $query->where('descriptor2', 'like', '%' . $this->descriptor2 . '%');
         }
         if ($this->numeral1) {
+
             $query->where('numeral1', 'like', '%' . $this->numeral1 . '%');
         }
         if ($this->numeral2) {

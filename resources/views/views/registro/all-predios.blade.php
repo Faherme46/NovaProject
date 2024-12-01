@@ -28,7 +28,7 @@
             </select>
         </div>
         <div class="col-3">
-            <select class="form-control" name="descriptor2" id="" wire:select='search'>
+            <select class="form-control" name="descriptor2" wire:model='descriptor2' wire:change='search'>
 
                 @foreach ($distincts['descriptor2'] as $item)
                     <option value="{{ $item }}">{{ $item }}</option>
@@ -37,7 +37,7 @@
         </div>
         <div class="col-2">
             <input wire:model.live='numeral2' type="text" wire:keypress='search' class="form-control" placeholder="#"
-                onkeypress="return onlyNumbers(event)" maxlength="5" onclick="this.select()">
+                 maxlength="10" onclick="this.select()">
         </div>
         <div class="col-1 ms-auto">
             <button wire:click='clean' class=" btn btn-danger"

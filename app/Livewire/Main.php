@@ -107,20 +107,6 @@ class Main extends Component
                 'body'=> 'Control y estadisticas de asamblea',
                 'visible'=> true,
                 'enabled'=>($this->role!='Operario'&&(cache('asamblea',false))),
-            ],[
-                "directives"=> 'onclick=location.href="/votacion";',
-                'icon'=> 'bi-question-circle',
-                'title'=> 'Votacion',
-                'body'=> 'Crear y Presentar Votaciones',
-                'visible'=> true,
-                'enabled'=>($this->role!='Operario'&&(cache('asamblea',false))),
-            ],[
-                "directives"=> 'onclick=location.href="/votacion/show";',
-                'icon'=> 'bi-patch-question',
-                'title'=> 'Ver Votaciones',
-                'body'=> 'Ver votaciones y resultados',
-                'visible'=> true,
-                'enabled'=>(cache('asamblea',false)),
             ], [
                 "directives"=> 'onclick=location.href="/asistencia/registrar";',
                 'icon'=> 'bi-person-check',
@@ -136,6 +122,20 @@ class Main extends Component
                 'title'=> 'Asignar',
                 'body'=> 'Asignar predios a controles',
                 'visible'=> (!cache('inRegistro',true)),
+                'enabled'=>(cache('asamblea',false)),
+            ],[
+                "directives"=> 'onclick=location.href="/votacion";',
+                'icon'=> 'bi-question-circle',
+                'title'=> 'Votacion',
+                'body'=> 'Crear y Presentar Votaciones',
+                'visible'=> true,
+                'enabled'=>($this->role!='Operario'&&(cache('asamblea',false))),
+            ],[
+                "directives"=> 'onclick=location.href="/votacion/show";',
+                'icon'=> 'bi-patch-question',
+                'title'=> 'Ver Votaciones',
+                'body'=> 'Ver votaciones y resultados',
+                'visible'=> true,
                 'enabled'=>(cache('asamblea',false)),
             ],
             [

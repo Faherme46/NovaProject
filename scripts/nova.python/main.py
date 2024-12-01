@@ -146,7 +146,7 @@ def create_plot(title, labels, values, output_path,nameAsamblea):
         title_fontsize = 28
 
     # Configuración de barras
-    bars = ax.bar(labels, values, width=bar_width, color=['blue', 'orange', 'green', 'red', 'purple', 'cyan', 'saddlebrown', 'pink', 'lime'], edgecolor='black', zorder=3)
+    bars = ax.bar(labels, values, width=bar_width, color=['red', 'orange', 'green', 'red', 'purple', 'cyan', 'saddlebrown', 'pink', 'lime'], edgecolor='black', zorder=3)
 
     # Añadir los valores sobre las columnas
     for bar in bars:
@@ -154,11 +154,12 @@ def create_plot(title, labels, values, output_path,nameAsamblea):
         ax.text(bar.get_x() + bar.get_width() / 2, yval, yval,
                 ha='center', va='bottom', fontsize=24)
 
-    # Cargar la imagen de marca de agua
-    img = mpimg.imread("./watermark.png")
-    ax_img = fig.add_axes([0.89, 0.01, 0.05, 0.05], anchor='NE')
-    ax_img.imshow(img)
+    # Cargar la imagen que se usará como marca de agua
+    img = mpimg.imread('C:/xampp/htdocs/nova/scripts/nova.python/watermark2.png')
+    ax_img = fig.add_axes([0.87, .02, 0.12, 0.12], zorder=0)  # Z-order 0 coloca la imagen detrás
+    ax_img.imshow(img, extent=[0, 10, 0, 10 ], aspect='auto', alpha=0.8)
     ax_img.axis('off')
+
 
     # Añadir cuadrícula y configurar el gráfico
     ax.grid(True, linestyle='--', linewidth=0.7, axis='y', color='gray', zorder=0)

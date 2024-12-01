@@ -33,9 +33,9 @@
                 <div class="card-header d-flex align-items-center   ">
 
                     <div class="col-11  text-center ms-2">
-                        <h1 class="mb-0 text-uppercase text-center lines-text-2 " id="title"
-                            style="font-size: {{ $sizeTitle }}rem;" data-bs-toggle="popover"
-                            data-bs-content="{{$question->title}}">
+                        <h1 class="mb-0 text-uppercase text-center
+                        @if ($sizeTitle<2) lines-text-3 @else lines-text-2 @endif " id="title"
+                            style="font-size: {{ $sizeTitle }}rem;" >
                             {{$question->title}}
                         </h1>
                     </div>

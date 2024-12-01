@@ -72,7 +72,11 @@ class Asignacion extends Component
     {
         $predio = Predio::find($predioId);
         if ($predio) {
-            $this->addPredioToList($predio);
+            if ($predio->control) {
+                $this->addError('error', 'Predio ya asignado al control ' . $predio->control->id);
+            } else {
+                $this->addPredioToList($predio);
+            }
         }
     }
 
@@ -108,7 +112,6 @@ class Asignacion extends Component
                 $this->addPredioToList($predio);
             }
         }
-
     }
 
     public function dropPredio($predioId)

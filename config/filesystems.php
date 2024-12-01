@@ -51,14 +51,6 @@ return [
             'visibility' => 'public',
             'throw' => false,
         ],
-       'backups' => [
-            'driver' => 'local',
-            'root' => storage_path('app/public/backups'),
-            'url' => env('APP_URL').'/storage',
-            'visibility' => 'private',
-            'throw' => false,
-        ],
-
         'externalClientes' => [
             'driver' => 'local',
             'root' => env('MAIN_FOLDER_PATH').'Clientes',

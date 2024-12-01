@@ -61,7 +61,7 @@
     <div class="body">
             <br><br>
             <h4 class="text-center">Contenido</h4>
-            <br><br><br>
+            <br><br>
             <div class="anexos">
                 <p>Resultados de las votaciones</p>
 
@@ -77,22 +77,22 @@
             <br>
             <table class="table table-general">
                 <tr>
-                    <th class="bb-white text-light bold bg-darkblue text-end" >Cliente:</th>
+                    <th class="bb-white text-light bold bg-darkblue text-end" colspan="2">Cliente:</th>
                     <td class="ps-2" colspan="5">{{$asamblea->folder}}</td>
                 </tr>
                 <tr>
-                    <th class="bb-white text-light bold bg-darkblue text-end" >Referencia:</th>
+                    <th class="bb-white text-light bold bg-darkblue text-end" colspan="2">Referencia:</th>
                     <td class="ps-2" colspan="5">{{$asamblea->referencia}}</td>
                 </tr>
                 <tr>
-                    <th class="bb-white text-light bold bg-darkblue text-end" >Tipo de Asamblea:</th>
+                    <th class="bb-white text-light bold bg-darkblue text-end" colspan="2">Tipo de Asamblea:</th>
                     <td class="ps-2" >{{$asamblea->tipo}}</td>
                     <th class="bb-white text-light bold bg-darkblue" >Direccion:</th>
                     <td class="ps-2" colspan="3">{{$asamblea->lugar}}</td>
                 </tr>
                 <tr>
-                    <th class=" text-light bold bg-darkblue text-end">Fecha</th>
-                    <td class="ps-2">{{$asamblea->fecha}}</td>
+                    <th class=" text-light bold bg-darkblue text-end">Fecha:</th>
+                    <td class="ps-2" colspan="2">{{$dateString}}</td>
                     <th class=" text-light bold bg-darkblue">Hora Inicio:</th>
                     <td class="ps-2">{{$asamblea->h_inicio}}</td>
                     <th class=" text-light bold bg-darkblue">Hora Fin:</th>

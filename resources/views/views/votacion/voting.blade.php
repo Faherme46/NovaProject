@@ -1,9 +1,11 @@
 <div class="col-12">
     <x-alerts />
+
     <div class="card mt-2">
         <div class="card-header d-flex justify-content-between align-items-center">
             <div class="col-4">
                 <div class="d-flex">
+
                     <button class="btn btn-primary  rounded-3 me-2" wire:click='goPresent'>
                         <i class="bi bi-arrow-left-circle-fill fs-3"></i>
                     </button>
@@ -13,13 +15,14 @@
                 </div>
 
             </div>
-            <div class="col-2">
-                <h1 class="mb-0" @if (!$this->stopped) wire:poll.1s='decrement' @endif>
+            <div class="col-4">
+                <img src="/storage/images/loguito.png" style="width: 4rem;" alt="logo">
+                <img src="/storage/images/letras.png" style="height: 3.5rem;" alt="logo">
+            </div>
+            <div class="col-4 justify-content-end d-flex">
+                <h1 class="mb-0 me-3"  wire:poll.1000ms='decrement' >
                     {{ $countdown }}
                 </h1>
-            </div>
-            <div class="col-2 justify-content-end d-flex">
-
                 <button class="btn btn-warning p-0 rounded-3 me-2" wire:click='playPause({{ !$stopped }})'>
 
                     @if ($stopped)
@@ -35,7 +38,7 @@
             </div>
         </div>
         <div class="card-body ">
-            <div class="container p-0">
+            <div class=" p-0 mx-0">
                 @foreach ($controls as $control)
                     <span
                         class="btn  ms-0 mb-1 me-0 fs-2
@@ -62,30 +65,26 @@
                     <button type="button" class="btn btn-warning" data-bs-dismiss="modal" wire:click='oneMoreMinut'>+1
                         min</button>
                     <button type="button" class="btn btn-success" data-bs-dismiss="modal"
-                        wire:click='store'>Guardar</button>
+                        wire:click='store' data-bs-toggle="modal" data-bs-target="#spinnerModal">Guardar</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal -->
-    <div class="modal fade" id="optionsModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal fade" id="spinnerModal" tabindex="-1" >
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+          <div class="modal-content">
+
+            <div class="modal-body d-flex justify-content-center align-items-center">
+                <div class="spinner-grow text-primary" style="width: 4rem; height: 4rem;" role="status">
+
                 </div>
-                <div class="modal-body">
-                    ...
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
+                <span class="ms-3 " style="font-size: 5rem">Cargando Resultados...</span>
             </div>
+
+          </div>
         </div>
-    </div>
+      </div>
 </div>
 @script
     <script>
@@ -95,8 +94,15 @@
             $('#modalConfirm').modal('toggle');
         });
         $wire.on('modal-close', () => {
-
             $('#modalConfirm').modal('hide');
+
         });
+        $wire.on('modal-spinner-close',()=>{
+            $('#spinnerModal').modal('hide');
+        })
+
+        
+
+
     </script>
 @endscript

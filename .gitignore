@@ -3,6 +3,7 @@
 /public/build
 /public/hot
 /storage/*.key
+/storage/app/public
 /scripts/nova.python/venv
 /scripts/nova.python/__pycache__
 /vendor

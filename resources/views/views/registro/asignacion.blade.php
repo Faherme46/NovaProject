@@ -1,12 +1,13 @@
-<div >
-   <x-alerts/>
+<div>
+    <x-alerts />
 
     <div class="col-12">
         <div class="card">
             <div class="card-header px-0">
                 <div class=" d-flex px-2  justify-content-start">
                     <div class="col-1">
-                        <button class="btn btn-danger" wire:click='cleanData'>
+                        <button class="btn btn-danger" wire:click='cleanData' data-bs-toggle="tooltip"
+                            data-bs-placement="right" data-bs-custom-class="custom-tooltip" data-bs-title="Limpiar Todo">
                             <i class='bi bi-trash-fill '></i>
                         </button>
                     </div>
@@ -24,7 +25,9 @@
                                     Predios a Asignar
                                 </div>
                                 <div class=" col-auto">
-                                    <button class="btn btn-danger px-2 py-1" wire:click='dropAllSelected'>
+                                    <button class="btn btn-danger px-2 py-1" wire:click='dropAllSelected'
+                                        data-bs-toggle="tooltip" data-bs-placement="top"
+                                        data-bs-custom-class="custom-tooltip" data-bs-title="Limpiar Predios">
                                         <i class="bi bi-x-square-fill fs-6"></i>
                                     </button>
                                 </div>
@@ -76,8 +79,11 @@
                                     <input type="text"
                                         class="form-control bg-success-subtle w-50 @error('controlId') is-invalid @enderror"
                                         wire:model.live='controlId' placeholder="Control" onclick="this.select()"
-                                        onkeypress="return onlyNumbers(event)" maxlength="3">
-                                    <button class="btn btn-primary ms-2 " wire:click='asignar'>
+                                        onkeypress="return onlyNumbers(event)" maxlength="3" wire:keydown.enter='asignar'>
+                                    <button class="btn btn-primary ms-2 " wire:click='asignar'
+                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                        data-bs-custom-class="custom-tooltip"
+                                        data-bs-title="Asignar">
                                         Asignar
                                     </button>
                                 </div>

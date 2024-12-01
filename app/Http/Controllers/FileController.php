@@ -117,6 +117,7 @@ class FileController extends Controller
     {
         // Verifica si el archivo existe
         if (file_exists($sourcePath)) {
+
             // Mueve el archivo al directorio de almacenamiento
             Storage::disk('results')->put($destinationPath, file_get_contents($sourcePath));
 
@@ -134,7 +135,8 @@ class FileController extends Controller
         ksort($votos);
 
         $export = new VotesExport($votos);
-        return Excel::store($export, $path . '/votos.xlsx', 'externalAsambleas');
+        Excel::store($export, $path . '/votos.xlsx', 'externalAsambleas');
+        return;
     }
 
     public function exportResult($question)

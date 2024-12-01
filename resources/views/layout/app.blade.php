@@ -162,6 +162,10 @@
                                 data-bs-placement="bottom" data-bs-title="Votaciones">
                                 <i class='bi bi-question-circle-fill nav_icon'></i>
                             </a>
+                            <a href="{{ route('votacion.show') }}" class="nav_link" data-bs-toggle="tooltip"
+                                data-bs-placement="bottom" data-bs-title="Ver Votaciones">
+                                <i class='bi bi-patch-question nav_icon'></i>
+                            </a>
                             <a href="{{ route('gestion.asamblea') }}" class="nav_link" data-bs-toggle="tooltip"
                                 data-bs-placement="bottom" data-bs-title="Control">
                                 <i class='bi bi-ui-checks-grid nav_icon'></i>

@@ -292,7 +292,7 @@
                                         <li class="list-group-item d-flex align-items-center justify-content-between">
                                             <h6 class="mb-0">Coef:</h6>
                                             <input type="text" class="form-control w-70"
-                                                onkeypress="return onlyNumbers(event)" name="coef"
+                                                name="coef"
                                                 value="{{ $Predio->coeficiente }}" @readonly(!$changes)>
                                         </li>
                                         <li class="list-group-item d-flex align-items-center justify-content-between">

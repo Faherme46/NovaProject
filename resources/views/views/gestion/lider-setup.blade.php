@@ -72,6 +72,8 @@
                         data-bs-toggle="modal" data-bs-target="#modalTerminar" @disabled(!$started || $finished)>
                         Terminar
                     </button>
+                    <br>
+                    <button type="button" onclick='location.href="/backup/download"' class="btn btn-info fs-5">Descargar</button>
                 </div>
             </div>
         </div>
@@ -161,8 +163,8 @@
                 <div class="modal-footer justify-content-between align-items-center">
                     <span class="badge m-0 text-bg-warning fs-6 ">Esta accion no se puede corregir</span>
 
-                    <button type="submit" class="btn btn-primary " data-bs-dismiss="modal" wire:click='terminar'>
-                        Presentar
+                    <button type="submit" class="btn btn-warning " data-bs-dismiss="modal" wire:click='terminar'>
+                        Terminar
                     </button>
                 </div>
             </div>

@@ -19,7 +19,7 @@
 
                     @foreach ($questions as $q)
                         <button type="button"
-                            class="list-group-item list-group-item-action @if ($q->id == $question->id) active @endif"
+                            class="list-group-item list-group-item-action lines-text-2 @if ($q->id == $question->id) active @endif"
                             wire:click='selectQuestion({{ $q->id }})'>
                             {{ $q->title }}
                         </button>
@@ -47,7 +47,8 @@
                                 <div class="col-12">
                                     <input type="hidden" name="question_id" value="{{ $question->id }}" id="resultId">
                                     <input type="text" class="form-control " placeholder="Resultado"
-                                        wire:model='questionResultTxt' name="result" id="resultValue">
+                                        wire:model='questionResultTxt' name="result" id="resultValue"
+                                        @readonly($question->type==1 || $question->type==5)>
                                 </div>
                             </div>
                             <div class="row">

@@ -82,36 +82,9 @@ class Reports extends Component
             $this->selectQuestion($this->questions->first()->id);
         }
 
-        if ($this->asamblea->registro) {
-            $this->defReportVariablesR();
-        } else {
-            $this->defReportVariablesV();
-        }
     }
 
-    public function defReportVariablesR()
-    {
 
-        $this->anexos = [
-            'Listado de Personas Citadas a la Asamblea  ',
-            'Asistencia Para Quorum',
-            'Listado Total de Participantes en la Asamblea',
-            'Orden del Día',
-            'Informe Resultado de Votaciones'
-        ];
-    }
-    public function defReportVariablesV()
-    {
-
-
-        $this->anexos = [
-            'Listado de Personas Citadas a la Asamblea ',
-            'Asistencia Para Quorum',
-            'Listado Total de Participantes en la Asamblea',
-            'Orden del Día',
-            'Informe Resultado de Votaciones'
-        ];
-    }
 
     public function selectQuestion($questionId)
     {
@@ -160,7 +133,7 @@ class Reports extends Component
 
     public function storeQuestion()
     {
-        $this->question->title=$this->questionTitle;
+        $this->question->title=strtoupper($this->questionTitle);
         $this->question->resultTxt = ($this->questionResultTxt)?strtoupper($this->questionResultTxt):null;
         $this->question->coefGraph= (bool) $this->questionIsCoefChart;
         $this->question->isValid= (bool) $this->questionIsValid;

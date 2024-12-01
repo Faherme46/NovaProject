@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Asamblea;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -10,19 +11,22 @@ class BackupController extends Controller
 {
     public function downloadBackup()
     {
-        $username = env('DB_USERNAME');
-        $password = env('DB_PASSWORD');
-        $database = env('DB_DATABASE');
-        $name=cache('asamblea')['name'];
-        $backupFile = storage_path('app/'.$name.'.sql');
+        $nameAsamblea=Asamblea::where('id_asamblea',cache('id_asamblea'))->pluck('name')->first();
 
-        // Ejecutar mysqldump para crear el respaldo
-        exec("mysqldump -u $username -p $password $database > $backupFile");
+        $ubicacionArchivoTemporal = storage_path("app\public\backups\\".$nameAsamblea.'.sql');
+        $codigoSalida = 0;
+        $comando = sprintf("%s --user=\"%s\" --password=\"%s\" %s > %s", env("UBICACION_MYSQLDUMP"), env("DB_USERNAME"), env("DB_PASSWORD"), env("DB_DATABASE"), $ubicacionArchivoTemporal);
 
-        // Descargar el archivo generado
-        $response=Storage::disk('backups')->put($name,$backupFile);
+        exec($comando, $salida, $codigoSalida);
 
-        return response()->download($backupFile)->deleteFileAfterSend(true);
+        if ($codigoSalida !== 0) {
+
+            return back()->withErrors('error','Error exportando la base de datos');
+        }
+
+        Storage::disk('externalAsambleas')->put($nameAsamblea.'/'.$nameAsamblea.'.sql', file_get_contents($ubicacionArchivoTemporal));
+
+        return back();
     }
 
     // Cargar respaldo en la base de datos

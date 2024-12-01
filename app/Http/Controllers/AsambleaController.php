@@ -9,8 +9,6 @@ use Illuminate\Http\Request;
 
 use App\Http\Controllers\FileController;
 
-use App\Models\Predio;
-use App\Models\Persona;
 use App\Models\Asamblea;
 use App\Models\Control;
 
@@ -74,6 +72,8 @@ class AsambleaController extends Controller
 
             if($imports==200){
                 $asamblea = Asamblea::create($request->all());
+                $asamblea->name=str_replace(' ', '_', $request->name);
+                $asamblea->save();
                 $this->sessionController->setSession($asamblea->id_asamblea, $asamblea->folder);
                 $data = [
                     'id_asamblea'   => $asamblea->id_asamblea,
@@ -169,7 +169,8 @@ class AsambleaController extends Controller
             $externalFilePathPredios = 'C:/Asambleas/Clientes/'.$file.'/predios.xlsx';
             $externalFilePathPersonas= 'C:/Asambleas/Clientes/'.$file.'/personas.xlsx';
 
-            if (!file_exists($externalFilePathPersonas)) {
+
+            if (!file_exists($externalFilePathPersonas)&&$registro){
                 throw new FileNotFoundException("El archivo no se encontró en la ruta: {$externalFilePathPersonas}");
             }
             if (!file_exists($externalFilePathPredios)) {
@@ -191,7 +192,7 @@ class AsambleaController extends Controller
             throw new \Exception('Error: '.$failures[1]);
             //Excepcion por archivo inexistente
         } catch (\Illuminate\Contracts\Filesystem\FileNotFoundException $e) {
-            throw new \Exception('Error: No se encontró una de las hojas de cálculo '.$e->getMessage());
+            throw new \Exception('Error: '.$e->getMessage());
         } catch (\Exception $e) {
 
             // Manejar cualquier otra excepción

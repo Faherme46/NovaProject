@@ -213,6 +213,13 @@ a {
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
+.lines-text-3{
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
 
 .medium-large-text {
     font-size: 3rem;

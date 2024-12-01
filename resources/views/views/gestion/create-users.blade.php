@@ -3,7 +3,7 @@
     <div class="d-flex me-3">
         <x-alerts />
 
-        <div class="col-7 me-3">
+        <div class="col-6 me-3">
 
             <div class="card mb-3">
                 <div class="card-header d-flex">
@@ -131,7 +131,7 @@
             @endif
 
         </div>
-        <div class="col-5">
+        <div class="col-6">
             <div class="card">
                 <div class="card-header">
                     Usuarios

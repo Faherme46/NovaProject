@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Jobs\GeneratePdf;
+use DateTime;
 use App\Models\Asamblea;
 use Carbon\Carbon;
 use App\Models\Question;
@@ -12,6 +12,7 @@ use App\Models\Predio;
 use setasign\Fpdi\Fpdi;
 
 use Barryvdh\DomPDF\Facade\Pdf;
+use DateTimeZone;
 use setasign\Fpdi\PdfParser\StreamReader;
 
 class ReportController extends Controller
@@ -27,13 +28,17 @@ class ReportController extends Controller
         $this->variables['date'] = Carbon::now()->locale('es')->isoFormat('MMMM YYYY');
         $this->variables['quorum'] = Control::whereNotIn('state', [4])->sum('sum_coef');
         $this->asamblea = Asamblea::find(cache('id_asamblea'));
-        $this->predios = Predio::where('id', '<', 12)->get();
-        // $this->predios = Predio::all();
+        $date = explode('-',$this->asamblea->fecha);
+        $meses=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+        $dateString=$date[2].' de '.$meses[(int)$date[1]-1].' de '.$date[0];
+        // $this->predios = Predio::where('id', '<', 12)->get();
+        $this->predios = Predio::all();
         $this->questions = Question::where('prefab',false)->where('isValid',true)->get();
 
         $this->variables += [
             'registro' => cache('inRegistro'),
             'asamblea' => $this->asamblea,
+            'dateString'=>$dateString,
             'predios' => $this->predios,
             'prediosCount' => $this->predios->whereNotNull('control_id')->count(),
             'questions' => $this->questions
@@ -80,17 +85,17 @@ class ReportController extends Controller
                 $this->createDocument('index-registro');
 
                 $this->variables['index'] = 0;
-                $this->createDocument('personas-citadas');
+                // $this->createDocument('personas-citadas');
 
                 $this->variables['index'] = 1;
-                $this->createDocument('asistencia-quorum');
+                // $this->createDocument('asistencia-quorum');
                 $this->variables['index'] = 2;
-                $this->createDocument('participantes-asamblea');
+                // $this->createDocument('participantes-asamblea');
                 $this->variables['index'] = 3;
-                if ($this->asamblea->ordenDia) {
-                    $this->variables['ordenDia'] = $this->asamblea->ordenDia;
-                    $this->createDocument('orden-dia');
-                }
+
+                $this->variables['ordenDia'] = json_decode($this->asamblea->ordenDia, false );
+
+                $this->createDocument('orden-dia');
 
                 // $this->variables['index']=3;
                 // $this->createDocument('quorum-final');

@@ -75,6 +75,7 @@ def connect():
 def sendComands(device):
 
     commands = [
+                [0x03, 0x78, 0x8c, 0xf4],
                 [0x03, 0x55, 0x80, 0xd5],
                 [0x0b, 0x5e, 0x80, 0xde, 0xb2, 0xb0, 0xb0, 0xb2, 0xb0, 0xb1, 0xb1, 0xb7],
                 [0x06, 0x35, 0x96, 0x02, 0x10, 0x00, 0x10],
@@ -84,6 +85,18 @@ def sendComands(device):
     for command in commands:
         device.write(command)
         time.sleep(.5)
+
+def sendComandsToClose(device):
+
+    commands = [
+                [0x03, 0x5b, 0x80, 0xdb],
+                [0x03, 0x5b, 0x80, 0xdb],
+                [0x03, 0x03, 0x82, 0x81]]
+    for command in commands:
+        device.write(command)
+        time.sleep(1)
+
+
 def getArgs():
     # Verifica si hay suficientes argumentos
     if len(sys.argv) > 1:
@@ -101,9 +114,7 @@ def setProcessId():
     with open(pid_file, 'w') as f:
         f.write(str(os.getpid()))
 
-if __name__ == "__main__":
-    pid_file = 'script_pid.txt'
-    setProcessId()
+def main():
     try:
         cursor,conn = connectDB()
         device=connect()
@@ -123,7 +134,7 @@ if __name__ == "__main__":
 
                     reportId=data[0]
                     values=[data[1],data[2]]
-
+                    print(reportId,' : ',values)
                     if (ignoreSecond) :
                         ignoreSecond = False
                         continue
@@ -158,7 +169,7 @@ if __name__ == "__main__":
                     dataResult = handleReport(values, reportId)
                     # Crear una consulta SQL para insertar datos
 
-                    if dataResult['vote'] in ['A', 'B', 'C', 'D', 'E', 'F'] :
+                    if dataResult['vote'] in ['A', 'B', 'C', 'D', 'E', 'F'] and dataResult['control']<1000:
                         sql = """INSERT INTO votes (control, vote)
                                 VALUES (%s, %s)
                                 ON DUPLICATE KEY UPDATE vote = VALUES(vote)"""
@@ -173,9 +184,22 @@ if __name__ == "__main__":
 
     except KeyboardInterrupt:
         print("Interrupción recibida 1, deteniendo el script.")
+        sendComandsToClose(device)
+
+
     except Exception as e:
         print("ERROR:" )
         print(e)
+        return 1
 
     finally:
+
         os.remove(pid_file)
+
+
+if __name__ == "__main__":
+    pid_file = 'script_pid.txt'
+    setProcessId()
+    flag=1
+    while flag:
+        flag=main()

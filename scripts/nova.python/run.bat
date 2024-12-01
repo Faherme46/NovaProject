@@ -1,2 +1,2 @@
-venv\Scripts\python -m flask --app main run
+python -m flask --app main run
 pause

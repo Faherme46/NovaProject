@@ -30,6 +30,7 @@ use App\Livewire\Registrar;
 use App\Livewire\Asignacion;
 use App\Livewire\Entregar;
 use App\Livewire\ListUsers;
+use App\Livewire\QuorumFull;
 use App\Livewire\Setup;
 use App\Livewire\ShowVotacion;
 use App\Livewire\Signing;
@@ -65,9 +66,9 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::delete('users/delete', [UsersController::class, 'deleteUser'])->name('users.delete')->withoutMiddleware([EnsureAsambleaOn::class]);
 
     Route::get('gestion/asamblea', LiderSetup::class)->name('gestion.asamblea');
-    Route::get('desterminar',[LiderSetup::class,'desterminar']);
+    Route::get('desterminar',[LiderSetup::class,'desterminar'])->name('desterminar');
     Route::get('votacion', Votacion::class)->name('votacion')->middleware(isAsambleaEnd::class)->middleware(isAsambleaInit::class);
-    Route::get('questions/show/{questionId}', PresentQuestion::class)->name('questions.show');
+    Route::get('questions/show/{questionId}/{plancha?}/{plazas?}', PresentQuestion::class)->name('questions.show');
 
     Route::post('predios/update', [PrediosController::class, 'updatePredio'])->name('predios.update');
     Route::post('personas/update', [PersonasController::class, 'updatePersona'])->name('personas.update');
@@ -83,6 +84,7 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::post('/gestion/saveSign', [FileController::class, 'saveSignImg'])->name('gestion.sign.save')->middleware(isAsambleaEnd::class);
     Route::get('/asistencia/firmas', Signs::class)->name('asistencia.signs')->middleware(isAsambleaEnd::class);
     Route::get('/asistencia/firmando', Signing::class)->name('asistencia.signing')->middleware(isAsambleaEnd::class);
+    Route::get('/quorum', QuorumFull::class)->name('quorum.show');
 });
 //rutas para livewire
 

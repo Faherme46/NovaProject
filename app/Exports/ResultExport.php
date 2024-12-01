@@ -7,6 +7,7 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
+
 class ResultExport implements FromArray, ShouldAutoSize, WithStyles
 {
     protected $question;
@@ -40,6 +41,7 @@ class ResultExport implements FromArray, ShouldAutoSize, WithStyles
 
         $array = [
             ['Pregunta: ', $this->question->title],
+            ['Fecha: ', $this->question->created_at],
             ['', '', ''],
             ['', 'Coeficiente', 'Nominal'],
             ['Quorum: ', $this->question->quorum, $this->question->predios],

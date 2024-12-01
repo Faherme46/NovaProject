@@ -16,7 +16,7 @@
 
         header {
             position: fixed;
-            top: -150;
+            top: -100;
             height: 20mm;
             display: flex;
             line-height: 35px;
@@ -79,7 +79,7 @@
                     <thead class="table-active">
                         <tr class="bg-darkblue  ">
                             <td colspan="4">
-                                <h4 class="w-100 text-center py-1 mb-0 text-light">
+                                <h4 class="w-100 text-center py-1 mb-0 text-light" style="font-size: 0.75rem">
                                     {{ $q->title }}
                                 </h4>
                             </td>
@@ -88,16 +88,16 @@
                     </thead>
                     <tbody>
                         <tr class="bg-secondary-subtle">
-                            <td >
+                            <td class="text-center">
                                 <b>Opción</b>
                             </td>
-                            <td >
+                            <td class="text-center">
                                 <b>Votos</b>
                             </td>
-                            <td >
+                            <td class="text-center">
                                 <b>Coeficiente</b>
                             </td>
-                            <td >
+                            <td class="text-center col-6">
                                 <b>Descripción</b>
                             </td>
                         </tr>
@@ -142,7 +142,7 @@
                             <td></td>
                         </tr>
                         <tr class="bg-secondary-subtle">
-                            <td ><b>TOTAL</b></td>
+                            <td class="text-center" ><b>TOTAL</b></td>
                             <td class="text-center">{{ $q->resultNom->total}}</td>
                             <td class="text-center">{{ sprintf('%.4f', $q->resultCoef->total)}}</td>
                             <td></td>
@@ -158,7 +158,7 @@
                             class="w-100 h-auto">
                     @endif
                 </div>
-                @if ($q->type != 1)
+                @if ($q->type != 1 && $q->type != 5 )
                     <h4 class="w-100 bg-darkblue text-light text-center mb-3 py-2">
                         {{ $q->resultTxt }}
                     </h4>

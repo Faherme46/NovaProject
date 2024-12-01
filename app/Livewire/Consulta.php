@@ -426,8 +426,9 @@ class Consulta extends Component
                 $controlL->setCoef();
                 $controlL->save();
             } else {
-                $controlL->setCoef();
+
                 $controlL->retirar();
+                $controlL->setCoef();
             }
             $this->success();
         } catch (\Throwable $th) {

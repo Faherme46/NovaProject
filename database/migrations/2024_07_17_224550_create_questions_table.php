@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('type');
-            $table->string('title');
+            $table->longText('title');
             $table->string('optionA')->nullable();
             $table->string('optionB')->nullable();
             $table->string('optionC')->nullable();
@@ -28,7 +28,6 @@ return new class extends Migration
             $table->integer('seconds')->default(0);
             $table->string('resultTxt')->nullable();
             $table->boolean('coefGraph')->default(1);
-            $table->boolean('plancha')->default(false);
             $table->timestamps();
 
             $table->foreign('type')->references('id')->on('question_types');
