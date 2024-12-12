@@ -71,6 +71,14 @@ class Main extends Component
                 'visible'=> ($this->role=='Admin'),
                 'enabled'=>!(cache('asamblea',false)),
             ],[
+                "directives"=> 'onclick=location.href="/asambleas";',
+                'icon'=> 'bi-upload',
+                'title'=> 'Cargar Asamblea',
+                'body'=> 'Cargar y eliminar las asambleas guardadas',
+                'visible'=> ($this->role=='Admin'),
+                // 'enabled'=>true
+                'enabled'=>!(cache('asamblea',false)),
+            ],[
                 "directives"=> 'onclick=location.href="/gestion/informes";',
                 'icon'=> 'bi-file-earmark-richtext',
                 'title'=> 'Informes',

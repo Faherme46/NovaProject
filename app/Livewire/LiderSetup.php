@@ -75,7 +75,7 @@ class LiderSetup extends Component
                 cache(['predios_init' =>  Predio::whereHas('control')->count()]);
                 cache(['quorum_init' => Control::whereNotIn('state', [4])->sum('sum_coef')]);
                 cache(['asamblea' => $this->asamblea]);
-                cache(['questionsPrefabCount' => Question::where('prefab', true)->count()]);
+                
                 Predio::whereHas('control')->update(['quorum_start' => true]);
                 $this->asamblea->h_inicio = $time;
                 $this->asamblea->save();
@@ -105,7 +105,9 @@ class LiderSetup extends Component
                 cache(['asamblea' => $this->asamblea]);
 
                 $fileController = new FileController;
-                $fileController->exportTables();
+                if(!$fileController->exportTables()){
+                    $this->addError('Error','Problema exportando las tablas de excel');
+                };
                 $this->asamblea->h_cierre = $time;
                 $this->asamblea->save();
                 $this->finished = true;

@@ -5,9 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-use App\Models\Question;
+use App\Models\QuestionsPrefab;
 use App\Models\QuestionType;
-use App\Models\Result;
 
 class QuestionSeeder extends Seeder
 {
@@ -23,7 +22,7 @@ class QuestionSeeder extends Seeder
         QuestionType::create(['name' => 'TD']);
         QuestionType::create(['name' => 'Plancha']);
 
-        Question::create([
+        QuestionsPrefab::create([
             'title' => 'Aprobacion de estados Financieros',
             'optionA' => '',
             'optionB' => '',
@@ -31,10 +30,9 @@ class QuestionSeeder extends Seeder
             'optionD' => 'Aprobado',
             'optionE' => 'No Aprobado',
             'optionF' => '',
-            'prefab' => true,
             'type' => 3
         ]);
-        Question::create([
+        QuestionsPrefab::create([
             'title' => 'Aprobacion de orden del dia',
             'optionA' => '',
             'optionB' => '',
@@ -42,10 +40,9 @@ class QuestionSeeder extends Seeder
             'optionD' => 'Aprobado',
             'optionE' => 'No Aprobado',
             'optionF' => '',
-            'prefab' => true,
             'type' => 3
         ]);
-        Question::create([
+        QuestionsPrefab::create([
             'title' => 'Aprobacion de Presupuestos',
            'optionA' => '',
             'optionB' => '',
@@ -53,10 +50,9 @@ class QuestionSeeder extends Seeder
             'optionD' => 'Aprobado',
             'optionE' => 'No Aprobado',
             'optionF' => '',
-            'prefab' => true,
             'type' => 3
         ]);
-        Question::create([
+        QuestionsPrefab::create([
             'title' => 'Aprobacion del Acta',
            'optionA' => '',
             'optionB' => '',
@@ -64,10 +60,9 @@ class QuestionSeeder extends Seeder
             'optionD' => 'Aprobado',
             'optionE' => 'No Aprobado',
             'optionF' => '',
-            'prefab' => true,
             'type' => 3
         ]);
-        Question::create([
+        QuestionsPrefab::create([
             'title' => 'Comite de Convivencia',
             'optionA' => '',
             'optionB' => '',
@@ -75,10 +70,9 @@ class QuestionSeeder extends Seeder
             'optionD' => '',
             'optionE' => '',
             'optionF' => '',
-            'prefab' => true,
             'type' => 2
         ]);
-        Question::create([
+        QuestionsPrefab::create([
             'title' => 'Consejo de Administracion',
             'optionA' => '',
             'optionB' => '',
@@ -86,10 +80,9 @@ class QuestionSeeder extends Seeder
             'optionD' => '',
             'optionE' => '',
             'optionF' => '',
-            'prefab' => true,
             'type' => 2
         ]);
-        Question::create([
+        QuestionsPrefab::create([
             'title' => 'Consentimiento de datos personales',
             'optionA' => 'Voto Publico',
             'optionB' => 'Voto Privado',
@@ -97,10 +90,9 @@ class QuestionSeeder extends Seeder
             'optionD' => '',
             'optionE' => '',
             'optionF' => '',
-            'prefab' => true,
             'type' => 5
         ]);
-        Question::create([
+        QuestionsPrefab::create([
             'title' => 'Eleccion de Presidente',
             'optionA' => '',
             'optionB' => '',
@@ -108,10 +100,9 @@ class QuestionSeeder extends Seeder
             'optionD' => '',
             'optionE' => '',
             'optionF' => '',
-            'prefab' => true,
             'type' => 2
         ]);
-        Question::create([
+        QuestionsPrefab::create([
             'title' => 'Eleccion de revisor fiscal',
             'optionA' => '',
             'optionB' => '',
@@ -119,10 +110,9 @@ class QuestionSeeder extends Seeder
             'optionD' => '',
             'optionE' => '',
             'optionF' => '',
-            'prefab' => true,
             'type' => 2
         ]);
-        Question::create([
+        QuestionsPrefab::create([
             'title' => 'Eleccion de secretario',
             'optionA' => '',
             'optionB' => '',
@@ -130,10 +120,9 @@ class QuestionSeeder extends Seeder
             'optionD' => '',
             'optionE' => '',
             'optionF' => '',
-            'prefab' => true,
             'type' => 2
         ]);
-        Question::create([
+        QuestionsPrefab::create([
             'title' => 'Verificación de Quorum',
             'optionA' => '',
             'optionB' => '',
@@ -141,10 +130,9 @@ class QuestionSeeder extends Seeder
             'optionD' => '',
             'optionE' => '',
             'optionF' => '',
-            'prefab' => true,
             'type' => 1
         ]);
-        Question::create([
+        QuestionsPrefab::create([
             'title' => 'Proposicion',
             'optionA' => 'SI',
             'optionB' => 'NO',
@@ -152,11 +140,10 @@ class QuestionSeeder extends Seeder
             'optionD' => '',
             'optionE' => '',
             'optionF' => '',
-            'prefab' => true,
             'type' => 4
         ]);
         
-        Question::create([
+        QuestionsPrefab::create([
             'title' => 'Prueba',
             'optionA' => '',
             'optionB' => '',
@@ -164,7 +151,6 @@ class QuestionSeeder extends Seeder
             'optionD' => '',
             'optionE' => '',
             'optionF' => '',
-            'prefab' => true,
             'type' => 2
         ]);
 

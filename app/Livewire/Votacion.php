@@ -8,6 +8,7 @@ use Livewire\Attributes\Layout;
 use App\Models\Control;
 use App\Models\General;
 use App\Models\Question;
+use App\Models\QuestionsPrefab;
 use App\Models\Vote;
 use Illuminate\Support\Facades\Http;
 use Throwable;
@@ -57,8 +58,9 @@ class Votacion extends Component
     public function mount()
     {
 
-        $this->questionsPrefab = Question::where('prefab', true)->get();
+        $this->questionsPrefab = QuestionsPrefab::all();
         $this->getValues();
+        $this->questionTitle='';
     }
 
     #[Layout('layout.full-page')]
@@ -87,7 +89,7 @@ class Votacion extends Component
     {
         $this->resetErrorBag();
         $this->reset('questionWhite');
-        $selectedQuestion = Question::find($questionId);
+        $selectedQuestion = QuestionsPrefab::find($questionId);
         $this->isQuestion = true;
         $this->questionTitle = $selectedQuestion->title;
         $this->questionId = $selectedQuestion->id;
@@ -317,7 +319,7 @@ class Votacion extends Component
                 'optionD' => ($this->questionOptions['D']) ? strtoupper(rtrim($this->questionOptions['D'])) : null,
                 'optionE' => ($this->questionOptions['E']) ? strtoupper(rtrim($this->questionOptions['E'])) : null,
                 'optionF' => ($this->questionOptions['F']) ? strtoupper(rtrim($this->questionOptions['F'])) : null,
-                'prefab' => (false),
+                
                 'isValid' => ($this->questionType == 6) ? 0 : 1,
                 'coefGraph' => (bool)$this->questionCoefChart,
                 'quorum' => $quorum,

@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Control;
+use App\Models\Vote;
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
@@ -12,19 +13,28 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 class VotesExport implements FromArray, WithHeadings, WithStyles
 {
     protected $data;
-    public function __construct(array $votos)
-    {
-        $this->data = $votos;
-    }
 
     public function array(): array
     {
-        $array = array_map(function ($value, $key) {
+        $array = $this->buildArray();
+        return $array;
 
-            $td = (Control::find($key)->value('t_publico')) ? 'Publico' : 'Privado';
-            
-            return [$key, $value, $td];
-        }, $this->data, array_keys($this->data));
+    }
+
+    public function buildArray(){
+        $array = Control::with('vote')->get()->map(function ($control) {
+            $td='';
+            if($control->vote){
+                $td = ($control->t_publico=='1') ? 'Publico' : 'Privado';
+                $vote=$control->vote->vote;
+            }else{
+                $td = '';
+                $vote='';
+            }
+
+
+            return [$control->id, $vote, $td];
+        })->toArray();
 
         return $array;
     }

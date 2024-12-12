@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\General;
 use App\Models\Question;
+use App\Models\QuestionsPrefab;
 use App\Models\QuestionType;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -86,7 +87,7 @@ class Setup extends Component
     public function mount()
     {
         $this->themeId = cache('themeId', 5);
-        $this->questionsPrefab = Question::where('prefab', true)->get();
+        $this->questionsPrefab = QuestionsPrefab::all();
 
         $this->questionTypes = QuestionType::all();
     }
@@ -109,7 +110,7 @@ class Setup extends Component
 
     public function setQuestion($questionId)
     {
-        $question = Question::find($questionId);
+        $question = QuestionsPrefab::find($questionId);
         $this->selectedQuestion=[
             'id' => $question->id,
             'title'=>$question->title,
@@ -134,7 +135,7 @@ class Setup extends Component
     public function deleteQuestion()
     {
         $idQuestion=$this->selectedQuestion['id'];
-        Question::destroy($idQuestion);
+        QuestionsPrefab::destroy($idQuestion);
         $this->reset('selectedQuestion');
         $this->dispatch('$refresh');
         $this->dispatch('close-delete-modal');
@@ -170,10 +171,10 @@ class Setup extends Component
             if($this->selectedQuestion['id']!=0){
                 $id=$this->selectedQuestion['id'];
                 array_diff($this->selectedQuestion, array('id'));
-                Question::where('id',$id)->update($this->selectedQuestion);
+                QuestionsPrefab::where('id',$id)->update($this->selectedQuestion);
                 session()->flash('success','Pregunta actualizada con exito');
             }else{
-                $question=Question::create($this->selectedQuestion);
+                $question=QuestionsPrefab::create($this->selectedQuestion);
             if($question){
                 session()->flash('success','Pregunta creada con exito');
             }

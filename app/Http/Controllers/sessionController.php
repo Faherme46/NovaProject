@@ -41,7 +41,7 @@ class SessionController extends Controller
     {
 
 
-        Cache::flush();     
+        Cache::flush();
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         Session::truncate();
         Predio::truncate();
@@ -50,19 +50,18 @@ class SessionController extends Controller
         Result::truncate();
         PrediosPersona::truncate();
         Question::truncate();
-        QuestionType::truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
-        $seeder= new QuestionSeeder();
-        $seeder->run();
-        $this->deleteAllFiles();
+        
+        
     }
-    public function deleteAllFiles()
+    public function deleteAsambleaFiles()
     {
         $disk = Storage::disk('results');
+        $asambleaName=cache('asamblea')['name'];
         // Verifica si el disco existe
-        if ($disk->exists('')) {
-            $this->deleteDirectory($disk, '');
+        if ($disk->exists($asambleaName)) {
+            $this->deleteDirectory($disk, $asambleaName);
         }
     }
 

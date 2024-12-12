@@ -20,9 +20,9 @@
             <div class="col-8">
                 <div class="card">
                     <div class="card-header justify-content-center d-flex">
-                        <h1 class="card-title text-center mb-0" style="font-size: {{ $sizeTitle }}rem;">
+                        <h6 class="card-title text-center mb-0" style="font-size: {{ $sizeTitle }}rem;">
                             {{ $question->title }}
-                        </h1>
+                        </h6>
                     </div>
                     <div class="card-body p-0 ">
                         <div class=" d-flex justify-content-center">
@@ -39,13 +39,13 @@
                         @if ($question->resultCoef)
                             @if ($inCoefResult)
                                 <a target="_blank"
-                                    href="/storage/images/results/{{ $question->resultCoef->chartPath }}">
-                                    <img src="/storage/images/results/{{ $question->resultCoef->chartPath }}"
+                                    href="/storage/images/results/{{$asambleaName}}/{{ $question->resultCoef->chartPath }}">
+                                    <img src="/storage/images/results/{{$asambleaName}}/{{ $question->resultCoef->chartPath }}"
                                         alt="No se encontro imagen" style="max-width: 100%">
                                 </a>
                             @else
-                                <a target="_blank" href="/storage/images/results/{{ $question->resultNom->chartPath }}">
-                                    <img src="/storage/images/results/{{ $question->resultNom->chartPath }}"
+                                <a target="_blank" href="/storage/images/results/{{$asambleaName}}/{{ $question->resultNom->chartPath }}">
+                                    <img src="/storage/images/results/{{$asambleaName}}/{{ $question->resultNom->chartPath }}"
                                         alt="No se encontro imagen" style="max-width: 100%">
                             @endif
                         @else

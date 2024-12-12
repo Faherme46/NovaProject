@@ -78,9 +78,10 @@
 
                                             </ul>
                                         </div>
+                                        
+                                        @if ($selectedQuestion['id'])
                                         <i class="   bi bi-plus-circle-fill ms-4 fs-2 text-primary pointer"
                                             wire:click='newQuestion'></i>
-                                        @if ($selectedQuestion['id'])
                                             <i class="bi bi-trash-fill ms-4 fs-2 text-danger pointer"
                                                 data-bs-toggle=modal data-bs-target=#modalDeleteQuestion></i>
                                         @endif

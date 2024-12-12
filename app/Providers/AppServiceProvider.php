@@ -3,7 +3,6 @@
 namespace App\Providers;
 use App\Http\Controllers\AsambleaController;
 use App\Http\Controllers\sessionController;
-use App\Models\Question;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Maatwebsite\Excel\ExcelServiceProvider;
@@ -33,19 +32,13 @@ class AppServiceProvider extends ServiceProvider
 
 
         View::composer('*', function ($view) {
-            $statesCollect = State::all();
-            $states = [];
-            foreach ($statesCollect as $item) {
-                $states[$item->id] = $item->value;
-                # code...
-            }
+            
 
-            $asamblea = \App\Models\Asamblea::find(cache('id_asamblea'));
+            
             $view->with(
                 [
-                    'asamblea' => $asamblea,
-                    'registro' => ($asamblea) ? $asamblea['registro'] : false,
-                    'states' => $states,
+                    'asamblea' => cache('asamblea'),
+                    'registro' => cache('inRegistro'),
                     'themeId'=> cache('themeId',5)
                 ]
             );

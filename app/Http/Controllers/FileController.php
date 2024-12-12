@@ -40,7 +40,7 @@ class FileController extends Controller
 
     public function getQuestionFolderPath($questionId, $title)
     {
-        $questionName = ($questionId - cache('questionsPrefabCount',13)) . '_' . $title;
+        $questionName = ($questionId);
         $parentFolderName = $this->getAsambleaFolderPath();
         $newFolderPath = $parentFolderName . '/Preguntas/' . $questionName;
 
@@ -72,8 +72,8 @@ class FileController extends Controller
 
     public function getOnlyQuestionPath($questionId, $title): string
     {
-        $questionCount=Question::where('prefab',true)->count();
-        $questionName = ($questionId - $questionCount) . '_' . $title;
+        $questionCount=Question::count();
+        $questionName = ($questionId - $questionCount);
         $parentFolderName = cache('asamblea')['name'];
         $newFolderPath = $parentFolderName . '/Preguntas/' . $questionName;
 
@@ -89,8 +89,7 @@ class FileController extends Controller
         $parent_path = $this->getQuestionFolderPath($questionId, $title); // Ruta donde se guardará la imagen
         $output_path =  $parent_path . '/' . $name . '.png';
         //todo numero de preguntas en defecto
-        $localPath = ($questionId - cache('questionsPrefabCount',13)) . '/' . $name . '.png';
-
+        $localPath = $asambleaName . '/' .  ($questionId - cache('questionsPrefabCount',13)) . '/' . $name . '.png';
         // Crear un array con los datos
         $data = [
             'title'=>$title,
@@ -167,10 +166,18 @@ class FileController extends Controller
         $prediosController= new \App\Http\Controllers\PrediosController;
         $personasController = new \App\Http\Controllers\PersonasController;
         $asambleaName = cache('asamblea')['name'];
-
+        $asambleaRegistro= cache('inRegistro');
         $ret1 =$prediosController->export($asambleaName);
-        $ret2 =$personasController->export($asambleaName);
-        return $ret1&&$ret2;
+        if($asambleaRegistro){
+            $ret2 =$personasController->export($asambleaName);
+            $ret3 =$prediosController->controlWithRegistroExport($asambleaName);
+        }else{
+            $ret2=true;
+            $ret3=$prediosController->controlExport($asambleaName);
+        }
+
+
+        return $ret1&&$ret2&&$ret3;
     }
 
 }

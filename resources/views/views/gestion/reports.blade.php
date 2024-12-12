@@ -170,7 +170,7 @@
                                             <div
                                                 class="card-body d-flex align-items-center p-1 justify-content-center">
                                                 <i class="bi bi-trash" style="font-size:40px"></i>
-                                                <h5 class="card-title mb-0 ms-2">Eliminar sesión</h5>
+                                                <h5 class="card-title mb-0 ms-2">Cerrar Asamblea</h5>
                                             </div>
                                         </div>
                                     </button>
@@ -191,7 +191,7 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">¿Desea eliminar la sesión?</h5>
+                        <h5 class="modal-title">¿Desea cerrar la asamblea actual?</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                     </div>
@@ -199,13 +199,13 @@
                         Se descargará toda la informacion de la asamblea en las carpetas correspondientes
                         y se limpiaran completamente las tablas.
                     </div>
-                    <div class="modal-footer justify-content-between align-items-center">
-                        <span class="badge m-0 text-bg-warning fs-6 ">Esta accion no se puede deshacer</span>
+                    <div class="modal-footer justify-content-end align-items-center">
+                       
                         <form action="{{ route('session.destroy') }}" method="POST">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger ">
-                                Eliminar sesion
+                                Cerrar Asamblea
                             </button>
                         </form>
                     </div>

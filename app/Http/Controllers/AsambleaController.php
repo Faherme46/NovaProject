@@ -18,6 +18,9 @@ use App\Imports\PrediosImport;
 use App\Imports\PredioWithRegistro;
 use App\Imports\UsersImport;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Validators\ValidationException;
 
@@ -68,17 +71,17 @@ class AsambleaController extends Controller
         ]);
 
         try {
-            $imports=$this->importPredios($request->folder,$request->registro);
+            $imports = $this->importPredios($request->folder, $request->registro);
 
-            if($imports==200){
+            if ($imports == 200) {
                 $asamblea = Asamblea::create($request->all());
-                $asamblea->name=str_replace(' ', '_', $request->name);
+                $asamblea->name = str_replace(' ', '_', $request->name);
                 $asamblea->save();
                 $this->sessionController->setSession($asamblea->id_asamblea, $asamblea->folder);
                 $data = [
                     'id_asamblea'   => $asamblea->id_asamblea,
                     'inRegistro'    => $asamblea->registro,
-                    'asamblea'=>$asamblea
+                    'asamblea' => $asamblea
                 ];
 
                 Cache::putMany($data);
@@ -104,31 +107,30 @@ class AsambleaController extends Controller
 
     public function updateAsamblea(Request $request)
     {
-        $messages=[
-        '*.required' =>'El campo :attribute no puede estar vacio',
-        'fecha.date' => 'El campo :attribute debe ser una fecha válida.',
-        '*.date_format' => 'El campo :attribute no corresponde con el formato :format.',
+        $messages = [
+            '*.required' => 'El campo :attribute no puede estar vacio',
+            'fecha.date' => 'El campo :attribute debe ser una fecha válida.',
+            '*.date_format' => 'El campo :attribute no corresponde con el formato :format.',
         ];
         $request->validate([
             'lugar' => 'required',
             'fecha' => 'required|date',
             'hora' => 'required',
             'controles' => 'required',
-        ],$messages);
+        ], $messages);
 
         $asamblea = Asamblea::find($request->id_asamblea);
-        if($asamblea){
+        if ($asamblea) {
             $asamblea->update($request->all());
             if (!$request->signature) {
-                $asamblea->signature=false;
+                $asamblea->signature = false;
                 $asamblea->save();
             }
-            cache(['asamblea'=>$asamblea]);
+            cache(['asamblea' => $asamblea]);
             return back()->with('success', 'Asamblea actualizada con éxito.');
-        }else{
+        } else {
             return back()->withErrors('No se encontro la asamblea')->withInput();
         }
-
     }
 
     public function destroy($id)
@@ -164,23 +166,24 @@ class AsambleaController extends Controller
 
 
     //Metodos de manejo de archivos
-    public function importPredios(String $file,$registro){
+    public function importPredios(String $file, $registro)
+    {
         try {
-            $externalFilePathPredios = 'C:/Asambleas/Clientes/'.$file.'/predios.xlsx';
-            $externalFilePathPersonas= 'C:/Asambleas/Clientes/'.$file.'/personas.xlsx';
+            $externalFilePathPredios = 'C:/Asambleas/Clientes/' . $file . '/predios.xlsx';
+            $externalFilePathPersonas = 'C:/Asambleas/Clientes/' . $file . '/personas.xlsx';
 
 
-            if (!file_exists($externalFilePathPersonas)&&$registro){
+            if (!file_exists($externalFilePathPersonas) && $registro) {
                 throw new FileNotFoundException("El archivo no se encontró en la ruta: {$externalFilePathPersonas}");
             }
             if (!file_exists($externalFilePathPredios)) {
                 throw new FileNotFoundException("El archivo no se encontró en la ruta: {$externalFilePathPredios}");
             }
-            if ($registro){
-                Excel::import(new PersonasImport,$externalFilePathPersonas);
-                Excel::import(new PredioWithRegistro,$externalFilePathPredios);
-            }else{
-                Excel::import(new PrediosImport,$externalFilePathPredios);
+            if ($registro) {
+                Excel::import(new PersonasImport, $externalFilePathPersonas);
+                Excel::import(new PredioWithRegistro, $externalFilePathPredios);
+            } else {
+                Excel::import(new PrediosImport, $externalFilePathPredios);
             }
 
             Excel::import(new UsersImport, 'C:/Asambleas/usuarios.xlsx');
@@ -189,14 +192,80 @@ class AsambleaController extends Controller
         } catch (ValidationException $e) {
             // Manejar excepciones específicas de validación de Excel
             $failures = $e->failures();
-            throw new \Exception('Error: '.$failures[1]);
+            throw new \Exception('Error: ' . $failures[1]);
             //Excepcion por archivo inexistente
         } catch (\Illuminate\Contracts\Filesystem\FileNotFoundException $e) {
-            throw new \Exception('Error: '.$e->getMessage());
+            throw new \Exception('Error: ' . $e->getMessage());
         } catch (\Exception $e) {
 
             // Manejar cualquier otra excepción
-             throw new \Exception($e->getMessage());
+            throw new \Exception($e->getMessage());
+        }
+    }
+
+    public function deleteAsamblea(Request $request)
+    {
+        $request->validate([
+            'password' => 'required',
+        ], [
+            'password.required' => 'Se requiere la contraseña'
+        ]);
+
+        $password = $request->input('password');
+        if ($this->validatePassword($password)) {
+            $this->deleteAsambleaFiles($request->name);
+            Asamblea::where('name',$request->name)->delete();
+            return back()->with('success', 'Informacion eliminada correctamente');
+        } else {
+            return back()->with('error', 'La contraseña es incorrecta');
+        }
+    }
+    public function deleteAsambleaFiles($asambleaName)
+    {
+        $disk = Storage::disk('results');
+        $path = "backups\\".$asambleaName.'.sql';
+        if (Storage::exists("public/backups/".$asambleaName.'.sql')) {
+            Storage::delete("public/backups/".$asambleaName.'.sql');
+           
+        }
+        
+        // Verifica si el disco existe
+        if ($disk->exists($asambleaName)) {
+            $this->deleteDirectory($disk, $asambleaName);
+        }
+    }
+    private function deleteDirectory($disk, $directory)
+    {
+        // Obtén todos los archivos y subdirectorios en el directorio actual
+        $files = $disk->allFiles($directory);
+        $directories = $disk->allDirectories($directory);
+
+        // Borra todos los archivos
+        foreach ($files as $file) {
+            $disk->delete($file);
+        }
+
+        // Borra todos los subdirectorios recursivamente
+        foreach ($directories as $subDirectory) {
+            $this->deleteDirectory($disk, $subDirectory);
+        }
+
+        // Finalmente, borra el directorio actual si está vacío
+        $disk->deleteDirectory($directory);
+    }
+    public function validatePassword($password)
+    {
+        // Validar el campo de contraseña en el formulario
+
+
+        // Obtener la contraseña ingresada por el usuario
+
+
+        // Comparar con la contraseña del usuario autenticado
+        if (Hash::check($password, Auth::user()->password)) {
+            return true;
+        } else {
+            return false;
         }
     }
 }

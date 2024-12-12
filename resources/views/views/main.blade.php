@@ -146,7 +146,8 @@
                         </script>
                     </div>
                     <div class="modal-footer justify-content-end">
-                        <button type="submit" class="btn btn-success w-25" id="submit-button">Crear</button>
+                        <button type="submit" class="btn btn-success w-25" id="submit-button"
+                        data-bs-toggle="modal" data-bs-target="#spinnerModal">Crear</button>
                     </div>
                 </form>
             </div>
@@ -296,6 +297,20 @@
 
         </div>
     @endif
+    <div class="modal fade" id="spinnerModal" tabindex="-1">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-body d-flex justify-content-center align-items-center">
+                    <div class="spinner-grow text-primary" style="width: 4rem; height: 4rem;" role="status">
+
+                    </div>
+                    <span class="ms-3 " style="font-size: 5rem">Cargando ...</span>
+                </div>
+
+            </div>
+        </div>
+    </div>
 </div>
 <script>
     document.addEventListener('livewire:init', () => {

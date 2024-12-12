@@ -20,10 +20,11 @@
                 <img src="/storage/images/letras.png" style="height: 3.5rem;" alt="logo">
             </div>
             <div class="col-4 justify-content-end d-flex">
-                <h1 class="mb-0 me-3"  wire:poll.1000ms='decrement' >
+                <h1 class="mb-0 me-3">
                     {{ $countdown }}
                 </h1>
-                <button class="btn btn-warning p-0 rounded-3 me-2" wire:click='playPause({{ !$stopped }})'>
+                <button class="btn btn-warning p-0 rounded-3 me-2" wire:click='playPause({{ !$stopped }})'
+                    wire:poll.1000ms='decrement'>
 
                     @if ($stopped)
                         <i class="bi bi-play-fill fs-2 py-0 px-1"></i>
@@ -32,6 +33,9 @@
                     @endif
                 </button>
                 <button class="btn btn-danger p-0 rounded-3" wire:click='stopVote'>
+                    <i class="bi bi-stop-fill fs-2 px-1"></i>
+                </button>
+                <button class="btn btn-success p-0 rounded-3" wire:click='store'>
                     <i class="bi bi-stop-fill fs-2 px-1"></i>
                 </button>
 
@@ -64,27 +68,27 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-warning" data-bs-dismiss="modal" wire:click='oneMoreMinut'>+1
                         min</button>
-                    <button type="button" class="btn btn-success" data-bs-dismiss="modal"
-                        wire:click='store' data-bs-toggle="modal" data-bs-target="#spinnerModal">Guardar</button>
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal" wire:click='store'
+                        data-bs-toggle="modal" data-bs-target="#spinnerModal">Guardar</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="spinnerModal" tabindex="-1" >
+    <div class="modal fade" id="spinnerModal" tabindex="-1">
         <div class="modal-dialog modal-xl modal-dialog-centered">
-          <div class="modal-content">
+            <div class="modal-content">
 
-            <div class="modal-body d-flex justify-content-center align-items-center">
-                <div class="spinner-grow text-primary" style="width: 4rem; height: 4rem;" role="status">
+                <div class="modal-body d-flex justify-content-center align-items-center">
+                    <div class="spinner-grow text-primary" style="width: 4rem; height: 4rem;" role="status">
 
+                    </div>
+                    <span class="ms-3 " style="font-size: 5rem">Cargando Resultados...</span>
                 </div>
-                <span class="ms-3 " style="font-size: 5rem">Cargando Resultados...</span>
-            </div>
 
-          </div>
+            </div>
         </div>
-      </div>
+    </div>
 </div>
 @script
     <script>
@@ -97,12 +101,11 @@
             $('#modalConfirm').modal('hide');
 
         });
-        $wire.on('modal-spinner-close',()=>{
+        $wire.on('modal-spinner-close', () => {
             $('#spinnerModal').modal('hide');
         })
-
-        
-
-
+        $wire.on('pause-timer', () => {
+            clearInterval(timeInterval);
+        });
     </script>
 @endscript

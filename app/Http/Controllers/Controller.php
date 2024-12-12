@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Models\Predio;
-use App\Models\Question;
+
+use App\Models\QuestionsPrefab;
 
 abstract class Controller
 {
@@ -24,7 +24,7 @@ abstract class Controller
             'optionF' => 'required',
             'type' => 'required'
         ], $messages);
-        $question=Question::create($request->all);
+        $question=QuestionsPrefab::create($request->all);
     }
 
     public function updateQuestion(Request $request){

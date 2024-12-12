@@ -111,4 +111,8 @@ class Control extends Model
 
         return $states[$this->state];
     }
+
+    public function vote(){
+        return $this->hasOne(Vote::class);
+    }
 }

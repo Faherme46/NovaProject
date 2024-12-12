@@ -202,6 +202,11 @@ class PresentQuestion extends Component
     public function playPause($value = '')
     {
         $this->stopped = (bool) $value;
+        if($value){
+            $this->dispatch('pause-timer');
+        }else{
+            $this->dispatch('start-timer');
+        }
     }
 
     public function store()
@@ -352,8 +357,14 @@ class PresentQuestion extends Component
             $valuesCoef['question_id'] = $this->question->id;
             $valuesCoef['isCoef'] = true;
             $valuesCoef['total'] = $totalCoef;
-            $resultNom = Result::updateOrCreate($valuesNom);
-            $resultCoef = Result::updateOrCreate($valuesCoef);
+            if($this->question->resultCoef){
+                $resultNom = Result::where('id',$this->question->resultNom->id)->update($valuesNom);
+                $resultCoef = Result::where('id',$this->question->resultCoef->id)->update($valuesCoef);
+            }else{
+                $resultNom = Result::create($valuesNom);
+                $resultCoef = Result::create($valuesCoef);
+            }
+
             $this->question->quorum = Control::where('state', 1)->sum('sum_coef');
             $this->question->predios = Control::where('state', 1)->sum('predios_vote');
 
@@ -402,7 +413,7 @@ class PresentQuestion extends Component
 
     public function updateVotes()
     {
-        $this->votes = Vote::pluck('vote', 'control')->toArray();
+        $this->votes = Vote::pluck('vote', 'control_id')->toArray();
     }
     public function handleVoting($action)
     {

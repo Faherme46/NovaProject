@@ -54,6 +54,7 @@ class Predio extends Model
     public function getFullName(){
 
         return $this->descriptor1.' '.$this->numeral1.' '.$this->descriptor2.' '.$this->numeral2;
+        // return $this->descriptor2.' '.$this->numeral2;
     }
 
 

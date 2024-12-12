@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('votes', function (Blueprint $table) {
             $table->id();
-            $table->integer('control')->unique();
+            $table->integer('control_id')->unique();
             $table->string('vote');
             $table->timestamps();
         });

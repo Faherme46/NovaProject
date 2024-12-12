@@ -54,7 +54,7 @@ def handleReport(data, id) :
 
     control = (data[0] - 32) * 16 + result['number']
     return {
-        'control': control,
+        'control_id': control,
         'vote': result['vote']
     }
 
@@ -169,11 +169,11 @@ def main():
                     dataResult = handleReport(values, reportId)
                     # Crear una consulta SQL para insertar datos
 
-                    if dataResult['vote'] in ['A', 'B', 'C', 'D', 'E', 'F'] and dataResult['control']<1000:
-                        sql = """INSERT INTO votes (control, vote)
+                    if dataResult['vote'] in ['A', 'B', 'C', 'D', 'E', 'F'] and dataResult['control_id']<1000:
+                        sql = """INSERT INTO votes (control_id, vote)
                                 VALUES (%s, %s)
                                 ON DUPLICATE KEY UPDATE vote = VALUES(vote)"""
-                        valores = (dataResult['control'],dataResult['vote'])
+                        valores = (dataResult['control_id'],dataResult['vote'])
 
                         # Ejecutar la consulta
                         cursor.execute(sql, valores)

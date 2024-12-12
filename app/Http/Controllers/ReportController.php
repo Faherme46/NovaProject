@@ -33,7 +33,7 @@ class ReportController extends Controller
         $dateString=$date[2].' de '.$meses[(int)$date[1]-1].' de '.$date[0];
         // $this->predios = Predio::where('id', '<', 12)->get();
         $this->predios = Predio::all();
-        $this->questions = Question::where('prefab',false)->where('isValid',true)->get();
+        $this->questions = Question::where('isValid',true)->get();
 
         $this->variables += [
             'registro' => cache('inRegistro'),

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ControlesExport;
+use App\Exports\ControlesWithRegistro;
 use App\Exports\PrediosExport;
 use App\Http\Controllers\Controller;
 
@@ -56,6 +58,17 @@ class PrediosController extends Controller
         $asambleaName = cache('asamblea')['name'];
         $export = new PrediosExport();
         return Excel::store($export, $asambleaName . '/predios.xlsx', 'externalAsambleas');
+    }
+
+    public function controlExport($route=null){
+        $asambleaName = cache('asamblea')['name'];
+        $export = new ControlesExport();
+        return Excel::store($export, $asambleaName . '/controles.xlsx', 'externalAsambleas');
+    }
+    public function controlWithRegistroExport($route=null){
+        $asambleaName = cache('asamblea')['name'];
+        $export = new ControlesWithRegistro();
+        return Excel::store($export, $asambleaName . '/controles.xlsx', 'externalAsambleas');
     }
 
 

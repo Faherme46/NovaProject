@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('questions', function (Blueprint $table) {
+        Schema::create('questions_prefabs', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('type');
             $table->longText('title');
@@ -21,11 +21,7 @@ return new class extends Migration
             $table->string('optionD')->nullable();
             $table->string('optionE')->nullable();
             $table->string('optionF')->nullable();
-            $table->boolean('isValid')->default(false);
-            $table->double('quorum')->nullable();
-            $table->integer('predios')->nullable();
             $table->integer('seconds')->default(0);
-            $table->string('resultTxt')->nullable();
             $table->boolean('coefGraph')->default(1);
             $table->timestamps();
 
@@ -38,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('questions');
+        Schema::dropIfExists('questions_prefabs');
     }
 };

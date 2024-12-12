@@ -12,10 +12,11 @@ class ShowVotacion extends Component
     public $question;
     public $sizeTitle = 2.5;
     public $inCoefResult =true;
-
+    public $asambleaName;
     public function mount()
     {
-        $this->questions = Question::where('prefab', false)->get();
+        $this->asambleaName=cache('asamblea')['name'];
+        $this->questions = Question::all();
         $this->selectQuestion($this->questions->first()->id);
         $this->inCoefResult=$this->question->coefGraph;
     }

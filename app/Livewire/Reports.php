@@ -77,7 +77,7 @@ class Reports extends Component
     public function defVariables()
     {
 
-        $this->questions = Question::where('prefab',false)->get();
+        $this->questions = Question::all();
         if (!$this->questions->isEmpty()) {
             $this->selectQuestion($this->questions->first()->id);
         }
