@@ -81,7 +81,7 @@ class FileController extends Controller
     }
 
     public function createChart($questionId, $title, $labels, $values, $name)
-    {
+    {   
         // Datos para el gráfico
 
         $asambleaName = cache('asamblea')['name'];
@@ -89,7 +89,7 @@ class FileController extends Controller
         $parent_path = $this->getQuestionFolderPath($questionId, $title); // Ruta donde se guardará la imagen
         $output_path =  $parent_path . '/' . $name . '.png';
         //todo numero de preguntas en defecto
-        $localPath = $asambleaName . '/' .  ($questionId - cache('questionsPrefabCount',13)) . '/' . $name . '.png';
+        $localPath = $asambleaName . '/' .  ($questionId) . '/' . $name . '.png';
         // Crear un array con los datos
         $data = [
             'title'=>$title,

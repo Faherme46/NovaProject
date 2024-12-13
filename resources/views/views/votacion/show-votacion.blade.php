@@ -40,12 +40,12 @@
                             @if ($inCoefResult)
                                 <a target="_blank"
                                     href="/storage/images/results/{{$asambleaName}}/{{ $question->resultCoef->chartPath }}">
-                                    <img src="/storage/images/results/{{$asambleaName}}/{{ $question->resultCoef->chartPath }}"
+                                    <img src="/storage/images/results/{{ $question->resultCoef->chartPath }}"
                                         alt="No se encontro imagen" style="max-width: 100%">
                                 </a>
                             @else
                                 <a target="_blank" href="/storage/images/results/{{$asambleaName}}/{{ $question->resultNom->chartPath }}">
-                                    <img src="/storage/images/results/{{$asambleaName}}/{{ $question->resultNom->chartPath }}"
+                                    <img src="/storage/images/results/{{ $question->resultNom->chartPath }}"
                                         alt="No se encontro imagen" style="max-width: 100%">
                             @endif
                         @else

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class LoginController extends Controller
 {
@@ -27,17 +28,13 @@ class LoginController extends Controller
             'password' => ['required'],
         ], $messages);
 
-        $fileController=new FileController;
-        $response=$fileController->importConf();
-        if ($response!=200) {
-            $message='No se ha encontrado el archivo de configuracion';
-            return redirect()->back()->withErrors($message)->withInput();
-        }
+        
 
 
         if (Auth::attempt($credentials)) {
+            Log::channel('custom')->info('El Usuario {username} ha ingresado al sistema.', ['username' =>Auth::getUser()->username]);
             $request->session()->regenerate();
-           
+            
             return redirect()->intended(route('home'))->with('success','Inicio de sesion exitoso');
         } else {
             return back()->withErrors('El usuario o contraseña no son validos');
@@ -47,11 +44,14 @@ class LoginController extends Controller
 
 
     public function logout(Request $request){
+        $username=Auth::getUser()->username;
+    
         Auth::logout();
 
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
+        Log::channel('custom')->info('El Usuario {username} ha salido del sistema.', ['username' => $username]);
 
         return redirect()->route('home')->with('warning','Sesion cerrada');
     }

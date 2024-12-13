@@ -18,21 +18,34 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
 
 class SessionController extends Controller
 {
     public function destroyAll()
     {
+        $nameAsamblea = cache('asamblea')['name'];
+        $logpath=storage_path('logs/myLog.log');
+        
+        if(File::exists($logpath)){
+            Storage::disk('externalAsambleas')->put($nameAsamblea . '/logs.log', file_get_contents($logpath));
+            File::delete($logpath);
+        }
         //se descargan las tablas
-        $this->downloadTables();
-
+        $backupController=new BackupController();
+        $response=$backupController->downloadBackup();
+        if($response!=200){
+            return back()->with('error', 'Error exportando la base de datos: '.$response->getMessage());
+        };
+        
         $sessionData = Auth::user();
 
 
         session()->flush();
         //se limpiaran las tablas
         $this->destroyOnError();
+        
         Auth::attempt([ "username"=> $sessionData->username,"password"=> $sessionData["passwordTxt"]]);
         return redirect()->route('home')->with('success', 'Sesion reestablecida');
     }

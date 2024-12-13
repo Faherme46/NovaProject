@@ -303,6 +303,7 @@ class Registrar extends Component
                     'registered' => true,
                     'user_id' => auth()->id()
                 ]);
+                \Illuminate\Support\Facades\Log::channel('custom')->info('Registra el control {control}',['control' =>$control->id,'predios'=>array_keys($this->predioSelected),'persona'=>$this->cedula]);
             }
         } catch (QueryException $e) {
             if ($e->errorInfo[1] == 1062) {

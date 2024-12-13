@@ -10,7 +10,7 @@
                     <div class="card">
                         <form action="{{ route('asamblea.update') }}" method="POST">
                             @csrf
-                            <input type="hidden" name="id_asamblea" value="{{ $asamblea->id_asamblea }}">
+                            <input type="hidden" name="id_asamblea" value="{{ $asambleaa->id_asamblea }}">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <h5 class="card-title mb-0">
                                     General
@@ -25,44 +25,44 @@
                                         Cliente
                                     </span>
                                     <input type="text" class="form-control fs-5 " placeholder="Cliente"
-                                        name="client_name" value="{{ $asamblea->folder }}" disabled>
+                                        name="client_name" value="{{ $asambleaa->folder }}" disabled>
                                 </div>
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">
                                         Referencia:
                                     </span>
-                                    <input type="text" class="form-control fs-5 " value="{{ $asamblea->referencia }}"
+                                    <input type="text" class="form-control fs-5 " value="{{ $asambleaa->referencia }}"
                                         name="referencia">
                                 </div>
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">
                                         Tipo:
                                     </span>
-                                    <input type="text" class="form-control fs-5 " value="{{ $asamblea->tipo }}"
+                                    <input type="text" class="form-control fs-5 " value="{{ $asambleaa->tipo }}"
                                         name="tipo">
                                     <span class="input-group-text">
                                         Controles:
                                     </span>
-                                    <input type="number" class="form-control fs-5 " value="{{ $asamblea->controles }}"
+                                    <input type="number" class="form-control fs-5 " value="{{ $asambleaa->controles }}"
                                         name="controles" oninput="debouncedValidateMultipleOf50(this)" required>
                                 </div>
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">
                                         Direccion:
                                     </span>
-                                    <input type="text" class="form-control fs-5" value="{{ $asamblea->lugar }}"
+                                    <input type="text" class="form-control fs-5" value="{{ $asambleaa->lugar }}"
                                         name="lugar" required>
                                 </div>
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">
                                         Fecha
                                     </span>
-                                    <input type="date" class="form-control fs-5" value="{{ $asamblea->fecha }}"
+                                    <input type="date" class="form-control fs-5" value="{{ $asambleaa->fecha }}"
                                         name="fecha" required>
                                     <span class="input-group-text">
                                         Hora:
                                     </span>
-                                    <input type="time" class="form-control fs-5 " value="{{ $asamblea->hora }}"
+                                    <input type="time" class="form-control fs-5 " value="{{ $asambleaa->hora }}"
                                         name="hora" required>
                                 </div>
 
@@ -70,19 +70,19 @@
                                     <span class="input-group-text">
                                         Hora Inicio
                                     </span>
-
-                                    <input type="time" class="form-control fs-5 " value="{{ $asamblea->h_inicio }}"
+                                    <input type="time" class="form-control fs-5 " value="{{ $asambleaa->h_inicio }}"
                                         name="h_inicio">
+
                                     <span class="input-group-text">
                                         Hora Cierre
                                     </span>
-                                    <input type="time" class="form-control fs-5 " value="{{ $asamblea->h_cierre }}"
+                                    <input type="time" class="form-control fs-5 " value="{{ $asambleaa->h_cierre }}"
                                         name="h_cierre">
                                 </div>
-                                @if($asamblea->registro)
+                                @if($asambleaa->registro)
                                 <div class="form-group">
                                     <input type="checkbox" class="btn-check" id="sign" name="signature"
-                                        value="1" @checked($asamblea->signature)>
+                                        value="1" @checked($asambleaa->signature)>
                                     <label class="btn btn-outline-primary" for="sign">
                                         Firma electronica
                                     </label>
@@ -93,7 +93,7 @@
                     </div>
 
                 </div>
-                @if ($asamblea['registro'])
+                @if ($asambleaa['registro'])
                     <div class="col-3">
                         <div class="card px-0">
                             <div class="card-header d-flex justify-content-between align-items-center pb-0">
@@ -154,7 +154,7 @@
                                             </div>
                                         </div>
                                     </button>
-                                    <button type="button" class="btn btn-info p-1 mt-2" @disabled(!$asamblea || !$allQuestionsVerified)
+                                    <button type="button" class="btn btn-info p-1 mt-2" @disabled(!$asambleaa || !$allQuestionsVerified)
                                         wire:click='verifyForm'>
                                         <div class="card ">
                                             <div
@@ -186,7 +186,7 @@
         </div>
     </div>
 
-    @if ($asamblea)
+    @if ($asambleaa)
         <div class="modal fade" tabindex="-1" id="modalDeleteSession" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">

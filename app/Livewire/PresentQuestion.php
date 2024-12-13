@@ -27,6 +27,7 @@ class PresentQuestion extends Component
     public $chartCoef;
     public $chartNom;
     public $stopped = false;
+    public $step=1;
     public $colors = [
         1 => 'btn-black',       //sin asignacion
         2 => 'btn-secondary',      //sin voto
@@ -50,7 +51,7 @@ class PresentQuestion extends Component
     public function mount($questionId, $plancha = false, $plazas = 0)
     {
         $this->reset('inVoting', 'seconds', 'countdown', 'votes', 'chartNom', 'inCoefResult', 'votes', 'controlsAssigned');
-
+        $this->step=1;
         // $this->question = Question::find(19);
         if (!$this->question) {
 
@@ -89,10 +90,9 @@ class PresentQuestion extends Component
 
     public function voting()
     {
-        $response = $this->handleVoting('run-votes');
+        $response = $this->handleVoting(action: 'run-votes');
         $this->playPause(false);
         if ($response) {
-            sleep(2);
             $this->seconds = $this->question->seconds;
             $this->updateCountdown();
             $this->dispatch('start-timer');
@@ -179,7 +179,7 @@ class PresentQuestion extends Component
     {
         if (!$this->stopped) {
             if ($this->seconds > 0) {
-                $this->seconds -= 1;
+                $this->seconds -= $this->step;
 
                 $this->updateCountdown();
             } else {
@@ -188,10 +188,10 @@ class PresentQuestion extends Component
         }
     }
 
-    public $proof=0;
+    
     public function updateCountdown()
     {
-        $this->proof+=1;
+        
         $this->updateVotes();
         $minutes = floor($this->seconds / 60);
         $seconds = $this->seconds % 60;
@@ -203,9 +203,7 @@ class PresentQuestion extends Component
     {
         $this->stopped = (bool) $value;
         if($value){
-            $this->dispatch('pause-timer');
-        }else{
-            $this->dispatch('start-timer');
+            $this->step=$this->step/2;
         }
     }
 
@@ -220,17 +218,14 @@ class PresentQuestion extends Component
 
     public function stopVote()
     {
-        $this->stopped = true;
+        
+        $this->seconds=0;
         $this->dispatch('modal-show');
-        $this->dispatch('stopPolling');
         $this->playPause(true);
         $this->dispatch('$refresh');
     }
 
-    public function sleep($seconds)
-    {
-        sleep($seconds);
-    }
+    
     public function oneMoreMinut()
     {
         $this->playPause(false);
@@ -395,6 +390,10 @@ class PresentQuestion extends Component
         $this->mount($this->question->id, $this->plancha, $this->plazas);
         $this->handleVoting('stop-votes');
         $this->dispatch('$refresh');
+    }
+
+    public function sleep($value){
+        sleep($value);
     }
 
 

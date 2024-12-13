@@ -311,6 +311,7 @@ class Votacion extends Component
         $newTitle = str_replace($forbidden, "", $this->questionTitle);
         try {
             Vote::truncate();
+            $predios=Control::where('state', 1)->sum('predios_vote');
             $question = Question::create([
                 'title' => strtoupper($newTitle),
                 'optionA' => ($this->questionOptions['A']) ? strtoupper(rtrim($this->questionOptions['A'])) : null,
@@ -323,7 +324,7 @@ class Votacion extends Component
                 'isValid' => ($this->questionType == 6) ? 0 : 1,
                 'coefGraph' => (bool)$this->questionCoefChart,
                 'quorum' => $quorum,
-                'predios' => Control::where('state', 1)->sum('predios_vote'),
+                'predios' =>$predios ,
                 'seconds' => $seconds,
                 'type' => $this->questionType
             ]);
@@ -333,8 +334,10 @@ class Votacion extends Component
                 $parametros['plancha']= $this->plancha;
                 $parametros['plazas']= $this->plazas;
             }
+            \Illuminate\Support\Facades\Log::channel('custom')->info('Se Inicia una votacion',['quorum'=>$quorum,'predios',$predios]);
             return redirect()->route('questions.show', $parametros);
         } catch (Throwable $th) {
+            
             return $this->addError('questionCreate', $th->getMessage());
         }
     }

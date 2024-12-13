@@ -24,7 +24,7 @@
                     {{ $countdown }}
                 </h1>
                 <button class="btn btn-warning p-0 rounded-3 me-2" wire:click='playPause({{ !$stopped }})'
-                    wire:poll.1000ms='decrement'>
+                    @if (!$stopped) wire:poll.1000ms='decrement' @endif>
 
                     @if ($stopped)
                         <i class="bi bi-play-fill fs-2 py-0 px-1"></i>
@@ -33,9 +33,6 @@
                     @endif
                 </button>
                 <button class="btn btn-danger p-0 rounded-3" wire:click='stopVote'>
-                    <i class="bi bi-stop-fill fs-2 px-1"></i>
-                </button>
-                <button class="btn btn-success p-0 rounded-3" wire:click='store'>
                     <i class="bi bi-stop-fill fs-2 px-1"></i>
                 </button>
 
@@ -66,8 +63,9 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-warning" data-bs-dismiss="modal" wire:click='oneMoreMinut'>+1
-                        min</button>
+                    <button type="button" class="btn btn-warning" data-bs-dismiss="modal" wire:click='oneMoreMinut'>
+                        +1 min
+                    </button>
                     <button type="button" class="btn btn-success" data-bs-dismiss="modal" wire:click='store'
                         data-bs-toggle="modal" data-bs-target="#spinnerModal">Guardar</button>
                 </div>

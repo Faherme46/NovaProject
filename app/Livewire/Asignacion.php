@@ -214,6 +214,7 @@ class Asignacion extends Component
             $control->setCoef();
             $control->h_entrega = Carbon::now(new DateTimeZone('America/Bogota'))->second(0)->format('H:i');
             $control->save();
+            \Illuminate\Support\Facades\Log::channel('custom')->info('Registra el control {control}',['control' =>$control->id,'predios'=>array_keys($this->predioSelected)]);
         } catch (\Exception $e) {
             return  session()->flash('warning', $e->getMessage());
         }

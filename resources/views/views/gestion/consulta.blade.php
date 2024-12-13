@@ -165,12 +165,8 @@
 
                                 <div class="card p-2 mt-5 ">
                                     <button type="button" class="btn btn-danger p-0 mb-3 text-center"
-                                        wire:click='cleanData(1)'>
+                                        wire:click='cleanData(1,{{$tab}})'>
                                         <i class='bi bi-trash-fill fs-4 '></i>
-                                    </button>
-                                    <button type="button" class="btn btn-warning mb-3 p-0 text-center"
-                                        wire:click='undo'>
-                                        <i class="bi bi-arrow-counterclockwise fs-4 "></i>
                                     </button>
 
                                     <button type="button" class="btn btn-primary  mb-0 py-0 ps-1"
@@ -210,13 +206,16 @@
 
                                         <tbody>
                                             @forelse ($prediosR as $predio)
-                                                <tr scope="row">
+                                                <tr scope="row" 
+                                                class="@if ($predio->control->id==$controlIdR)
+                                                    table-active
+                                                @endif">
                                                     <td>{{ $predio->descriptor1 }} {{ $predio->numeral1 }}
                                                         {{ $predio->descriptor2 }} {{ $predio->numeral2 }}
                                                     </td>
 
                                                     <td>
-                                                        @if ($tab == 2)
+                                                        @if ($tab == 2 || $predio->control->id!=$controlIdR)
                                                             <button type="button" class="btn p-0"
                                                                 wire:click="toLeft({{ $predio->id }})">
                                                                 <i class='bi bi-arrow-left-square-fill'></i>

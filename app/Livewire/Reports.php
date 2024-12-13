@@ -20,7 +20,7 @@ class Reports extends Component
     public $quorumRegistered;
     public $quorumVote;
     public $allControls;
-    public $asamblea;
+    public $asambleaa;
 
     //report variables
     public $values;
@@ -56,11 +56,11 @@ class Reports extends Component
         });
         $this->report = cache('report', null);
 
-        $this->asamblea = Asamblea::find(cache('id_asamblea'));
+        $this->asambleaa = Asamblea::find(cache('id_asamblea'));
 
         $this->defVariables();
         $this->setQuestionsVerified();
-        $this->ordenDia=($this->asamblea->ordenDia)?htmlspecialchars(implode("\n",json_decode($this->asamblea->ordenDia))):'';
+        $this->ordenDia=($this->asambleaa->ordenDia)?htmlspecialchars(implode("\n",json_decode($this->asamblea->ordenDia))):'';
 
     }
 
@@ -97,7 +97,7 @@ class Reports extends Component
     public function saveOrdenDia()
     {
         $list=($this->ordenDia)?explode("\n", $this->ordenDia):[];
-        $this->asamblea->update(['ordenDia'=>json_encode($list)]);
+        $this->asambleaa->update(['ordenDia'=>json_encode($list)]);
 
     }
 
@@ -111,7 +111,7 @@ class Reports extends Component
 
     public function setQuestionsVerified()
     {
-        $attributes = $this->asamblea->getAttributes(); // Obtiene todos los atributos
+        $attributes = $this->asambleaa->getAttributes(); // Obtiene todos los atributos
 
         // Verifica si todos los campos tienen valor
         $this->asambleaVerified = true;

@@ -73,7 +73,7 @@
                         Terminar
                     </button>
                     <br>
-                    <button type="button" onclick='location.href="/backup/download"' class="btn btn-info fs-5">Descargar</button>
+                    
                 </div>
             </div>
         </div>

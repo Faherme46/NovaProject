@@ -75,7 +75,7 @@ class Consulta extends Component
     ];
 
 
-    public function cleanData($value)
+    public function cleanData($value,$tab=5)
     {
 
         if ($value) {
@@ -97,12 +97,12 @@ class Consulta extends Component
             'controlIdSearch',
             'Control'
         ]);
-        $this->mount();
+        $this->mount($tab);
         $this->dispatch('$refresh');
     }
-    public function mount()
+    public function mount($tab=5)
     {
-        $this->tab = 5;
+        $this->tab = $tab;
         $this->tiposId = Persona::distinct()->pluck('tipo_id');
         $this->maxControls = cache('asamblea')['controles'];
     }
@@ -220,23 +220,22 @@ class Consulta extends Component
         }
 
 
-            if ($control->state != 4) {
-                $this->controlLInvalid = false;
-                $predios = $control->predios;
-                if ($left) {
-                    $this->messageL = $this->messages[$control->state];
-                    foreach ($predios as $predio) {
-                        $this->prediosL[$predio->id] = $predio;
-                    }
-                } else {
-                    $this->messageL = $this->messages[$control->state];
-                    foreach ($predios as $predio) {
-                        $this->prediosR[$predio->id] = $predio;
-                    }
+        if ($control->state != 4) {
+            $this->controlLInvalid = false;
+            $predios = $control->predios;
+            if ($left) {
+                $this->messageL = $this->messages[$control->state];
+                foreach ($predios as $predio) {
+                    $this->prediosL[$predio->id] = $predio;
+                }
+            } else {
+                $this->messageL = $this->messages[$control->state];
+                foreach ($predios as $predio) {
+                    $this->prediosR[$predio->id] = $predio;
                 }
             }
-            return $control;
-
+        }
+        return $control;
     }
 
 
@@ -308,14 +307,7 @@ class Consulta extends Component
     }
 
 
-    public function undo()
-    {
-        $this->changes = false;
-        $this->cleanData(0);
-        $this->updatedControlIdL($this->controlIdL);
-
-        $this->updatedControlIdR($this->controlIdR);
-    }
+    
 
     public function validation()
     {
@@ -352,6 +344,7 @@ class Consulta extends Component
 
     public function storeInChange()
     {
+        
         $this->validation();
         if (!$this->changes) {
             session()->flash('warning', 'No hay cambios para guardar');
@@ -360,7 +353,10 @@ class Consulta extends Component
         try {
             $controlR = Control::find($this->controlIdR);
             $controlL = Control::find($this->controlIdL);
-
+            $prediosChange=array_diff(array_keys($this->prediosR),$controlR->predios->pluck('id')->toArray());
+            
+            
+            
             if ($this->controlRInvalid) {
                 $this->addError('error', 'El control B esta retirado');
                 return;
@@ -388,6 +384,8 @@ class Consulta extends Component
             if (!$this->prediosL) {
                 $controlL->retirar();
             }
+            
+            \Illuminate\Support\Facades\Log::channel('custom')->info('Se cambian los predios del control {controlA} al control {controlB}',['controlA' =>$controlL->id,'controlB' =>$controlR->id,'predios'=>array_values($prediosChange)]);
             $this->success();
         } catch (\Throwable $th) {
             $this->addError('error', '5 ' . $th->getMessage());
@@ -426,10 +424,10 @@ class Consulta extends Component
                 $controlL->setCoef();
                 $controlL->save();
             } else {
-
                 $controlL->retirar();
                 $controlL->setCoef();
             }
+            \Illuminate\Support\Facades\Log::channel('custom')->info('Se le retiran los predios al control {control}',['control' =>$controlL->id,'predios'=>array_keys($this->prediosR)]);
             $this->success();
         } catch (\Throwable $th) {
             $this->addError('error', '6 ' . $th->getMessage());
@@ -544,6 +542,7 @@ class Consulta extends Component
             $this->dispatch('crearPropietarioModalHide');
             $this->reset('namePersonita', 'lastNamePersonita');
             $this->addPropietario();
+            \Illuminate\Support\Facades\Log::channel('custom')->info('Crea una persona', ['cc' => $this->cedulaPersonita, 'nombre' => strtoupper($this->namePersonita), 'apellido' => strtoupper($this->lastNamePersonita)]);
         } catch (\Throwable $th) {
             $this->addError('error', 'Error al crear la persona: ' . $th->getMessage());
         }

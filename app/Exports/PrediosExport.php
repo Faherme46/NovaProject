@@ -27,10 +27,9 @@ class PrediosExport implements FromArray, WithHeadings, WithStyles
             $personasIds = $predio->personas->pluck('id')->implode(';');
 
             // Agrega el string de IDs al array del predio
-            $predioArray = ['cc_propietario' => $personasIds];
+            $predioArray = [];
             $predioArray += $predio->toArray();
             $clavesAEliminar = [
-                "id",
                 "control_id",
                 "quorum_start",
                 "quorum_end",
@@ -51,6 +50,7 @@ class PrediosExport implements FromArray, WithHeadings, WithStyles
 
             $predioArray['noVota'] = ($predioArray['vota']) ? '' : 1;
             unset($predioArray['vota']);
+            $predioArray['cc_propietario']= $personasIds;
             $predioArray['cc_apoderado'] = ($predio->apoderado) ? $predio->apoderado->id : null;
             $predioArray['nombre_ap'] = ($predio->apoderado) ? $predio->apoderado->nombre : null;
             $predioArray['apellido_ap'] = ($predio->apoderado) ? $predio->apoderado->apellido : null;
@@ -65,13 +65,14 @@ class PrediosExport implements FromArray, WithHeadings, WithStyles
     public function headings(): array
     {
         return [
-            'cc_propietario',
+            'id',
             'descriptor1',
             'numeral1',
             'descriptor2',
             'numeral2',
             'coeficiente',
             'noVota',
+            'cc_propietario',
             'cc_apoderado',
             'nombre_ap',
             'apellido_ap'
