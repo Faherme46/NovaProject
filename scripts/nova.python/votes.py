@@ -13,8 +13,8 @@ def connectDB():
     # Conectarse a la base de datos
     conn = mysql.connector.connect(
         host="localhost",
-        user="rootDb",
-        password="root",
+        user="root",
+        password="",
         database="novaDB"
     )
 
@@ -193,8 +193,11 @@ def main():
         return 1
 
     finally:
+        try:
+            os.remove(pid_file)
+        except:
+            pass
 
-        os.remove(pid_file)
 
 
 if __name__ == "__main__":

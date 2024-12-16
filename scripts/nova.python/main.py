@@ -36,7 +36,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def hello_world():
-    return "<p>Hello, World!</p>"
+    return "<p>Servidor On!</p>"
 
 @app.route('/run-votes', methods=['GET'])
 def run_script():
@@ -48,7 +48,7 @@ def run_script():
             return jsonify({"status": "Success","message":"Proceso ejecutado"}), 200
         except Exception as e:
             return jsonify({"status": "Error", "message": str(e)}), 500
-    return jsonify({"status": "Error", "message": "El script ya está corriendo"}), 400
+    return jsonify({"status": "Error", "message": "El script ya esta corriendo"}), 400
 
 @app.route('/verify-device', methods=['GET'])
 def verify_device():
@@ -76,7 +76,7 @@ def stop_script():
             return jsonify({"status":"Success","message": "Script detenido"}), 200
         except Exception as e:
             return jsonify({"status": "Error", "message": str(e)}), 500
-    return jsonify({"status": "Error", "message": "El script no está corriendo"}), 400
+    return jsonify({"status": "Error", "message": "El script no esta corriendo"}), 400
 
 @app.route('/stop-votes', methods=['GET'])
 def closeDevice():
