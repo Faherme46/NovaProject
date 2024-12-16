@@ -15,6 +15,7 @@ class Signs extends Component
     public $persona;
     public $tratamiento=false;
     public $enabled=false;
+
     public function mount(){
         $this->getPersona();
         //todo proof

@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Http\Controllers\FileController;
+use App\Models\Persona;
 use App\Models\Signature;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Url;
@@ -14,8 +15,12 @@ class Signing extends Component
     public $persona_id=0;
     #[Url]
     public $tratamiento=0;
+    public $fullscreen=false;
     protected $listeners=['uploadCanvasImage'=>'getImage'];
 
+    public function mount(){
+
+    }
 
     #[Layout("layout.presentation")]
     public function render()
@@ -52,4 +57,7 @@ class Signing extends Component
         return redirect()->route('asistencia.signs');
     }
 
+    public function toSign(){
+        $this->fullscreen=true;
+    }
 }

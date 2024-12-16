@@ -13,9 +13,9 @@
         </button>
     </div>
     <div class="mt-5 ">
-
         <div class=" py-5  my-5 d-flex justify-content-center align-content-center">
-            <div class=" px-3">
+
+            <div class=" px-3 ">
                 <div class="row mb-3 justify-content-center">
                     <button class="btn btn-danger d-flex align-items-center w-auto border border-light " id="clearButton"
                         type="button">
@@ -37,8 +37,46 @@
 
     </div>
 
+    <div class="modal " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" >
+        <div class="modal-dialog  modal-dialog-centered" >
+            <div class="modal-content">
+                <div class="modal-body">
+                   <h1>Por favor firme dentro del recuadro</h1>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary d-flex align-items-center " id='fullscreen'
+                        data-bs-dismiss="modal">
+                        <h4 class="mb-0">Siguiente</h4>
+                    </button>
+                    <script>
+                        document.getElementById('fullscreen').addEventListener('click', function() {
+
+                            if (!document.fullscreenElement) {
+                                // Entrar en pantalla completa
+                                document.documentElement.requestFullscreen().catch((err) => {
+                                    alert(`Error al intentar entrar en pantalla completa: ${err.message} (${err.name})`);
+                                });
+                            } else {
+                                // Salir de pantalla completa
+                                document.exitFullscreen().catch((err) => {
+                                    alert(`Error al intentar salir de pantalla completa: ${err.message} (${err.name})`);
+                                });
+                            }
+                        });
+                    </script>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 <script>
+    const myModal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
+
+    // Muestra el modal
+    myModal.show();
     // Obtener el canvas y el contexto de dibujo 2D
     const canvas = document.getElementById('drawing-canvas');
     const ctx = canvas.getContext('2d');
@@ -116,8 +154,8 @@
             const touch = e.touches[0] || e.changedTouches[0];
             const rect = canvas.getBoundingClientRect();
             console.log(touch)
-            offsetX = touch.clientX - rect.left ;
-            offsetY = touch.clientY - rect.top ;
+            offsetX = touch.clientX - rect.left;
+            offsetY = touch.clientY - rect.top;
         } else {
             offsetX = e.offsetX;
             offsetY = e.offsetY;

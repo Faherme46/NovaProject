@@ -143,6 +143,7 @@
 </body>
 <script>
     document.getElementById('fullscreen-button').addEventListener('click', function() {
+        
         if (!document.fullscreenElement) {
             // Entrar en pantalla completa
             document.documentElement.requestFullscreen().catch((err) => {
