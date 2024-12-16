@@ -80,6 +80,7 @@ class ControlesExport implements FromArray,WithHeadings,WithStyles
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('C')->setAutoSize(true);
         $sheet->getColumnDimension('D')->setAutoSize(true);
+        
         return [
             // Style the first row as bold text.
             1    => [

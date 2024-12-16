@@ -75,8 +75,8 @@ class LiderSetup extends Component
                 $this->started = true;
                 cache(['predios_init' =>  Predio::whereHas('control')->count()]);
                 cache(['quorum_init' => Control::whereNotIn('state', [4])->sum('sum_coef')]);
-                
-                
+
+
                 Predio::whereHas('control')->update(['quorum_start' => true]);
                 $this->asamblea->h_inicio = $time;
                 $this->asamblea->save();
@@ -96,10 +96,10 @@ class LiderSetup extends Component
 
         try {
         $logpath=storage_path('logs/myLog.log');
-        
+
         if(File::exists($logpath)){
             Storage::disk('externalAsambleas')->put($this->asamblea->name . '/logs.log', file_get_contents($logpath));
-            
+
         }
             $time = Carbon::now(new DateTimeZone('America/Bogota'))->second(0);
             if (!$this->asamblea->h_cierre) {
@@ -110,13 +110,13 @@ class LiderSetup extends Component
                 Control::whereHas('predios')->update(['h_recibe' => $time->format('H:i')]);
                 cache(['predios_end' =>  Predio::where('quorum_end', true)->count()]);
                 cache(['quorum_end' => Control::whereNotIn('state', [4,5])->sum('sum_coef')]);
-                
+
 
                 $fileController = new FileController;
                 if(!$fileController->exportTables()){
                     $this->addError('Error','Problema exportando las tablas de excel');
                 };
-                    
+
                 $this->asamblea->h_cierre = $time;
                 $this->asamblea->save();
                 cache(['asamblea' => $this->asamblea]);
@@ -128,7 +128,7 @@ class LiderSetup extends Component
             }
         } catch (\Exception $e) {
             //throw $th;
-            $this->addError('error', 'Error termianndo la asamblea: ' . $e->getMessage());
+            $this->addError('error', 'Error terminando la asamblea: ' . $e->getTraceAsString());
         }
     }
 

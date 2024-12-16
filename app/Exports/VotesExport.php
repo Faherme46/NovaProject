@@ -13,6 +13,9 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 class VotesExport implements FromArray, WithHeadings, WithStyles
 {
     protected $data;
+    public function __construct($votes) {
+        $this->data = $votes;
+    }
 
     public function array(): array
     {

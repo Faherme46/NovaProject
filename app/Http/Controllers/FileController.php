@@ -73,7 +73,7 @@ class FileController extends Controller
     public function getOnlyQuestionPath($questionId, $title): string
     {
         $questionCount=Question::count();
-        $questionName = ($questionId - $questionCount);
+        $questionName = ($questionId);
         $parentFolderName = cache('asamblea')['name'];
         $newFolderPath = $parentFolderName . '/Preguntas/' . $questionName;
 
@@ -81,7 +81,7 @@ class FileController extends Controller
     }
 
     public function createChart($questionId, $title, $labels, $values, $name)
-    {   
+    {
         // Datos para el gráfico
 
         $asambleaName = cache('asamblea')['name'];

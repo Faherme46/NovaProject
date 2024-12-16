@@ -188,10 +188,10 @@ class PresentQuestion extends Component
         }
     }
 
-    
+
     public function updateCountdown()
     {
-        
+
         $this->updateVotes();
         $minutes = floor($this->seconds / 60);
         $seconds = $this->seconds % 60;
@@ -218,14 +218,14 @@ class PresentQuestion extends Component
 
     public function stopVote()
     {
-        
+
         $this->seconds=0;
         $this->dispatch('modal-show');
         $this->playPause(true);
         $this->dispatch('$refresh');
     }
 
-    
+
     public function oneMoreMinut()
     {
         $this->playPause(false);
@@ -285,7 +285,7 @@ class PresentQuestion extends Component
                             $control->t_publico = 0;
                         }
                     } else {
-                        $valuesCoef['abstainted'] += $control->predios->count();
+                        $valuesCoef['abstainted'] += $control->sum_coef;
                         $valuesNom['abstainted']  += $control->predios->count();
                         $control->t_publico = 0;
                     }

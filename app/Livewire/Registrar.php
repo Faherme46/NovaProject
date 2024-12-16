@@ -334,6 +334,9 @@ class Registrar extends Component
     #[On('add-predio')]
     public function addPredioToList($predioId)
     {
+        if(!$this->cedula){
+            return $this->addError('error','Primero debe ingresar el asistente');
+        }
         $predio = Predio::find($predioId);
         if ($predio) {
             if($predio->control){

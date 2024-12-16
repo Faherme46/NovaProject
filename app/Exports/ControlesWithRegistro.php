@@ -41,8 +41,8 @@ class ControlesWithRegistro implements FromArray,WithHeadings,WithStyles
                 $controlArray['coeficiente']=$control->sum_coef;
                 $controlArray['votos']=$control->predios->count();
                 $controlArray['TD']=($control->t_publico==='1')?'Publico':'Privado';
-                $controlArray['cc_asistente']=$control->persona->id;
-                $controlArray['name_asistente']=$control->persona->fullName();
+                $controlArray['cc_asistente']=($control->persona)?$control->persona->id:'';
+                $controlArray['name_asistente']=($control->persona)?$control->persona->fullName():'';
 
             }
 
@@ -82,6 +82,7 @@ class ControlesWithRegistro implements FromArray,WithHeadings,WithStyles
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('C')->setAutoSize(true);
         $sheet->getColumnDimension('D')->setAutoSize(true);
+        $sheet->getColumnDimension('G')->setAutoSize(true);
         return [
             // Style the first row as bold text.
             1    => [

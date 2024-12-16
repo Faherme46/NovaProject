@@ -60,7 +60,7 @@ class Reports extends Component
 
         $this->defVariables();
         $this->setQuestionsVerified();
-        $this->ordenDia=($this->asambleaa->ordenDia)?htmlspecialchars(implode("\n",json_decode($this->asamblea->ordenDia))):'';
+        $this->ordenDia=($this->asambleaa->ordenDia)?htmlspecialchars(implode("\n",json_decode($this->asambleaa->ordenDia))):'';
 
     }
 
@@ -98,7 +98,7 @@ class Reports extends Component
     {
         $list=($this->ordenDia)?explode("\n", $this->ordenDia):[];
         $this->asambleaa->update(['ordenDia'=>json_encode($list)]);
-
+        session()->flash('success', 'Orden del dia guardado');
     }
 
     public function setView($value)

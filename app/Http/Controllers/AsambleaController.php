@@ -120,6 +120,18 @@ class AsambleaController extends Controller
         ], $messages);
 
         $asamblea = Asamblea::find($request->id_asamblea);
+        $controles=intval($request->controles);
+        if ($controles > $asamblea->controles) {
+            for ($i = $asamblea->controles+1; $i < $request->controles+1; $i++) {
+                Control::firstOrCreate([
+                    'id'=>$i,
+                    'state' => 4,
+                    'sum_coef' => 0,
+                    'sum_coef_can' => 0,
+                    'predios_vote' => 0
+                ]);
+            }
+        }
         if ($asamblea) {
             $asamblea->update($request->all());
             if (!$request->signature) {
@@ -214,7 +226,7 @@ class AsambleaController extends Controller
         $password = $request->input('password');
         if ($this->validatePassword($password)) {
             $this->deleteAsambleaFiles($request->name);
-            Asamblea::where('name',$request->name)->delete();
+            Asamblea::where('name', $request->name)->delete();
             return back()->with('success', 'Informacion eliminada correctamente');
         } else {
             return back()->with('error', 'La contraseña es incorrecta');
@@ -223,12 +235,11 @@ class AsambleaController extends Controller
     public function deleteAsambleaFiles($asambleaName)
     {
         $disk = Storage::disk('results');
-        $path = "backups\\".$asambleaName.'.sql';
-        if (Storage::exists("public/backups/".$asambleaName.'.sql')) {
-            Storage::delete("public/backups/".$asambleaName.'.sql');
-           
+        $path = "backups\\" . $asambleaName . '.sql';
+        if (Storage::exists("public/backups/" . $asambleaName . '.sql')) {
+            Storage::delete("public/backups/" . $asambleaName . '.sql');
         }
-        
+
         // Verifica si el disco existe
         if ($disk->exists($asambleaName)) {
             $this->deleteDirectory($disk, $asambleaName);
