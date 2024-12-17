@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\AsambleaExport;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 
 
 use App\Http\Controllers\FileController;
-
+use App\Imports\AsambleaImport;
 use App\Models\Asamblea;
 use App\Models\Control;
 
@@ -17,6 +18,8 @@ use App\Imports\PrediosImport;
 
 use App\Imports\PredioWithRegistro;
 use App\Imports\UsersImport;
+use Carbon\Carbon;
+use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -95,7 +98,7 @@ class AsambleaController extends Controller
             } else {
                 return redirect()->route('home')->withErrors($qe->getMessage());
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->sessionController->destroyOnError();
             return redirect()->route('home')->withErrors($e->getMessage());
         }
@@ -120,11 +123,11 @@ class AsambleaController extends Controller
         ], $messages);
 
         $asamblea = Asamblea::find($request->id_asamblea);
-        $controles=intval($request->controles);
+        $controles = intval($request->controles);
         if ($controles > $asamblea->controles) {
-            for ($i = $asamblea->controles+1; $i < $request->controles+1; $i++) {
+            for ($i = $asamblea->controles + 1; $i < $request->controles + 1; $i++) {
                 Control::firstOrCreate([
-                    'id'=>$i,
+                    'id' => $i,
                     'state' => 4,
                     'sum_coef' => 0,
                     'sum_coef_can' => 0,
@@ -204,14 +207,14 @@ class AsambleaController extends Controller
         } catch (ValidationException $e) {
             // Manejar excepciones específicas de validación de Excel
             $failures = $e->failures();
-            throw new \Exception('Error: ' . $failures[1]);
+            throw new Exception('Error: ' . $failures[1]);
             //Excepcion por archivo inexistente
-        } catch (\Illuminate\Contracts\Filesystem\FileNotFoundException $e) {
-            throw new \Exception('Error: ' . $e->getMessage());
-        } catch (\Exception $e) {
+        } catch (FileNotFoundException $e) {
+            throw new Exception('Error: ' . $e->getMessage());
+        } catch (Exception $e) {
 
             // Manejar cualquier otra excepción
-            throw new \Exception($e->getMessage());
+            throw new Exception($e->getMessage());
         }
     }
 
@@ -277,6 +280,120 @@ class AsambleaController extends Controller
             return true;
         } else {
             return false;
+        }
+    }
+
+
+
+    public function importAsambleaFile($folder)
+    {
+        try {
+            $data = Storage::disk('externalAsambleas')->get($folder . '/info.json');
+            $values = json_decode($data, true);
+            if ($values['h_cierre']) {
+                $time = Carbon::parse($values['h_cierre']);
+
+
+                $hora = $time->format('H:i:s');
+                $values['h_cierre'] = $hora;
+            }
+            unset($values['id_asamblea']);
+            if($values['ordenDia']){
+                $$values['ordenDia']=json_decode($values['ordenDia']);
+            }
+            $asamblea = Asamblea::create(
+                $values
+            );
+
+        } catch (FileNotFoundException $e) {
+            return redirect()->route('asambleas')->withErrors('Error: No se encontró la hoja de cálculo');
+        } catch (Exception $e) {
+            // Manejar cualquier otra excepción
+            return redirect()->route('asambleas')->with('error', '3' . $e->getMessage());
+        }
+    }
+
+    // public function exportAsambleaFile()
+    // {
+
+    //     try {
+    //         $export = new AsambleaExport();
+    //         $excel = Excel::store($export, 'asambleas.xlsx', 'externalAsambleas');
+    //         if ($excel) {
+    //             return back()->with('success', 'Archivo de asambleas exportado exitosamente');
+    //         } else {
+    //             return back()->with('error', 'Error exportando el archivo por que otro programa lo esta usando, cierre el archivo e intentelo de nuevo');
+    //         }
+    //     } catch (ValidationException $e) {
+    //         // Manejar excepciones específicas de validación de Excel
+    //         $failures = $e->failures();
+    //         return redirect()->route('asambleas')->withErrors('Error: ' . $failures[1]);
+    //         //Excepcion por archivo inexistente
+    //     } catch (FileNotFoundException $e) {
+    //         return redirect()->route('asambleas')->withErrors('Error: No se encontró la hoja de cálculo');
+    //     } catch (Exception $e) {
+    //         // Manejar cualquier otra excepción
+    //         return redirect()->route('asambleas')->withErrors('2' . $e->getMessage());
+    //     }
+    // }
+    public function loadAsambleas()
+    {
+
+
+
+        $externalFolderPath = config('filesystems.disks.externalAsambleas.root');
+
+        // Verifica si la carpeta existe
+        if (is_dir($externalFolderPath)) {
+            // Obtén una lista de subcarpetas
+            $subfolders = array_filter(glob($externalFolderPath . '/*'), 'is_dir');
+
+            // Extrae solo los nombres de las carpetas
+            $subfolderNames = array_map('basename', $subfolders);
+        } else {
+            return redirect()->route('asambleas')->withErrors(['error' => 'La carpeta externa no existe.']);
+        }
+        $folderStorage = Asamblea::all()->pluck('name')->toArray();
+        $foldersDiff = array_diff($subfolderNames,  $folderStorage);
+
+        if (!$foldersDiff) {
+
+            return redirect()->route('asambleas')->with('success', 'Asambleas Importadas Correctamente');
+        }
+
+        try {
+            foreach ($subfolderNames as $folder) {
+                // $this->importAsambleaFile($folder);
+                $questions = Storage::disk('externalAsambleas')->directories($folder . '/Preguntas');
+                foreach ($questions as $question) {
+                    $pathCoef = Storage::disk('externalAsambleas')->get($question . '/coefChart.png');
+                    Storage::disk('results')->put($question . '/coefChart.png', $pathCoef);
+                    $pathCoef = Storage::disk('externalAsambleas')->get($question . '/nominalChart.png');
+                    Storage::disk('results')->put($question . '/nominalChart.png', $pathCoef);
+                    # code...
+                }
+                $sql = Storage::disk('externalAsambleas')->get($folder . '/' . $folder . '.sql');
+                Storage::disk(name: 'backups')->put($folder . '.sql', $sql);
+            }
+            // $this->exportAsambleaFile();
+            return redirect()->route('asambleas')->with('success', 'Asambleas Importadas Correctamente');
+        } catch (\Throwable $th) {
+            return redirect()->route('asambleas')->withErrors(['error' => '1' . $th->getMessage()]);
+        }
+    }
+
+    public function loadFile($sourcePath, $destinationPath)
+    {
+        // Verifica si el archivo existe
+        if (file_exists($sourcePath)) {
+
+            // Mueve el archivo al directorio de almacenamiento
+            Storage::disk('results')->put($destinationPath, file_get_contents($sourcePath));
+
+            return $destinationPath;
+        } else {
+
+            throw new Exception('File does not exist');
         }
     }
 }

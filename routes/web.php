@@ -54,6 +54,7 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::post('question/update', [Controller::class, 'updateQuestion'])->name('question.update');
     Route::post('question/prefab/create', [Controller::class, 'createPrefabQuestion'])->name('question.prefab.create');
     Route::delete('asamblea/delete', [AsambleaController::class, 'deleteAsamblea'])->name('asamblea.delete')->withoutMiddleware(EnsureAsambleaOn::class);
+    Route::get('/asambleas/load', [AsambleaController::class,'loadAsambleas'])->name('asambleas.load')->withoutMiddleware(EnsureAsambleaOn::class);
     Route::get('/backup/download', [BackupController::class, 'downloadBackup']);
     Route::post('/backup/restore', [BackupController::class, 'restoreBackup'])->name('backup.restore')->withoutMiddleware(EnsureAsambleaOn::class);
 });

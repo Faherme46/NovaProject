@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Asamblea;
+use App\Models\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -40,7 +41,7 @@ class BackupController extends Controller
     {
         $nameAsamblea = $request->name;
         $dataLog=Storage::disk('externalAsambleas')->url($nameAsamblea.'/logs.log');
-        
+
         $username = env('DB_USERNAME');
         $password = env('DB_PASSWORD');
         $database = env('DB_DATABASE');
@@ -52,17 +53,19 @@ class BackupController extends Controller
             return back()->with('error', 'No se encontro el archivo de la respectiva asamblea');
         }
         $sql = file_get_contents($path);
-        DB::unprepared($sql);
+
         $comando = sprintf("%s --user=\"%s\" --password=\"%s\" --skip-lock-tables %s < %s", env("UBICACION_MYSQLDUMP"), env("DB_USERNAME"), env("DB_PASSWORD"), env("DB_DATABASE"), $sql);
+
         // Ejecutar el comando SQL
         try {
             exec($comando, $salida, $codigoSalida);
-            \Illuminate\Support\Facades\Log::channel('custom')->info('Carga la informacion de la asamblea:'.$nameAsamblea);
+
         } catch (\Throwable $th) {
 
             return redirect()->route('home')->with('success', 'Asamblea Cargada Correctamente');
         }
 
+        cache(['asamblea'=>Asamblea::find(Session::first()->id_asamblea)]);
 
         // Restaurar la base de datos usando el archivo
         // exec("mysql -u $username -p $password $database < " . storage_path("app/$path"));
