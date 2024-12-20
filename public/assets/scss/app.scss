@@ -220,6 +220,12 @@ a {
     overflow: hidden;
 }
 
+.lines-text-4{
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
 
 .medium-large-text {
     font-size: 3rem;

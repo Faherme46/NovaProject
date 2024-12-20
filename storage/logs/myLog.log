@@ -1,2 +1,6 @@
-[2024-12-16 19:24:25] local.INFO: Se descargo la informacion de la BD.  
-[2024-12-16 19:25:14] local.NOTICE: Se destermina la asamblea  
+[2024-12-20 02:16:25] local.INFO: Se descargo la informacion de la BD.  
+[2024-12-20 02:17:56] local.INFO: El Usuario ehernandez ha ingresado al sistema. {"username":"ehernandez"} 
+[2024-12-20 02:18:51] local.NOTICE: Se Inicia la asamblea  
+[2024-12-20 02:19:02] local.INFO: Se Inicia una votacion {"quorum":"4.122440","0":"predios","1":"12"} 
+[2024-12-20 02:20:07] local.INFO: Se Inicia una votacion {"quorum":"4.122440","0":"predios","1":"12"} 
+[2024-12-20 03:02:49] local.INFO: Se Inicia una votacion {"quorum":"4.122440","0":"predios","1":"12"} 

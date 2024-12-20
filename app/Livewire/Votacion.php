@@ -268,38 +268,38 @@ class Votacion extends Component
         //Se requiere un titulo a la pregunta'
         $error = 0;
         if (!$this->questionTitle) {
-            $this->addError('questionTitle', 'Se requiere el titulo de la pregunta');
+            $this->addError('error', 'Se requiere el titulo de la pregunta');
             $error = 1;
         }
         //Se requiere un tipo de la pregunta'
         if (!$this->questionType) {
-            $this->addError('questionTitle', 'Se requiere el tipo de la pregunta');
+            $this->addError('error', 'Se requiere el tipo de la pregunta');
             $error = 1;
         }
         if ($this->questionType == 2) {
             if (!$this->isOneOptionAlmost($this->questionOptions)) {
 
-                $this->addError('questionTitle', 'Al menos uno de los campos debe tener un valor.');
+                $this->addError('error', 'Al menos uno de los campos debe tener un valor.');
                 $error = 1;
             }
         }
 
         //si hay plancha se requiere el numero de plazas
         if  ($this->plancha && !$this->plazas){
-            $this->addError('questionTitle', 'Se requiere el numero de plazas');
+            $this->addError('error', 'Se requiere el numero de plazas');
             $error = 1;
         }elseif ($this->plazas<0 || !is_int($this->plazas)) {
-            $this->addError('questionTitle', 'El numero de plaznas no es valido');
+            $this->addError('error', 'El numero de plaznas no es valido');
         }
 
         $quorum = Control::where('state', 1)->sum('sum_coef');
         if ($quorum <= 0) {
-            $this->addError('questionTitle', 'No se han registrado asistentes');
+            $this->addError('error', 'No se han registrado asistentes');
             $error = 1;
         }
         $seconds = $this->secs + ($this->mins * 60);
         if ($seconds <= 0) {
-            $this->addError('questionTitle', 'El tiempo debe ser mayor a 0');
+            $this->addError('error', 'El tiempo debe ser mayor a 0');
             $error = 1;
         }
 
@@ -320,7 +320,7 @@ class Votacion extends Component
                 'optionD' => ($this->questionOptions['D']) ? strtoupper(rtrim($this->questionOptions['D'])) : null,
                 'optionE' => ($this->questionOptions['E']) ? strtoupper(rtrim($this->questionOptions['E'])) : null,
                 'optionF' => ($this->questionOptions['F']) ? strtoupper(rtrim($this->questionOptions['F'])) : null,
-                
+
                 'isValid' => ($this->questionType == 6) ? 0 : 1,
                 'coefGraph' => (bool)$this->questionCoefChart,
                 'quorum' => $quorum,
@@ -337,7 +337,7 @@ class Votacion extends Component
             \Illuminate\Support\Facades\Log::channel('custom')->info('Se Inicia una votacion',['quorum'=>$quorum,'predios',$predios]);
             return redirect()->route('questions.show', $parametros);
         } catch (Throwable $th) {
-            
+
             return $this->addError('questionCreate', $th->getMessage());
         }
     }

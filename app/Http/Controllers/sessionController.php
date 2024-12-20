@@ -27,7 +27,7 @@ class SessionController extends Controller
     {
         $nameAsamblea = cache('asamblea')['name'];
         $logpath=storage_path('logs/myLog.log');
-        
+
         if(File::exists($logpath)){
             Storage::disk('externalAsambleas')->put($nameAsamblea . '/logs.log', file_get_contents($logpath));
             File::delete($logpath);
@@ -36,16 +36,16 @@ class SessionController extends Controller
         $backupController=new BackupController();
         $response=$backupController->downloadBackup();
         if($response!=200){
-            return back()->with('error', 'Error exportando la base de datos: '.$response->getMessage());
+            return redirect()->route(route: 'asambleas')->with('error', 'Error exportando la base de datos: '.$response->getMessage());
         };
-        
+
         $sessionData = Auth::user();
 
 
         session()->flush();
         //se limpiaran las tablas
         $this->destroyOnError();
-        
+
         Auth::attempt([ "username"=> $sessionData->username,"password"=> $sessionData["passwordTxt"]]);
         return redirect()->route('home')->with('success', 'Sesion reestablecida');
     }
@@ -65,8 +65,8 @@ class SessionController extends Controller
         Question::truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
-        
-        
+
+
     }
     public function deleteAsambleaFiles()
     {
