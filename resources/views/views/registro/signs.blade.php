@@ -5,7 +5,7 @@
     </style>
     <x-alerts />
     <p wire:poll.1s='getPersona' class="hidden">
-        
+
     </p>
 
     <div class="position-fixed z-2 top-0 start-0 px-4 pt-2 d-flex justify-content-between align-items-center">
@@ -22,7 +22,7 @@
                     @if ($tratamiento)
                         <div class="card-body">
                             <h5 class="mb-5">
-                                TECNOVIS S.A. En cumplimiento de la ley <i>Habeas Data</i> es responsable por el
+                                TECNOVIS En cumplimiento de la ley <i>Habeas Data</i> (Ley 1581 de 2012) es responsable por el
                                 tratamiento de la informacion recopilada en la presente asamblea; por esta razon, nos
                                 permitimos consultar si de forma personal desea que sus datos sean de forma
                                 <i>PUBLICA* O PRIVADA*</i>.
@@ -50,8 +50,8 @@
                         <div class="card-footer d-flex justify-content-between">
                             <div class="col-9">
                                 <small>
-                                    *La calidad de PUBLICO o PRIVADO en el tratamiento de los datos esta establecido en
-                                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                                    *<b>Publico:</b> Los datos podran ser solicitados por la Administracion de {{cache('asamblea')['folder']}} en cualquier momento
+                                    *<b>Privado:</b> Los datos unicamente podran ser solicitados mediante una orden judicial
                                 </small>
                             </div>
                             <div class="col-3">

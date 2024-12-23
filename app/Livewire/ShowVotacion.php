@@ -17,8 +17,12 @@ class ShowVotacion extends Component
     {
         $this->asambleaName=cache('asamblea')['name'];
         $this->questions = Question::all();
-        $this->selectQuestion($this->questions->first()->id);
-        $this->inCoefResult=$this->question->coefGraph;
+        if ($this->questions->isNotEmpty()) {
+            $this->selectQuestion($this->questions->first()->id);
+            $this->inCoefResult=$this->question->coefGraph;
+        }
+
+
     }
     #[Layout('layout.full-page')]
     public function render()

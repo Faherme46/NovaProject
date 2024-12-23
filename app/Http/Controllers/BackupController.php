@@ -17,7 +17,7 @@ class BackupController extends Controller
 
         $ubicacionArchivoTemporal = storage_path("app\public\backups\\" . $nameAsamblea . '.sql');
         $codigoSalida = 0;
-       
+
         $tables = ['cache', 'controls', 'personas', 'predios', 'predios_personas', 'questions', 'results', 'session', 'signatures', 'votes'];
         $comando = sprintf("%s --user=\"%s\" --password=\"%s\" --skip-lock-tables --no-create-info %s %s > %s", env("UBICACION_MYSQLDUMP"), env("DB_USERNAME"), env("DB_PASSWORD"), env('DB_DATABASE'), implode(' ', $tables), $ubicacionArchivoTemporal);
         try {
@@ -53,11 +53,11 @@ class BackupController extends Controller
         }
         try {
             $questions = Storage::disk('externalAsambleas')->directories($nameAsamblea . '/Preguntas');
-            foreach ($questions as $question) {
+            foreach ($questions as $key=>$question) {
                 $pathCoef = Storage::disk('externalAsambleas')->get($question . '/coefChart.png');
-                Storage::disk('results')->put($question . '/coefChart.png', $pathCoef);
+                Storage::disk('results')->put($nameAsamblea.'/'.($key+1) . '/coefChart.png', $pathCoef);
                 $pathNom = Storage::disk('externalAsambleas')->get($question . '/nominalChart.png');
-                Storage::disk('results')->put($question . '/nominalChart.png', $pathNom);
+                Storage::disk('results')->put($nameAsamblea.'/'.($key+1)  . '/nominalChart.png', $pathNom);
                 // Ejecutar el comando SQL
 
             }
@@ -65,7 +65,7 @@ class BackupController extends Controller
             \Illuminate\Support\Facades\Log::channel('custom')->info('Carga la informacion de la asamblea:' . $nameAsamblea);
         } catch (\Throwable $th) {
 
-            return redirect()->route('home')->with('success', 'Asamblea Cargada Correctamente');
+            return back()->with('error', 'Error cargando la Asamblea: '.$th->getTraceAsString());
         }
 
 

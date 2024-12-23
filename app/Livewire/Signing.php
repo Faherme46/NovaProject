@@ -31,7 +31,7 @@ class Signing extends Component
     public function getImage($image){
         $asamblea=cache('asamblea');
 
-        $path=$asamblea['name']."/firmas/".$this->persona_id.'.png';
+        $path=$asamblea['name']."/Firmas/".$this->persona_id.'.png';
         $fileController= new FileController;
         $validImage = $this->dataUrlToImage($image  );
         $fileController->exportPdf($path,$validImage);

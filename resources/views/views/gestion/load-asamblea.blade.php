@@ -5,6 +5,7 @@
             <h1 class="card-title mb-0">
                 Asambleas Guardadas
             </h1>
+            <button type="button" class="btn btn-primary fs-4" onclick='location.href="/asambleas/load";'> Actualizar</button>
         </div>
         <div class="card-body">
             <div class="list-group pe-0 border mt-3" style="max-height: 50vh; overflow-y: auto;">

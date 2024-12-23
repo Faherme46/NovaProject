@@ -305,7 +305,7 @@ class AsambleaController extends Controller
                 $values
             );
         } catch (FileNotFoundException $e) {
-            return redirect()->route('asambleas')->with('error','No se encontro el archivo "info.json"');
+            return redirect()->route('asambleas')->with('error', 'No se encontro el archivo "info.json"');
         } catch (Exception $e) {
             // Manejar cualquier otra excepción
             return redirect()->route('asambleas')->with('error', '3 ' . $e->getMessage());
@@ -332,17 +332,20 @@ class AsambleaController extends Controller
         }
         $folderStorage = Asamblea::all()->pluck('name')->toArray();
         $foldersDiff = array_diff($subfolderNames,  $folderStorage);
-
-        if (!$foldersDiff) {
-
-            return redirect()->route('asambleas')->with('success', 'Asambleas Importadas Correctamente');
-        }
+        $foldersDelete = array_diff($folderStorage, $subfolderNames);
 
         try {
+            foreach ($foldersDelete as $name) {
+                Asamblea::where('name',$name)->delete();
+            }
+            if (!$foldersDiff) {
+
+                return redirect()->route('asambleas')->with('success', 'Asambleas Importadas Correctamente');
+            }
             foreach ($foldersDiff as $name) {
                 $this->importAsambleaFile($name);
             }
-
+            dd($foldersDelete);
 
             return redirect()->route('asambleas')->with('success', 'Asambleas Importadas Correctamente');
         } catch (\Throwable $th) {
