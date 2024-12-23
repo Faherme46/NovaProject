@@ -71,7 +71,7 @@ class Main extends Component
                 'visible'=> ($this->role=='Admin'),
                 'enabled'=>!(cache('asamblea',false)),
             ],[
-                "directives"=> 'onclick=location.href="/asambleas";',
+                "directives"=> 'onclick=location.href="/asambleas/load";',
                 'icon'=> 'bi-upload',
                 'title'=> 'Cargar Asamblea',
                 'body'=> 'Cargar y eliminar las asambleas guardadas',

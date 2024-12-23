@@ -1,7 +1,7 @@
 <div>
     <x-alerts />
     <div class="card">
-        <div class="card-header">
+        <div class="card-header d-flex justify-content-between">
             <h1 class="card-title mb-0">
                 Asambleas Guardadas
             </h1>
@@ -14,7 +14,7 @@
                         <th class="fs-2 text-center">Fecha</th>
                         <th class="fs-2 text-center">Hora</th>
                         <th class="fs-2 text-center">Tipo</th>
-                        <th class="fs-2 text-center" colspan="2">Acciones</th>
+                        <th class="fs-2 text-center" > </th>
                     </thead>
                     <tbody>
                         @foreach ($asambleas as $a)
@@ -32,13 +32,6 @@
                                         wire:click='setNameAsamblea("{{ $a->name }}")'>
                                         <i class="bi bi-upload"></i>
                                         Cargar
-                                    </button>
-                                </td>
-                                <td class="fs-3 text-center">
-                                    <button type="button" class="btn fs-5 btn-danger"
-                                        wire:click='deleteAsamblea("{{ $a->name }}")'>
-                                        <i class="bi bi-trash"></i>
-                                        Eliminar
                                     </button>
                                 </td>
                             </tr>
@@ -77,10 +70,10 @@
     <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
-                <form action="{{ route('asamblea.delete') }}"  method="POST">
+                <form action="{{ route('asamblea.delete') }}" method="POST">
                     @method('DELETE')
                     @csrf
-                    
+
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="exampleModalLabel">
                             Eliminar TODA la información de
@@ -110,9 +103,10 @@
 
                             </div>
                             <div class="col-4">
-                                <input type="password" class="form-control" name="password" placeholder="Contraseña" required>
-                                <input type="hidden" name="name" value="{{ $asambleaName }}" >
-                                
+                                <input type="password" class="form-control" name="password" placeholder="Contraseña"
+                                    required>
+                                <input type="hidden" name="name" value="{{ $asambleaName }}">
+
                             </div>
                         </div>
                     </div>
@@ -121,10 +115,10 @@
 
                         <input type="hidden" name="name" value="{{ $asambleaName }}">
                         <span>
-                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-danger">ELIMINAR</button>  
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-danger">ELIMINAR</button>
                         </span>
-                        
+
                     </div>
                 </form>
             </div>

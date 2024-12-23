@@ -269,10 +269,6 @@ class AsambleaController extends Controller
     }
     public function validatePassword($password)
     {
-        // Validar el campo de contraseña en el formulario
-
-
-        // Obtener la contraseña ingresada por el usuario
 
 
         // Comparar con la contraseña del usuario autenticado
@@ -298,44 +294,25 @@ class AsambleaController extends Controller
                 $values['h_cierre'] = $hora;
             }
             unset($values['id_asamblea']);
-            if($values['ordenDia']){
-                $$values['ordenDia']=json_decode($values['ordenDia']);
-            }
-            $asamblea = Asamblea::create(
+            unset($values['created_at']);
+            unset($values['updated_at']);
+
+            // if($values['ordenDia']){
+            //     $values['ordenDia']=json_decode($values['ordenDia']);
+            // }
+
+            $asamblea = Asamblea::updateOrCreate(
                 $values
             );
-
         } catch (FileNotFoundException $e) {
-            return redirect()->route('asambleas')->withErrors('Error: No se encontró la hoja de cálculo');
+            return redirect()->route('asambleas')->with('error','No se encontro el archivo "info.json"');
         } catch (Exception $e) {
             // Manejar cualquier otra excepción
-            return redirect()->route('asambleas')->with('error', '3' . $e->getMessage());
+            return redirect()->route('asambleas')->with('error', '3 ' . $e->getMessage());
         }
     }
 
-    // public function exportAsambleaFile()
-    // {
 
-    //     try {
-    //         $export = new AsambleaExport();
-    //         $excel = Excel::store($export, 'asambleas.xlsx', 'externalAsambleas');
-    //         if ($excel) {
-    //             return back()->with('success', 'Archivo de asambleas exportado exitosamente');
-    //         } else {
-    //             return back()->with('error', 'Error exportando el archivo por que otro programa lo esta usando, cierre el archivo e intentelo de nuevo');
-    //         }
-    //     } catch (ValidationException $e) {
-    //         // Manejar excepciones específicas de validación de Excel
-    //         $failures = $e->failures();
-    //         return redirect()->route('asambleas')->withErrors('Error: ' . $failures[1]);
-    //         //Excepcion por archivo inexistente
-    //     } catch (FileNotFoundException $e) {
-    //         return redirect()->route('asambleas')->withErrors('Error: No se encontró la hoja de cálculo');
-    //     } catch (Exception $e) {
-    //         // Manejar cualquier otra excepción
-    //         return redirect()->route('asambleas')->withErrors('2' . $e->getMessage());
-    //     }
-    // }
     public function loadAsambleas()
     {
 
@@ -362,20 +339,11 @@ class AsambleaController extends Controller
         }
 
         try {
-            foreach ($subfolderNames as $folder) {
-                // $this->importAsambleaFile($folder);
-                $questions = Storage::disk('externalAsambleas')->directories($folder . '/Preguntas');
-                foreach ($questions as $question) {
-                    $pathCoef = Storage::disk('externalAsambleas')->get($question . '/coefChart.png');
-                    Storage::disk('results')->put($question . '/coefChart.png', $pathCoef);
-                    $pathCoef = Storage::disk('externalAsambleas')->get($question . '/nominalChart.png');
-                    Storage::disk('results')->put($question . '/nominalChart.png', $pathCoef);
-                    # code...
-                }
-                $sql = Storage::disk('externalAsambleas')->get($folder . '/' . $folder . '.sql');
-                Storage::disk(name: 'backups')->put($folder . '.sql', $sql);
+            foreach ($foldersDiff as $name) {
+                $this->importAsambleaFile($name);
             }
-            // $this->exportAsambleaFile();
+
+
             return redirect()->route('asambleas')->with('success', 'Asambleas Importadas Correctamente');
         } catch (\Throwable $th) {
             return redirect()->route('asambleas')->withErrors(['error' => '1' . $th->getMessage()]);

@@ -11,7 +11,7 @@ use App\Models\PrediosPersona;
 use App\Models\Question;
 use App\Models\QuestionType;
 use App\Models\Result;
-
+use App\Models\Signature;
 use Database\Seeders\QuestionSeeder;
 
 use Illuminate\Support\Facades\DB;
@@ -35,14 +35,16 @@ class SessionController extends Controller
         //se descargan las tablas
         $backupController=new BackupController();
         $response=$backupController->downloadBackup();
+
         if($response!=200){
-            return redirect()->route(route: 'asambleas')->with('error', 'Error exportando la base de datos: '.$response->getMessage());
+            return redirect()->route(route: 'asambleas')->with('error', 'Error exportando la base de datos: '.$response);
         };
 
         $sessionData = Auth::user();
 
 
         session()->flush();
+        $this->deleteAsambleaFiles();
         //se limpiaran las tablas
         $this->destroyOnError();
 
@@ -52,8 +54,6 @@ class SessionController extends Controller
 
     public function destroyOnError()
     {
-
-
         Cache::flush();
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         Session::truncate();
@@ -63,10 +63,8 @@ class SessionController extends Controller
         Result::truncate();
         PrediosPersona::truncate();
         Question::truncate();
+        Signature::truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-
-
-
     }
     public function deleteAsambleaFiles()
     {
@@ -74,7 +72,7 @@ class SessionController extends Controller
         $asambleaName=cache('asamblea')['name'];
         // Verifica si el disco existe
         if ($disk->exists($asambleaName)) {
-            $this->deleteDirectory($disk, $asambleaName);
+            Storage::disk('results')->deleteDirectory($asambleaName);
         }
     }
 

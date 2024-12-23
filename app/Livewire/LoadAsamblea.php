@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Http\Controllers\AsambleaController;
 use App\Models\Asamblea;
 use Livewire\Component;
 
@@ -21,13 +22,17 @@ class LoadAsamblea extends Component
     }
 
     public function setNameAsamblea($value){
-        
+
         $this->asambleaName=$value;
         $this->dispatch('loadModalShow');
     }
     public function deleteAsamblea($value){
-        
+
         $this->asambleaName=$value;
         $this->dispatch('deleteModalShow');
+    }
+
+    public function loadAsambleas(){
+
     }
 }
