@@ -80,7 +80,7 @@ class LiderSetup extends Component
                 Predio::whereHas('control')->update(['quorum_start' => true]);
                 $this->asamblea->h_inicio = $time;
                 $this->asamblea->save();
-                cache(['asamblea' => $this->asamblea]);
+                cache(['asamblea' => $this->asamblea->toArray()]);
                 \Illuminate\Support\Facades\Log::channel('custom')->notice('Se Inicia la asamblea');
                 session()->flash('info', 'Se ha iniciado la asamblea en: ' . $time);
             } else {
@@ -119,7 +119,7 @@ class LiderSetup extends Component
 
                 $this->asamblea->h_cierre = $time;
                 $this->asamblea->save();
-                cache(['asamblea' => $this->asamblea]);
+                cache(['asamblea' => $this->asamblea->toArray()]);
                 $this->finished = true;
                 \Illuminate\Support\Facades\Log::channel('custom')->notice('Se termina la asamblea');
                 session()->flash('info', 'Se ha terminado la asamblea en: ' . $time);
@@ -135,7 +135,7 @@ class LiderSetup extends Component
     public function desterminar()
     {
         try {
-
+            
             $this->asamblea = Asamblea::find(cache('id_asamblea'));
             cache(['predios_end' => -1]);
             $this->asamblea->h_cierre = null;

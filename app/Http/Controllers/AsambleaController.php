@@ -141,7 +141,7 @@ class AsambleaController extends Controller
                 $asamblea->signature = false;
                 $asamblea->save();
             }
-            cache(['asamblea' => $asamblea]);
+            cache(['asamblea' => $asamblea->toArray()]);
             return back()->with('success', 'Asamblea actualizada con éxito.');
         } else {
             return back()->withErrors('No se encontro la asamblea')->withInput();
@@ -280,6 +280,9 @@ class AsambleaController extends Controller
     }
 
 
+    
+
+
 
     public function importAsambleaFile($folder)
     {
@@ -316,10 +319,7 @@ class AsambleaController extends Controller
     public function loadAsambleas()
     {
 
-
-
         $externalFolderPath = config('filesystems.disks.externalAsambleas.root');
-
         // Verifica si la carpeta existe
         if (is_dir($externalFolderPath)) {
             // Obtén una lista de subcarpetas

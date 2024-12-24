@@ -24,8 +24,6 @@ class PresentQuestion extends Component
     public $question;
     public $countdown;
     public $seconds;
-    public $chartCoef;
-    public $chartNom;
     public $stopped = false;
     public $step = 1;
     public $colors = [
@@ -49,11 +47,11 @@ class PresentQuestion extends Component
 
 
     public $newTitle;
-    public $newOptions=[];
+    public $newOptions = [];
     public $isEditting = false;
     public function mount($questionId, $plancha = false, $plazas = 0)
     {
-        $this->reset('inVoting', 'seconds', 'countdown', 'votes', 'chartNom', 'inCoefResult', 'votes', 'controlsAssigned');
+        $this->reset('inVoting', 'seconds', 'countdown', 'votes', 'inCoefResult', 'votes', 'controlsAssigned');
         $this->step = 1;
         // $this->question = Question::find(19);
         if (!$this->question) {
@@ -110,24 +108,20 @@ class PresentQuestion extends Component
     }
     public function toPlanchas()
     {
-
-
         $this->resultToUse = ($this->inCoefResult) ? $this->question->resultCoef : $this->question->resultNom;
         $this->calculatePlazas();
-        $this->inVoting = 4;
+        $this->inVoting=4;
     }
 
     public function setImageUrl($result, $quorum)
     {
         try {
             $path = $this->setChart($result, $quorum);
-            $urlImg = Storage::disk('results')->url('images/results/' . $path);
+
             // dd($urlImg);
             if ($result->isCoef) {
-                $this->chartCoef = $urlImg;
                 $result->chartPath = $path;
             } else {
-                $this->chartNom = $urlImg;
                 $result->chartPath = $path;
             }
             $result->save();
@@ -424,6 +418,10 @@ class PresentQuestion extends Component
         $pythonUrl = env('PYTHON_PATH', 'http://127.0.0.1:5000');
         try {
             $response = Http::get($pythonUrl . '/' . $action);
+            if ($response->status() == 400) {
+                $this->addError('error', 'Error iniciando votación');
+                return False;
+            }
             return True;
         } catch (Throwable $th) {
             $this->addError('Error', 'Error al conectar con el servidor python: ' . $th->getMessage());
@@ -545,24 +543,26 @@ class PresentQuestion extends Component
                     $plazasRestantes--;
                 }
             }
-            $this->valuesPlanchas['total'] = $total;
-            $this->valuesPlanchas['umbral'] = round($umbral, 4);
         }
+        $this->valuesPlanchas['total'] = $total;
+        $this->valuesPlanchas['umbral'] = round($umbral, 4);
     }
+
 
     public function editting()
     {
         $this->isEditting = true;
     }
 
-    public function updateQuestion() {
-        $this->question->title=$this->newTitle;
+    public function updateQuestion()
+    {
+        $this->question->title = $this->newTitle;
 
 
         $this->question->update($this->newOptions);
 
         $this->question->save();
         $this->setSizePresentation();
-        $this->isEditting=false;
+        $this->isEditting = false;
     }
 }

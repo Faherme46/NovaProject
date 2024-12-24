@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Asamblea;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -14,7 +13,9 @@ class BackupController extends Controller
     public function downloadBackup()
     {
         $nameAsamblea = cache('asamblea')['name'];
-
+        $asamblea=Asamblea::find(cache('asamblea')['id_asamblea'])->toArray();
+        $info=Storage::disk('externalAsambleas')->put($nameAsamblea.'/info.json',json_encode($asamblea));
+        
         $ubicacionArchivoTemporal = storage_path("app\public\backups\\" . $nameAsamblea . '.sql');
         $codigoSalida = 0;
 
@@ -42,9 +43,6 @@ class BackupController extends Controller
     public function restoreBackup(Request $request)
     {
         $nameAsamblea = $request->name;
-
-
-
         // Almacenar temporalmente el archivo SQL cargado
         $path = $nameAsamblea . '/' . $nameAsamblea . '.sql';
         $sql = Storage::disk('externalAsambleas')->get($path);
@@ -62,6 +60,8 @@ class BackupController extends Controller
 
             }
             $execute = DB::unprepared($sql);
+            $asamblea=Asamblea::where('name',$nameAsamblea)->toArray();
+            cache(['asamblea' => $asamblea]);
             \Illuminate\Support\Facades\Log::channel('custom')->info('Carga la informacion de la asamblea:' . $nameAsamblea);
         } catch (\Throwable $th) {
 

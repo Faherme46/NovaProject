@@ -12,6 +12,7 @@
 /scripts/nova.python/venv
 /scripts/nova.python/__pycache__
 /vendor
+/vendore
 .env
 .env.backup
 .env.production

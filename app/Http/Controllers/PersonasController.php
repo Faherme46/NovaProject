@@ -109,7 +109,7 @@ class PersonasController extends Controller
 
     public function export($route){
         $export = new PersonasExport();
-        return Excel::store($export, $route . '/personas.xlsx', 'externalAsambleas');
+        return Excel::store($export, $route . '/Tablas/personas.xlsx', 'externalAsambleas');
     }
     
 }

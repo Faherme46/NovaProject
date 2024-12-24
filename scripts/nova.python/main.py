@@ -48,7 +48,13 @@ def run_script():
             return jsonify({"status": "Success","message":"Proceso ejecutado"}), 200
         except Exception as e:
             return jsonify({"status": "Error", "message": str(e)}), 500
-    return jsonify({"status": "Error", "message": "El script ya esta corriendo"}), 400
+    stop_script()
+    try:
+        # Inicia el script en segundo plano
+        process=subprocess.Popen(['python', 'votes.py'])
+        return jsonify({"status": "Success","message":"Proceso ejecutado"}), 200
+    except Exception as e:
+        return jsonify({"status": "Error", "message": str(e)}), 500
 
 @app.route('/verify-device', methods=['GET'])
 def verify_device():

@@ -31,14 +31,14 @@ class ReportController extends Controller
     {
         $this->variables['date'] = Carbon::now()->locale('es')->isoFormat('MMMM YYYY');
         $this->variables['quorum'] = Control::whereNotIn('state', [4])->sum('sum_coef');
-        $this->asamblea = Asamblea::find(cache('id_asamblea'));
+        $this->asamblea = Asamblea::find(cache('asamblea')['id_asamblea']);
         $date = explode('-', $this->asamblea->fecha);
         $meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
         $dateString = $date[2] . ' de ' . $meses[(int)$date[1] - 1] . ' de ' . $date[0];
         $this->predios = Predio::where('id', '<', 12)->get();
         // $this->predios = Predio::all();
         $this->questions = Question::where('isValid', true)->with('results')->get();
-
+        
         $this->variables += [
             'registro' => cache('inRegistro'),
             'asamblea' => $this->asamblea,
@@ -129,7 +129,7 @@ class ReportController extends Controller
                 ->header('Content-Disposition', 'inline; filename="Informe.pdf"');
         } catch (\Throwable $th) {
 
-            return redirect()->route('gestion.report')->with('error', $th->getMessage());
+            return redirect()->route('gestion.report')->with('error', $th->getTrace());
         }
     }
     public function createDocument($name)
@@ -190,15 +190,9 @@ class ReportController extends Controller
             if (!$responseExcel2) {
                 return response()->json('Asistencia_Quorum.xlsx', 423);
             }
-            $export3 = new AsistenciaQuorum($predios, 0);
-
-            $responseExcel3 = Excel::store($export3, $asambleaName . '/Informe/Total_Participantes.xlsx', 'externalAsambleas');
-            if (!$responseExcel3) {
-                return response()->json('Total_Participantes.xlsx', 423);
-            }
             return response()->json(['success' => 'Archivos Exportados correctamente'], 200);
         } catch (\Throwable $th) {
-            return response()->json('Falla en la exportacion de excel '.$th->getMessage(), 500);
+            return response()->json('Falla en la exportacion de excel: '.$th->getMessage(), 500);
         }
     }
 }

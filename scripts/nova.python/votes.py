@@ -94,7 +94,7 @@ def sendComandsToClose(device):
                 [0x03, 0x03, 0x82, 0x81]]
     for command in commands:
         device.write(command)
-        time.sleep(1)
+        time.sleep(.5)
 
 
 def getArgs():
@@ -131,7 +131,7 @@ def main():
                 data = device.read(64)  # Leer un bloque de datos de 64 bytes
 
                 if data and myFlag:
-
+                    
                     reportId=data[0]
                     values=[data[1],data[2]]
                     print(reportId,' : ',values)
