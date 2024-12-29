@@ -15,7 +15,7 @@ class BackupController extends Controller
         $nameAsamblea = cache('asamblea')['name'];
         $asamblea=Asamblea::find(cache('asamblea')['id_asamblea'])->toArray();
         $info=Storage::disk('externalAsambleas')->put($nameAsamblea.'/info.json',json_encode($asamblea));
-        
+
         $ubicacionArchivoTemporal = storage_path("app\public\backups\\" . $nameAsamblea . '.sql');
         $codigoSalida = 0;
 
@@ -60,12 +60,14 @@ class BackupController extends Controller
 
             }
             $execute = DB::unprepared($sql);
-            $asamblea=Asamblea::where('name',$nameAsamblea)->toArray();
-            cache(['asamblea' => $asamblea]);
+            $asamblea=Asamblea::where('name',$nameAsamblea)->get();
+            
+            cache(['asamblea' => $asamblea[0],'id_asamblea'=>$asamblea[0]->id_asamblea]);
+
             \Illuminate\Support\Facades\Log::channel('custom')->info('Carga la informacion de la asamblea:' . $nameAsamblea);
         } catch (\Throwable $th) {
 
-            return back()->with('error', 'Error cargando la Asamblea: '.$th->getTraceAsString());
+            return back()->with('error', 'Error cargando la Asamblea: '.$th->getMessage());
         }
 
 

@@ -35,10 +35,10 @@ class ReportController extends Controller
         $date = explode('-', $this->asamblea->fecha);
         $meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
         $dateString = $date[2] . ' de ' . $meses[(int)$date[1] - 1] . ' de ' . $date[0];
-        $this->predios = Predio::where('id', '<', 12)->get();
-        // $this->predios = Predio::all();
+        // $this->predios = Predio::where('id', '<', 12)->get();
+        $this->predios = Predio::all();
         $this->questions = Question::where('isValid', true)->with('results')->get();
-        
+
         $this->variables += [
             'registro' => cache('inRegistro'),
             'asamblea' => $this->asamblea,

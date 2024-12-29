@@ -169,7 +169,7 @@
                                         <div class="card ">
                                             <div
                                                 class="card-body d-flex align-items-center p-1 justify-content-center">
-                                                <i class="bi bi-trash" style="font-size:40px"></i>
+                                                <i class="bi bi-door-open" style="font-size:40px"></i>
                                                 <h5 class="card-title mb-0 ms-2">Cerrar Asamblea</h5>
                                             </div>
                                         </div>

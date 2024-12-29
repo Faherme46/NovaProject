@@ -152,10 +152,10 @@
                 <div class="text-center mb-1">
                     @if ($q->coefGraph)
                         <img src="{{ asset('storage/images/results/' . $q->resultCoef->chartPath) }}"
-                            class="w-100 h-auto">
+                            class="w-100 h-auto" alt="No se encontro la imagen">
                     @else
                         <img src="{{ asset('storage/images/results/' . $q->resultNom->chartPath) }}"
-                            class="w-100 h-auto">
+                            class="w-100 h-auto" alt="No se encontro la imagen">
                     @endif
                 </div>
                 @if ($q->type != 1 && $q->type != 5 )
