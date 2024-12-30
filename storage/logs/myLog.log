@@ -1,1 +1,5 @@
 [2024-12-24 16:25:59] local.INFO: Se descargo la informacion de la BD.  
+[2024-12-29 23:49:41] local.INFO: El Usuario ehernandez ha ingresado al sistema. {"username":"ehernandez"} 
+[2024-12-29 23:50:34] local.INFO: Registra el control 5 {"control":5,"predios":[1,30]} 
+[2024-12-29 23:50:45] local.INFO: Registra el control 6 {"control":6,"predios":[2,35]} 
+[2024-12-29 23:50:57] local.NOTICE: Se Inicia la asamblea  
