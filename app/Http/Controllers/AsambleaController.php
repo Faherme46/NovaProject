@@ -280,7 +280,7 @@ class AsambleaController extends Controller
     }
 
 
-    
+
 
 
 
@@ -289,13 +289,13 @@ class AsambleaController extends Controller
         try {
             $data = Storage::disk('externalAsambleas')->get($folder . '/info.json');
             $values = json_decode($data, true);
-            if ($values['h_cierre']) {
-                $time = Carbon::parse($values['h_cierre']);
+            // if ($values['h_cierre']) {
+            //     $time = Carbon::parse($values['h_cierre']);
 
 
-                $hora = $time->format('H:i:s');
-                $values['h_cierre'] = $hora;
-            }
+            //     $hora = $time->format('H:i:s');
+            //     $values['h_cierre'] = $hora;
+            // }
             unset($values['id_asamblea']);
             unset($values['created_at']);
             unset($values['updated_at']);
@@ -311,7 +311,7 @@ class AsambleaController extends Controller
             return redirect()->route('asambleas')->with('error', 'No se encontro el archivo "info.json"');
         } catch (Exception $e) {
             // Manejar cualquier otra excepción
-            return redirect()->route('asambleas')->with('error', '3 ' . $e->getMessage());
+            return redirect()->route('asambleas')->with('error', '3 ' . $e->getTraceAsString());
         }
     }
 
@@ -345,7 +345,6 @@ class AsambleaController extends Controller
             foreach ($foldersDiff as $name) {
                 $this->importAsambleaFile($name);
             }
-            dd($foldersDelete);
 
             return redirect()->route('asambleas')->with('success', 'Asambleas Importadas Correctamente');
         } catch (\Throwable $th) {

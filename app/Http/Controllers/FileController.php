@@ -20,17 +20,14 @@ class FileController extends Controller
     public function getFolders()
     {
         // Obtén la ruta de la carpeta externa desde la configuración
-        $externalFolderPath = config('filesystems.disks.externalClientes.root');
+        $externalFolderPath=Storage::disk('externalClientes');
 
         // Verifica si la carpeta existe
-        if (is_dir($externalFolderPath)) {
+        if ($externalFolderPath->exists('')) {
             // Obtén una lista de subcarpetas
-            $subfolders = array_filter(glob($externalFolderPath . '/*'), 'is_dir');
+            $subfolders = $externalFolderPath->directories();
 
-            // Extrae solo los nombres de las carpetas
-            $subfolderNames = array_map('basename', $subfolders);
-
-            return $subfolderNames;
+            return $subfolders;
         } else {
 
             return redirect()->back()->withErrors(['error' => 'La carpeta externa no existe.']);
@@ -52,15 +49,9 @@ class FileController extends Controller
 
     public function getAsambleaFolderPath()
     {
-        $externalFolderPath = config('filesystems.disks.externalAsambleas.root');
-        // Verifica si la carpeta existe
 
-        if (!file_exists($externalFolderPath)) {
-            mkdir($externalFolderPath, 0755, true);
-        }
         $asambleaName = cache('asamblea')['name'];
-
-        $asambleaFolderPath = $externalFolderPath . '/' . $asambleaName;
+        $asambleaFolderPath = Storage::disk('externalAsambleas')->get($asambleaName);
         // Verifica si la carpeta existe
 
         if (!file_exists($asambleaFolderPath)) {

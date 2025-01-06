@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         // Establece un nuevo temporizador para ejecutar la validación después de 2 segundos
         timeout = setTimeout(() => {
             validateMultipleOf50(input);
-        }, 1250); // 2000 milisegundos = 2 segundos
+        }, 2000); // 2000 milisegundos = 2 segundos
     }
 
     function validateMultipleOf50(input) {
