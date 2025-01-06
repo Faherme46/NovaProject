@@ -73,7 +73,7 @@
                         <div class="col-6 d-flex align-items-center gradient-custom-2">
                             <div class="text-white px-3  mx-4">
                                 <h3 class="mb-4">Somos mas que una compañia</h3>
-                                <p class=" mb-0 ">En Tecnovis, no solo gestionamos logística;creamos experiencias que unen
+                                <p class=" mb-0 ">En Tecnovis, no solo gestionamos logística; creamos experiencias que unen
                                     comunidades.
                                     Nuestra pasión por la innovación y el compromiso con la excelencia nos impulsa a
                                     transformar
