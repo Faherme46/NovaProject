@@ -54,8 +54,8 @@ class FileController extends Controller
         $asambleaFolderPath = Storage::disk('externalAsambleas')->get($asambleaName);
         // Verifica si la carpeta existe
 
-        if (!file_exists($asambleaFolderPath)) {
-            mkdir($asambleaFolderPath, 0755, true);
+        if (!$asambleaFolderPath) {
+            Storage::disk('externalAsambleas')->makeDirectory($asambleaName);
         }
 
         return $asambleaFolderPath;

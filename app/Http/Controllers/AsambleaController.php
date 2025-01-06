@@ -200,8 +200,10 @@ class AsambleaController extends Controller
             } else {
                 Excel::import(new PrediosImport, $externalFilePathPredios);
             }
+            if(file_exists('C:/Asambleas/usuarios.xlsx')){
+                Excel::import(new UsersImport, 'C:/Asambleas/usuarios.xlsx');
+            }
 
-            Excel::import(new UsersImport, 'C:/Asambleas/usuarios.xlsx');
 
             return 200;
         } catch (ValidationException $e) {
