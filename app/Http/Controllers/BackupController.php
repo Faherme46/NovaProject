@@ -19,6 +19,7 @@ class BackupController extends Controller
         $ubicacionArchivoTemporal = storage_path("app\public\backups\\" . $nameAsamblea . '.sql');
         $codigoSalida = 0;
 
+
         $tables = ['cache', 'controls', 'personas', 'predios', 'predios_personas', 'questions', 'results', 'session', 'signatures', 'votes'];
         $comando = sprintf("%s --user=\"%s\" --password=\"%s\" --skip-lock-tables --no-create-info %s %s > %s", env("UBICACION_MYSQLDUMP"), env("DB_USERNAME"), env("DB_PASSWORD"), env('DB_DATABASE'), implode(' ', $tables), $ubicacionArchivoTemporal);
         try {
@@ -59,11 +60,13 @@ class BackupController extends Controller
                 // Ejecutar el comando SQL
 
             }
-            $execute = DB::unprepared($sql);
-            $asamblea=Asamblea::where('name',$nameAsamblea)->get();
-            
-            cache(['asamblea' => $asamblea[0],'id_asamblea'=>$asamblea[0]->id_asamblea]);
 
+            $asamblea=Asamblea::where('name',$nameAsamblea)->first();
+
+            $execute = DB::unprepared($sql);
+
+            cache(['asamblea' => $asamblea]);
+            cache(['id_asamblea'=>$asamblea->id_asamblea]);
             \Illuminate\Support\Facades\Log::channel('custom')->info('Carga la informacion de la asamblea:' . $nameAsamblea);
         } catch (\Throwable $th) {
 

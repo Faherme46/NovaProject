@@ -12,7 +12,6 @@ use App\Models\Question;
 use App\Models\QuestionType;
 use App\Models\Result;
 use App\Models\Signature;
-use Database\Seeders\QuestionSeeder;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
@@ -32,6 +31,7 @@ class SessionController extends Controller
             Storage::disk('externalAsambleas')->put($nameAsamblea . '/logs.log', file_get_contents($logpath));
             File::delete($logpath);
         }
+
         //se descargan las tablas
         $backupController=new BackupController();
         $response=$backupController->downloadBackup();

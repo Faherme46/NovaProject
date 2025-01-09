@@ -288,8 +288,13 @@ class AsambleaController extends Controller
 
     public function importAsambleaFile($folder)
     {
+
         try {
+
             $data = Storage::disk('externalAsambleas')->get($folder . '/info.json');
+            if (!$data){
+                return redirect()->route('asambleas')->with('error', 'No se encontro el archivo "info.json" de '.$folder);
+            }
             $values = json_decode($data, true);
             // if ($values['h_cierre']) {
             //     $time = Carbon::parse($values['h_cierre']);
@@ -302,18 +307,18 @@ class AsambleaController extends Controller
             unset($values['created_at']);
             unset($values['updated_at']);
 
-            // if($values['ordenDia']){
-            //     $values['ordenDia']=json_decode($values['ordenDia']);
-            // }
-
+            if($values['ordenDia']){
+                $values['ordenDia']=json_decode($values['ordenDia']);
+            }
             $asamblea = Asamblea::updateOrCreate(
                 $values
             );
         } catch (FileNotFoundException $e) {
-            return redirect()->route('asambleas')->with('error', 'No se encontro el archivo "info.json"');
+
         } catch (Exception $e) {
+            dd($e);
             // Manejar cualquier otra excepción
-            return redirect()->route('asambleas')->with('error', '3 ' . $e->getTraceAsString());
+            return redirect()->route('asambleas')->with('error', '3 '. $e->getMessage());
         }
     }
 
