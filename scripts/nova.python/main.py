@@ -95,7 +95,17 @@ def closeDevice():
         device.close()
         return jsonify({"status":"Success","message": "Dispositivo desconectado"}), 200
     else:
-        jsonify({"status": "Error", "message": "Error al conectar con el dispositivo"}), 400
+        return jsonify({"status": "Error", "message": "Error al conectar con el dispositivo"}), 400
+
+
+@app.route('/stop-if-voting', methods=['GET'])
+def stopIfVoting():
+    global process
+    if process is not None:
+        print('Cerrando dispositivo')
+        closeDevice()
+    return jsonify({"status": "Success", "message": "El script no esta corriendo"}), 200
+
 
 # @app.route('/hello/')
 # @app.route('/hello/<name>/')

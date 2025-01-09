@@ -41,9 +41,9 @@
         <div class="card-body pt-4 pb-3 px-0 mt-3">
 
             @if ($inCoefResult)
-                <img src="/storage/images/results/{{ $question->resultCoef->chartPath }}" alt="Full Screen Image" style="max-width: 100%">
+                <img src="/storage/images/results/{{ $chartCoef }}" alt="Full Screen Image" style="max-width: 100%">
             @else
-                <img src="/storage/images/results/{{ $question->resultNom->chartPath }}" alt="Full Screen Image" style="max-width: 100%">
+                <img src="/storage/images/results/{{ $chartNom }}" alt="Full Screen Image" style="max-width: 100%">
             @endif
 
 

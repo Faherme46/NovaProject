@@ -60,7 +60,8 @@ class Votacion extends Component
 
         $this->questionsPrefab = QuestionsPrefab::all();
         $this->getValues();
-        $this->questionTitle='';
+        $this->questionTitle = '';
+        $this->stopIfVoting();
     }
 
     #[Layout('layout.full-page')]
@@ -285,10 +286,10 @@ class Votacion extends Component
         }
 
         //si hay plancha se requiere el numero de plazas
-        if  ($this->plancha && !$this->plazas){
+        if ($this->plancha && !$this->plazas) {
             $this->addError('error', 'Se requiere el numero de plazas');
             $error = 1;
-        }elseif ($this->plazas<0 || !is_int($this->plazas)) {
+        } elseif ($this->plazas < 0 || !is_int($this->plazas)) {
             $this->addError('error', 'El numero de plaznas no es valido');
         }
 
@@ -311,7 +312,7 @@ class Votacion extends Component
         $newTitle = str_replace($forbidden, "", $this->questionTitle);
         try {
             Vote::truncate();
-            $predios=Control::where('state', 1)->sum('predios_vote');
+            $predios = Control::where('state', 1)->sum('predios_vote');
             $question = Question::create([
                 'title' => strtoupper($newTitle),
                 'optionA' => ($this->questionOptions['A']) ? strtoupper(rtrim($this->questionOptions['A'])) : null,
@@ -324,21 +325,35 @@ class Votacion extends Component
                 'isValid' => ($this->questionType == 6) ? 0 : 1,
                 'coefGraph' => (bool)$this->questionCoefChart,
                 'quorum' => $quorum,
-                'predios' =>$predios ,
+                'predios' => $predios,
                 'seconds' => $seconds,
                 'type' => $this->questionType
             ]);
 
-            $parametros=['questionId' => $question->id];
-            if($this->plancha){
-                $parametros['plancha']= $this->plancha;
-                $parametros['plazas']= $this->plazas;
+            $parametros = ['questionId' => $question->id];
+            if ($this->plancha) {
+                $parametros['plancha'] = $this->plancha;
+                $parametros['plazas'] = $this->plazas;
             }
-            \Illuminate\Support\Facades\Log::channel('custom')->info('Se Inicia una votacion',['quorum'=>$quorum,'predios',$predios]);
+            \Illuminate\Support\Facades\Log::channel('custom')->info('Se Inicia una votacion', ['quorum' => $quorum, 'predios', $predios]);
             return redirect()->route('questions.show', $parametros);
         } catch (Throwable $th) {
 
             return $this->addError('questionCreate', $th->getMessage());
+        }
+    }
+
+    public function stopIfVoting()
+    {
+
+        $pythonUrl = env('PYTHON_PATH', 'http://127.0.0.1:5000');
+        try {
+            $response = Http::get($pythonUrl . '/stop-if-voting');
+
+            return True;
+        } catch (Throwable $th) {
+            $this->addError('Error', 'Error al conectar con el servidor python: ' . $th->getMessage());
+            return False;
         }
     }
     public function verifyDevice()
@@ -371,18 +386,17 @@ class Votacion extends Component
         ];
     }
 
-    public function updatedQuestionOptions($value,$field)
+    public function updatedQuestionOptions($value, $field)
     {
-        $this->blockFields=[];
+        $this->blockFields = [];
         foreach ($this->questionOptions as $id => $option) {
-            if(!$option){
-                $this->blockFields[]='option'.$id;
+            if (!$option) {
+                $this->blockFields[] = 'option' . $id;
             }
         }
         array_shift($this->blockFields);
 
         if ($this->questionType == 2) {
-
         }
     }
 }

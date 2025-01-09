@@ -36,7 +36,8 @@ class PresentQuestion extends Component
     public $inVoting = 2;
     public $inCoefResult = true;
 
-
+    public $chartCoef;
+    public $chartNom;
     public $votes = [];
     public $options = ['optionA', 'optionB', 'optionC', 'optionD', 'optionE', 'optionF'];
     public $plancha = false;
@@ -51,6 +52,10 @@ class PresentQuestion extends Component
     public $isEditting = false;
     public function mount($questionId, $plancha = false, $plazas = 0)
     {
+        $response = $this->handleVoting(action: 'run-votes');
+        if(!$response){
+            return;
+        }
         $this->reset('inVoting', 'seconds', 'countdown', 'votes', 'inCoefResult', 'votes', 'controlsAssigned');
         $this->step = 1;
         // $this->question = Question::find(19);
@@ -91,14 +96,12 @@ class PresentQuestion extends Component
 
     public function voting()
     {
-        $response = $this->handleVoting(action: 'run-votes');
+
         $this->playPause(false);
-        if ($response) {
-            $this->seconds = $this->question->seconds;
-            $this->updateCountdown();
-            $this->dispatch('start-timer');
-            $this->inVoting = 1;
-        }
+        $this->seconds = $this->question->seconds;
+        $this->updateCountdown();
+        $this->dispatch('start-timer');
+        $this->inVoting = 1;
     }
 
     public function inResults()
@@ -121,8 +124,10 @@ class PresentQuestion extends Component
             // dd($urlImg);
             if ($result->isCoef) {
                 $result->chartPath = $path;
+                $this->chartCoef=$path;
             } else {
                 $result->chartPath = $path;
+                $this->chartNom=$path;
             }
             $result->save();
         } catch (Throwable $th) {
