@@ -3,3 +3,8 @@
 [2024-12-29 23:50:34] local.INFO: Registra el control 5 {"control":5,"predios":[1,30]} 
 [2024-12-29 23:50:45] local.INFO: Registra el control 6 {"control":6,"predios":[2,35]} 
 [2024-12-29 23:50:57] local.NOTICE: Se Inicia la asamblea  
+[2025-01-09 01:47:15] local.INFO: Se Inicia una votacion {"quorum":"0.553060","0":"predios","1":"1"} 
+[2025-01-09 01:49:16] local.INFO: Se Inicia una votacion {"quorum":"0.553060","0":"predios","1":"1"} 
+[2025-01-09 02:01:53] local.INFO: Se Inicia una votacion {"quorum":"0.553060","0":"predios","1":"1"} 
+[2025-01-12 02:29:11] local.INFO: El Usuario ehernandez ha ingresado al sistema. {"username":"ehernandez"} 
+[2025-01-12 04:15:15] local.INFO: Se Inicia una votacion {"quorum":"0.553060","0":"predios","1":"1"} 

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Providers;
+
 use App\Http\Controllers\AsambleaController;
 use App\Http\Controllers\sessionController;
 use Illuminate\Support\ServiceProvider;
@@ -18,7 +19,7 @@ class AppServiceProvider extends ServiceProvider
      */
 
 
-         public function register(): void
+    public function register(): void
     {
         $this->app->register(ExcelServiceProvider::class);
     }
@@ -32,14 +33,14 @@ class AppServiceProvider extends ServiceProvider
 
 
         View::composer('*', function ($view) {
-            
 
-            
+
+
             $view->with(
                 [
                     'asamblea' => cache('asamblea'),
                     'registro' => cache('inRegistro'),
-                    'themeId'=> cache('themeId',5)
+                    'themeId' => cache('themeId', 5)
                 ]
             );
         });

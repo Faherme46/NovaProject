@@ -116,25 +116,27 @@ def setProcessId():
 
 def main():
     try:
+        print('Estableciendo Conexión con el Dispositivo y la BD...')
         cursor,conn = connectDB()
         device=connect()
         if device:
-            print('Send Commands')
+
             sendComands(device)
             time.sleep(.5)
             myFlag=0
             ignoreSecond = False
             awaitSecond = False
             head = 0
+            i=0
             while True:
 
                 data = device.read(64)  # Leer un bloque de datos de 64 bytes
 
                 if data and myFlag:
-                    
+
                     reportId=data[0]
                     values=[data[1],data[2]]
-                    print(reportId,' : ',values)
+
                     if (ignoreSecond) :
                         ignoreSecond = False
                         continue
@@ -168,7 +170,7 @@ def main():
 
                     dataResult = handleReport(values, reportId)
                     # Crear una consulta SQL para insertar datos
-
+                    print(dataResult)
                     if dataResult['vote'] in ['A', 'B', 'C', 'D', 'E', 'F'] and dataResult['control_id']<1000:
                         sql = """INSERT INTO votes (control_id, vote)
                                 VALUES (%s, %s)

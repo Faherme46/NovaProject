@@ -61,7 +61,7 @@
                         </td>
                         <td>
                             <p class="p-0 ps-2 my-0 no-line-spacing text-left ">
-                                {{ $asamblea->folder }} <br>
+                                {{ $asambleaR->folder }} <br>
                                 <span class="border-1 border px-3 border-black">
                                     {{ $predios->count() }}
                                 </span>
@@ -79,10 +79,10 @@
     <footer>
         <div class="">
             <small class="txt-small">(1) La información reflejada en este Anexo,
-                tiene como base los datos suministrados por la Administración de {{ $asamblea->folder }}.</small>
+                tiene como base los datos suministrados por la Administración de {{ $asambleaR->folder }}.</small>
         </div>
         <div class="text-end txt-small">
-            Informe de Asistencia {{$asamblea->name}}
+            Informe de Asistencia {{$asambleaR->name}}
 
         </div>
 

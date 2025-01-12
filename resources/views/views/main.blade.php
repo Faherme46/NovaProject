@@ -56,13 +56,13 @@
                             <input type="text" class="form-control" placeholder="Direccion" id="lugar"
                                 name="lugar" required>
                         </div>
-                        <div class="form-group col-4">
+                        <div class="form-group col-6">
                             <label for="fecha">Fecha</label>
                             <input type="date" class="form-control" id="fecha" name="fecha" required>
                         </div>
 
 
-                        <div class="form-group col-5">
+                        <div class="form-group col-6">
                             <label for="hora">Hora</label>
                             <input type="time" class="form-control" id="hora" name="hora" required>
                         </div>

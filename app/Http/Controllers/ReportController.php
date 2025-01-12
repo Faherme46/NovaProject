@@ -41,7 +41,7 @@ class ReportController extends Controller
 
         $this->variables += [
             'registro' => cache('inRegistro'),
-            'asamblea' => $this->asamblea,
+            'asambleaR' => $this->asamblea,
             'dateString' => $dateString,
             'predios' => $this->predios,
             'prediosCount' => $this->predios->whereNotNull('control_id')->count(),
@@ -105,9 +105,13 @@ class ReportController extends Controller
                 $this->createDocument('participantes-asamblea');
                 $this->variables['index'] = 3;
 
-                $this->variables['ordenDia'] = json_decode($this->asamblea->ordenDia, false);
+                if($this->asamblea->ordenDia){
+                    $this->variables['ordenDia'] = json_decode($this->asamblea->ordenDia, false);
+                    $this->createDocument('orden-dia');
+                }
 
-                $this->createDocument('orden-dia');
+
+
 
                 // $this->variables['index']=3;
                 // $this->createDocument('quorum-final');

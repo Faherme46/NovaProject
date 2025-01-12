@@ -78,25 +78,25 @@
             <table class="table table-general">
                 <tr>
                     <th class="bb-white text-light bold bg-darkblue text-end" colspan="2">Cliente:</th>
-                    <td class="ps-2" colspan="5">{{$asamblea->folder}}</td>
+                    <td class="ps-2" colspan="5">{{$asambleaR->folder}}</td>
                 </tr>
                 <tr>
                     <th class="bb-white text-light bold bg-darkblue text-end" colspan="2">Referencia:</th>
-                    <td class="ps-2" colspan="5">{{$asamblea->referencia}}</td>
+                    <td class="ps-2" colspan="5">{{$asambleaR->referencia}}</td>
                 </tr>
                 <tr>
                     <th class="bb-white text-light bold bg-darkblue text-end" colspan="2">Tipo de Asamblea:</th>
-                    <td class="ps-2" >{{$asamblea->tipo}}</td>
+                    <td class="ps-2" >{{$asambleaR->tipo}}</td>
                     <th class="bb-white text-light bold bg-darkblue" >Direccion:</th>
-                    <td class="ps-2" colspan="3">{{$asamblea->lugar}}</td>
+                    <td class="ps-2" colspan="3">{{$asambleaR->lugar}}</td>
                 </tr>
                 <tr>
                     <th class=" text-light bold bg-darkblue text-end">Fecha:</th>
                     <td class="ps-2" colspan="2">{{$dateString}}</td>
                     <th class=" text-light bold bg-darkblue">Hora Inicio:</th>
-                    <td class="ps-2">{{$asamblea->h_inicio}}</td>
+                    <td class="ps-2">{{$asambleaR->h_inicio}}</td>
                     <th class=" text-light bold bg-darkblue">Hora Fin:</th>
-                    <td class="ps-2">{{$asamblea->h_cierre}}</td>
+                    <td class="ps-2">{{$asambleaR->h_cierre}}</td>
                 </tr>
             </table>
     </div>

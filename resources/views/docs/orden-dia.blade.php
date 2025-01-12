@@ -84,8 +84,14 @@
                 <br>
                 <div class="anexos">
                     <ul>
-                        @foreach ($questions as $key => $q)
-                            <li>Ítem {{ $key+1 }} - {{ $q->title }} </li>
+                        @php
+                            $i=0;
+                        @endphp
+                        @foreach ($questions as $q)
+                            @php
+                                $i++;
+                            @endphp
+                            <li>Ítem {{ $i }} - {{ $q->title }} </li>
                         @endforeach
                     </ul>
                 </div>
