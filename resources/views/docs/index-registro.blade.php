@@ -54,9 +54,12 @@
 
         <hr class="blue">
     </header>
-    <footer>
+    <footer class="bg-pr">
         <hr class="w-25 mb-1">
-        <small class="txt-small no-line-spacing">{{$firstFooter}}</small>
+        <span style="font-size: 8pt;">
+            Los datos utilizados por TECNOVIS para la elaboración de los anexos relacionados en este informe (incluye los cálculos para las votaciones), y que comprende la lista de delegados, tiene como base la información suministrada por la Administración de {{$asamblea->folder}} a TECNOVIS, para el desarrollo de esta Asamblea.
+            <hr>
+        </span>
     </footer>
     <div class="body">
             <br><br>

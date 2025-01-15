@@ -51,7 +51,7 @@ class FileController extends Controller
     {
 
         $asambleaName = cache('asamblea')['name'];
-        $asambleaFolderPath = Storage::disk('externalAsambleas')->get($asambleaName);
+        $asambleaFolderPath = Storage::disk('externalAsambleas')->path($asambleaName);
         // Verifica si la carpeta existe
 
         if (!$asambleaFolderPath) {
@@ -70,7 +70,11 @@ class FileController extends Controller
 
         return $newFolderPath;
     }
-
+    public function quitarTildes($texto) {
+        $conTildes = ['á', 'é', 'í', 'ó', 'ú', 'Á', 'É', 'Í', 'Ó', 'Ú', 'ñ', 'Ñ'];
+        $sinTildes = ['a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U', 'n', 'N'];
+        return str_replace($conTildes, $sinTildes, $texto);
+    }
     public function createChart($questionId, $title, $labels, $values, $name)
     {
         // Datos para el gráfico
@@ -83,7 +87,7 @@ class FileController extends Controller
         $localPath = $asambleaName . '/' .  ($questionId) . '/' . $name . '.png';
         // Crear un array con los datos
         $data = [
-            'title'=>$title,
+            'title'=>$this->quitarTildes($title),
             'output'=>$output_path,
             'labels'=>$labels,
             'values'=>$values,

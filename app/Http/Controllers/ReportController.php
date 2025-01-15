@@ -35,9 +35,9 @@ class ReportController extends Controller
         $date = explode('-', $this->asamblea->fecha);
         $meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
         $dateString = $date[2] . ' de ' . $meses[(int)$date[1] - 1] . ' de ' . $date[0];
-        // $this->predios = Predio::where('id', '<', 12)->get();
+        // $this->predios = Predio::where('id', '<', 5)->get();
         $this->predios = Predio::all();
-        $this->questions = Question::where('isValid', true)->with('results')->get();
+        $this->questions = Question::where('isValid', true)->whereHas('resultCoef')->with('results')->get();
 
         $this->variables += [
             'registro' => cache('inRegistro'),
@@ -56,7 +56,7 @@ class ReportController extends Controller
     {
 
         try {
-            // $this->exportQuestions($this->questions);
+
             $this->createDocument('front-page');
             if (!cache('inRegistro')) {
                 $this->variables += [
@@ -64,6 +64,7 @@ class ReportController extends Controller
                 ];
                 $this->createDocument('index-votacion');
             } else {
+
                 $response = $this->exportPersonas();
                 if ($response->getStatusCode()==500) {
                     return redirect()->route('gestion.report')->with('error', $response->getContent());
@@ -86,13 +87,6 @@ class ReportController extends Controller
                 ];
                 $this->variables += [
                     'anexos' => $anexos,
-                    'firstFooter' => "Los datos utilizados por TECNOVIS para la elaboración de los
-                                    Anexos relacionados en este informe
-                                    (incluye los cálculos para las votaciones),
-                                    y que comprende la lista de delegados,
-                                    tiene como base la información suministrada
-                                    por la Administración de {$this->asamblea->folder} a TECNOVIS,
-                                    para el desarrollo de esta Asamblea."
                 ];
                 $this->createDocument('index-registro');
 
@@ -109,12 +103,6 @@ class ReportController extends Controller
                     $this->variables['ordenDia'] = json_decode($this->asamblea->ordenDia, false);
                     $this->createDocument('orden-dia');
                 }
-
-
-
-
-                // $this->variables['index']=3;
-                // $this->createDocument('quorum-final');
             }
 
             $this->createDocument('votaciones');
@@ -175,9 +163,7 @@ class ReportController extends Controller
 
     public function exportQuestions($questions)
     {
-        $asambleaName = cache('asamblea')['name'];
-        $export = new QuestionsExport($questions);
-        return Excel::store($export, $asambleaName . '/Informe/votaciones.xlsx', 'externalAsambleas');
+
     }
     public function exportPersonas()
     {
@@ -193,6 +179,12 @@ class ReportController extends Controller
             $responseExcel2 = Excel::store($export2, $asambleaName . '/Informe/Asistencia_Quorum.xlsx', 'externalAsambleas');
             if (!$responseExcel2) {
                 return response()->json('Asistencia_Quorum.xlsx', 423);
+            }
+
+            $export3 = new QuestionsExport($this->questions);
+            $responseExcel3= Excel::store($export3, $asambleaName . '/Informe/Votaciones.xlsx', 'externalAsambleas');
+            if (!$responseExcel3) {
+                return response()->json('Votaciones.xlsx', 423);
             }
             return response()->json(['success' => 'Archivos Exportados correctamente'], 200);
         } catch (\Throwable $th) {

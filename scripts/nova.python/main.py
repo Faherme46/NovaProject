@@ -154,6 +154,7 @@ def create_plot(title, labels, values, output_path,nameAsamblea):
         labels[i] = s.translate(trans)
     title = title.translate(trans)
 
+
     # Ajustar el título si es demasiado largo
     if len(title) > 60:
         title = textwrap.fill(title[:135], width=90)  # Truncar y dividir en líneas
@@ -162,13 +163,21 @@ def create_plot(title, labels, values, output_path,nameAsamblea):
         title_fontsize = 28
 
     # Configuración de barras
-    bars = ax.bar(labels, values, width=bar_width, color=['red', 'orange', 'green', 'red', 'purple', 'cyan', 'saddlebrown', 'pink', 'lime'], edgecolor='black', zorder=3)
+    bars = ax.bar(labels, values, width=bar_width, color=['red', 'orange', 'green', 'yellow', 'purple', 'cyan', 'saddlebrown', 'pink', 'lime'], edgecolor='black', zorder=3)
+
 
     # Añadir los valores sobre las columnas
     for bar in bars:
         yval = bar.get_height()
         ax.text(bar.get_x() + bar.get_width() / 2, yval, yval,
                 ha='center', va='bottom', fontsize=24)
+
+    if len(bars)==1:
+        bar = bars[0]
+        bar.set_width(0.05)
+        bar.set_x(0-(bar.get_width() / 2))
+
+
 
     # Cargar la imagen que se usará como marca de agua
     img = mpimg.imread('C:/xampp/htdocs/nova/scripts/nova.python/watermark2.png')

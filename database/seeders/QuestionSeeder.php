@@ -15,7 +15,7 @@ class QuestionSeeder extends Seeder
      */
     public function run(): void
     {
-        QuestionType::create(['name' => 'Quorum']);
+        QuestionType::create(['name' => 'Quórum']);
         QuestionType::create(['name' => 'Seleccion']);
         QuestionType::create(['name' => 'Aprobacion']);
         QuestionType::create(['name' => 'SI/NO']);
@@ -123,7 +123,7 @@ class QuestionSeeder extends Seeder
             'type' => 2
         ]);
         QuestionsPrefab::create([
-            'title' => 'Verificación de Quorum',
+            'title' => 'Verificación de Quórum',
             'optionA' => '',
             'optionB' => '',
             'optionC' => '',
@@ -142,7 +142,7 @@ class QuestionSeeder extends Seeder
             'optionF' => '',
             'type' => 4
         ]);
-        
+
         QuestionsPrefab::create([
             'title' => 'Prueba',
             'optionA' => '',

@@ -36,6 +36,11 @@ return [
             'throw' => false,
         ],
 
+        'logs'=> [
+            'driver' => 'local',
+            'root' => storage_path('logs'),
+            'throw' => false,
+        ],
 
         'public' => [
             'driver' => 'local',

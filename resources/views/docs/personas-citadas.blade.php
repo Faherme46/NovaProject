@@ -8,12 +8,12 @@
     <style>
 
         @page {
-            margin: 35mm 15mm 20mm;
+            margin: 41mm 15mm 20mm;
         }
 
         header {
             position: fixed;
-            top: -80;
+            top: -90;
             height: 20mm;
             display: flex;
             line-height: 35px;
@@ -22,15 +22,14 @@
 
         .title {
             position: fixed;
-            top: -60;
+            top: -70;
             right: 0;
             left: 0;
             text-align: center;
         }
 
         .body {
-            height: 235mm;
-            padding-top: 2mm;
+            height: 230mm;
         }
         {!! file_get_contents(public_path('\assets\scss\blue.css')) !!} {!! file_get_contents(public_path('\assets\scss\_variables.scss')) !!} {!! file_get_contents(public_path('\assets\scss\docs.scss')) !!}
 
@@ -88,9 +87,7 @@
 
     </footer>
     <div class="body" style="">
-
-
-        <table class="table mt-3 table-bordered border-black-1 table-anexos fs-10px">
+        <table class="table table-bordered border-black-1 table-anexos fs-10px">
             <thead class="bg-darkblue text-light text-center fs-10">
                 <tr>
                     <td class="p-0" colspan="2">Predio</td>

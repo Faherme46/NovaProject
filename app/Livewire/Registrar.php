@@ -286,6 +286,7 @@ class Registrar extends Component
                 $controlH = $this->asistenteControls[$this->controlH];
                 $controlH->attachPredios($prediosToAsign);
                 $controlH->setCoef();
+                \Illuminate\Support\Facades\Log::channel('custom')->info('Agrega predios al control {control}',['control' =>$control->id,'predios'=>array_values($this->predioSelected),'persona'=>$this->cedula]);
             } else {
                 if ($control->asignacion()) {
                     $this->getAvailableControls();
@@ -303,7 +304,7 @@ class Registrar extends Component
                     'registered' => true,
                     'user_id' => auth()->id()
                 ]);
-                \Illuminate\Support\Facades\Log::channel('custom')->info('Registra el control {control}',['control' =>$control->id,'predios'=>array_keys($this->predioSelected),'persona'=>$this->cedula]);
+                \Illuminate\Support\Facades\Log::channel('custom')->info('Registra el control {control}',['control' =>$control->id,'predios'=>array_values($this->predioSelected),'persona'=>$this->cedula]);
             }
         } catch (QueryException $e) {
             if ($e->errorInfo[1] == 1062) {

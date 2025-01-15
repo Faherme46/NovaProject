@@ -310,11 +310,14 @@ class Votacion extends Component
         $forbidden = ['/', "\\", "*", '?', '"', ':', "<", ">", "|"];
         //'No se han registrado controles'
         $newTitle = str_replace($forbidden, "", $this->questionTitle);
+        $newTitle=strtoupper($newTitle);
+        $newTitle=str_replace(['á','é','í','ó','ú'], ['Á','É','Í','Ó','U'], subject: $newTitle);
+
         try {
             Vote::truncate();
             $predios = Control::where('state', 1)->sum('predios_vote');
             $question = Question::create([
-                'title' => strtoupper($newTitle),
+                'title' =>$newTitle,
                 'optionA' => ($this->questionOptions['A']) ? strtoupper(rtrim($this->questionOptions['A'])) : null,
                 'optionB' => ($this->questionOptions['B']) ? strtoupper(rtrim($this->questionOptions['B'])) : null,
                 'optionC' => ($this->questionOptions['C']) ? strtoupper(rtrim($this->questionOptions['C'])) : null,

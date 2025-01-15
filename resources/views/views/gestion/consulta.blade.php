@@ -165,7 +165,7 @@
 
                                 <div class="card p-2 mt-5 ">
                                     <button type="button" class="btn btn-danger p-0 mb-3 text-center"
-                                        wire:click='cleanData(1,{{$tab}})'>
+                                        wire:click='cleanData(1,{{ $tab }})'>
                                         <i class='bi bi-trash-fill fs-4 '></i>
                                     </button>
 
@@ -206,16 +206,14 @@
 
                                         <tbody>
                                             @forelse ($prediosR as $predio)
-                                                <tr scope="row" 
-                                                class="@if ($predio->control->id==$controlIdR)
-                                                    table-active
-                                                @endif">
+                                                <tr scope="row"
+                                                    class="@if ($predio->control->id == $controlIdR) table-active @endif">
                                                     <td>{{ $predio->descriptor1 }} {{ $predio->numeral1 }}
                                                         {{ $predio->descriptor2 }} {{ $predio->numeral2 }}
                                                     </td>
 
                                                     <td>
-                                                        @if ($tab == 2 || $predio->control->id!=$controlIdR)
+                                                        @if ($tab == 2 || $predio->control->id != $controlIdR)
                                                             <button type="button" class="btn p-0"
                                                                 wire:click="toLeft({{ $predio->id }})">
                                                                 <i class='bi bi-arrow-left-square-fill'></i>
@@ -290,8 +288,7 @@
 
                                         <li class="list-group-item d-flex align-items-center justify-content-between">
                                             <h6 class="mb-0">Coef:</h6>
-                                            <input type="text" class="form-control w-70"
-                                                name="coef"
+                                            <input type="text" class="form-control w-70" name="coef"
                                                 value="{{ $Predio->coeficiente }}" @readonly(!$changes)>
                                         </li>
                                         <li class="list-group-item d-flex align-items-center justify-content-between">
@@ -350,7 +347,7 @@
                     <div class="card border-black w-80 p-0 mx-auto my-3">
                         <div class="card-header">
                             <form wire:submit="searchControl()" method="POST"
-                                class="d-flex w-100 justify-content-center">
+                                class="d-flex w-100 justify-content-center align-items-center">
                                 <input class="me-2 w-15 form-control @error('noFound') is-invalid @enderror"
                                     type="text" onkeypress="return onlyNumbers(event)" maxlength="3"
                                     wire:keydown.enter="searchControl()" wire:model='controlIdSearch'
@@ -362,6 +359,8 @@
                                     <button type="button" class="btn btn-danger p-0 px-1" wire:click='dropControl'>
                                         <i class="bi bi-x-circle bx-w fs-5 "></i>
                                     </button>
+                                    <span class="badge mx-2 border-1 border border-black text-black fs-6">Coef. Votacion: {{ $Control ? $Control->sum_coef_can : 0 }}</span>
+                                    <span class="badge mx-2 border-1 border border-black text-black fs-6"> Votos: {{ $Control ? $Control->predios_vote : 0 }}</span>
                                 @endif
                             </form>
                         </div>
@@ -406,11 +405,11 @@
                                 </tbody>
                                 <tfoot class="position-sticky bottom-0 table-active">
                                     <td class="text-end bold"> </td>
-                                    <td>Total Predios: {{ $Control ? $Control->predios->count() : 0 }}</td>
-                                    <td>Total Votacion: {{ $Control ? $Control->sum_coef_can : 0 }}</td>
-                                    <td class="">{{ $Control ? $Control->sum_coef : 0 }}</td>
-
-                                    <td>{{ $Control ? $Control->predios_vote : 0 }}</td>
+                                    <td></td>
+                                    <td class="text-end">Total Predios:
+                                        {{ $Control ? $Control->predios->count() : 0 }}</td>
+                                    <td class="text-end">{{ $Control ? $Control->sum_coef : 0 }}</td>
+                                    <td></td>
                                 </tfoot>
                             </table>
                         </div>
@@ -455,7 +454,7 @@
                         <div class="col-8 me-1 ">
                             <input class="me-2 form-control" type="text" onkeypress="return onlyNumbers(event)"
                                 maxlength="12" id="cedula" name="cedula" wire:model='cedulaPersonita'
-                                placeholder="Cédula" >
+                                placeholder="Cédula">
                         </div>
                         <div class="col">
                             <button type="button" class="btn btn-primary" wire:click='searchPersonita'
