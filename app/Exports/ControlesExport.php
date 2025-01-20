@@ -41,7 +41,7 @@ class ControlesExport implements FromArray,WithHeadings,WithStyles
 
                 $controlArray['predios'] = $prediosName;
                 $controlArray['coeficiente']=$control->sum_coef;
-                $controlArray['votos']=$control->predios->count();
+                $controlArray['votos']=$control->predios_vote;
                 $controlArray['TD']=($control->t_publico==='1')?'Publico':'Privado';
 
             }
@@ -80,7 +80,7 @@ class ControlesExport implements FromArray,WithHeadings,WithStyles
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('C')->setAutoSize(true);
         $sheet->getColumnDimension('D')->setAutoSize(true);
-        
+
         return [
             // Style the first row as bold text.
             1    => [

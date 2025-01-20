@@ -38,7 +38,6 @@ class PrediosExport implements FromArray, WithHeadings, WithStyles
                 "personas",
                 "personas_ids",
                 "apoderado",
-
                 "cc_apoderado"
             ];
 
@@ -70,6 +69,7 @@ class PrediosExport implements FromArray, WithHeadings, WithStyles
             'numeral1',
             'descriptor2',
             'numeral2',
+            'votos',
             'coeficiente',
             'noVota',
             'cc_propietario',

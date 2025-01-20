@@ -307,16 +307,18 @@ class AsambleaController extends Controller
             unset($values['created_at']);
             unset($values['updated_at']);
 
-            if($values['ordenDia']){
-                $values['ordenDia']=json_decode($values['ordenDia']);
-            }
+
+            // if($values['ordenDia']){
+            //     $values['ordenDia']=$values['ordenDia']);
+
+            //     // $values['ordenDia']=null;
+            // }
             $asamblea = Asamblea::updateOrCreate(
                 $values
             );
         } catch (FileNotFoundException $e) {
 
         } catch (Exception $e) {
-            dd($e);
             // Manejar cualquier otra excepción
             return redirect()->route('asambleas')->with('error', '3 '. $e->getMessage());
         }

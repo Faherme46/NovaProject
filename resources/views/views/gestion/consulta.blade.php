@@ -292,6 +292,11 @@
                                                 value="{{ $Predio->coeficiente }}" @readonly(!$changes)>
                                         </li>
                                         <li class="list-group-item d-flex align-items-center justify-content-between">
+                                            <h6 class="mb-0">Votos:</h6>
+                                            <input type="text" class="form-control w-70" name="votos"
+                                                value="{{ $Predio->votos }}" @readonly(!$changes)>
+                                        </li>
+                                        <li class="list-group-item d-flex align-items-center justify-content-between">
                                             <h6 class="mb-0">Control:</h6>
                                             <input type="text" class="form-control w-50 ms-1" disabled
                                                 value="{{ $Predio->control ? $Predio->control->id : '-' }}">
@@ -359,8 +364,10 @@
                                     <button type="button" class="btn btn-danger p-0 px-1" wire:click='dropControl'>
                                         <i class="bi bi-x-circle bx-w fs-5 "></i>
                                     </button>
-                                    <span class="badge mx-2 border-1 border border-black text-black fs-6">Coef. Votacion: {{ $Control ? $Control->sum_coef_can : 0 }}</span>
-                                    <span class="badge mx-2 border-1 border border-black text-black fs-6"> Votos: {{ $Control ? $Control->predios_vote : 0 }}</span>
+                                    <span class="badge mx-2 border-1 border border-black text-black fs-6">Coef.
+                                        Votacion: {{ $Control ? $Control->sum_coef_can : 0 }}</span>
+                                    <span class="badge mx-2 border-1 border border-black text-black fs-6"> Votos:
+                                        {{ $Control ? $Control->votes : 0 }}</span>
                                 @endif
                             </form>
                         </div>
@@ -370,8 +377,9 @@
                                 <thead class="table-active">
                                     <th>Id</th>
                                     <th colspan="2">Predio</th>
+                                    <th>Votos</th>
                                     <th>Coef.</th>
-                                    <th>Voto</th>
+                                    <th>Vota</th>
                                 </thead>
                                 <tbody>
                                     @if ($Control)
@@ -388,7 +396,8 @@
                                                 <tr>
                                                     <td class="pe-0">{{ $p->id }}</td>
                                                     <td colspan="2">{{ $p->getFullName() }}</td>
-                                                    <td>{{ $p->coeficiente }}</td>
+                                                    <td class="text-end">{{ $p->votos }}</td>
+                                                    <td class="text-end">{{ $p->coeficiente }}</td>
                                                     <td class="{{ $p->vota ? '' : 'text-danger' }}">
                                                         {{ $p->vota ? 'SI' : 'No' }}</td>
                                                 </tr>
@@ -398,7 +407,8 @@
                                         <tr class="text-muted">
                                             <td class="text-muted">#</td>
                                             <td class="text-muted" colspan="2">Torre * Apartamento ###</td>
-                                            <td class="text-muted">0,0000</td>
+                                            <td class="text-muted text-end">0</td>
+                                            <td class="text-muted text-end">0,0000</td>
                                             <td class="text-muted">No</td>
                                         </tr>
                                     @endif
@@ -407,7 +417,9 @@
                                     <td class="text-end bold"> </td>
                                     <td></td>
                                     <td class="text-end">Total Predios:
-                                        {{ $Control ? $Control->predios->count() : 0 }}</td>
+                                        {{ $Control ? $Control->predios->count() : 0 }}
+                                    </td>
+                                    <td class="text-end">{{ $Control ? $Control->predios_vote : 0 }}</td>
                                     <td class="text-end">{{ $Control ? $Control->sum_coef : 0 }}</td>
                                     <td></td>
                                 </tfoot>

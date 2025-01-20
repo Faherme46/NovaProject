@@ -22,13 +22,19 @@ class PrediosImport implements ToModel, WithHeadingRow
                 throw new \Exception('La columna "' . $key . '" es obligatoria');
             }
         }
-        return new Predio([
+        $attributes=[
             'descriptor1' => $row['descriptor1'],
             'numeral1' => $row['numeral1'],
             'descriptor2' => $row['descriptor2'],
             'numeral2' => $row['numeral2'],
             'coeficiente' => $row['coeficiente'],
-            'vota' => !$row['novota']
-        ]);
+            'vota' => !$row['novota'],
+        ];
+        if (array_key_exists('votos', $row)) {
+            $attributes['votos']=$row['votos'];
+        }else{
+            $attributes['votos']=1;
+        }
+        return new Predio($attributes);
     }
 }

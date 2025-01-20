@@ -32,14 +32,13 @@ class ControlesWithRegistro implements FromArray,WithHeadings,WithStyles
                     $flag-=1;
                     if($flag>0){
                         $prediosName.="\n";
-
                     }
                 }
 
 
                 $controlArray['predios'] = $prediosName;
                 $controlArray['coeficiente']=$control->sum_coef;
-                $controlArray['votos']=$control->predios->count();
+                $controlArray['votos']=$control->predios_vote;
                 $controlArray['TD']=($control->t_publico==='1')?'Publico':'Privado';
                 $controlArray['cc_asistente']=($control->persona)?$control->persona->id:'';
                 $controlArray['name_asistente']=($control->persona)?$control->persona->fullName():'';

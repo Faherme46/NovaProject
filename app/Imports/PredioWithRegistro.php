@@ -39,6 +39,11 @@ class PredioWithRegistro implements ToModel, WithHeadingRow
             'coeficiente' => $row['coeficiente'],
             'vota' => !$row['novota']
         ]);
+        if (array_key_exists('votos', $row)) {
+            $predio->votos=$row['votos'];
+        }else{
+            $predio->votos=1;
+        }
         $predio->personas()->attach($personasArray);
         $predio->save();
 

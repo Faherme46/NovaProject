@@ -15,8 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('descriptor1');
             $table->string('numeral1');
-            $table->string('descriptor2');
-            $table->string('numeral2');
+            $table->string('descriptor2')->nullable();
+            $table->string('numeral2')->nullable();
+            $table->integer('votos')->default(1);
             $table->float('coeficiente');
             $table->boolean('vota');
             $table->unsignedBigInteger('control_id')->nullable();

@@ -20,7 +20,8 @@ class ControlFactory extends Factory
             'state'=> 4,
             'sum_coef'=>0,
             'sum_coef_can'=>0,
-            'predios_vote'=>0
+            'predios_vote'=>0,
+            'votes'=>0
         ];
     }
 }

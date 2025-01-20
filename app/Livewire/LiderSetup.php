@@ -128,7 +128,7 @@ class LiderSetup extends Component
             }
         } catch (\Exception $e) {
             //throw $th;
-            $this->addError('error', 'Error terminando la asamblea: ' . $e->getTraceAsString());
+            $this->addError('error', 'Error terminando la asamblea: ' . $e->getMessage());
         }
     }
 

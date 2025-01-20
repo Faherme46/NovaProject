@@ -23,11 +23,13 @@ class PrediosController extends Controller
 
         $messages = [
             'coef.required' => 'El campo coeficiente es obligatorio.',
+            'votos.required' => 'El campo votos es obligatorio.',
             'id.required' => 'El campo id es obligatorio.',
         ];
 
         $request->validate([
             'coef' => ['required'],
+            'votos' => ['required'],
             'id' => ['required'],
         ], $messages);
 
@@ -38,6 +40,7 @@ class PrediosController extends Controller
             try {
                 $predio->update([
                     'coeficiente'=>$request->coef,
+                    'votos'=>$request->votos,
                     'vota'=>$request->boolean('voto')
                 ]);
                 if($predio->control){

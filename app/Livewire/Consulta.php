@@ -307,7 +307,7 @@ class Consulta extends Component
     }
 
 
-    
+
 
     public function validation()
     {
@@ -344,7 +344,7 @@ class Consulta extends Component
 
     public function storeInChange()
     {
-        
+
         $this->validation();
         if (!$this->changes) {
             session()->flash('warning', 'No hay cambios para guardar');
@@ -354,9 +354,9 @@ class Consulta extends Component
             $controlR = Control::find($this->controlIdR);
             $controlL = Control::find($this->controlIdL);
             $prediosChange=array_diff(array_keys($this->prediosR),$controlR->predios->pluck('id')->toArray());
-            
-            
-            
+
+
+
             if ($this->controlRInvalid) {
                 $this->addError('error', 'El control B esta retirado');
                 return;
@@ -384,7 +384,7 @@ class Consulta extends Component
             if (!$this->prediosL) {
                 $controlL->retirar();
             }
-            
+
             \Illuminate\Support\Facades\Log::channel('custom')->info('Se cambian los predios del control {controlA} al control {controlB}',['controlA' =>$controlL->id,'controlB' =>$controlR->id,'predios'=>array_values($prediosChange)]);
             $this->success();
         } catch (\Throwable $th) {
@@ -421,12 +421,11 @@ class Consulta extends Component
         try {
             if ($this->prediosL) {
                 $controlL->deletePredios($this->prediosR);
-                $controlL->setCoef();
                 $controlL->save();
             } else {
                 $controlL->retirar();
-                $controlL->setCoef();
             }
+            $controlL->setCoef();
             \Illuminate\Support\Facades\Log::channel('custom')->info('Se le retiran los predios al control {control}',['control' =>$controlL->id,'predios'=>array_keys($this->prediosR)]);
             $this->success();
         } catch (\Throwable $th) {

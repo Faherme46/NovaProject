@@ -67,13 +67,14 @@ class Control extends Model
     {
         $this->sum_coef_can = $this->predios()->where('vota', true)->sum('coeficiente');
         $this->sum_coef = $this->predios()->sum('coeficiente');
-        $this->predios_vote = $this->predios()->where('vota', true)->count();
+        $this->predios_vote =  $this->predios()->sum('votos');
+        $this->votes=$this->predios()->where('vota', true)->sum('votos');
         return $this->save();
     }
 
     public function getPrediosCan()
     {
-        return $this->predios()->where('vota', true)->count();
+        return $this->predios()->where('vota', true)->sum('votos');
     }
 
     #agrega predios desde un array de predios
