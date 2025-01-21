@@ -29,7 +29,7 @@ class BackupController extends Controller
 
             if ($codigoSalida !== 0) {
 
-                return $codigoSalida;
+                return $salida;
             }
 
             Storage::disk('externalAsambleas')->put($nameAsamblea . '/' . $nameAsamblea . '.sql', file_get_contents($ubicacionArchivoTemporal));
