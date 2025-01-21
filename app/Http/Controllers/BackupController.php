@@ -28,7 +28,7 @@ class BackupController extends Controller
             exec($comando, $salida, $codigoSalida);
 
             if ($codigoSalida !== 0) {
-
+                dd($salida);
                 return $salida;
             }
 
@@ -80,7 +80,6 @@ class BackupController extends Controller
             if ($logpath) {
                 Storage::disk('logs')->put('myLog.log', $logpath);
             }
-
         } catch (\Throwable $th) {
 
             return back()->with('error', 'Error cargando la Asamblea: ' . $th->getMessage());
