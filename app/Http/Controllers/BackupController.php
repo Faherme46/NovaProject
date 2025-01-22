@@ -17,13 +17,15 @@ class BackupController extends Controller
         $asamblea = Asamblea::find(cache('asamblea')['id_asamblea'])->toArray();
         $info = Storage::disk('externalAsambleas')->put($nameAsamblea . '/info.json', json_encode($asamblea));
 
-        $ubicacionArchivoTemporal = storage_path("app\public\backups\\" . $nameAsamblea . '.sql');
+        $ubicacionArchivoTemporal = Storage::disk('externalAsambleas')->path($nameAsamblea.'/'.$nameAsamblea.'.sql');
+
         $codigoSalida = 0;
 
 
         $tables = ['cache', 'controls', 'personas', 'predios', 'predios_personas', 'questions', 'results', 'session', 'signatures', 'votes'];
         $comando = sprintf("%s --user=\"%s\" --password=\"%s\" --skip-lock-tables --no-create-info %s %s > %s", env("UBICACION_MYSQLDUMP"), env("DB_USERNAME"), env("DB_PASSWORD"), env('DB_DATABASE'), implode(' ', $tables), $ubicacionArchivoTemporal);
         try {
+            // Storage::disk('public')->makeDirectory('backups');
 
             exec($comando, $salida, $codigoSalida);
 
