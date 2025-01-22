@@ -119,7 +119,7 @@
                 @if ($asamblea['registro'])
                 <div class="col-3">
                 @else
-                <div class="col-5">
+                <div class="col-4">
                 @endif
 
                     <form action="{{ route('gestion.report.docs') }}" method="GET" class="px-3" id="formReport"
