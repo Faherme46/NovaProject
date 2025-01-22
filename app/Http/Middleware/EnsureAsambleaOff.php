@@ -20,9 +20,9 @@ class EnsureAsambleaOff
             // No aplicar este middleware a la ruta livewire/update
             return $next($request);
         }
-        /**   if (cache('asamblea')) {
-         *      return redirect()->route('home')->withErrors(['msg' => 'No es posible si hay una asamblea en sesión']);
-         *}*/
+        if (cache('asamblea')) {
+            return redirect()->route('home')->withErrors(['msg' => 'No es posible si hay una asamblea en sesión']);
+        }
 
 
         return $next($request);

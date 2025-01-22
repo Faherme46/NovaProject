@@ -37,7 +37,7 @@ class SessionController extends Controller
         $response=$backupController->downloadBackup();
 
         if($response!=200){
-            return redirect()->route(route: 'asambleas')->with('error', 'Error exportando la base de datos: '.$response);
+            return redirect()->route(route: 'gestion.report')->with('error', 'Error exportando la base de datos: '.$response);
         };
 
         $sessionData = Auth::user();
