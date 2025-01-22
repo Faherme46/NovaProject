@@ -93,7 +93,7 @@
                     </div>
 
                 </div>
-                @if ($asambleaa['registro'])
+                @if ($asamblea['registro'])
                     <div class="col-3">
                         <div class="card px-0">
                             <div class="card-header d-flex justify-content-between align-items-center pb-0">
@@ -116,8 +116,12 @@
                     </div>
                 @endif
 
-
+                @if ($asamblea['registro'])
                 <div class="col-3">
+                @else
+                <div class="col-5">
+                @endif
+
                     <form action="{{ route('gestion.report.docs') }}" method="GET" class="px-3" id="formReport"
                         target="_blank">
                         @csrf
