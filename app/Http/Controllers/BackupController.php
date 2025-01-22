@@ -33,9 +33,6 @@ class BackupController extends Controller
                 dd($comando);
                 return $salida;
             }
-
-            Storage::disk('externalAsambleas')->put($nameAsamblea . '/' . $nameAsamblea . '.sql', file_get_contents($ubicacionArchivoTemporal));
-            Storage::disk('public')->delete('backups/' . $nameAsamblea . '.sql');
             \Illuminate\Support\Facades\Log::channel('custom')->info('Se descargo la informacion de la BD.');
         } catch (\Throwable $th) {
             return $th->getMessage();
