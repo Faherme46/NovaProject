@@ -27,8 +27,8 @@ class BackupController extends Controller
 
             exec($comando, $salida, $codigoSalida);
 
-            if ($codigoSalida !== 0) {
-                dd($salida);
+            if ($codigoSalida == 0) {
+                dd($comando);
                 return $salida;
             }
 
