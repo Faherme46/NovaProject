@@ -570,4 +570,7 @@ class PresentQuestion extends Component
         $this->setSizePresentation();
         $this->isEditting = false;
     }
+
+
+    
 }

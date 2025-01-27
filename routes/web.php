@@ -37,6 +37,7 @@ use App\Livewire\Setup;
 use App\Livewire\ShowVotacion;
 use App\Livewire\Signing;
 use App\Livewire\Signs;
+use App\Livewire\ViewQuestion;
 
 //rutas de redireccion
 
@@ -71,7 +72,7 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::get('desterminar',[LiderSetup::class,'desterminar'])->name('desterminar');
     Route::get('votacion', Votacion::class)->name('votacion')->middleware(isAsambleaEnd::class);
     Route::get('questions/show/{questionId}/{plancha?}/{plazas?}', PresentQuestion::class)->name('questions.show');
-
+    Route::get('questions/view/{questionId}', ViewQuestion::class)->name('questions.view');
     Route::post('predios/update', [PrediosController::class, 'updatePredio'])->name('predios.update');
     Route::post('personas/update', [PersonasController::class, 'updatePersona'])->name('personas.update');
 });

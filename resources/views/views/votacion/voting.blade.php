@@ -6,12 +6,19 @@
             <div class="col-4">
                 <div class="d-flex">
 
-                    <button class="btn btn-primary  rounded-3 me-2" wire:click='goPresent'>
+                    <button class="btn btn-primary  rounded-3 me-2" wire:click='goPresent'data-bs-toggle="tooltip"
+                    data-bs-placement="bottom" data-bs-custom-class="custom-tooltip" data-bs-title="Volver  ">
                         <i class="bi bi-arrow-left-circle-fill fs-3"></i>
                     </button>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="bi bi-card-list fs-3"></i>
-                    </button>
+                    <form action="{{ route('questions.view', ['questionId' => $question->id]) }}" method="get"
+                        target=" _blank">
+                        @csrf
+                        <button type="submit" class="btn btn-primary" data-bs-toggle="tooltip"
+                            data-bs-placement="bottom" data-bs-custom-class="custom-tooltip" data-bs-title="Ver Pregunta">
+                            <i class="bi bi-card-list fs-3"></i>
+                        </button>
+                    </form>
+
                 </div>
 
             </div>
@@ -23,7 +30,9 @@
                 <h1 class="mb-0 me-3">
                     {{ $countdown }}
                 </h1>
-                <button class="btn btn-warning p-0 rounded-3 me-2" wire:click='playPause({{ !$stopped }})'
+                <button class="btn btn-warning p-0 rounded-3 me-2" wire:click='playPause({{ !$stopped }})'data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip" data-bs-title="Pausar"
+
+
                     @if (!$stopped) wire:poll.1000ms='decrement' @endif>
 
                     @if ($stopped)
@@ -32,7 +41,8 @@
                         <i class="bi bi-pause-fill fs-2 py-0 px-1"></i>
                     @endif
                 </button>
-                <button class="btn btn-danger p-0 rounded-3" wire:click='stopVote'>
+                <button class="btn btn-danger p-0 rounded-3" wire:click='stopVote'data-bs-toggle="tooltip"
+                data-bs-placement="bottom" data-bs-custom-class="custom-tooltip" data-bs-title="Detener">
                     <i class="bi bi-stop-fill fs-2 px-1"></i>
                 </button>
 

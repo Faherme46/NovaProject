@@ -20,7 +20,7 @@
                                 @foreach ($questionsPrefab as $question)
                                     <li>
                                         <a class="dropdown-item d-flex align-items-center
-                                             @if ($question->id == $questionId) active @endif"
+                                            @if ($question->id == $questionId) active @endif"
                                             wire:click='setQuestion({{ $question->id }})'>{{ $question->title }}</a>
                                     </li>
                                 @endforeach
