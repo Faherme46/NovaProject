@@ -68,14 +68,14 @@ class Main extends Component
                 'icon'=> 'bi-sliders',
                 'title'=> 'Programar',
                 'body'=> 'Importar los archivos en este dispositivo',
-                'visible'=> ($this->role=='Admin'),
+                'visible'=> ($this->role=='Admin' || $this->role=='Lider'),
                 'enabled'=>!(cache('asamblea',false)),
             ],[
                 "directives"=> 'onclick=location.href="/asambleas/load";',
                 'icon'=> 'bi-upload',
                 'title'=> 'Cargar Asamblea',
                 'body'=> 'Cargar y eliminar las asambleas guardadas',
-                'visible'=> ($this->role=='Admin'),
+                'visible'=> ($this->role=='Admin' || $this->role=='Lider'),
                 // 'enabled'=>true
                 'enabled'=>!(cache('asamblea',false)),
             ],[
@@ -83,14 +83,14 @@ class Main extends Component
                 'icon'=> 'bi-file-earmark-richtext',
                 'title'=> 'Informes',
                 'body'=> 'Gestión y generación del informe',
-                'visible'=> ($this->role=='Admin'),
+                'visible'=> ($this->role=='Admin' || $this->role=='Lider'),
                 'enabled'=>cache('asamblea',false)  ,
             ],[
                 "directives"=> 'onclick=location.href="/setup";',
                 'icon'=> 'bi-palette',
                 'title'=> 'Configurar Diseño',
                 'body'=> 'Colores, tamaños y fuentes',
-                'visible'=> ($this->role=='Admin'),
+                'visible'=> ($this->role=='Admin' || $this->role=='Lider'),
                 'enabled'=>true,
             ],
             [
@@ -98,14 +98,14 @@ class Main extends Component
                 'icon'=> 'bi-people',
                 'title'=> 'Usuarios',
                 'body'=> 'Crear y Consultar Usuarios',
-                'visible'=> ($this->role=='Admin'),
+                'visible'=> ($this->role=='Admin' || $this->role=='Lider'),
                 'enabled'=>($this->role!='Operario'),
             ],[
                 "directives"=> 'data-bs-toggle=modal data-bs-target=#modalFilePredios @disabled(!$asambleaOn)',
                 'icon'=> 'bi-file-arrow-up',
                 'title'=> 'Archivos',
                 'body'=> 'Archivos cargados de predios y personas',
-                'visible'=> ($this->role=='Admin'),
+                'visible'=> ($this->role=='Admin' || $this->role=='Lider'),
                 'enabled'=>($this->role!='Operario'&&(cache('asamblea',false))),
             ],
             [
@@ -169,7 +169,16 @@ class Main extends Component
                 'body'=> 'Recibir Firmas electronicas',
                 'visible'=> (cache('asamblea'))?cache('asamblea')['registro']:false,
                 'enabled'=>(cache('asamblea'))?cache('asamblea')['signature']:false,
-            ],
+            ],[
+                "directives"=> 'data-bs-toggle=modal data-bs-target=#logOutModal',
+                'icon'=> 'bi-box-arrow-left',
+                'title'=> 'Cerrar Sesión',
+                'body'=> '',
+                'visible'=> true,
+                'enabled'=>true,
+            ]
+
+
         ];
     }
 

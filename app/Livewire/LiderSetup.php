@@ -46,6 +46,7 @@ class LiderSetup extends Component
             return $control->predios->count();
         });
         $this->prediosVote = $this->allControls->sum(function ($control) {
+            $control->setCoef();
             return $control->predios_vote;
         });
 

@@ -21,7 +21,6 @@ class ControlFactory extends Factory
             'sum_coef'=>0,
             'sum_coef_can'=>0,
             'predios_vote'=>0,
-            'votes'=>0
         ];
     }
 }

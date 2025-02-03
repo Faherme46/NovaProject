@@ -112,8 +112,8 @@ class Votacion extends Component
     {
         // dd($this->questionWhite);
         $count = 0;
-        foreach ($this->questionOptions as $value) {
-            if ($value) {
+        foreach ($this->questionOptions as $val) {
+            if ($val) {
                 $count++;
             }
         }
@@ -131,7 +131,7 @@ class Votacion extends Component
         } else {
             if ($this->questionType == 2 || $this->questionType == 6) {
                 foreach ($this->questionOptions as $key => $value) {
-                    if ($value == 'Blanco') {
+                    if ($value == 'En blanco') {
                         $id = $key;
                     }
                 }

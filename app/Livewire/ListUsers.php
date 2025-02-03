@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
@@ -14,11 +15,13 @@ class ListUsers extends Component
     public $sortDirection = 'asc'; // Dirección de orden por defecto
     public $toDeleteId;
     public $editting=false;
+    public $isAdmin;
     public function mount()
     {
-        $this->users = User::whereNot('id',1)->orderBy($this->sortField, $this->sortDirection)->get();
+        $this->users = User::whereNot('id',1)->whereNot('id',2)->orderBy($this->sortField, $this->sortDirection)->get();
         $serverIp = request()->server('SERVER_ADDR');
         $this->showImport= ($serverIp == '127.0.0.1');
+        $this->isAdmin=(bool)Auth::user()->getRoleNames()[0]=="Admin";
     }
     #[Layout('layout.full-page')]
     public function render()
@@ -38,7 +41,7 @@ class ListUsers extends Component
             $this->sortDirection = 'asc';
         }
 
-        $this->users = User::query()->whereNot('id',1)->orderBy($this->sortField, $this->sortDirection)->get();
+        $this->users = User::query()->whereNot('id',1)->whereNot('id',2)->orderBy($this->sortField, $this->sortDirection)->get();
     }
 
     public function confirmDelete($userId)

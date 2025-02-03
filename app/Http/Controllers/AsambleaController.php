@@ -134,6 +134,8 @@ class AsambleaController extends Controller
                     'predios_vote' => 0
                 ]);
             }
+        }else{
+            return back()->withErrors('No se puede reducir el numero de controles')->withInput();
         }
         if ($asamblea) {
             $asamblea->update($request->all());

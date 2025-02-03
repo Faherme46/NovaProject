@@ -96,13 +96,13 @@
                 @if ($tab != 3 && $tab != 5)
                     <div class="row g-1">
                         <div class="col-5">
-                            <div class="card p-0">
+                            <div class="card p-0 mb-0">
                                 <div class="card-header d-flex align-items-center justify-content-between">
                                     <div class="col-auto">
                                         @if ($tab == 1)
                                             Control A
                                         @elseif ($tab == 2)
-                                            Predios a Asignar
+                                            Predios Asignados
                                         @elseif($tab == 4)
                                             Predios
                                         @endif
@@ -119,7 +119,7 @@
 
                                     </div>
                                 </div>
-                                <div class="card-body table-responsive table-fixed-header table-50 px-0 pt-0">
+                                <div class="card-body table-responsive table-fixed-header table-45 p-0 mb-0">
                                     <table class="w-100 table mb-0 ">
 
                                         <tbody>
@@ -179,9 +179,9 @@
 
                         </div>
 
-                        <div class="col-5">
+                        <div @if($tab==4) class="col-6" @else class="col-5" @endif>
                             <div class="card p-0">
-                                <div class="card-header d-flex align-items-center justify-content-between">
+                                <div class="card-header d-flex align-items-center justify-content-between pe-2">
                                     <div class="col-auto">
                                         @if ($tab == 1)
                                             Control B
@@ -189,6 +189,7 @@
                                             <p class="mb-0 py-2">Predios a Retirar</p>
                                         @elseif($tab == 4)
                                             <p class="mb-0">Predios asignados</p>
+
                                         @endif
                                     </div>
                                     <div class=" col-4">
@@ -198,8 +199,11 @@
                                             placeholder="Control" @if ($tab != 1) hidden @endif
                                             onkeypress="return onlyNumbers(event)" maxlength="3">
                                     </div>
+                                    <div class="col-auto d-flex justify-content-end">
+                                        <i class="bi bi-building bx"></i>
+                                    </div>
                                 </div>
-                                <div class="card-body table-responsive table-fixed-header table-50 px-0 pt-0">
+                                <div class="card-body table-responsive table-fixed-header table-45 px-0 pt-0">
 
 
                                     <table class="w-100 table mb-0 ">
@@ -213,7 +217,7 @@
                                                     </td>
 
                                                     <td>
-                                                        @if ($tab == 2 || $predio->control->id != $controlIdR)
+                                                        @if (($tab == 2 || $predio->control->id != $controlIdR) && $tab != 4)
                                                             <button type="button" class="btn p-0"
                                                                 wire:click="toLeft({{ $predio->id }})">
                                                                 <i class='bi bi-arrow-left-square-fill'></i>
@@ -221,7 +225,20 @@
                                                         @endif
                                                         @if ($tab == 4)
                                                             @isset($Persona)
+                                                                @if ($predio->getRelationPersona($Persona->id) == 'Propietario')
+                                                                    <span class="text-primary">
+                                                                    @else
+                                                                        <span>
+                                                                @endif
                                                                 {{ $predio->getRelationPersona($Persona->id) }}
+                                                                </span>
+                                                            @endisset
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        @if ($tab == 4)
+                                                            @isset($Persona)
+                                                                {{$predio->control->id}}
                                                             @endisset
                                                         @endif
                                                     </td>
@@ -255,7 +272,8 @@
                                 <div class="d-flex align-items-center ">
                                     @if ($changes)
                                         <button type="button" class="btn mt-1 p-0 me-2"
-                                            wire:click='undoPredioChanges({{ $Predio->id }})'>
+                                            wire:click='undoPredioChanges({{ $Predio->id }})' data-bs-toggle="tooltip"
+                                            data-bs-title="Deshacer">
                                             <i class="bi bi-arrow-counterclockwise fs-6 "></i>
                                         </button>
                                     @endif
@@ -367,7 +385,7 @@
                                     <span class="badge mx-2 border-1 border border-black text-black fs-6">Coef.
                                         Votacion: {{ $Control ? $Control->sum_coef_can : 0 }}</span>
                                     <span class="badge mx-2 border-1 border border-black text-black fs-6"> Votos:
-                                        {{ $Control ? $Control->votes : 0 }}</span>
+                                        {{ $Control ? $Control->predios_vote : 0 }}</span>
                                 @endif
                             </form>
                         </div>
@@ -419,17 +437,21 @@
                                     <td class="text-end">Total Predios:
                                         {{ $Control ? $Control->predios->count() : 0 }}
                                     </td>
-                                    <td class="text-end">{{ $Control ? $Control->predios_vote : 0 }}</td>
+                                    <td class="text-end">{{ $Control ? $Control->predios()->sum('votos') : 0 }}</td>
                                     <td class="text-end">{{ $Control ? $Control->sum_coef : 0 }}</td>
                                     <td></td>
                                 </tfoot>
                             </table>
                         </div>
                     </div>
-                    @if ($asamblea['registro'] && $Control)
+                    @if ($asamblea['registro'] && $Control && $Control->persona)
                         <div class="d-flex mt-2 align-items-center justify-content-center">
                             <span class="bold fs-5 me-2">Asistente: </span>
-                            <span> {{ $Control->persona ? $Control->persona->fullName() : '-' }} </span>
+                            <span> {{ $Control->persona->fullName() }} </span>
+                        </div>
+                        <div class="d-flex mt-1 align-items-center justify-content-center">
+                            <span class="bold fs-5 me-2">{{ $Control->persona->tipo_id }}: </span>
+                            <span> {{ $Control->persona->id }} </span>
                         </div>
                     @endif
 

@@ -15,10 +15,10 @@
                     <div class="card-body pb-0">
 
                         @csrf
-                        <input type="text" class="form-control" id="idUser" name="idUser" hidden >
+                        <input type="text" class="form-control" id="idUser" name="idUser" hidden>
                         @if ($editting)
-
-                            <input type="hidden" class="form-control" id="role" name="role" value="Operario" hidden>
+                            <input type="hidden" class="form-control" id="role" name="role" value="Operario"
+                                hidden>
                         @endif
                         <div class="mb-2 row">
                             <div class="col-6">
@@ -85,7 +85,10 @@
 
                                 <option value="Operario" selected>Operario</option>
                                 <option value="Lider">Lider</option>
-                                <option value="Admin">Administrador</option>
+                                @if ($isAdmin)
+                                    <option value="Admin">Administrador</option>
+                                @endif
+
                             </select>
                         </div>
                         <button type="submit"

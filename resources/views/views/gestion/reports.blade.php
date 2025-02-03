@@ -44,7 +44,7 @@
                                         Controles:
                                     </span>
                                     <input type="number" class="form-control fs-5 " value="{{ $asambleaa->controles }}"
-                                        name="controles" oninput="debouncedValidateMultipleOf50(this)" required>
+                                        name="controles" oninput="debouncedValidateMultipleOf50(this)" max="400" required>
                                 </div>
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">

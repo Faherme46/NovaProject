@@ -64,16 +64,11 @@
                                                 {{ $op }}</h1>
                                         </div>
                                         <div class="col-11 d-flex align-items-center justify-content-center">
-                                            @if ($question->type == 2)
-                                                <textarea type="text" class="w-100 mb-0 text-uppercase ms-2" rows="1"
-                                                    style="font-size:{{ $sizeOptions - 2 }}rem" wire:model='newOptions.{{ 'option' . $op }}'>
-                                            </textarea>
-                                            @else
-                                                <h1 class="mx-auto mb-0 text-uppercase lines-text-2 ms-2"
-                                                    style="font-size:{{ $sizeOptions }}rem ">
-                                                    {{ $question['option' . $op] }}
-                                                </h1>
-                                            @endif
+
+                                            <h1 class="mx-auto mb-0 text-uppercase lines-text-2 ms-2"
+                                                style="font-size:{{ $sizeOptions }}rem ">
+                                                {{ $question['option' . $op] }}
+                                            </h1>
                                         </div>
                                     </li>
                                 @endif

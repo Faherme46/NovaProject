@@ -71,7 +71,7 @@
                     <h5 class="card-title  mb-0 me-5">Poderdantes</h5>
                     <div class="d-flex align-items-baseline ">
 
-                        <input placeholder="cedula" onkeypress="return onlyNumbers(event)" type="text"
+                        <input placeholder="Cédula" onkeypress="return onlyNumbers(event)" type="text"
                             name="cedulaPropietario" id="cc" class="form-control"
                             wire:keypress.enter='addPoderdante' aria-describedby="helpId" wire:model='ccPoderdante'
                             onclick="this.select()" />
@@ -86,9 +86,12 @@
                         <thead>
                             <tr>
                                 <th>Nombre</th>
-                                <th>Cedula</th>
+                                <th>Cédula</th>
                                 <th>
-                                    <a class="btn p-0" wire:click='dropAllPoderdantes'>
+                                    <a class="btn p-0" wire:click='dropAllPoderdantes'
+                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                    data-bs-custom-class="custom-tooltip"
+                                    data-bs-title="Quitar todos los poderdantes">
                                         <i class='bi bi-x-square-fill'></i>
                                     </a>
                                 </th>
@@ -102,7 +105,9 @@
                                         <td>{{ $p->nombre }} {{ $p->apellido }} </td>
                                         <td>{{ $p->id }}</td>
                                         <td>
-                                            <button class="btn p-0"
+                                            <button class="btn p-0" data-bs-toggle="tooltip" data-bs-placement="top"
+                                            data-bs-custom-class="custom-tooltip"
+                                            data-bs-title="Quitar poderdante"
                                                 wire:click="dropPoderdante({{ $p->id }},{{ $p->predios }})">
                                                 <i class='bi bi-x-square-fill'></i>
                                             </button>

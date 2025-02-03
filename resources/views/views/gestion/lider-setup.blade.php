@@ -73,7 +73,7 @@
                         Terminar
                     </button>
                     <br>
-                    
+
                 </div>
             </div>
         </div>
@@ -106,13 +106,13 @@
                             @forelse ($allControls as $control)
 
                                 <tr>
-                                    <td class="text-center">{{ $control->id }}</td>
+                                    <td class="text-center  " >{{ $control->id }}</td>
                                     @if ($asamblea['registro'])
-                                        <td>{{ $control->persona->nombre }} {{ $control->persona->apellido }}</td>
+                                        <td class="text-wrap" width="30%">{{ $control->persona->nombre }} {{ $control->persona->apellido }}</td>
                                     @endif
                                     {{--  --}}
                                     </td>
-                                    <td>
+                                    <td >
                                         @foreach ($control->predios as $predio)
                                             <p class="mb-0 @if (!$predio->vota) text-danger @endif">
                                                 {{ $predio->getFullName() }}

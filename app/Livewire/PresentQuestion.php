@@ -71,7 +71,6 @@ class PresentQuestion extends Component
         }
         $this->newTitle = $this->question->title;
         $this->controls = Control::all()->pluck('id')->toArray();
-        $this->dispatch('full-screen-in');
         $this->inCoefResult = $this->question->coefGraph;
         $this->plazasCoef = $this->question->coefGraph;
         $this->setControlsAssigned();
@@ -505,7 +504,7 @@ class PresentQuestion extends Component
         $total = 0;
         $this->valuesPlanchas = [];
         foreach ($this->options as $op) {
-            if ($this->question[$op] != 'BLANCO') {
+            if ($this->question[$op] != 'EN BLANCO') {
                 $total += $this->resultToUse[$op];
             }
         }
@@ -513,14 +512,14 @@ class PresentQuestion extends Component
         $umbral = $total / $this->plazas;
         if ($total <= 0) {
             foreach ($this->options as $option) {
-                if ($this->question[$option] !== 'BLANCO') {
+                if ($this->question[$option] !== 'EN BLANCO') {
                     $this->valuesPlanchas[$option] = 1;
                 }
             }
         } else {
 
             foreach ($this->options as $option) {
-                if ($this->question[$option] !== 'BLANCO') {
+                if ($this->question[$option] !== 'EN BLANCO') {
 
                     $this->valuesPlanchas[$option] = floor($this->resultToUse[$option] / $umbral);
                 } else {
@@ -534,7 +533,7 @@ class PresentQuestion extends Component
             $plazasRestantes = $this->plazas - array_sum($this->valuesPlanchas);
 
             foreach ($this->options as $option) {
-                if ($this->question[$option] !== 'Blanco') {
+                if ($this->question[$option] !== 'En blanco') {
                     $residuos[$option] = $this->resultToUse[$option] - $umbral * $this->valuesPlanchas[$option];
                 }
             }
@@ -572,5 +571,5 @@ class PresentQuestion extends Component
     }
 
 
-    
+
 }

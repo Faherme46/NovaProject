@@ -83,7 +83,7 @@
 
                             <input class="form-check-input scaled-switch-15 me-2" type="checkbox" role="switch"
                                 id="switchBlanco" wire:model.change='questionWhite' @disabled(!$questionType || $questionType == 1 || $questionType == 5)>
-                            <label class="form-check-label fw-bolder fs-5 ms-3" for="switchBlanco">Blanco</label>
+                            <label class="form-check-label fw-bolder fs-5 ms-3" for="switchBlanco">En blanco</label>
                         </div>
                     </div>
                     <div class="card-body d-flex p-0">
@@ -342,8 +342,8 @@
             input = document.getElementById('option' + id);
             console.log(id);
 
-            $wire.questionOptions[id] = 'Blanco'
-            input.value = 'Blanco'
+            $wire.questionOptions[id] = 'En blanco'
+            input.value = 'En blanco'
         });
         $wire.on('setNone', (event) => {
             let id = event.myId

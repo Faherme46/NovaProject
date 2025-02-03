@@ -445,6 +445,7 @@ class Consulta extends Component
     public function searchControl()
     {
         $this->Control = Control::find($this->controlIdSearch);
+        $this->Control->setCoef();
         if (!$this->Control) {
             $this->addError('noFound', 'No se encontro el control');
         }

@@ -45,23 +45,27 @@ use App\Livewire\ViewQuestion;
 //rutas de las predios
 
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Admin')]], function () {
-    Route::delete('/session/destroy', [SessionController::class, 'destroyAll'])->name('session.destroy');
-    Route::get('gestion/informes', Reports::class)->name('gestion.report');
-    Route::get('setup', Setup::class)->name('setup.main')->withoutMiddleware(EnsureAsambleaOn::class    );
+
+
+
     Route::get('gestion/informes/Informe', [ReportController::class, 'createReport'])->name('gestion.report.docs');
+    Route::post('question/update', [Controller::class, 'updateQuestion'])->name('question.update');
+    Route::post('question/prefab/create', [Controller::class, 'createPrefabQuestion'])->name('question.prefab.create');
+
+});
+
+Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Admin|Lider')]], function () {
     Route::get('asambleas', LoadAsamblea::class)->name('asambleas')->middleware(EnsureAsambleaOff::class)->withoutMiddleware(EnsureAsambleaOn::class);
     Route::post('asambleas/store', [AsambleaController::class,'store'])->name('asambleas.store')->withoutMiddleware(EnsureAsambleaOn::class);
     Route::post('/predios/import', [PrediosController::class, 'import'])->name('predios.import');
     Route::post('gestion/asamblea/update', [AsambleaController::class, 'updateAsamblea'])->name('asamblea.update');
-    Route::post('question/update', [Controller::class, 'updateQuestion'])->name('question.update');
-    Route::post('question/prefab/create', [Controller::class, 'createPrefabQuestion'])->name('question.prefab.create');
+    Route::get('gestion/informes', Reports::class)->name('gestion.report');
+    Route::get('setup', Setup::class)->name('setup.main')->withoutMiddleware(EnsureAsambleaOn::class    );
+    Route::delete('/session/destroy', [SessionController::class, 'destroyAll'])->name('session.destroy');
     Route::delete('asamblea/delete', [AsambleaController::class, 'deleteAsamblea'])->name('asamblea.delete')->withoutMiddleware(EnsureAsambleaOn::class);
     Route::get('/asambleas/load', [AsambleaController::class,'loadAsambleas'])->name('asambleas.load')->withoutMiddleware(EnsureAsambleaOn::class)->middleware(EnsureAsambleaOff::class);
     Route::get('/backup/download', [BackupController::class, 'downloadBackup']);
     Route::post('/backup/restore', [BackupController::class, 'restoreBackup'])->middleware(EnsureAsambleaOff::class)->name('backup.restore')->withoutMiddleware(EnsureAsambleaOn::class);
-});
-
-Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Admin|Lider')]], function () {
     Route::get('/users', ListUsers::class)->name('users.index')->withoutMiddleware([EnsureAsambleaOn::class]);
     Route::post('users/create', [UsersController::class, 'createUser'])->name('users.create')->withoutMiddleware([EnsureAsambleaOn::class]);
     Route::post('users/update', [UsersController::class, 'updateUser'])->name('users.update')->withoutMiddleware([EnsureAsambleaOn::class]);

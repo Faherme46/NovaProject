@@ -17,7 +17,6 @@ return new class extends Migration
             $table->unsignedBigInteger('cc_asistente')->nullable();
             $table->decimal('sum_coef_can', 8, 6);
             $table->integer('predios_vote');
-            $table->integer('votes');
             $table->decimal('sum_coef', 8, 6);
             $table->string('h_entrega')->nullable();//se le entrega al cliente
             $table->string('h_recibe')->nullable();//recibe el operario
