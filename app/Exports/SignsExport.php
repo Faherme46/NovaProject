@@ -89,9 +89,9 @@ class SignsExport implements FromArray, WithHeadings,WithStyles,WithDrawings
             $drawing = new Drawing();
             $drawing->setPath(public_path('assets/img/logo.png'));
             $drawing->setHeight(90);
-            $drawing->setCoordinates('F'.($index+));
+            $drawing->setCoordinates('F'.($index));
             return $drawing;
         })->toArray();
-     }
+    }
 
 }
