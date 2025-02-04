@@ -71,7 +71,7 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::post('users/update', [UsersController::class, 'updateUser'])->name('users.update')->withoutMiddleware([EnsureAsambleaOn::class]);
     Route::get('users/import', [UsersController::class, 'importUsers'])->name('users.import')->withoutMiddleware([EnsureAsambleaOn::class]);
     Route::delete('users/delete', [UsersController::class, 'deleteUser'])->name('users.delete')->withoutMiddleware([EnsureAsambleaOn::class]);
-
+    Route::get('personas/export',[PersonasController::class,'signsExports'])->name('personas.export');
     Route::get('gestion/asamblea', LiderSetup::class)->name('gestion.asamblea');
     Route::get('desterminar',[LiderSetup::class,'desterminar'])->name('desterminar');
     Route::get('votacion', Votacion::class)->name('votacion')->middleware(isAsambleaEnd::class);

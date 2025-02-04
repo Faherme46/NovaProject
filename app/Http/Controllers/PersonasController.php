@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Exports\PersonasExport;
+use App\Exports\ProofExport;
+use App\Exports\SignsExport;
 use Illuminate\Support\Facades\DB;
 
 use App\Http\Controllers\Controller;
@@ -11,6 +13,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Exception;
 
 use App\Imports\PersonasImport;
+use App\Livewire\Signs;
 use App\Models\Predio;
 use App\Models\Persona;
 use App\Models\Control;
@@ -111,5 +114,11 @@ class PersonasController extends Controller
         $export = new PersonasExport();
         return Excel::store($export, $route . '/Tablas/personas.xlsx', 'externalAsambleas');
     }
-    
+
+
+    public function signsExports($route=null){
+        $asambleaName = cache( 'asamblea')['name'];
+        $export = new ProofExport();
+        return Excel::store($export, $asambleaName . '/Informe/Firmas.xlsx', 'externalAsambleas');
+    }
 }
