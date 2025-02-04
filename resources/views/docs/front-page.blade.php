@@ -23,13 +23,13 @@
     <div class="body">
         <div class="text-center">
             <br><br>
-            <h3>Asamblea de Copropietarios</h3>
-            <br><br><br><br><br><br>
+            <h3>ASAMBLEA DE COPROPIETARIOS</h3>
+            <br><br><br><br><br><br><br><br>
             <h3>{{ strtoupper($asambleaR->folder) }}</h3>
-            <br><br><br><br><br><br>
+            <br><br><br><br><br><br><br><br>
             <h3>{{ strtoupper('Informe de '.$asambleaR->referencia) }}</h3>
             <br><br><br><br><br><br>
-            <br><br><br>
+            <br><br><br><br><br><br>
             <h3>{{ strtoupper($date) }}</h3>
 
         </div>

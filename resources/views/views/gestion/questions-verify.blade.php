@@ -15,16 +15,18 @@
                         </div>
                     </button>
                 </div>
-                <div class="list-group pe-0 border mt-3" style="max-height: 50vh; overflow-y: auto;">
+                <table class="list-group pe-0 border mt-3 " style="max-height: 60vh; overflow-y: auto;">
+
+
 
                     @foreach ($questions as $q)
-                        <button type="button"
+                        <tr
                             class="list-group-item list-group-item-action lines-text-2 @if ($q->id == $question->id) active @endif"
                             wire:click='selectQuestion({{ $q->id }})'>
-                            {{ $q->title }}
-                        </button>
+                            <td>{{ $q->title }}</td>
+                        </tr>
                     @endforeach
-                </div>
+                </table>
 
 
 

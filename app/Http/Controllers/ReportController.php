@@ -58,62 +58,62 @@ class ReportController extends Controller
         try {
 
             $this->createDocument('front-page');
-            // if (!cache('inRegistro')) {
-            //     $this->variables += [
-            //         'anexos' => $this->questions->pluck('title')->toArray(),
-            //     ];
-            //     $this->createDocument('index-votacion');
-            // } else {
+            if (!cache('inRegistro')) {
+                $this->variables += [
+                    'anexos' => $this->questions->pluck('title')->toArray(),
+                ];
+                $this->createDocument('index-votacion');
+            } else {
 
-            //     $response = $this->exportPersonas();
-            //     if ($response->getStatusCode()==500) {
-            //         return redirect()->route('gestion.report')->with('error', $response->getContent());
-            //     } else if ($response->getStatusCode()==423) {
-            //         return redirect()->route('gestion.report')->with('error', 'Error exportando el archivo: "'.$response->getContent().'". Verifique que no se este usando');
-            //     }else if($response->getStatusCode()!=200){
-            //         return redirect()->route('gestion.report')->with('error', 'Error desconocido');
-            //     }
-            //     $anexos = ($this->asamblea->ordenDia) ? [
-            //         'Listado de Personas Citadas a la Asamblea ',
-            //         'Asistencia Para Quorum',
-            //         'Listado Total de Participantes en la Asamblea',
-            //         'Orden del Día',
-            //         'Informe Resultado de Votaciones'
-            //     ] : [
-            //         'Listado de Personas Citadas a la Asamblea ',
-            //         'Asistencia Para Quorum',
-            //         'Listado Total de Participantes en la Asamblea',
-            //         'Informe Resultado de Votaciones'
-            //     ];
-            //     $this->variables += [
-            //         'anexos' => $anexos,
-            //     ];
-            //     $this->createDocument('index-registro');
+                $response = $this->exportPersonas();
+                if ($response->getStatusCode()==500) {
+                    return redirect()->route('gestion.report')->with('error', $response->getContent());
+                } else if ($response->getStatusCode()==423) {
+                    return redirect()->route('gestion.report')->with('error', 'Error exportando el archivo: "'.$response->getContent().'". Verifique que no se este usando');
+                }else if($response->getStatusCode()!=200){
+                    return redirect()->route('gestion.report')->with('error', 'Error desconocido');
+                }
+                $anexos = ($this->asamblea->ordenDia) ? [
+                    'Listado de Personas Citadas a la Asamblea ',
+                    'Asistencia Para Quorum',
+                    'Listado Total de Participantes en la Asamblea',
+                    'Orden del Día',
+                    'Informe Resultado de Votaciones'
+                ] : [
+                    'Listado de Personas Citadas a la Asamblea ',
+                    'Asistencia Para Quorum',
+                    'Listado Total de Participantes en la Asamblea',
+                    'Informe Resultado de Votaciones'
+                ];
+                $this->variables += [
+                    'anexos' => $anexos,
+                ];
+                $this->createDocument('index-registro');
 
-            //     $this->variables['index'] = 0;
-            //     $this->createDocument('personas-citadas');
+                $this->variables['index'] = 0;
+                $this->createDocument('personas-citadas');
 
-            //     $this->variables['index'] = 1;
-            //     $this->createDocument('asistencia-quorum');
-            //     $this->variables['index'] = 2;
-            //     $this->createDocument('participantes-asamblea');
-            //     $this->variables['index'] = 3;
+                $this->variables['index'] = 1;
+                $this->createDocument('asistencia-quorum');
+                $this->variables['index'] = 2;
+                $this->createDocument('participantes-asamblea');
+                $this->variables['index'] = 3;
 
-            //     if($this->asamblea->ordenDia){
-            //         $this->variables['ordenDia'] = json_decode($this->asamblea->ordenDia, false);
-            //         $this->createDocument('orden-dia');
-            //     }
-            // }
+                if($this->asamblea->ordenDia){
+                    $this->variables['ordenDia'] = json_decode($this->asamblea->ordenDia, false);
+                    $this->createDocument('orden-dia');
+                }
+            }
 
-            // $this->createDocument('votaciones');
-            // $fileController = new FileController();
-            // $filePath = $fileController->getAsambleaFolderPath();
-            // $filePath = $filePath . '/Informe';
-            // if (!file_exists($filePath)) {
-            //     mkdir($filePath, 0755, true);
-            // }
+            $this->createDocument('votaciones');
+            $fileController = new FileController();
+            $filePath = $fileController->getAsambleaFolderPath();
+            $filePath = $filePath . '/Informe';
+            if (!file_exists($filePath)) {
+                mkdir($filePath, 0755, true);
+            }
             $output = $this->mergePdf();
-            // $fileController->exportPdf($this->asamblea->name . '/Informe/Informe.pdf', $output);
+            $fileController->exportPdf($this->asamblea->name . '/Informe/Informe.pdf', $output);
 
 
             return response($output, 200)

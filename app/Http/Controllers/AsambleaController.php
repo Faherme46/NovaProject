@@ -124,7 +124,7 @@ class AsambleaController extends Controller
 
         $asamblea = Asamblea::find($request->id_asamblea);
         $controles = intval($request->controles);
-        if ($controles > $asamblea->controles) {
+        if ($controles >= $asamblea->controles) {
             for ($i = $asamblea->controles + 1; $i < $request->controles + 1; $i++) {
                 Control::firstOrCreate([
                     'id' => $i,
