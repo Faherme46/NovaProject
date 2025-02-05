@@ -46,7 +46,7 @@
     </style>
     @switch($themeId)
         @case(1)
-        <link rel="stylesheet" href="{{ asset('assets/scss/orange.css') }}">
+            <link rel="stylesheet" href="{{ asset('assets/scss/orange.css') }}">
             <style>
                 :root {
                     --first-color: #e45801;
@@ -56,7 +56,7 @@
         @break
 
         @case(2)
-        <link rel="stylesheet" href="{{ asset('assets/scss/cyan.css') }}">
+            <link rel="stylesheet" href="{{ asset('assets/scss/cyan.css') }}">
             <style>
                 :root {
                     --first-color: #3ab4ff;
@@ -66,7 +66,7 @@
         @break
 
         @case(3)
-        <link rel="stylesheet" href="{{ asset('assets/scss/teal.css') }}">
+            <link rel="stylesheet" href="{{ asset('assets/scss/teal.css') }}">
             <style>
                 :root {
                     --first-color: #00a976;
@@ -76,9 +76,8 @@
         @break
 
         @case(4)
-        <link rel="stylesheet" href="{{ asset('assets/scss/pink.css') }}">
+            <link rel="stylesheet" href="{{ asset('assets/scss/pink.css') }}">
             <style>
-
                 :root {
                     --first-color: #ff7cbe;
                     --first-color-light: #ffc9e4;
@@ -87,7 +86,7 @@
         @break
 
         @case(5)
-        <link rel="stylesheet" href="{{ asset('assets/scss/indigo.css') }}">
+            <link rel="stylesheet" href="{{ asset('assets/scss/indigo.css') }}">
             <style>
                 :root {
                     --first-color: #4723D9;
@@ -97,7 +96,7 @@
         @break
 
         @case(6)
-        <link rel="stylesheet" href="{{ asset('assets/scss/blue.css') }}">
+            <link rel="stylesheet" href="{{ asset('assets/scss/blue.css') }}">
             <style>
                 :root {
                     --first-color: #3c80fd;
@@ -105,8 +104,9 @@
                 }
             </style>
         @break
+
         @case(7)
-        <link rel="stylesheet" href="{{ asset('assets/scss/crimson.css') }}">
+            <link rel="stylesheet" href="{{ asset('assets/scss/crimson.css') }}">
             <style>
                 :root {
                     --first-color: #a03a3a;
@@ -114,7 +114,6 @@
                 }
             </style>
         @break
-
 
         @default
     @endswitch
@@ -137,40 +136,52 @@
                     </a>
 
                     @if ($asamblea)
-                        @if ($asamblea['registro'])
-                            <a href="{{ route('asistencia.registrar') }}" class="nav_link" data-bs-toggle="tooltip"
+                        @if ($asamblea['eleccion'])
+                            <a href="{{ route('elecciones.registrar') }}" class="nav_link" data-bs-toggle="tooltip"
                                 data-bs-placement="bottom" data-bs-title="Registro">
                                 <i class='bi bi-person-check-fill nav_icon'></i>
                             </a>
+                            <a href="{{ route('gestion.asamblea') }}" class="nav_link" data-bs-toggle="tooltip"
+                                    data-bs-placement="bottom" data-bs-title="Control">
+                                    <i class='bi bi-ui-checks-grid nav_icon'></i>
+                                </a>
                         @else
-                            <a href="{{ route('asistencia.asignacion') }}" class="nav_link" data-bs-toggle="tooltip"
-                                data-bs-placement="bottom" data-bs-title="Asignacion">
-                                <i class='bi bi-building-check nav_icon'></i>
+                            @if ($asamblea['registro'])
+                                <a href="{{ route('asistencia.registrar') }}" class="nav_link" data-bs-toggle="tooltip"
+                                    data-bs-placement="bottom" data-bs-title="Registro">
+                                    <i class='bi bi-person-check-fill nav_icon'></i>
+                                </a>
+                            @else
+                                <a href="{{ route('asistencia.asignacion') }}" class="nav_link" data-bs-toggle="tooltip"
+                                    data-bs-placement="bottom" data-bs-title="Asignacion">
+                                    <i class='bi bi-building-check nav_icon'></i>
+                                </a>
+                            @endif
+
+                            <a href="{{ route('consulta') }}" class="nav_link" data-bs-toggle="tooltip"
+                                data-bs-placement="bottom" data-bs-title="Consulta">
+                                <i class='bi bi-info-circle-fill nav_icon'></i>
                             </a>
+                            <a href="{{ route('entregar') }}" class="nav_link" data-bs-toggle="tooltip"
+                                data-bs-placement="bottom" data-bs-title="Entrega">
+                                <i class='bi bi-door-closed-fill nav_icon'></i>
+                            </a>
+                            @hasanyrole('Admin|Lider')
+                                <a href="{{ route('votacion') }}" class="nav_link" data-bs-toggle="tooltip"
+                                    data-bs-placement="bottom" data-bs-title="Votaciones">
+                                    <i class='bi bi-question-circle-fill nav_icon'></i>
+                                </a>
+                                <a href="{{ route('votacion.show') }}" class="nav_link" data-bs-toggle="tooltip"
+                                    data-bs-placement="bottom" data-bs-title="Ver Votaciones">
+                                    <i class='bi bi-patch-question nav_icon'></i>
+                                </a>
+                                <a href="{{ route('gestion.asamblea') }}" class="nav_link" data-bs-toggle="tooltip"
+                                    data-bs-placement="bottom" data-bs-title="Control">
+                                    <i class='bi bi-ui-checks-grid nav_icon'></i>
+                                </a>
+                            @endhasanyrole
                         @endif
 
-                        <a href="{{ route('consulta') }}" class="nav_link" data-bs-toggle="tooltip"
-                            data-bs-placement="bottom" data-bs-title="Consulta">
-                            <i class='bi bi-info-circle-fill nav_icon'></i>
-                        </a>
-                        <a href="{{ route('entregar') }}" class="nav_link" data-bs-toggle="tooltip"
-                            data-bs-placement="bottom" data-bs-title="Entrega">
-                            <i class='bi bi-door-closed-fill nav_icon'></i>
-                        </a>
-                        @hasanyrole('Admin|Lider')
-                            <a href="{{ route('votacion') }}" class="nav_link" data-bs-toggle="tooltip"
-                                data-bs-placement="bottom" data-bs-title="Votaciones">
-                                <i class='bi bi-question-circle-fill nav_icon'></i>
-                            </a>
-                            <a href="{{ route('votacion.show') }}" class="nav_link" data-bs-toggle="tooltip"
-                                data-bs-placement="bottom" data-bs-title="Ver Votaciones">
-                                <i class='bi bi-patch-question nav_icon'></i>
-                            </a>
-                            <a href="{{ route('gestion.asamblea') }}" class="nav_link" data-bs-toggle="tooltip"
-                                data-bs-placement="bottom" data-bs-title="Control">
-                                <i class='bi bi-ui-checks-grid nav_icon'></i>
-                            </a>
-                        @endhasanyrole
                     @endif
                 </div>
                 <div class="nav-logo">
