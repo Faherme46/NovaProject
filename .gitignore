@@ -11,7 +11,7 @@
 
 /scripts/nova.python/venv
 /scripts/nova.python/__pycache__
-/scripts/nova.python/script_pid.txt
+scripts/nova.python/script_pid.txt
 /vendor
 /vendore
 .env

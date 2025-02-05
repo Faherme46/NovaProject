@@ -17,7 +17,7 @@ class BackupController extends Controller
         $asamblea = Asamblea::find(cache('asamblea')['id_asamblea'])->toArray();
         $info = Storage::disk('externalAsambleas')->put($nameAsamblea . '/info.json', json_encode($asamblea));
 
-        $ubicacionArchivoTemporal = Storage::disk('externalAsambleas')->path($nameAsamblea.'/'.$nameAsamblea.'.sql');
+        $ubicacionArchivoTemporal = Storage::disk('externalAsambleas')->path($nameAsamblea . '/' . $nameAsamblea . '.sql');
 
         $codigoSalida = 0;
 
@@ -53,36 +53,50 @@ class BackupController extends Controller
             return back()->with('error', 'No se encontro el archivo "C:/Asambleas/Asambleas/' . $path . '"');
         }
         try {
-            $questions = Storage::disk('externalAsambleas')->directories($nameAsamblea . '/Preguntas');
-            foreach ($questions as $key => $question) {
-                $pathCoef = Storage::disk('externalAsambleas')->get($question . '/coefChart.png');
-                Storage::disk('results')->put($nameAsamblea . '/' . ($question) . '/coefChart.png', $pathCoef);
-                $pathNom = Storage::disk('externalAsambleas')->get($question . '/nominalChart.png');
-                Storage::disk('results')->put($nameAsamblea . '/' . ($question)  . '/nominalChart.png', $pathNom);
-                // Ejecutar el comando SQL
-
-            }
-
-            $asamblea = Asamblea::where('name', $nameAsamblea)->first();
-
             $execute = DB::unprepared($sql);
 
-
+            $asamblea = Asamblea::where('name', $nameAsamblea)->first();
             cache(['asamblea' => $asamblea]);
             cache(['id_asamblea' => $asamblea->id_asamblea]);
-
-
-            #Importacion del log
-            $logpath = Storage::disk('externalAsambleas')->get($nameAsamblea . '/logs.log');;
-
-
-            if ($logpath) {
-                Storage::disk('logs')->put('myLog.log', $logpath);
-            }
         } catch (\Throwable $th) {
 
             return back()->with('error', 'Error cargando la Asamblea: ' . $th->getMessage());
         }
+
+
+        try {
+            $questions = Storage::disk('externalAsambleas')->directories($nameAsamblea . '/Preguntas');
+            foreach ($questions as $key => $question) {
+                $partes = explode("Preguntas/", $question);
+                if (isset($partes[1])) {
+                    $pathCoef = Storage::disk('externalAsambleas')->get($question . '/coefChart.png');
+                    Storage::disk('results')->put($nameAsamblea . '/' . $partes[1] . '/coefChart.png', $pathCoef);
+                    $pathNom = Storage::disk('externalAsambleas')->get($question . '/nominalChart.png');
+                    Storage::disk('results')->put($nameAsamblea . '/' . $partes[1]  . '/nominalChart.png', $pathNom);
+                }
+
+                // Ejecutar el comando SQL
+
+            }
+        } catch (\Throwable $th) {
+
+            return back()->with('error', 'Error Importando las imagenes de las preguntas ' . $th->getMessage());
+        }
+
+
+
+
+
+
+
+        #Importacion del log
+        $logpath = Storage::disk('externalAsambleas')->get($nameAsamblea . '/logs.log');;
+
+
+        if ($logpath) {
+            Storage::disk('logs')->put('myLog.log', $logpath);
+        }
+
 
 
         // Restaurar la base de datos usando el archivo
