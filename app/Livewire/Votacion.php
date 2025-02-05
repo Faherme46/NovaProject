@@ -285,6 +285,14 @@ class Votacion extends Component
             }
         }
 
+        $questionsFiltered = array_filter($this->questionOptions, function ($valor) {
+            return $valor !== null && $valor !== '';
+        });
+        if(count($questionsFiltered) !== count(array_unique($questionsFiltered))){
+            $this->addError('error', 'No pueden haber opciones iguales');
+            $error = 1;
+        }
+
         //si hay plancha se requiere el numero de plazas
         if ($this->plancha && !$this->plazas) {
             $this->addError('error', 'Se requiere el numero de plazas');

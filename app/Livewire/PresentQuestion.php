@@ -130,7 +130,7 @@ class PresentQuestion extends Component
             }
             $result->save();
         } catch (Throwable $th) {
-            $this->addError('error', 'ERROR 1' . $th->getMessage());
+            $this->addError('error', 'ERROR ' . $th->getMessage());
         }
     }
 
@@ -149,6 +149,9 @@ class PresentQuestion extends Component
                 $values[] = $result->$option;
             }
         }
+        $six= count($labels)==6;
+
+
         if ($quorum) {
             $additionalOptions = [
                 'nule' => 'PRESENTE'
@@ -157,9 +160,13 @@ class PresentQuestion extends Component
             $additionalOptions = [
                 'abstainted' => 'ABSTENCION',
                 'absent' => 'AUSENTE',
-                'nule' => 'NULO'
             ];
+
+            if ($this->question->type!=2 || !$six) {
+                $additionalOptions['nule']='NULO';
+            }
         }
+
         // Agregar abstained, absent y nule con sus etiquetas en español
 
 
@@ -369,7 +376,7 @@ class PresentQuestion extends Component
             $fileController->exportResult($this->question);
             $fileController->exportVotes($this->votes, $this->question->id, $this->question->title);
         } catch (Throwable $th) {
-            $this->addError('Error', 'ERROR 2' . $th->getMessage());
+            $this->addError('Error', 'ERROR ' . $th->getMessage());
         }
         $this->reset('votes');
         foreach ($this->question->results as $result) {
