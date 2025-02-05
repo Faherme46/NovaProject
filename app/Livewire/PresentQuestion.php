@@ -333,7 +333,7 @@ class PresentQuestion extends Component
                         $valuesNom['abstainted']  += $control->getPrediosCan();
                     }
                     $valuesCoef['abstainted'] += ($control->sum_coef - $control->sum_coef_can);
-                    $valuesNom['abstainted']  +=  ($control->predios_vote - $control->getPrediosCan());
+                    $valuesNom['abstainted']  +=  ($control->predios->count() - $control->getPrediosCan());
                 }
             }
         }

@@ -56,9 +56,9 @@ class BackupController extends Controller
             $questions = Storage::disk('externalAsambleas')->directories($nameAsamblea . '/Preguntas');
             foreach ($questions as $key => $question) {
                 $pathCoef = Storage::disk('externalAsambleas')->get($question . '/coefChart.png');
-                Storage::disk('results')->put($nameAsamblea . '/' . ($key + 1) . '/coefChart.png', $pathCoef);
+                Storage::disk('results')->put($nameAsamblea . '/' . ($question) . '/coefChart.png', $pathCoef);
                 $pathNom = Storage::disk('externalAsambleas')->get($question . '/nominalChart.png');
-                Storage::disk('results')->put($nameAsamblea . '/' . ($key + 1)  . '/nominalChart.png', $pathNom);
+                Storage::disk('results')->put($nameAsamblea . '/' . ($question)  . '/nominalChart.png', $pathNom);
                 // Ejecutar el comando SQL
 
             }
