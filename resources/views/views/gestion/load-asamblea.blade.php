@@ -25,7 +25,7 @@
                                 <td class="fs-3">{{ $a->hora }}</td>
                                 <td class="fs-3 text-center">
                                     <span class="badge bg-primary">
-                                        {{ $a->registro ? 'Registro' : 'Solo Votación' }}
+                                        {{ $a->registro ? ($a->eleccion)?'Eleccion':'Registro' : 'Solo Votación' }}
                                     </span>
                                 </td>
                                 <td class="fs-3 text-center">

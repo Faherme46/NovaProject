@@ -26,6 +26,7 @@ return new class extends Migration
             // $table->enum('estado', ['pendiente', 'en_progreso', 'finalizada','cancelada']);
             $table->boolean('registro');
             $table->boolean('signature')->default(false);
+            $table->boolean('eleccion')->default(false);
             $table->time('h_inicio')->nullable();
             $table->time('h_cierre')->nullable();
             $table->timestamps();

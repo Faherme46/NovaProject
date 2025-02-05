@@ -51,6 +51,7 @@ class FileController extends Controller
     {
 
         $asambleaName = cache('asamblea')['name'];
+
         $asambleaFolderPath = Storage::disk('externalAsambleas')->path($asambleaName);
         // Verifica si la carpeta existe
 
@@ -142,16 +143,6 @@ class FileController extends Controller
     }
 
 
-    public function importConf(): int
-    {
-        $path = storage_path('conf.json');
-        if (file_exists($path)) {
-            $config = json_decode(file_get_contents($path), true);
-            return 200;
-        } else {
-            return 0;
-        }
-    }
 
     public function exportPdf($path,$output){
         Storage::disk('externalAsambleas')->put($path, $output);

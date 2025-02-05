@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class EnsureAsambleaOff
+class EleccionesMiddleware
 {
     /**
      * Handle an incoming request.
@@ -15,16 +15,11 @@ class EnsureAsambleaOff
      */
     public function handle(Request $request, Closure $next): Response
     {
+        
+        if ((cache('asamblea'))?cache('asamblea')['eleccion']:false) {
 
-        if ($request->is('livewire/update')) {
-            // No aplicar este middleware a la ruta livewire/update
-            return $next($request);
+            return redirect()->route('home.elecciones');
         }
-        if (cache('asamblea')) {
-            return back()->withErrors(['msg' => 'No es posible si hay una asamblea en sesión']);
-        }
-
-
         return $next($request);
     }
 }

@@ -185,14 +185,14 @@
                                         <tr>
 
 
-                                            <td>{{ $persona->nombre }} {{ $persona->apellido }}</td>
+                                            <td class="align-middle">{{ $persona->fullName() }}</td>
                                             <td>{{ $persona->id }}</td>
                                             <td>
                                                 @forelse ($persona->predios as $p)
                                                     {{ $p->getFullName() }}
                                                     <br>
                                                 @empty
-                                                    No hay Predios en propiedad
+                                                    -
                                                 @endforelse
                                             </td>
                                             <td>
@@ -200,7 +200,7 @@
                                                     {{ $p->getFullName() }}
                                                     <br>
                                                 @empty
-                                                    No hay Predios en poder
+                                                    -
                                                 @endforelse
                                             </td>
                                         </tr>
@@ -259,7 +259,7 @@
                                 @forelse ($predios as $p)
                                     <tr>
                                         <td>{{ $p->id }}</td>
-                                        <td>{{ $p->getFullName() }}</td>
+                                        <td class="align-middle">{{ $p->getFullName() }}</td>
                                         <td>{{ $p->coeficiente }}</td>
                                         <td>{{ $p->vota ? 'Si' : 'No' }}</td>
                                         @if ($asamblea['registro'])
