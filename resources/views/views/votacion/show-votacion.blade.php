@@ -6,23 +6,31 @@
         @if (!$questions->isEmpty())
             <div class="col-4">
 
-                <div class="list-group pe-0 border" style="max-height: 70vh; overflow-y: auto;">
+                <table class="list-group pe-0 border " style="max-height: 70vh; overflow-y: auto;">
 
-                    @foreach ($questions as $q)
-                        <button type="button"
-                            class="list-group-item list-group-item-action lines-text-4 @if ($q->id == $question->id) active @endif"
+                    @foreach ($questions as $key=>$q)
+                        <tr class="list-group-item px-2 list-group-item-action lines-text-2 @if ($q->id == $question->id) active @endif"
                             wire:click='selectQuestion({{ $q->id }})'>
-                            {{ $q->title }}
-                        </button>
+                            <td class="text-end me-2">{{$key+1}}</td>
+                            <td class="ps-2">{{ $q->title }}</td>
+                        </tr>
                     @endforeach
-                </div>
+                </table>
             </div>
             <div class="col-8">
                 <div class="card">
-                    <div class="card-header justify-content-center d-flex">
-                        <h6 class="card-title text-center mb-0 lines-text-4" style="font-size: {{ $sizeTitle }}rem;">
-                            {{ $question->title }}
-                        </h6>
+                    <div class="card-header d-flex">
+                        <div class="col-10">
+                            <h6 class="card-title text-center mb-0 lines-text-4" style="font-size: {{ $sizeTitle }}rem;">
+                                {{ $question->title }}
+                            </h6>
+                        </div>
+                        <div class="col-2 justify-content-end d-flex">
+                            <button type="button" class="btn btn-primary" wire:click='importarVotos({{$q->id}})'>
+                                Importar <br>Votos
+                            </button>
+                        </div>
+
                     </div>
                     <div class="card-body p-0 ">
                         <div class=" d-flex justify-content-center">

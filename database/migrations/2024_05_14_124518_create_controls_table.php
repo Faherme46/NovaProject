@@ -15,12 +15,16 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('state')->default(4);
             $table->unsignedBigInteger('cc_asistente')->nullable();
-            $table->decimal('sum_coef_can', 8, 6);
-            $table->integer('predios_vote');
-            $table->decimal('sum_coef', 8, 6);
+            $table->float('sum_coef_can')->default(0);
+            $table->float('sum_coef')->default(0);
+            $table->float('sum_coef_abs')->default(0);
+            $table->integer('predios_total')->default(0);
+            $table->integer('predios_vote')->default(0);
+            $table->integer('predios_abs')->default(0);
             $table->string('h_entrega')->nullable();//se le entrega al cliente
             $table->string('h_recibe')->nullable();//recibe el operario
             $table->string('t_publico')->default(0);
+            $table->string('vote')->nullable();
             $table->timestamps();
             $table->foreign('state')->references('id')->on('states');
             $table->foreign('cc_asistente')->references('id')->on('personas');

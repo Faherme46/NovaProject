@@ -319,8 +319,9 @@ class AsambleaController extends Controller
             $asamblea = Asamblea::updateOrCreate(
                 $values
             );
-        } catch (FileNotFoundException $e) {
 
+        } catch (FileNotFoundException $e) {
+            return redirect()->route('asambleas')->with('error', '3 '. $e->getMessage());
         } catch (Exception $e) {
             // Manejar cualquier otra excepción
             return redirect()->route('asambleas')->with('error', '3 '. $e->getMessage());
@@ -342,6 +343,7 @@ class AsambleaController extends Controller
         } else {
             return redirect()->route('asambleas')->withErrors(['error' => 'La carpeta externa no existe.']);
         }
+
         $folderStorage = Asamblea::all()->pluck('name')->toArray();
         $foldersDiff = array_diff($subfolderNames,  $folderStorage);
         $foldersDelete = array_diff($folderStorage, $subfolderNames);
@@ -357,7 +359,6 @@ class AsambleaController extends Controller
             foreach ($foldersDiff as $name) {
                 $this->importAsambleaFile($name);
             }
-
             return redirect()->route('asambleas')->with('success', 'Asambleas Importadas Correctamente');
         } catch (\Throwable $th) {
             return redirect()->route('asambleas')->withErrors(['error' => '1' . $th->getMessage()]);

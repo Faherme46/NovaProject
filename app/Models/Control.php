@@ -43,10 +43,9 @@ class Control extends Model
 
     public function isAbsent()
     {
-        if ($this->state == 2 || $this->state == 5) {
-            return true;
-        }
-        return false;
+
+        return $this->state == 2 || $this->state == 5;
+
     }
     public function changeState($value)
     {

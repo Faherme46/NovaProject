@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Asamblea;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -14,14 +15,14 @@ class BackupController extends Controller
     public function downloadBackup()
     {
         $nameAsamblea = cache('asamblea')['name'];
-        $asamblea = Asamblea::find(cache('asamblea')['id_asamblea'])->toArray();
-        $info = Storage::disk('externalAsambleas')->put($nameAsamblea . '/info.json', json_encode($asamblea));
+        $asamblea=cache('asamblea');
+        $info = Storage::disk('externalAsambleas')->put($nameAsamblea . '/info.json', json_encode( $asamblea->toArray()));
 
         $ubicacionArchivoTemporal = Storage::disk('externalAsambleas')->path($nameAsamblea . '/' . $nameAsamblea . '.sql');
 
         $codigoSalida = 0;
 
-
+        Cache::forget('asamblea');
         $tables = ['cache', 'controls', 'personas', 'predios', 'predios_personas', 'questions', 'results', 'session', 'signatures', 'votes','torres','torres_candidatos'];
         $comando = sprintf("%s --user=\"%s\" --password=\"%s\" --skip-lock-tables --no-create-info %s %s > %s", env("UBICACION_MYSQLDUMP"), env("DB_USERNAME"), env("DB_PASSWORD"), env('DB_DATABASE'), implode(' ', $tables), $ubicacionArchivoTemporal);
         try {
@@ -30,9 +31,9 @@ class BackupController extends Controller
             exec($comando, $salida, $codigoSalida);
 
             if ($codigoSalida !== 0) {
-                dd($comando);
                 return $salida;
             }
+            cache(['asamblea'=>$asamblea]);
             \Illuminate\Support\Facades\Log::channel('custom')->info('Se descargo la informacion de la BD.');
         } catch (\Throwable $th) {
             return $th->getMessage();
@@ -47,24 +48,28 @@ class BackupController extends Controller
 
 
         // Almacenar temporalmente el archivo SQL cargado
-        $path = $nameAsamblea . '/' . $nameAsamblea . '.sql';
-        $sql = Storage::disk('externalAsambleas')->get($path);
-        if (!$path) {
-            return back()->with('error', 'No se encontro el archivo "C:/Asambleas/Asambleas/' . $path . '"');
+        $folder = $nameAsamblea . '/' . $nameAsamblea . '.sql';
+        $path = Storage::disk('externalAsambleas')->path($folder);
+        if (!file_exists($path)) {
+            return back()->with('error', 'No se encontro el archivo "' . $path . '"');
         }
+
+        $sql=Storage::disk('externalAsambleas')->get($folder);
         try {
             $execute = DB::unprepared($sql);
 
-            $asamblea = Asamblea::where('name', $nameAsamblea)->first();
-            cache(['asamblea' => $asamblea]);
-            cache(['id_asamblea' => $asamblea->id_asamblea]);
-        } catch (\Throwable $th) {
 
-            return back()->with('error', 'Error cargando la Asamblea: ' . $th->getMessage());
+        } catch (\Throwable $th) {
+            $sessionController = new SessionController;
+            $sessionController->destroyOnError();
+            return redirect()->route('home')->with('error', 'Error cargando la Asamblea: ' . $th->getMessage());
         }
 
 
         try {
+            $asamblea = Asamblea::where('name', $nameAsamblea)->first();
+            cache(['asamblea' => $asamblea]);
+            cache(['id_asamblea' => $asamblea->id_asamblea]);
             $questions = Storage::disk('externalAsambleas')->directories($nameAsamblea . '/Preguntas');
             foreach ($questions as $key => $question) {
                 $partes = explode("Preguntas/", $question);
@@ -80,7 +85,7 @@ class BackupController extends Controller
             }
         } catch (\Throwable $th) {
 
-            return back()->with('error', 'Error Importando las imagenes de las preguntas ' . $th->getMessage());
+            return redirect()->route('home')->with('error', 'Error Importando las imagenes de las preguntas ' . $th->getMessage());
         }
 
 

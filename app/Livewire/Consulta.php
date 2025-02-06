@@ -58,6 +58,14 @@ class Consulta extends Component
     public $cedulaSearch;
     public $controlIdSearch;
 
+    public $predioIdSearch=null;
+
+    public $distincts =[
+        'descriptor1'=>[],
+        'descriptor2'=>[],
+        'numeral1'=>[]
+    ];
+
 
     protected $listeners = [
         'showModalPredio' => 'searchPredio',
@@ -95,7 +103,8 @@ class Consulta extends Component
             'Predio',
             'Persona',
             'controlIdSearch',
-            'Control'
+            'Control',
+            'predioIdSearch'
         ]);
         $this->mount($tab);
         $this->dispatch('$refresh');
@@ -340,8 +349,6 @@ class Consulta extends Component
 
 
 
-
-
     public function storeInChange()
     {
 
@@ -432,13 +439,38 @@ class Consulta extends Component
             $this->addError('error', '6 ' . $th->getMessage());
         }
     }
-    public function searchPredio($predioId)
+    public function searchPredio($predioId=null)
     {
+        if(!$predioId){
+            $predioId=$this->predioIdSearch;
+        }
+        if(!$predioId){
+    return;
+        }
         $this->updatedTab(3);
         if (!$predioId) {
             return;
         }
         $this->Predio = Predio::find($predioId);
+        if(!$this->Predio){
+            session()->flash('warning','No se encontró');
+        }
+    }
+
+
+    public function forgetPredio(){
+        $this->reset(['Predio','predioIdSearch']);
+        $this->updatedTab(3);
+    }
+
+    public function createPredio(){
+        $this->distincts = [
+            'descriptor1' => Predio::distinct()->pluck('descriptor1'),
+            'numeral1' => Predio::distinct()->pluck('numeral1'),
+            'descriptor2' => Predio::distinct()->pluck('descriptor2'),
+        ];
+        $this->dispatch('crearPredioModalShow');
+
     }
 
 

@@ -106,12 +106,17 @@
             $('#modalConfirm').modal('toggle');
         });
         $wire.on('modal-close', () => {
-            $('#modalConfirm').modal('hide');
+
 
         });
         $wire.on('modal-spinner-close', () => {
             $('#spinnerModal').modal('hide');
         })
+        $wire.on('modal-all-close', () => {
+            $('#modalConfirm').modal('hide');
+            $('#spinnerModal').modal('hide');
+        })
+
         $wire.on('pause-timer', () => {
             clearInterval(timeInterval);
         });

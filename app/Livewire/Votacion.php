@@ -301,7 +301,7 @@ class Votacion extends Component
             $this->addError('error', 'El numero de plaznas no es valido');
         }
 
-        $quorum = Control::where('state', 1)->sum('sum_coef');
+        $quorum = Control::whereNot('state', 4)->sum('sum_coef');
         if ($quorum <= 0) {
             $this->addError('error', 'No se han registrado asistentes');
             $error = 1;
@@ -323,7 +323,7 @@ class Votacion extends Component
 
         try {
             Vote::truncate();
-            $predios = Control::where('state', 1)->sum('predios_vote');
+            $predios = Control::whereNot('state', 4)->sum('predios_vote');
             $question = Question::create([
                 'title' =>$newTitle,
                 'optionA' => ($this->questionOptions['A']) ? strtoupper(rtrim($this->questionOptions['A'])) : null,
@@ -346,7 +346,7 @@ class Votacion extends Component
                 $parametros['plancha'] = $this->plancha;
                 $parametros['plazas'] = $this->plazas;
             }
-            \Illuminate\Support\Facades\Log::channel('custom')->info('Se Inicia una votacion', ['quorum' => $quorum, 'predios', $predios]);
+            \Illuminate\Support\Facades\Log::channel('custom')->info('Se Inicia una votacion', ['id'=>$question->id,'quorum' => $quorum, 'predios'=> $predios]);
             return redirect()->route('questions.show', $parametros);
         } catch (Throwable $th) {
 

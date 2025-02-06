@@ -9,6 +9,7 @@ use App\Models\QuestionsPrefab;
 
 abstract class Controller
 {
+    
     public function createPrefabQuestion(Request $request)
     {
         $messages = [

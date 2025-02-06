@@ -79,6 +79,7 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::post('asambleas/store', [AsambleaController::class, 'store'])->name('asambleas.store')->withoutMiddleware(EnsureAsambleaOn::class);
     Route::post('predios/import', [PrediosController::class, 'import'])->name('predios.import');
     Route::post('predios/update', [PrediosController::class, 'updatePredio'])->name('predios.update');
+    Route::post('predios/create', [PrediosController::class, 'createPredio'])->name('predios.create');
     Route::post('gestion/asamblea/update', [AsambleaController::class, 'updateAsamblea'])->name('asamblea.update');
     Route::post('personas/update', [PersonasController::class, 'updatePersona'])->name('personas.update');
     Route::post('backup/restore', [BackupController::class, 'restoreBackup'])->middleware(EnsureAsambleaOff::class)->name('backup.restore')->withoutMiddleware(EnsureAsambleaOn::class);

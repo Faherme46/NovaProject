@@ -41,6 +41,7 @@
                                 <td class="text-end">Predios registrados:</td>
                                 <td class="text-start">{{ $prediosRegistered }}</td>
                             </tr>
+                            
                             <tr>
                                 <td class="text-end">Predios Habilitados:</td>
                                 <td class="text-start">{{ $prediosVote }}</td>
@@ -51,13 +52,16 @@
                             </tr>
                             <tr>
                                 <td class="text-end">Quorum Presente:</td>
-                                <td class="text-start">{{ $quorumRegistered }}</td>
+                                <td class="text-start">{{ round($quorumRegistered,6) }}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-end">Quorum Ausente:</td>
+                                <td class="text-start">{{ round($quorumAbsent,6) }}</td>
                             </tr>
                             <tr>
                                 <td class="text-end">Quorum Habilitado:</td>
-                                <td class="text-start">{{ $quorumVote }}</td>
+                                <td class="text-start">{{ round($quorumVote,6) }}</td>
                             </tr>
-                            <!-- Añade más filas según sea necesario -->
                         </tbody>
                     </table>
                 </div>
@@ -119,8 +123,8 @@
                                             </p>
                                         @endforeach
                                     </td>
-                                    <td>{{ $control->sum_coef }}</td>
-                                    <td>{{ $control->sum_coef_can }}</td>
+                                    <td>{{ round($control->sum_coef,6) }}</td>
+                                    <td>{{ round($control->sum_coef_can,6) }}</td>
                                     <td>
                                         <span
                                             class="badge p-1 fs-6 {{ $colors[$control->state] }}">{{ $control->getStateTxt() }}</span>

@@ -21,7 +21,7 @@ class EnsureAsambleaOff
             return $next($request);
         }
         if (cache('asamblea')) {
-            return back()->withErrors(['msg' => 'No es posible si hay una asamblea en sesión']);
+            return redirect()->route('home')->withErrors(['msg' => 'No es posible si hay una asamblea en sesión']);
         }
 
 

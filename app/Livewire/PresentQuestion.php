@@ -52,9 +52,10 @@ class PresentQuestion extends Component
     public $isEditting = false;
     public function mount($questionId, $plancha = false, $plazas = 0)
     {
+
         $response = $this->handleVoting(action: 'run-votes');
         if(!$response){
-            return;
+            return session()->flash('error','Problemas para conectar al servidor python');
         }
         $this->reset('inVoting', 'seconds', 'countdown', 'votes', 'inCoefResult', 'votes', 'controlsAssigned');
         $this->step = 1;
@@ -430,7 +431,8 @@ class PresentQuestion extends Component
         try {
             $response = Http::get($pythonUrl . '/' . $action);
             if ($response->status() == 400) {
-                $this->addError('error', 'Error iniciando votación');
+                $this->addError('error', 'Error Conectando al dispositivo hid');
+                $this->dispatch('modal-all-close');
                 return False;
             }
             return True;

@@ -27,7 +27,7 @@
                 @endforeach
             </select>
         </div>
-        <div class="col-3">
+        <div class="col-2">
             <select class="form-control" name="descriptor2" wire:model='descriptor2' wire:change='search'>
 
                 @foreach ($distincts['descriptor2'] as $item)

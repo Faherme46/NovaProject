@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
 
     function onlyNumbers(event) {
-        var charCode = event.charCode;
+        var charCode = event.charCode;  
         if (charCode < 48 || charCode > 57) {
             return false; // Bloquear el input si no es un número
         }

@@ -22,6 +22,8 @@ class LiderSetup extends Component
 
     public $prediosVote;
     public $quorumRegistered;
+    public $quorumAbsent;
+    public $prediosAbsent;
     public $quorumVote;
 
     public $asamblea;
@@ -47,14 +49,15 @@ class LiderSetup extends Component
         });
         $this->prediosVote = $this->allControls->sum(function ($control) {
             $control->setCoef();
-            return $control->predios_vote;
+            return $control->predios->count();
         });
 
-        $this->quorumRegistered = $this->allControls->sum(function ($control) {
-            return $control->sum_coef;
-        });
-        $this->quorumVote = $this->allControls->sum(function ($control) {
-            return $control->sum_coef_can;
+        $this->quorumRegistered = $this->allControls->where('state',1)->sum('sum_coef');
+        $this->quorumVote = $this->allControls->where('state',1)->sum('sum_coef_can');
+        $this->quorumAbsent = $this->allControls->whereNotIn('state',[1,4])->sum('sum_coef');
+        $this->prediosAbsent = $this->allControls->whereNotIn('state',[1,4])->sum(function ($control) {
+            $control->setCoef();
+            return $control->predios->count();
         });
         $this->asamblea = Asamblea::find(cache('id_asamblea'));
 

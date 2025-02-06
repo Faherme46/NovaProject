@@ -179,7 +179,7 @@
 
                         </div>
 
-                        <div @if($tab==4) class="col-6" @else class="col-5" @endif>
+                        <div @if ($tab == 4) class="col-6" @else class="col-5" @endif>
                             <div class="card p-0">
                                 <div class="card-header d-flex align-items-center justify-content-between pe-2">
                                     <div class="col-auto">
@@ -189,7 +189,6 @@
                                             <p class="mb-0 py-2">Predios a Retirar</p>
                                         @elseif($tab == 4)
                                             <p class="mb-0">Predios asignados</p>
-
                                         @endif
                                     </div>
                                     <div class=" col-4">
@@ -238,7 +237,7 @@
                                                     <td>
                                                         @if ($tab == 4)
                                                             @isset($Persona)
-                                                                {{$predio->control->id}}
+                                                                {{ $predio->control->id }}
                                                             @endisset
                                                         @endif
                                                     </td>
@@ -264,10 +263,17 @@
                     @if ($Predio)
 
                         <div class="card-header d-flex align-items-center justify-content-between">
-                            <h5 class="card-title mb-0 ">{{ $Predio->descriptor1 }}
-                                {{ $Predio->numeral1 }}
-                                {{ $Predio->descriptor2 }} {{ $Predio->numeral2 }}
-                            </h5>
+                            <div class="d-flex align-items-center">
+                                <h5 class="card-title mb-0 ">{{ $Predio->descriptor1 }}
+                                    {{ $Predio->numeral1 }}
+                                    {{ $Predio->descriptor2 }} {{ $Predio->numeral2 }}
+                                </h5>
+                                <button type="button" class="btn btn-black px-0 py-0 ms-2 mb-0"
+                                    wire:click='forgetPredio'>
+                                    <i class="bi bi-x-square-fill fs-4 text-danger "></i>
+                                </button>
+                            </div>
+
                             @hasanyrole('Admin|Lider')
                                 <div class="d-flex align-items-center ">
                                     @if ($changes)
@@ -364,7 +370,22 @@
                             </div>
                         </form>
                     @else
-                        <p class="mb-0 p-1">Debe elegir un predio</p>
+                        <div class="card-header d-flex align-items-center justify-content-between">
+                            <div class="form-group d-flex align-items-center">
+                                <input type="text" class="form-control w-25 me-1" wire:model='predioIdSearch'
+                                    placeholder="Id">
+                                <button type="button" class="btn btn-primary" wire:click='searchPredio'>
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </div>
+                            <button type="button" class="btn btn-primary" wire:click='createPredio'>
+                                Crear Predio
+                            </button>
+
+                        </div>
+                        <div class="card-body">
+                            <h4 class="mb-0">Puede Elegir un predio</h4>
+                        </div>
                     @endif
                 @elseif ($tab == 5)
                     <div class="card border-black w-80 p-0 mx-auto my-3">
@@ -517,7 +538,7 @@
         </div>
     </div>
 
-    <!-- Modal crear propietario-->
+    <!-- Modal crear crear persona-->
     <div class="modal fade" id="crearPropietarioModal" tabindex="-1" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog">
@@ -573,7 +594,7 @@
             </div>
         </div>
     </div>
-    <!-- Modal -->
+    <!-- Modal eliminar persona -->
     <div class="modal fade" id="dropPersonaModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -591,6 +612,72 @@
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
                         wire:click='dropPropietario'> Quitar</button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal crear propietario-->
+    <div class="modal fade" id="crearPredioModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Crear Predio</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route('predios.create') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <div class=" row g-3 d-flex">
+                            <div class="col-3">
+                                <select class="form-control" name="descriptor1" required>
+                                    @foreach ($distincts['descriptor1'] as $d1)
+                                        <option value="{{ $d1 }}">{{ $d1 }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-3">
+                                <select class="form-control" name="numeral1" required>
+                                    @foreach ($distincts['numeral1'] as $n1)
+                                        <option value="{{ $n1 }}">{{ $n1 }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-3">
+                                <select class="form-control" name="descriptor2" required>
+                                    @foreach ($distincts['descriptor2'] as $d2)
+                                        <option value="{{ $d2 }}">{{ $d2 }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-3">
+                                <input type="text" name="numeral2" id="numeral2" class="form-control"
+                                    onclick="this.select()" placeholder="Numeral 2">
+                            </div>
+                            <div class="col-3">
+                                <input type="text" name="coef" class="form-control" onclick="this.select()"
+                                placeholder="Coeficiente" required />
+                                <small id="helpId" class="text-muted">Coeficiente</small>
+                            </div>
+                            <div class="col-3">
+                                <input type="number" name="votos" class="form-control" onclick="this.select()"
+                                placeholder="Votos" required />
+                                <small id="helpId" class="text-muted">Votos</small>
+                            </div>
+                            <div class="col-3 ms-2">
+                                    <input class="form-check-input fs-3" type="checkbox" value="1" id="flexCheckDefault"
+                                    name="vota">
+                                    <label class="form-check-label fs-3" for="flexCheckDefault">
+                                        Vota
+                                    </label>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary" >Crear</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -624,6 +711,11 @@
 
         $wire.on('crearPropietarioModalHide', (event) => {
             $('#crearPropietarioModal').modal('hide');
+        });
+
+
+        $wire.on('crearPredioModalShow', (event) => {
+            $('#crearPredioModal').modal('show');
         });
     </script>
 @endscript
