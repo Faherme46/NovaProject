@@ -46,4 +46,7 @@ class Persona extends Model
         return $this->nombre.' '.$this->apellido;
     }
 
+    public function candidatura(){
+        return $this->belongsToMany(Torre::class, table: 'torres_candidatos');
+    }
 }

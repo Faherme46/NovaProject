@@ -141,10 +141,15 @@
                                 data-bs-placement="bottom" data-bs-title="Registro">
                                 <i class='bi bi-person-check-fill nav_icon'></i>
                             </a>
+                            <a href="{{ route('elecciones.candidatos') }}" class="nav_link ps-3 pt-1" data-bs-toggle="tooltip"
+                                data-bs-placement="bottom" data-bs-title="Candidatos">
+                                <i class='bi bi-person-video2 ms-1 fs-3'></i>
+                            </a>
+
                             <a href="{{ route('gestion.asamblea') }}" class="nav_link" data-bs-toggle="tooltip"
-                                    data-bs-placement="bottom" data-bs-title="Control">
-                                    <i class='bi bi-ui-checks-grid nav_icon'></i>
-                                </a>
+                                data-bs-placement="bottom" data-bs-title="Control">
+                                <i class='bi bi-ui-checks-grid nav_icon'></i>
+                            </a>
                         @else
                             @if ($asamblea['registro'])
                                 <a href="{{ route('asistencia.registrar') }}" class="nav_link" data-bs-toggle="tooltip"

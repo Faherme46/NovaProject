@@ -183,13 +183,13 @@
                             <thead>
                                 <tr>
                                     <th>
-                                        <button type="button" class="btn btn-black text-black p-0 fs-5"
+                                        <button type="button" class="btn btn-black  p-0 fs-5"
                                             wire:click='orderPersonasByName'>
                                             Nombre
                                         </button>
                                     </th>
                                     <th>
-                                        <button type="button" class="btn btn-black text-black p-0 fs-5"
+                                        <button type="button" class="btn btn-black  p-0 fs-5"
                                             wire:click='orderPersonasByCc'>
                                             Cedula
                                         </button>

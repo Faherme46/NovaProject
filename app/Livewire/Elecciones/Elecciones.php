@@ -59,6 +59,14 @@ class Elecciones extends Component
                 'enabled' => true,
             ],
             [
+                "directives" => 'onclick=location.href="/elecciones/candidatos";',
+                'icon' => 'bi-person-video2',
+                'title' => 'Crear Candidatos',
+                'body' => 'Seleccionar los candidatos que participarán en cada torre',
+                'visible' => true,
+                'enabled' => true,
+            ],
+            [
                 "directives" => 'onclick=location.href="/asambleas/load";',
                 'icon' => 'bi-upload',
                 'title' => 'Cargar Elecciones',

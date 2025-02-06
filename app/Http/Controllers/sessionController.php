@@ -12,7 +12,7 @@ use App\Models\Question;
 use App\Models\QuestionType;
 use App\Models\Result;
 use App\Models\Signature;
-
+use App\Models\Torre;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 
@@ -64,6 +64,7 @@ class SessionController extends Controller
         PrediosPersona::truncate();
         Question::truncate();
         Signature::truncate();
+        Torre::truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
     public function deleteAsambleaFiles()

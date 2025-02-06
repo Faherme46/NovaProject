@@ -57,6 +57,10 @@ class Predio extends Model
         // return $this->descriptor2.' '.$this->numeral2;
     }
 
+    public function torre(){
+        return $this->belongsTo(Torre::class,'numeral1','name');
+    }
+
 
 
 

@@ -10,4 +10,14 @@ class Torre extends Model
     use HasFactory;
 
     protected $guarded=[];
+
+
+    public function candidatos(){
+        return $this->belongsToMany(Persona::class,'torres_candidatos');
+    }
+
+
+    public function predios(){
+        return $this->hasMany(Predio::class,'numeral1','name');
+    }
 }

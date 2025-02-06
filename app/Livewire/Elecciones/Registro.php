@@ -77,7 +77,7 @@ class Registro extends Component
 
         $this->asistente = ($persona) ? $persona : Persona::find($this->cedula);
 
-
+        
 
         if ($this->asistente) {
 
@@ -90,6 +90,22 @@ class Registro extends Component
             $this->selectAll = true;
         } else {
             $this->dispatch('showModal');
+        }
+    }
+    public function creaPersona()
+    {
+        try {
+            $this->asistente = Persona::create([
+                'tipo_id' => $this->tipoId,
+                'id' => $this->cedula,
+                'nombre' => strtoupper($this->name),
+                'apellido' => strtoupper($this->lastName)
+            ]);
+
+            $this->dispatch('hideModal');
+            session()->flash('success', 'Asistente creado exitosamente');
+        } catch (\Exception $e) {
+            return back()->withCookie('error' . $e->getMessage());
         }
     }
 

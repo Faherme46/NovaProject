@@ -31,6 +31,7 @@ use App\Livewire\Main;
 use App\Livewire\Consulta;
 use App\Livewire\Registrar;
 use App\Livewire\Asignacion;
+use App\Livewire\Elecciones\Candidatos;
 use App\Livewire\Elecciones\Elecciones;
 use App\Livewire\Elecciones\Programar;
 use App\Livewire\Elecciones\Registro;
@@ -71,7 +72,8 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::get('questions/show/{questionId}/{plancha?}/{plazas?}', PresentQuestion::class)->name('questions.show');
     Route::get('questions/view/{questionId}', ViewQuestion::class)->name('questions.view');
     Route::get('elecciones/programar', Programar::class)->name('elecciones.programar')->withoutMiddleware(EnsureAsambleaOn::class);
-    Route::get('elecciones/registrar', Registro::class)->name('elecciones.registrar')->withoutMiddleware(EnsureAsambleaOn::class);
+    Route::get('elecciones/registrar', Registro::class)->name('elecciones.registrar');
+    Route::get('elecciones/candidatos', Candidatos::class)->name('elecciones.candidatos');
 
 
     Route::post('asambleas/store', [AsambleaController::class, 'store'])->name('asambleas.store')->withoutMiddleware(EnsureAsambleaOn::class);
