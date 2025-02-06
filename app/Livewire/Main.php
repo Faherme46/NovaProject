@@ -76,7 +76,13 @@ class Main extends Component
                 'title'=> 'Cargar Asamblea',
                 'body'=> 'Cargar y eliminar las asambleas guardadas',
                 'visible'=> ($this->role=='Admin' || $this->role=='Lider'),
-                // 'enabled'=>true
+                'enabled'=>!(cache('asamblea',false)),
+            ],[
+                "directives"=> 'onclick=location.href="/elecciones";',
+                'icon'=> 'bi-person-badge',
+                'title'=> 'Elecciones',
+                'body'=> 'Representantes para asambleas',
+                'visible'=> !(cache('asamblea',false)),
                 'enabled'=>!(cache('asamblea',false)),
             ],[
                 "directives"=> 'onclick=location.href="/gestion/informes";',

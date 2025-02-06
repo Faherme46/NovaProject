@@ -207,6 +207,15 @@ a {
     font-size: 2rem;
 }
 
+.lines-text-1{
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    word-break: break-word;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+}
 .lines-text-2{
     display: -webkit-box;
     -webkit-line-clamp: 2;

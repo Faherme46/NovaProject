@@ -8,7 +8,7 @@
             <button type="button" class="btn btn-primary fs-4" onclick='location.href="/asambleas/load";'> Actualizar</button>
         </div>
         <div class="card-body">
-            <div class="list-group pe-0 border mt-3" style="max-height: 50vh; overflow-y: auto;">
+            <div class="list-group pe-0 border mt-3" style="max-height: 70vh; overflow-y: auto;">
                 <table class="table table-bordered mb-0">
                     <thead class="table-active ">
                         <th class="fs-2 text-center">Cliente</th>
@@ -24,8 +24,8 @@
                                 <td class="fs-3">{{ $a->fecha }}</td>
                                 <td class="fs-3">{{ $a->hora }}</td>
                                 <td class="fs-3 text-center">
-                                    <span class="badge bg-primary">
-                                        {{ $a->registro ? 'Registro' : 'Solo Votación' }}
+                                    <span class="badge @if ($a->eleccion) bg-info @else bg-primary @endif">
+                                        {{ $a->registro ? ($a->eleccion)?'Elección':'Registro' : 'Solo Votación' }}
                                     </span>
                                 </td>
                                 <td class="fs-3 text-center">

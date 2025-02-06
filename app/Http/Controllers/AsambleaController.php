@@ -54,6 +54,7 @@ class AsambleaController extends Controller
         } else {
             $input['registro'] = false;
         }
+
         $input['name'] = $input['folder'] . '_' . str_replace('-', '.', $input['fecha']);
         if (array_key_exists('signature', $input)) {
 
@@ -94,13 +95,13 @@ class AsambleaController extends Controller
         } catch (QueryException $qe) {
             $this->sessionController->destroyOnError();
             if ($qe->errorInfo[1] == 1062) { // 1062 es el código de error para duplicados
-                return redirect()->route('home')->withErrors('Ya existe una asamblea en la misma fecha.');
+                return back()->withErrors('Ya existe una asamblea en la misma fecha.');
             } else {
-                return redirect()->route('home')->withErrors($qe->getMessage());
+                return back()->withErrors($qe->getMessage());
             }
         } catch (Exception $e) {
             $this->sessionController->destroyOnError();
-            return redirect()->route('home')->withErrors($e->getMessage());
+            return back()->withErrors($e->getMessage());
         }
 
         return redirect()->route('home')->with('success', 'Asamblea creada con éxito, documentos importados.');
