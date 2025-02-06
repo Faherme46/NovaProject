@@ -64,9 +64,14 @@ class Control extends Model
 
     public function setCoef()
     {
-        $this->sum_coef_can = $this->predios()->where('vota', true)->sum('coeficiente');
         $this->sum_coef = $this->predios()->sum('coeficiente');
+        $this->sum_coef_can = $this->predios()->where('vota', true)->sum('coeficiente');
+        $this->sum_coef_abs =$this->predios()->where('vota', operator: false)->sum('coeficiente');
+
+        $this->predios_total =$this->predios()->sum('votos');
         $this->predios_vote =$this->predios()->where('vota', true)->sum('votos');
+        $this->predios_abs =$this->predios()->where('vota', operator: false)->sum('votos');
+
         return $this->save();
     }
 

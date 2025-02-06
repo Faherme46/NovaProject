@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Gestion;
 
-use App\Models\General;
-use App\Models\Question;
+
 use App\Models\QuestionsPrefab;
 use App\Models\QuestionType;
 use Livewire\Attributes\Layout;
@@ -95,7 +94,7 @@ class Setup extends Component
     #[Layout('layout.full-page')]
     public function render()
     {
-        return view(view: 'views.setup.setup');
+        return view(view: 'views.gestion.setup');
     }
 
     public function updatedThemeId()
@@ -164,7 +163,7 @@ class Setup extends Component
         if(!$this->selectedQuestion['title']){
             $this->addError('error','La pregunta debe tener un titulo');
         };
-        
+
         $this->selectedQuestion['isValid']=false;
         $this->selectedQuestion['coefGraph']=1;
         try {

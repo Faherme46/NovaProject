@@ -1,8 +1,6 @@
 <?php
 
-namespace App\Livewire;
-
-use App\Http\Controllers\AsambleaController;
+namespace App\Livewire\Gestion;
 use App\Models\Asamblea;
 use Livewire\Component;
 

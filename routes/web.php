@@ -23,32 +23,36 @@ use App\Http\Middleware\EleccionesMiddleware;
 use App\Http\Middleware\EnsureAsambleaOff;
 use App\Http\Middleware\isAsambleaInit;
 use App\Http\Middleware\isLogged;
-use App\Livewire\PresentQuestion;
-use App\Livewire\Votacion;
-use App\Livewire\LiderSetup;
-use App\Livewire\Reports;
+
 use App\Livewire\Main;
-use App\Livewire\Consulta;
-use App\Livewire\Registrar;
-use App\Livewire\Asignacion;
+
+use App\Livewire\Gestion\LiderSetup;
+use App\Livewire\Gestion\Reports;
+use App\Livewire\Gestion\Consulta;
+use App\Livewire\Gestion\Entregar;
+use App\Livewire\Gestion\ListUsers;
+use App\Livewire\Gestion\LoadAsamblea;
+use App\Livewire\Gestion\Setup;
+
+
+use App\Livewire\Registro\QuorumFull;
+use App\Livewire\Registro\Registrar;
+use App\Livewire\Registro\Asignacion;
+use App\Livewire\Registro\Signing;
+use App\Livewire\Registro\Signs;
+
+use App\Livewire\Votacion\ViewQuestion;
+use App\Livewire\Votacion\ShowVotacion;
+use App\Livewire\Votacion\PresentQuestion;
+use App\Livewire\Votacion\Votacion;
+
+
+use App\Livewire\Elecciones\Registro;
 use App\Livewire\Elecciones\Candidatos;
 use App\Livewire\Elecciones\Elecciones;
 use App\Livewire\Elecciones\Programar;
-use App\Livewire\Elecciones\Registro;
-use App\Livewire\Entregar;
-use App\Livewire\ListUsers;
-use App\Livewire\LoadAsamblea;
-use App\Livewire\QuorumFull;
-use App\Livewire\Setup;
-use App\Livewire\ShowVotacion;
-use App\Livewire\Signing;
-use App\Livewire\Signs;
-use App\Livewire\ViewQuestion;
-
-//rutas de redireccion
 
 
-//rutas de las predios
 
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Admin')]], function () {
     Route::get('gestion/informes/Informe', [ReportController::class, 'createReport'])->name('gestion.report.docs');

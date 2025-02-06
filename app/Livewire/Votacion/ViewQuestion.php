@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Votacion;
 
 use App\Models\Question;
 use Livewire\Attributes\Layout;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Registro;
 
 use App\Http\Controllers\FileController;
 use App\Models\Persona;

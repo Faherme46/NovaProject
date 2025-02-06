@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Votacion;
 
 use App\Imports\VotesImport;
 use Livewire\Attributes\Layout;

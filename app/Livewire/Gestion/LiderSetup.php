@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Gestion;
 
 use App\Http\Controllers\FileController;
 use Livewire\Component;
