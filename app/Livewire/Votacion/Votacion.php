@@ -9,7 +9,6 @@ use App\Models\Control;
 use App\Models\General;
 use App\Models\Question;
 use App\Models\QuestionsPrefab;
-use App\Models\Vote;
 use Illuminate\Support\Facades\Http;
 use Throwable;
 
@@ -322,7 +321,7 @@ class Votacion extends Component
         $newTitle=str_replace(['á','é','í','ó','ú'], ['Á','É','Í','Ó','U'], subject: $newTitle);
 
         try {
-            Vote::truncate();
+            Control::query()->update(['vote' => null]);
             $predios = Control::whereNot('state', 4)->sum('predios_vote');
             $question = Question::create([
                 'title' =>$newTitle,

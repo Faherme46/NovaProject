@@ -10,7 +10,6 @@ use App\Models\Result;
 
 use App\Http\Controllers\FileController;
 use App\Models\Question;
-use App\Models\Vote;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Throwable;
@@ -403,7 +402,7 @@ class PresentQuestion extends Component
 
     public function getOut()
     {
-        Vote::truncate();
+        Control::query()->update(['vote' => null]);
         return redirect()->route('votacion')->with('success', 'Resultado almacenado correctamente');
     }
 
