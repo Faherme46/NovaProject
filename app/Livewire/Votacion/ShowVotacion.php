@@ -3,10 +3,10 @@
 namespace App\Livewire\Votacion;
 
 use App\Imports\VotesImport;
+use App\Models\Control;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use App\Models\Question;
-use App\Models\Vote;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
@@ -59,7 +59,7 @@ class ShowVotacion extends Component
         if (!file_exists($externalFilePathVotes)) {
             session()->flash('error',"El archivo no se encontró en la ruta: {$externalFilePathVotes}");
         }
-        Vote::truncate();
+        Control::query()->update(['vote' => null]);
         $import=Excel::import(new VotesImport, $externalFilePathVotes);
         return redirect()->route('questions.show',['questionId'=>$this->question->id])->with('info','Continue con la votación para generar los resultados');
     }

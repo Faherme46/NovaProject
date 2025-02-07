@@ -2,6 +2,7 @@
 
 namespace App\Imports;
 
+use App\Models\Control;
 use App\Models\Vote;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToModel;
@@ -15,13 +16,9 @@ class VotesImport implements ToModel, WithHeadingRow
     public function model(array $row)
     {
         if ($row['voto']) {
-            return new Vote([
-                'control_id'=> $row['control'],
-                'vote' => $row['voto'],
-            ]);
+            Control::where('id', $row['control'])->update(['vote' => $row['voto']]);
         }else{
             return;
         }
-
     }
 }
