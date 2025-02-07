@@ -47,7 +47,6 @@ class PresentQuestion extends Component
     public $resultToUse;
     public $valuesPlanchas;
 
-    public $start;
     public $newTitle;
     public $newOptions = [];
     public $isEditting = false;
@@ -219,7 +218,7 @@ class PresentQuestion extends Component
 
     public function store()
     {
-        $this->start = microtime(true);
+
         $this->dispatch('closeModal');
         $this->playPause(true);
         if ($this->handleVoting('stop-votes')) {
@@ -339,9 +338,6 @@ class PresentQuestion extends Component
             $this->setImageUrl($result, ($this->question->type == 1));
         }
         $this->inResults();
-        $end = microtime(true);
-        $executionTime = $end - $this->start;
-        dd($executionTime);
     }
 
 
