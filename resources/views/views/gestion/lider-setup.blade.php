@@ -39,28 +39,29 @@
                             </tr>
                             <tr>
                                 <td class="text-end">Predios registrados:</td>
-                                <td class="text-start">{{ $prediosRegistered }}</td>
+                                <td class="text-start">{{ $prediosTotal }}</td>
                             </tr>
-                            
+
                             <tr>
-                                <td class="text-end">Predios Habilitados:</td>
-                                <td class="text-start">{{ $prediosVote }}</td>
+                                <td class="text-end">Predios Presentes:</td>
+                                <td class="text-start">{{ $prediosPresente }}</td>
                             </tr>
                             <tr>
-                                <td class="text-end">Predios Inhabilitados:</td>
-                                <td class="text-start">{{ $prediosRegistered - $prediosVote }}</td>
+                                <td class="text-end">Predios Ausentes:</td>
+                                <td class="text-start">{{ $prediosAbsent}}</td>
+                            </tr>
+
+                            <tr>
+                                <td class="text-end">Quorum Registrado:</td>
+                                <td class="text-start">{{ round($quorumTotal,6) }}</td>
                             </tr>
                             <tr>
                                 <td class="text-end">Quorum Presente:</td>
-                                <td class="text-start">{{ round($quorumRegistered,6) }}</td>
+                                <td class="text-start">{{ round($quorumPresente,6) }}</td>
                             </tr>
                             <tr>
                                 <td class="text-end">Quorum Ausente:</td>
                                 <td class="text-start">{{ round($quorumAbsent,6) }}</td>
-                            </tr>
-                            <tr>
-                                <td class="text-end">Quorum Habilitado:</td>
-                                <td class="text-start">{{ round($quorumVote,6) }}</td>
                             </tr>
                         </tbody>
                     </table>

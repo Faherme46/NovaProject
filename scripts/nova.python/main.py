@@ -102,6 +102,7 @@ def closeDevice():
 def stopIfVoting():
     global process
     if process is not None:
+        stop_script()
         print('Cerrando dispositivo')
         closeDevice()
     return jsonify({"status": "Success", "message": "El script no esta corriendo"}), 200

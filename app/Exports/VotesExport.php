@@ -25,11 +25,11 @@ class VotesExport implements FromArray, WithHeadings, WithStyles
     }
 
     public function buildArray(){
-        $array = Control::with('vote')->get()->map(function ($control) {
+        $array = Control::all()->map(function ($control) {
             $td='';
             if($control->vote){
                 $td = ($control->t_publico=='1') ? 'Publico' : 'Privado';
-                $vote=$control->vote->vote;
+                $vote=$control->vote;
             }else{
                 $td = '';
                 $vote='';

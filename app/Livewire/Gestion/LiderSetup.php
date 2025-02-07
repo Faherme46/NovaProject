@@ -20,11 +20,13 @@ class LiderSetup extends Component
     public $allControls;
     public $prediosRegistered;
 
-    public $prediosVote;
-    public $quorumRegistered;
-    public $quorumAbsent;
+    public $prediosTotal;
     public $prediosAbsent;
-    public $quorumVote;
+    public $prediosPresente;
+    public $quorumPresente;
+    public $quorumAbsent;
+
+    public $quorumTotal;
 
     public $asamblea;
     public $started = false;
@@ -44,21 +46,14 @@ class LiderSetup extends Component
     {
         $this->allControls = Control::whereNotIn('state', [4])->get();
 
-        $this->prediosRegistered = $this->allControls->sum(function ($control) {
-            return $control->predios->count();
-        });
-        $this->prediosVote = $this->allControls->sum(function ($control) {
-            $control->setCoef();
-            return $control->predios->count();
-        });
+        $this->prediosPresente = $this->allControls->where('state',1)->sum('predios_vote');
+        $this->prediosTotal = $this->allControls->sum('predios_vote');
+        $this->prediosAbsent = $this->allControls->whereNotIn('state',[1,4])->sum('predios_vote');
 
-        $this->quorumRegistered = $this->allControls->where('state',1)->sum('sum_coef');
-        $this->quorumVote = $this->allControls->where('state',1)->sum('sum_coef_can');
+        $this->quorumPresente = $this->allControls->where('state',1)->sum('sum_coef');
+        $this->quorumTotal = $this->allControls->sum('sum_coef');
         $this->quorumAbsent = $this->allControls->whereNotIn('state',[1,4])->sum('sum_coef');
-        $this->prediosAbsent = $this->allControls->whereNotIn('state',[1,4])->sum(function ($control) {
-            $control->setCoef();
-            return $control->predios->count();
-        });
+
         $this->asamblea = Asamblea::find(cache('id_asamblea'));
 
         $this->started = ($this->asamblea->h_inicio);

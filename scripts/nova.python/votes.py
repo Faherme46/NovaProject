@@ -171,17 +171,22 @@ def main():
                     dataResult = handleReport(values, reportId)
                     # Crear una consulta SQL para insertar datos
                     print(dataResult)
+
                     if dataResult['vote'] in ['A', 'B', 'C', 'D', 'E', 'F'] and dataResult['control_id']<1000:
-                        sql = """INSERT INTO votes (control_id, vote)
-                                VALUES (%s, %s)
-                                ON DUPLICATE KEY UPDATE vote = VALUES(vote)"""
-                        valores = (dataResult['control_id'],dataResult['vote'])
+                        
+                        sql = """UPDATE controls
+                                SET `vote` = %s
+                                WHERE `id` = %s"""
+                        valores = (dataResult['vote'],dataResult['control_id'])
+                        try:
+                            # Ejecutar la consulta
+                            cursor.execute(sql, valores)
 
-                        # Ejecutar la consulta
-                        cursor.execute(sql, valores)
+                            # Guardar los cambios en la base de datos
+                            conn.commit()
+                        except Exception as e:
+                            print(e)
 
-                        # Guardar los cambios en la base de datos
-                        conn.commit()
                 myFlag=1
 
     except KeyboardInterrupt:

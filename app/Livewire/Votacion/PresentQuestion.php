@@ -9,11 +9,10 @@ use App\Models\Control;
 use App\Models\Result;
 
 use App\Http\Controllers\FileController;
-use App\Models\General;
 use App\Models\Question;
 use App\Models\Vote;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Storage;
 use Throwable;
 
 class PresentQuestion extends Component
@@ -32,7 +31,10 @@ class PresentQuestion extends Component
         3 => 'btn-success',       //votado
     ];
     public $controls;
-    public $controlsAssigned = [];
+    public $controlsAssigned;
+    public $controlAssignedIds;
+    public $controlAbsent;
+
     public $inVoting = 2;
     public $inCoefResult = true;
 
@@ -46,7 +48,7 @@ class PresentQuestion extends Component
     public $resultToUse;
     public $valuesPlanchas;
 
-
+    public $start;
     public $newTitle;
     public $newOptions = [];
     public $isEditting = false;
@@ -54,8 +56,8 @@ class PresentQuestion extends Component
     {
 
         $response = $this->handleVoting(action: 'run-votes');
-        if(!$response){
-            return session()->flash('error','Problemas para conectar al servidor python');
+        if (!$response) {
+            return session()->flash('error', 'Problemas para conectar al servidor python');
         }
         $this->reset('inVoting', 'seconds', 'countdown', 'votes', 'inCoefResult', 'votes', 'controlsAssigned');
         $this->step = 1;
@@ -113,7 +115,7 @@ class PresentQuestion extends Component
     {
         $this->resultToUse = ($this->inCoefResult) ? $this->question->resultCoef : $this->question->resultNom;
         $this->calculatePlazas();
-        $this->inVoting=4;
+        $this->inVoting = 4;
     }
 
     public function setImageUrl($result, $quorum)
@@ -124,10 +126,10 @@ class PresentQuestion extends Component
             // dd($urlImg);
             if ($result->isCoef) {
                 $result->chartPath = $path;
-                $this->chartCoef=$path;
+                $this->chartCoef = $path;
             } else {
                 $result->chartPath = $path;
-                $this->chartNom=$path;
+                $this->chartNom = $path;
             }
             $result->save();
         } catch (Throwable $th) {
@@ -150,7 +152,7 @@ class PresentQuestion extends Component
                 $values[] = $result->$option;
             }
         }
-        $six= count($labels)==6;
+        $six = count($labels) == 6;
 
 
         if ($quorum) {
@@ -163,8 +165,8 @@ class PresentQuestion extends Component
                 'absent' => 'AUSENTE',
             ];
 
-            if ($this->question->type!=2 || !$six) {
-                $additionalOptions['nule']='NULO';
+            if ($this->question->type != 2 || !$six) {
+                $additionalOptions['nule'] = 'NULO';
             }
         }
 
@@ -218,6 +220,7 @@ class PresentQuestion extends Component
 
     public function store()
     {
+        $this->start = microtime(true);
         $this->dispatch('closeModal');
         $this->playPause(true);
         if ($this->handleVoting('stop-votes')) {
@@ -269,82 +272,35 @@ class PresentQuestion extends Component
             'abstainted' => 0,
         ];
         $availableOptions = $this->question->getAvailableOptions();
-
+        $valuesCoef['absent'] += $this->controlAbsent->sum('sum_coef');
+        $valuesNom['absent']  += $this->controlAbsent->sum('predios_total');
+        $valuesCoef['abstainted'] += $this->controlsAssigned->sum('sum_coef_abs');
+        $valuesNom['abstainted']  +=  $this->controlsAssigned->sum('predios_abs');
+        $valuesCoef['abstainted'] += $this->controlsAssigned->whereNull('vote')->sum('sum_coef');
+        $valuesNom['abstainted']  +=  $this->controlsAssigned->whereNull('vote')->sum('predios_total');
         if ($this->question->type == 5) {
-            foreach ($this->controlsAssigned as $id => $control) {
-                if ($control->isAbsent()) {
-                    $valuesCoef['absent'] += $control->sum_coef;
-                    $valuesNom['absent']  += $control->predios_vote;
 
-                    $control->t_publico = 0;
-                } else {
-                    if (array_key_exists($id, $this->votes)) {
-                        $vote = $this->votes[$id];
-                        if ($vote == 'A') {
-                            $valuesCoef['option' . $vote] += $control->sum_coef;
-                            $valuesNom['option' . $vote] += $control->predios_vote;
-                            $control->t_publico = 1;
-                        } else if ($vote == 'B') {
-                            $valuesCoef['option' . $vote] += $control->sum_coef;
-                            $valuesNom['option' . $vote] += $control->predios_vote;
-                            $control->t_publico = 0;
-                        } else {
-                            $valuesCoef['nule'] += $control->sum_coef;
-                            $valuesNom['nule'] += $control->predios_vote;
-                            $control->t_publico = 0;
-                        }
-                    } else {
-                        $valuesCoef['abstainted'] += $control->sum_coef;
-                        $valuesNom['abstainted']  += $control->predios_vote;
-                        $control->t_publico = 0;
-                    }
-                }
-                $control->save();
-            }
+            $valuesNom['optionA'] += $this->controlsAssigned->where('vote', 'A')->sum('predios_total');
+            $valuesCoef['optionA'] += $this->controlsAssigned->where('vote', 'A')->sum('sum_coef');
+            $valuesNom['optionB'] += $this->controlsAssigned->where('vote', 'B')->sum('predios_total');
+            $valuesCoef['optionB'] += $this->controlsAssigned->where('vote', 'B')->sum('sum_coef');
+            $valuesNom['nule'] += $this->controlsAssigned->whereNotIn('vote', ['A', 'B'])->sum('predios_total');
+            $valuesCoef['nule'] += $this->controlsAssigned->whereNotIn('vote', ['A', 'B'])->sum('sum_coef');
+            Control::where('state', 1)
+                ->whereIn('vote', ['A', 'B'])
+                ->update(['t_publico' => DB::raw('CASE WHEN vote = "A" THEN 1 ELSE 0 END')]);
         } else if ($this->question->type == 1) {
-            foreach ($this->controlsAssigned as $id => $control) {
-                if ($control->isAbsent()) {
-                    $valuesCoef['absent'] += $control->sum_coef;
-                    $valuesNom['absent']  += $control->predios_vote;
-                } else {
-
-                    if (array_key_exists($id, $this->votes)) {
-
-                        $valuesCoef['nule'] += $control->sum_coef;
-                        $valuesNom['nule'] += $control->predios_vote;
-                    } else {
-                        $valuesCoef['abstainted'] += $control->sum_coef;
-                        $valuesNom['abstainted']  += $control->predios_vote;
-                    }
-                }
-            }
+            $valuesNom['nule'] += $this->controlsAssigned->whereNotNull('vote')->sum('predios_total');
+            $valuesCoef['nule'] += $this->controlsAssigned->whereNotNull('vote')->sum('sum_coef');
         } else {
-            foreach ($this->controlsAssigned as $id => $control) {
-                if ($control->isAbsent()) {
-                    $valuesCoef['absent'] += $control->sum_coef;
-                    $valuesNom['absent']  += $control->predios_vote;
-                } else {
-
-                    if (array_key_exists($id, $this->votes)) {
-
-                        $vote = $this->votes[$id];
-                        if (in_array($vote, $availableOptions)) {
-                            $valuesCoef['option' . $vote] += $control->sum_coef_can;
-                            $valuesNom['option' . $vote] += $control->getPrediosCan();
-                        } else {
-
-                            $valuesCoef['nule'] += $control->sum_coef_can;
-                            $valuesNom['nule'] += $control->getPrediosCan();
-                        }
-                    } else {
-                        $valuesCoef['abstainted'] += $control->sum_coef_can;
-                        $valuesNom['abstainted']  += $control->getPrediosCan();
-                    }
-                    $valuesCoef['abstainted'] += ($control->sum_coef - $control->sum_coef_can);
-                    $valuesNom['abstainted']  +=  ($control->predios->count() - $control->getPrediosCan());
-                }
+            foreach ($availableOptions as $option) {
+                $valuesNom['option' . $option] += $this->controlsAssigned->where('vote', $option)->sum('predios_vote');
+                $valuesCoef['option' . $option] += $this->controlsAssigned->where('vote', $option)->sum('sum_coef_can');
             }
+            $valuesNom['nule'] += $this->controlsAssigned->whereNotNull('vote')->whereNotIn('vote', $availableOptions)->sum('predios_vote');
+            $valuesCoef['nule'] += $this->controlsAssigned->whereNotNull('vote')->whereNotIn('vote', $availableOptions)->sum('sum_coef_can');
         }
+
         $totalCoef = 0;
         foreach ($valuesCoef as $value) {
             $totalCoef += $value;
@@ -384,6 +340,9 @@ class PresentQuestion extends Component
             $this->setImageUrl($result, ($this->question->type == 1));
         }
         $this->inResults();
+        $end = microtime(true);
+        $executionTime = $end - $this->start;
+        dd($executionTime);
     }
 
 
@@ -409,10 +368,9 @@ class PresentQuestion extends Component
 
     public function setControlsAssigned()
     {
-        $controls = Control::whereHas('predios')->get();
-        foreach ($controls as $control) {
-            $this->controlsAssigned[$control->id] = $control;
-        }
+        $this->controlsAssigned = Control::where('state', 1)->get();
+        $this->controlAssignedIds = $this->controlsAssigned->pluck('id')->toArray();
+        $this->controlAbsent = Control::whereNotIn('state', [1, 4])->get();
     }
 
     public function proof()
@@ -422,7 +380,7 @@ class PresentQuestion extends Component
 
     public function updateVotes()
     {
-        $this->votes = Vote::pluck('vote', 'control_id')->toArray();
+        $this->votes = Control::whereNotNull('vote')->pluck('id')->toArray();
     }
     public function handleVoting($action)
     {
@@ -578,7 +536,4 @@ class PresentQuestion extends Component
         $this->setSizePresentation();
         $this->isEditting = false;
     }
-
-
-
 }

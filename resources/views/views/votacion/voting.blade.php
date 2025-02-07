@@ -53,8 +53,8 @@
                 @foreach ($controls as $control)
                     <span
                         class="btn  ms-0 mb-1 me-0 fs-2
-                    @if (array_key_exists($control, $votes) && array_key_exists($control, $controlsAssigned)) btn-primary
-                    @elseif(array_key_exists($control, $controlsAssigned)) btn-secondary @else btn-black @endif ">
+                    @if (in_array($control, $votes)&&in_array($control,$controlAssignedIds) ) btn-primary
+                    @elseif(in_array($control,$controlAssignedIds)) btn-secondary @else btn-black @endif ">
                         {{ $control < 10 ? '0' : '' }}{{ $control }}
                     </span>
                 @endforeach
