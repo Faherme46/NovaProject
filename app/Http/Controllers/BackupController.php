@@ -16,7 +16,7 @@ class BackupController extends Controller
     {
         $nameAsamblea = cache('asamblea')['name'];
         $asamblea=cache('asamblea');
-        $info = Storage::disk('externalAsambleas')->put($nameAsamblea . '/info.json', json_encode( $asamblea->toArray()));
+        $info = Storage::disk('externalAsambleas')->put($nameAsamblea . '/info.json', json_encode( $asamblea));
 
         $ubicacionArchivoTemporal = Storage::disk('externalAsambleas')->path($nameAsamblea . '/' . $nameAsamblea . '.sql');
 
