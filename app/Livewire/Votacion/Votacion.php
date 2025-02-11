@@ -81,8 +81,8 @@ class Votacion extends Component
         $this->prediosVote = Control::whereIn('state', [1, 2])->sum('predios_vote');
         $this->controlsRegistered = Control::whereIn('state', [1, 2])->count();
         $this->controlsVote = Control::where('sum_coef_can', '!=', 0)->count();
-        $this->quorumVote = Control::whereNotIn('state', [4])->sum('sum_coef_can');
-        $this->quorumRegistered = Control::whereNotIn('state', [4])->sum('sum_coef');
+        $this->quorumVote = round(Control::whereNotIn('state', [4])->sum('sum_coef_can'),5);
+        $this->quorumRegistered = round(Control::whereNotIn('state', [4])->sum('sum_coef'),5);
     }
 
     public function setQuestion($questionId)

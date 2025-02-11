@@ -80,7 +80,7 @@ class LiderSetup extends Component
                 $this->asamblea->h_inicio = $time;
                 $this->asamblea->save();
                 cache(['asamblea' => $this->asamblea]);
-                \Illuminate\Support\Facades\Log::channel('custom')->notice('Se Inicia la asamblea');
+                \Illuminate\Support\Facades\Log::channel('custom')->notice('Se Inicia la asamblea',['HORA'=>$time]);
                 session()->flash('info', 'Se ha iniciado la asamblea en: ' . $time);
             } else {
                 session()->flash('warning', 'Ya se establecio el inicio en: ' . $this->asamblea->h_inicio);
@@ -106,7 +106,7 @@ class LiderSetup extends Component
                 Predio::whereHas('control', function ($query) use ($time) {
                     $query->where('state', 1);
                 })->update(['quorum_end' => true]);
-                Control::whereHas('predios')->update(['h_recibe' => $time->format('H:i')]);
+                Control::whereHas('predios')->whereNull('h_recibe')->update(['h_recibe' => $time->format('H:i')]);
                 cache(['predios_end' =>  Predio::where('quorum_end', true)->count()]);
                 cache(['quorum_end' => Control::whereNotIn('state', [4,5])->sum('sum_coef')]);
 
@@ -120,7 +120,7 @@ class LiderSetup extends Component
                 $this->asamblea->save();
                 cache(['asamblea' => $this->asamblea]);
                 $this->finished = true;
-                \Illuminate\Support\Facades\Log::channel('custom')->notice('Se termina la asamblea');
+                \Illuminate\Support\Facades\Log::channel('custom')->notice('Se termina la asamblea',['HORA'=>$time]);
                 session()->flash('info', 'Se ha terminado la asamblea en: ' . $time);
             } else {
                 session()->flash('warning', 'Ya se establecio el cierre en: ' . $this->asamblea->h_cierre);

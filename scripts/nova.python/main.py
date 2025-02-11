@@ -193,7 +193,7 @@ def create_plot(title, labels, values, output_path,nameAsamblea):
     ax.spines['right'].set_visible(False)
     ax.spines['left'].set_visible(True)
     ax.yaxis.set_visible(True)
-    ax.set_title(title, fontsize=title_fontsize, pad=30)
+    ax.set_title(title, fontsize=title_fontsize, pad=20)
     ax.set_xlabel(nameAsamblea)
     ax.tick_params(axis='both', which='major', labelsize=20)
 

@@ -11,13 +11,13 @@ use App\Http\Middleware\EnsureAsambleaOn;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\AsambleaController;
 use App\Http\Controllers\BackupController;
-use App\Http\Controllers\Controller;
 use App\Http\Controllers\EleccionesController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\PrediosController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PersonasController;
+use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ReportController;
 use App\Http\Middleware\EleccionesMiddleware;
 use App\Http\Middleware\EnsureAsambleaOff;
@@ -57,8 +57,11 @@ use App\Livewire\Elecciones\Programar;
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Admin')]], function () {
     Route::get('gestion/informes/Informe', [ReportController::class, 'createReport'])->name('gestion.report.docs');
 
-    Route::post('question/update', [Controller::class, 'updateQuestion'])->name('question.update');
-    Route::post('question/prefab/create', [Controller::class, 'createPrefabQuestion'])->name('question.prefab.create');
+    Route::post('question/import', [QuestionController::class, 'importarVotos'])->name('question.import');
+    Route::post('question/chart', [QuestionController::class, 'crearGrafica'])->name('question.createChart');
+
+    Route::post('question/update', [QuestionController::class, 'updateQuestion'])->name('question.update');
+    Route::post('question/prefab/create', [QuestionController::class, 'createPrefabQuestion'])->name('question.prefab.create');
 });
 
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Admin|Lider')]], function () {
@@ -120,8 +123,8 @@ Route::post('/login', [LoginController::class, 'authenticate'])->name('users.aut
 Route::get('/logout', [LoginController::class, 'logout'])->name('users.logout')->withoutMiddleware(EnsureAsambleaOn::class);
 
 //rutas de prueba
-Route::get('/proofAsignacion', [Asignacion::class, 'proofAsignacion'])->name('proofAsignacion');
-Route::get('proofQuestion', [FileController::class, 'exportAllQuestions']);
-Route::get('proofExport', [FileController::class, 'exportTables']);
+// Route::get('/proofAsignacion', [Asignacion::class, 'proofAsignacion'])->name('proofAsignacion');
+// Route::get('proofQuestion', [FileController::class, 'exportAllQuestions
+// Route::get('proofVotacion', [QuestionController::class, 'crearGraficasProof']);
 
 //Route::get('proofExport',[PrediosController::class,'export']);

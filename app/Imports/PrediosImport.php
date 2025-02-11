@@ -5,6 +5,7 @@ namespace App\Imports;
 use App\Models\Predio;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use PhpOffice\PhpSpreadsheet\Calculation\MathTrig\Round;
 
 class PrediosImport implements ToModel, WithHeadingRow
 {
@@ -27,7 +28,7 @@ class PrediosImport implements ToModel, WithHeadingRow
             'numeral1' => $row['numeral1'],
             'descriptor2' => $row['descriptor2'],
             'numeral2' => $row['numeral2'],
-            'coeficiente' => $row['coeficiente'],
+            'coeficiente' => round($row['coeficiente'],5),
             'vota' => !$row['novota'],
         ];
         if (array_key_exists('votos', $row)) {

@@ -15,10 +15,21 @@ class VotesImport implements ToModel, WithHeadingRow
      */
     public function model(array $row)
     {
+        $attributes = [
+            'sum_coef' => ($row['coeficiente_total'])?$row['coeficiente_total']:0,
+            'sum_coef_can' => ($row['coeficiente_habilitado'])?$row['coeficiente_habilitado']:0,
+            'sum_coef_abs' => ($row['coeficiente_abstencion'])?$row['coeficiente_abstencion']:0,
+            'predios_total' => ($row['predios_totales'])?$row['predios_totales']:0,
+            'predios_vote' => ($row['predios_habilitados'])?$row['predios_habilitados']:0,
+            'predios_abs' => ($row['predios_abstencion'])?$row['predios_abstencion']:0,
+        ];
         if ($row['voto']) {
-            Control::where('id', $row['control'])->update(['vote' => $row['voto']]);
-        }else{
-            return;
+            $attributes['vote'] = $row['voto'];
+        } else {
+            $attributes['vote'] = '';
         }
+        Control::where('id', $row['control'])->update(
+            $attributes
+        );
     }
 }

@@ -38,7 +38,7 @@ class Entregar extends Component
 
         $control->changeState($value);
         $this->inModal=false;
-
+        \Illuminate\Support\Facades\Log::channel('custom')->info('Se entrega un control', ['id'=>$control->id,'estado'=>$value]);
         return redirect()->to('/entregar');
     }
 
@@ -58,6 +58,7 @@ class Entregar extends Component
 
     public function entregarAll(){
         $now=Carbon::now(new \DateTimeZone('America/Bogota'));
+        \Illuminate\Support\Facades\Log::channel('custom')->info('Se entrega un control', ['Se entregan todos los controles']);
         $this->controls=Control::whereHas('predios')->update(['h_recibe'=>$now,'state'==5]);
     }
 }

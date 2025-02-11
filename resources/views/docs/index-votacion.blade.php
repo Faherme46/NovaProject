@@ -65,15 +65,12 @@
                 <ul>
                     @for ($i = 0; $i < count($anexos); $i++)
                         <li>
-                            ITEM {{$i+1}} - {{ ucfirst(strtolower($anexos[$i]))}}
+                            ITEM {{$i+1}} - {{ ucfirst(strtr(strtolower($anexos[$i]), ['Á' => 'á', 'É' => 'é', 'Í' => 'í', 'Ó' => 'ó', 'Ú' => 'ú','Ñ'=>'ñ']))}}
                         </li>
                     @endfor
                 </ul>
             </div>
             <hr>
-            <br>
-            <br>
-            <br>
             <br>
             <h5>Información General</h5>
             <br>

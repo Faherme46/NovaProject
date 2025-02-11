@@ -13,7 +13,8 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 class VotesExport implements FromArray, WithHeadings, WithStyles
 {
     protected $data;
-    public function __construct($votes) {
+    public function __construct($votes)
+    {
         $this->data = $votes;
     }
 
@@ -21,22 +22,31 @@ class VotesExport implements FromArray, WithHeadings, WithStyles
     {
         $array = $this->buildArray();
         return $array;
-
     }
 
-    public function buildArray(){
+    public function buildArray()
+    {
         $array = Control::all()->map(function ($control) {
-            $td='';
-            if($control->vote){
-                $td = ($control->t_publico=='1') ? 'Publico' : 'Privado';
-                $vote=$control->vote;
-            }else{
-                $td = '';
-                $vote='';
+            $td = '';
+            if ($control->vote) {
+                $vote = $control->vote;
+            } else {
+                $vote = '';
             }
 
-
-            return [$control->id, $vote, $td];
+            $td = ($control->t_publico == '1') ? 'Publico' : 'Privado';
+            return [
+                $control->id,
+                $vote,
+                $control->state,
+                $td,
+                $control->sum_coef,
+                $control->sum_coef_can,
+                $control->sum_coef_abs,
+                $control->predios_total,
+                $control->predios_vote,
+                $control->predios_abs
+            ];
         })->toArray();
 
         return $array;
@@ -46,10 +56,18 @@ class VotesExport implements FromArray, WithHeadings, WithStyles
      */
     public function headings(): array
     {
+
         return [
             'Control',
             'Voto',
-            'TD'
+            'Estado',
+            'TD',
+            'Coeficiente Total',
+            'Coeficiente Habilitado',
+            'Coeficiente Abstencion',
+            'Predios Totales',
+            'Predios Habilitados',
+            'Predios Abstencion',
         ];
     }
 

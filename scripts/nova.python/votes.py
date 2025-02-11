@@ -133,7 +133,7 @@ def main():
                 data = device.read(64)  # Leer un bloque de datos de 64 bytes
 
                 if data and myFlag:
-
+                    print(data[:4])
                     reportId=data[0]
                     values=[data[1],data[2]]
 
@@ -148,32 +148,37 @@ def main():
                     #primer elementol de cada uno
 
                     #solo se maneja si no es 3
-                    if reportId != 3 :
-                        #si es uno se guarda el primer elemento y pasa
-                        if reportId == 1 :
-                            awaitSecond = True
-                            head = values[0]
-                            continue
+                    
+                    #si es uno se guarda el primer elemento y pasa
+                    if reportId == 1 :
+                        awaitSecond = True
+                        head = values[0]
+                        continue
 
-                        #si es dos ordena ignorar el siguiente
-                        elif reportId == 2 and not awaitSecond:
-                            ignoreSecond = True
+                    #si es dos ordena ignorar el siguiente
+                    elif reportId == 2 and not awaitSecond:
+                        ignoreSecond = True
 
-                        #es el segundo mensaje del caso 3
-                        elif reportId == 2 and awaitSecond :
-                            dataPass = [head, values[0]]
-                            values = dataPass
-                            awaitSecond = False
-                            head=0
+                    #es el segundo mensaje del caso 3
+                    elif reportId == 2 and awaitSecond :
+                        dataPass = [head, values[0]]
+                        values = dataPass
+                        awaitSecond = False
+                        head=0
+
+                    elif reportId == 3 and data[1]>82:
+                        continue
 
 
 
                     dataResult = handleReport(values, reportId)
                     # Crear una consulta SQL para insertar datos
                     print(dataResult)
+                    print('----------------------------------------------')
 
-                    if dataResult['vote'] in ['A', 'B', 'C', 'D', 'E', 'F'] and dataResult['control_id']<1000:
-                        
+
+                    if dataResult['vote'] in ['A', 'B', 'C', 'D', 'E', 'F'] and dataResult['control_id']<400:
+
                         sql = """UPDATE controls
                                 SET `vote` = %s
                                 WHERE `id` = %s"""

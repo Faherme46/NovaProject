@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Votacion;
 
+use App\Exports\StatesExport;
 use App\Imports\VotesImport;
 use App\Models\Control;
 use Livewire\Attributes\Layout;
@@ -15,6 +16,7 @@ class ShowVotacion extends Component
 {
     public $questions;
     public $question;
+    
     public $sizeTitle = 2.5;
     public $inCoefResult =true;
     public $asambleaName;
@@ -50,17 +52,5 @@ class ShowVotacion extends Component
         }
     }
 
-    public function importarVotos(){
 
-
-        $nameAsamblea=cache('asamblea')['name'];
-        $externalFilePathVotes = Storage::disk('externalAsambleas')->path($nameAsamblea.'/Preguntas/'.$this->question->id.'/votos.xlsx');
-
-        if (!file_exists($externalFilePathVotes)) {
-            session()->flash('error',"El archivo no se encontró en la ruta: {$externalFilePathVotes}");
-        }
-        Control::query()->update(['vote' => null]);
-        $import=Excel::import(new VotesImport, $externalFilePathVotes);
-        return redirect()->route('questions.show',['questionId'=>$this->question->id])->with('info','Continue con la votación para generar los resultados');
-    }
 }

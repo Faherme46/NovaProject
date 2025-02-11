@@ -58,14 +58,20 @@ class ReportController extends Controller
         try {
 
             $this->createDocument('front-page');
+
             if (!cache('inRegistro')) {
+
+                $response = $this->exportQuestions();
+                if ($response->getStatusCode()!=200) {
+                    return redirect()->route('gestion.report')->with('error', $response->getContent());
+                }
                 $this->variables += [
                     'anexos' => $this->questions->pluck('title')->toArray(),
                 ];
                 $this->createDocument('index-votacion');
             } else {
 
-                $response = $this->exportPersonas();
+                $response=$this->exportPersonas();
                 if ($response->getStatusCode()==500) {
                     return redirect()->route('gestion.report')->with('error', $response->getContent());
                 } else if ($response->getStatusCode()==423) {
@@ -161,9 +167,16 @@ class ReportController extends Controller
         return $pdf->output('S');
     }
 
-    public function exportQuestions($questions)
+    public function exportQuestions()
     {
+        $asambleaName = cache('asamblea')['name'];
+        $export4 = new QuestionsExport($this->questions);
+        $responseExcel4= Excel::store($export4, $asambleaName . '/Informe/Votaciones.xlsx', 'externalAsambleas');
+        if (!$responseExcel4) {
+            return response()->json('Votaciones.xlsx', 423);
+        }
 
+        return response()->json(['success' => 'Archivos Exportados correctamente'], 200);
     }
     public function exportPersonas()
     {
@@ -188,11 +201,7 @@ class ReportController extends Controller
                 return response()->json('Asistencia_Quorum.xlsx', 423);
             }
 
-            $export4 = new QuestionsExport($this->questions);
-            $responseExcel4= Excel::store($export4, $asambleaName . '/Informe/Votaciones.xlsx', 'externalAsambleas');
-            if (!$responseExcel4) {
-                return response()->json('Votaciones.xlsx', 423);
-            }
+
             return response()->json(['success' => 'Archivos Exportados correctamente'], 200);
         } catch (\Throwable $th) {
             return response()->json('Falla en la exportacion de excel: '.$th->getMessage(), 500);
