@@ -64,11 +64,9 @@ class FileController extends Controller
 
     public function getOnlyQuestionPath($questionId, $title): string
     {
-        $questionCount=Question::count();
         $questionName = ($questionId);
         $parentFolderName = cache('asamblea')['name'];
         $newFolderPath = $parentFolderName . '/Preguntas/' . $questionName;
-
         return $newFolderPath;
     }
     public function quitarTildes($texto) {
@@ -123,13 +121,10 @@ class FileController extends Controller
         }
     }
 
-    public function exportVotes($votos, $questionId, $title)
+    public function exportVotes( $questionId, $title)
     {
         $path = $this->getOnlyQuestionPath($questionId, $title);
-        // Sort the data by key (Control) alphabetically
-        ksort($votos);
-
-        $export = new VotesExport($votos);
+        $export = new VotesExport();
         Excel::store($export, $path . '/votos.xlsx', 'externalAsambleas');
         return;
     }

@@ -59,10 +59,26 @@
                             </button>
                         @endif
 
-                        <button type="button" class="btn btn-primary fs-4" wire:click='voting'
+                        <button type="button" class="btn btn-primary fs-4" wire:click='voting' id="fullscreen"
                             @disabled($isEditting)>
                             VOTAR
                         </button>
+                        <script>
+                            document.getElementById('fullscreen').addEventListener('click', function() {
+
+                                if (!document.fullscreenElement) {
+                                    // Entrar en pantalla completa
+                                    document.documentElement.requestFullscreen().catch((err) => {
+                                        alert(`Error al intentar entrar en pantalla completa: ${err.message} (${err.name})`);
+                                    });
+                                } else {
+                                    // Salir de pantalla completa
+                                    document.exitFullscreen().catch((err) => {
+                                        alert(`Error al intentar salir de pantalla completa: ${err.message} (${err.name})`);
+                                    });
+                                }
+                            });
+                        </script>
                     </div>
                 </div>
 

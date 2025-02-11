@@ -41,7 +41,7 @@
         <div class="modal-dialog  modal-dialog-centered" >
             <div class="modal-content">
                 <div class="modal-body">
-                   <h1>Por favor firme dentro del recuadro</h1>
+                    <h1>Por favor firme dentro del recuadro</h1>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary d-flex align-items-center " id='fullscreen'

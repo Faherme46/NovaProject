@@ -148,10 +148,8 @@ class QuestionController extends Controller
             $this->question->predios = Control::where('state', 1)->sum('predios_vote');
 
             $fileController = new FileController;
-
-            $fileController->exportResult($this->question);
-            $votes = Control::whereNotNull('vote')->pluck('id')->toArray();
-            $fileController->exportVotes($votes, $this->question->id, $this->question->title);
+            // $fileController->exportResult($this->question);
+            $fileController->exportVotes($this->question->id, $this->question->title);
         } catch (Throwable $th) {
             throw $th;
         }
@@ -229,19 +227,20 @@ class QuestionController extends Controller
         $this->question = Question::find($request->idQuestion);
         $this->setImageUrl($this->question->resultCoef, false);
         $this->setImageUrl($this->question->resultNom, false);
-        return back()->with('success','Gráficas generadas correctamente correctamente');
+        return back()->with('success', 'Gráficas generadas correctamente correctamente');
     }
 
 
-    public function importarVotos(Request $request){
+    public function importarVotos(Request $request)
+    {
 
-        $this->question=Question::find($request->idQuestion);
+        $this->question = Question::find($request->idQuestion);
 
-        $nameAsamblea=cache('asamblea')['name'];
-        $externalFilePathVotes = Storage::disk('externalAsambleas')->path($nameAsamblea.'/Preguntas/'.$this->question->id.'/votos.xlsx');
+        $nameAsamblea = cache('asamblea')['name'];
+        $externalFilePathVotes = Storage::disk('externalAsambleas')->path($nameAsamblea . '/Preguntas/' . $this->question->id . '/votos.xlsx');
 
         if (!file_exists($externalFilePathVotes)) {
-            back()->withErrors('error',"El archivo no se encontró en la ruta: {$externalFilePathVotes}");
+            back()->withErrors('error', "El archivo no se encontró en la ruta: {$externalFilePathVotes}");
         }
 
         // $externalFilePathStates=Storage::disk('externalAsambleas')->path($nameAsamblea.'/Tablas/states.xlsx');
@@ -249,15 +248,15 @@ class QuestionController extends Controller
         // Excel::store($export, $externalFilePathVotes);
 
         Control::query()->update(['vote' => null]);
-        $import=Excel::import(new VotesImport, $externalFilePathVotes);
+        $import = Excel::import(new VotesImport, $externalFilePathVotes);
 
         $this->createResults();
 
         Control::query()->update(['vote' => null]);
-        $controls=Control::all();
+        $controls = Control::all();
         foreach ($controls as  $control) {
             $control->setCoef();
         }
-        return back()->with('success','Votos importados correctamente');
+        return back()->with('success', 'Votos importados correctamente');
     }
 }

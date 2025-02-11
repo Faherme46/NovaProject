@@ -163,14 +163,11 @@ class PresentQuestion extends Component
                 if(is_array($questionController->createResults())){
                     $this->chartCoef=$questionController->createResults()[0];
                     $this->chartNom=$questionController->createResults()[1];
+                    cache(['toExportVotes'=>true]);
                 };
             } catch (Throwable $th) {
-                dd($th->getMessage());
                 return back()->withErrors('error',$th->getMessage());
             }
-
-
-
             $this->inResults();
         }
     }
@@ -254,6 +251,7 @@ class PresentQuestion extends Component
 
     public function getOut()
     {
+        
         Control::query()->update(['vote' => null]);
         return redirect()->route('votacion')->with('success', 'Resultado almacenado correctamente');
     }
@@ -355,8 +353,6 @@ class PresentQuestion extends Component
                     $residuos[$option] = $this->resultToUse[$option] - $umbral * $this->valuesPlanchas[$option];
                 }
             }
-
-
             // Ordenar opciones por residuos
             arsort($residuos);
             foreach (array_keys($residuos) as $option) {
@@ -379,10 +375,7 @@ class PresentQuestion extends Component
     public function updateQuestion()
     {
         $this->question->title = $this->newTitle;
-
-
         $this->question->update($this->newOptions);
-
         $this->question->save();
         $this->setSizePresentation();
         $this->isEditting = false;

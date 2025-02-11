@@ -153,6 +153,13 @@
                                     </tr>
 
                                 </tbody>
+                                <tfoot>
+                                    <tr class="table-active">
+                                        <th class="text-end">Total:</th>
+                                        <th>{{ $question->resultNom ? $question->resultNom['total'] : 'Sin resultado' }}</th>
+                                        <th>{{ $question->resultCoef ? $question->resultCoef['total'] : 'Sin resultado' }}</th>
+                                    </tr>
+                                </tfoot>
 
                             </table>
                         </div>

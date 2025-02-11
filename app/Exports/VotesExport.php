@@ -12,10 +12,9 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class VotesExport implements FromArray, WithHeadings, WithStyles
 {
-    protected $data;
-    public function __construct($votes)
+
+    public function __construct()
     {
-        $this->data = $votes;
     }
 
     public function array(): array
