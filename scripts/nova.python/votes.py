@@ -128,6 +128,7 @@ def main():
             awaitSecond = False
             head = 0
             i=0
+            caso=0
             while True:
 
                 data = device.read(64)  # Leer un bloque de datos de 64 bytes
@@ -135,46 +136,62 @@ def main():
                 if data and myFlag:
                     print(data[:4])
                     reportId=data[0]
-                    values=[data[1],data[2]]
-
-                    if (ignoreSecond) :
+                    values=[data[1],data[2],data[3]]
+                    #caso 2.1 se ignora el siguiente mensaje si su report id es 1
+                    if ignoreSecond:
                         ignoreSecond = False
-                        continue
-
-                    # hay tres casos de respuesta
-                    #1. caso con reportID=3, viene un unico mensaje con toda la informacion correcta
-                    #2. caso con reportId=2, vienen dos mensajes el primero tiene reportId=2 y el otro en 1, solo el primero tiene la informacion correcta
-                    #3. caso con reportId=1, vienen dos, ambos tienen la informacion parcial, se tiene en cuenta el
-                    #primer elementol de cada uno
-
-                    #solo se maneja si no es 3
-                    
-                    #si es uno se guarda el primer elemento y pasa
-                    if reportId == 1 :
+                        if reportId == 1 or (values[0]>80 and reportId == 1) :
+                            continue
+                    # hay multiples casos de respuesta
+                    #siempre necesitamos dos valores uno que indica el grupo: va de 32 a 80
+                    #otro que indica el control y el voto
+                    #CASO 1, comienza con reportId 1 y el siguiente mensaje es 2 o 3, se toma el primer valor de cada mensaje
+                    if reportId == 1 and values[0]<=80  :
+                        caso=1
                         awaitSecond = True
                         head = values[0]
                         continue
+                    #CASO 1.1, se lee el siguiente mensaje y se calcula el resultado con eso
+                    elif (reportId == 2 or reportId == 3)  and awaitSecond :
 
-                    #si es dos ordena ignorar el siguiente
-                    elif reportId == 2 and not awaitSecond:
-                        ignoreSecond = True
-
-                    #es el segundo mensaje del caso 3
-                    elif reportId == 2 and awaitSecond :
-                        dataPass = [head, values[0]]
-                        values = dataPass
+                        values = [head, values[0]]
                         awaitSecond = False
                         head=0
+                    #CASO 2, vienen dos mensajes, el primer con id 2 y el otro en 1, se toman los dos primeros valores del primer mensaje
+                    elif reportId == 2 and values[0]<80 :
+                        caso=2
+                        ignoreSecond = True
+                    #CASO 3, con report id 2 viene un unico mensaje, se toma el ultimo valor y el primero en ese orden
+                    elif reportId == 2 and values[2]<80:
+                        caso=3
+                        dataPass=[values[2],values[0]]
+                        values=dataPass
+                    #CASO 4, con reportId 3 viene un mensaje se toman sus dos primeros valores
+                    elif reportId == 3 and values[0]<=80:
+                        caso=4
+                    #CASO 5, dos mensajes con reportId 3 y 1 los dos ultimos valores deben ser iguales y esos se toman
+                    elif reportId == 3 and values[1]<80:
+                        caso=5
+                        dataPass =[values[1],values[2]]
+                        awaitSecond= True
+                        continue
+                    #CASO 5.1, se recibe el segundo valor y se compara que sean iguales
+                    elif reportId == 1 and values[0]>80 and awaitSecond:
 
-                    elif reportId == 3 and data[1]>82:
+                        awaitSecond= False
+                        if dataPass[0]==values[1] and dataPass[1]==values[2]:
+                            values=dataPass
+                        else:
+                            continue
+                    else:
+                        print('Desconocido')
                         continue
 
 
 
                     dataResult = handleReport(values, reportId)
                     # Crear una consulta SQL para insertar datos
-                    print(dataResult)
-                    print('----------------------------------------------')
+                    print(dataResult,caso)
 
 
                     if dataResult['vote'] in ['A', 'B', 'C', 'D', 'E', 'F'] and dataResult['control_id']<400:

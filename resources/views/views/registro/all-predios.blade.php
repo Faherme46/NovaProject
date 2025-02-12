@@ -10,25 +10,27 @@
                     onclick="this.select()">
             </div>
         @endif
+        @if ($distincts['descriptor1'][0] != '' && $distincts['numeral1'][0] != '')
+            <div class="col-2">
+                <select wire:model.live='descriptor1' wire:keypress='search' class="form-control px-1" name="descriptor1"
+                    id="">
+                    @foreach ($distincts['descriptor1'] as $item)
+                        <option value="{{ $item }}">{{ $item }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-1">
+                <select wire:model.live='numeral1' wire:change='search' class="form-control px-1" name="numeral1">
+                    <option value="">#</option>
+                    @foreach ($distincts['numeral1'] as $item)
+                        <option value="{{ $item }}">{{ $item }}</option>
+                    @endforeach
+                </select>
+            </div>
+        @endif
 
         <div class="col-2">
-            <select wire:model.live='descriptor1' wire:keypress='search' class="form-control" name="descriptor1"
-                id="">
-                @foreach ($distincts['descriptor1'] as $item)
-                    <option value="{{ $item }}">{{ $item }}</option>
-                @endforeach
-            </select>
-        </div>
-        <div class="col-1">
-            <select wire:model.live='numeral1' wire:change='search' class="form-control" name="numeral1" id="">
-                <option value="">#</option>
-                @foreach ($distincts['numeral1'] as $item)
-                    <option value="{{ $item }}">{{ $item }}</option>
-                @endforeach
-            </select>
-        </div>
-        <div class="col-2">
-            <select class="form-control" name="descriptor2" wire:model='descriptor2' wire:change='search'>
+            <select class="form-control px-1" name="descriptor2" wire:model='descriptor2 ' wire:change='search'>
 
                 @foreach ($distincts['descriptor2'] as $item)
                     <option value="{{ $item }}">{{ $item }}</option>
@@ -40,11 +42,8 @@
                  maxlength="10" onclick="this.select()">
         </div>
         <div class="col-1 ms-auto">
-            <button wire:click='clean' class=" btn btn-danger"
-
-            data-bs-toggle="tooltip" data-bs-placement="top"
-            data-bs-custom-class="custom-tooltip"
-            data-bs-title="Limpiar Busqueda">
+            <button wire:click='clean' class=" btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top"
+                data-bs-custom-class="custom-tooltip" data-bs-title="Limpiar Busqueda">
                 <i class='bi bi-x-circle-fill '></i>
             </button>
         </div>
@@ -53,10 +52,11 @@
     </div>
     <div class="card-body table-responsive table-fixed-header table-h100 px-0 pt-0">
 
-        <table class="table">
+        <table class="table table-striped-columns   ">
 
             <thead>
-                <th class="text-center">Añadir</th>
+                <th class="text-center w-10">
+                </th>
                 <th class="ps-4 text-center">Predio</th>
                 @if ($asamblea['registro'])
                     <th>Propietario</th>

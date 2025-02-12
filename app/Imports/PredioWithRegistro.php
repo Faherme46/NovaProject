@@ -17,7 +17,7 @@ class PredioWithRegistro implements ToModel, WithHeadingRow
      */
     public function model(array $row)
     {
-        $keys = ['descriptor1', 'numeral1', 'descriptor2', 'numeral2', 'coeficiente', 'novota',
+        $keys = [ 'descriptor2', 'numeral2', 'coeficiente', 'novota',
         'cc_propietario', 'cc_apoderado', 'nombre_ap', 'apellido_ap'];
         foreach ($keys as $key) {
 
@@ -31,8 +31,8 @@ class PredioWithRegistro implements ToModel, WithHeadingRow
 
 
         $predio = Predio::create([
-            'descriptor1' => $row['descriptor1'],
-            'numeral1' => $row['numeral1'],
+            'descriptor1' => ($row['descriptor1'])?$row['descriptor1']:'',
+            'numeral1' => ($row['numeral1'])?$row['numeral1']:'',
             'descriptor2' => $row['descriptor2'],
             'numeral2' => $row['numeral2'],
             'cc_apoderado' => $row['cc_apoderado'],

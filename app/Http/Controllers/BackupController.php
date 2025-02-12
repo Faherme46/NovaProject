@@ -15,15 +15,17 @@ class BackupController extends Controller
     public function downloadBackup()
     {
         $nameAsamblea = cache('asamblea')['name'];
-        $asamblea=cache('asamblea');
-        $info = Storage::disk('externalAsambleas')->put($nameAsamblea . '/info.json', json_encode( $asamblea));
+        $asamblea = cache('asamblea');
+
+        
+        $info = Storage::disk('externalAsambleas')->put($nameAsamblea . '/info.json', json_encode($asamblea));
 
         $ubicacionArchivoTemporal = Storage::disk('externalAsambleas')->path($nameAsamblea . '/' . $nameAsamblea . '.sql');
 
         $codigoSalida = 0;
 
         Cache::forget('asamblea');
-        $tables = ['cache', 'controls', 'personas', 'predios', 'predios_personas', 'questions', 'results', 'session', 'signatures', 'votes','torres','torres_candidatos'];
+        $tables = ['cache', 'controls', 'personas', 'predios', 'predios_personas', 'questions', 'results', 'session', 'signatures', 'votes', 'torres', 'torres_candidatos'];
         $comando = sprintf("%s --user=\"%s\" --password=\"%s\" --skip-lock-tables --no-create-info %s %s > %s", env("UBICACION_MYSQLDUMP"), env("DB_USERNAME"), env("DB_PASSWORD"), env('DB_DATABASE'), implode(' ', $tables), $ubicacionArchivoTemporal);
         try {
             // Storage::disk('public')->makeDirectory('backups');
@@ -33,7 +35,7 @@ class BackupController extends Controller
             if ($codigoSalida !== 0) {
                 return $salida;
             }
-            cache(['asamblea'=>$asamblea]);
+            cache(['asamblea' => $asamblea]);
             \Illuminate\Support\Facades\Log::channel('custom')->info('Se descargo la informacion de la BD.');
         } catch (\Throwable $th) {
             return $th->getMessage();
@@ -54,11 +56,9 @@ class BackupController extends Controller
             return back()->with('error', 'No se encontro el archivo "' . $path . '"');
         }
 
-        $sql=Storage::disk('externalAsambleas')->get($folder);
+        $sql = Storage::disk('externalAsambleas')->get($folder);
         try {
             $execute = DB::unprepared($sql);
-
-
         } catch (\Throwable $th) {
             $sessionController = new SessionController;
             $sessionController->destroyOnError();

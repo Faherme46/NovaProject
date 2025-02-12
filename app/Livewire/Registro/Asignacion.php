@@ -207,6 +207,9 @@ class Asignacion extends Component
         }
 
         $control = Control::find($this->controlId);
+        if (!$control) {
+            return $this->addError('error','Control no valido');
+        }
         try {
 
             $control->state = 1;

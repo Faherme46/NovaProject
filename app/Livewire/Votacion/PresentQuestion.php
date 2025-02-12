@@ -8,7 +8,7 @@ use Livewire\Attributes\Layout;
 use App\Models\Control;
 use App\Models\Result;
 
-use App\Http\Controllers\FileController;
+
 use App\Http\Controllers\QuestionController;
 use App\Models\Question;
 use Illuminate\Support\Facades\DB;
@@ -56,7 +56,7 @@ class PresentQuestion extends Component
         if (!$response) {
             return session()->flash('error', 'Problemas para conectar al servidor python');
         }
-        $this->reset('inVoting', 'seconds', 'countdown', 'votes', 'inCoefResult', 'votes', );
+        $this->reset('inVoting', 'seconds', 'countdown', 'votes', 'inCoefResult', 'votes',);
         $this->step = 1;
         // $this->question = Question::find(19);
         if (!$this->question) {
@@ -158,15 +158,15 @@ class PresentQuestion extends Component
         $this->dispatch('closeModal');
         $this->playPause(true);
         if ($this->handleVoting('stop-votes')) {
-            $questionController=new QuestionController($this->question->id);
+            $questionController = new QuestionController($this->question->id);
             try {
-                if(is_array($questionController->createResults())){
-                    $this->chartCoef=$questionController->createResults()[0];
-                    $this->chartNom=$questionController->createResults()[1];
-                    cache(['toExportVotes'=>true]);
+                if (is_array($questionController->createResults())) {
+                    $this->chartCoef = $questionController->createResults()[0];
+                    $this->chartNom = $questionController->createResults()[1];
+                    cache(['toExportVotes' => true]);
                 };
             } catch (Throwable $th) {
-                return back()->withErrors('error',$th->getMessage());
+                return back()->withErrors('error', $th->getMessage());
             }
             $this->inResults();
         }
@@ -202,9 +202,11 @@ class PresentQuestion extends Component
 
     public function goPresent()
     {
-        $this->mount($this->question->id, $this->plancha, $this->plazas);
-        $this->handleVoting('stop-votes');
-        $this->dispatch('$refresh');
+        $this->playPause(true);
+
+
+        $this->dispatch('stop-timer');
+        $this->inVoting = 2;
     }
 
     public function sleep($value)
@@ -217,8 +219,6 @@ class PresentQuestion extends Component
     {
 
         $this->controlAssignedIds = Control::where('state', 1)->pluck('id')->toArray();
-
-
     }
 
     public function proof()
@@ -251,7 +251,7 @@ class PresentQuestion extends Component
 
     public function getOut()
     {
-        
+
         Control::query()->update(['vote' => null]);
         return redirect()->route('votacion')->with('success', 'Resultado almacenado correctamente');
     }

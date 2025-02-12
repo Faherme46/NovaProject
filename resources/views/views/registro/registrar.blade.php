@@ -172,29 +172,17 @@
                 </div>
                 <div class="card-body table-responsive table-fixed-header table-45 p-0">
                     <table class="table">
-                        <thead>
-                            <tr>
-
-                                <th class="">A/P</th>
-                                <th>Predio</th>
-                                <th>Coef.</th>
-                                <th>
-                                    <input class="form-check-input" type="checkbox" wire:model='selectAll'
-                                        wire:click="setSumCoef" />
-                                </th>
-                            </tr>
+                        <thead class="table-active">
+                            <th>Predio</th>
+                            <th>Coef.</th>
+                            <th>
+                                <input class="form-check-input" type="checkbox" wire:model='selectAll'
+                                    wire:click="setSumCoef" />
+                            </th>
                         </thead>
                         <tbody>
                             @forelse ($prediosAvailable as $predio)
                                 <tr>
-
-                                    <td>
-                                        <span class="badge text-bg-info fs-6">
-                                            {{ $predio->getRelationPersona($cedula) }}
-                                        </span>
-
-                                    </td>
-
                                     <td>{{ $predio->getFullName() }} </td>
                                     <td>{{ $predio->coeficiente }}</td>
                                     <td>

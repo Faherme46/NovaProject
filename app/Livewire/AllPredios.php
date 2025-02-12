@@ -5,7 +5,6 @@ use Livewire\Attributes\On;
 
 use Livewire\Component;
 use App\Models\Predio;
-use App\Models\Persona;
 use App\Models\Control;
 
 class AllPredios extends Component
@@ -33,11 +32,13 @@ class AllPredios extends Component
             $this->consulta=true;
         }
         $this->distincts = [
-            'descriptor1' => Predio::distinct()->pluck('descriptor1'),
-            'numeral1' => Predio::distinct()->pluck('numeral1'),
-            'descriptor2' => Predio::distinct()->pluck('descriptor2'),
-            'numeral2' => Predio::distinct()->pluck('numeral2'),
+            'descriptor1' => Predio::distinct()->pluck('descriptor1')->toArray(),
+            'numeral1' => Predio::distinct()->pluck('numeral1')->toArray(),
+            'descriptor2' => Predio::distinct()->pluck('descriptor2')->toArray(),
+            'numeral2' => Predio::distinct()->pluck('numeral2')->toArray(),
         ];
+
+            
         $this->prediosAll = Predio::all();
     }
 

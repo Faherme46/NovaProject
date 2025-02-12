@@ -116,5 +116,5 @@ class Control extends Model
         return $states[$this->state];
     }
 
-   
+
 }

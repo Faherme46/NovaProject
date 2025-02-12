@@ -32,6 +32,14 @@ class SessionController extends Controller
             File::delete($logpath);
         }
 
+        try {
+            $fileController = new FileController;
+            if (!$fileController->exportTables()) {
+                return back()->withErrors('Error', 'Problema exportando las tablas de excel');
+            };
+        } catch (\Throwable $th) {
+            return back()->withErrors('Error', 'Problema exportando las tablas de excel '.$th->getMessage());
+        }
         //se descargan las tablas
         $backupController=new BackupController();
         $response=$backupController->downloadBackup();
