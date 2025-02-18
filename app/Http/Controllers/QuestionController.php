@@ -182,7 +182,7 @@ class QuestionController extends Controller
         foreach ($this->options as $option) {
             if ($this->question->$option !== null) {
                 $labels[] = $this->question->$option;
-                $values[] = $result->$option;
+                $values[] = round($result->$option,5);
             }
         }
         $six = count($labels) == 6;
