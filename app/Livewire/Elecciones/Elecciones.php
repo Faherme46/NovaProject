@@ -92,9 +92,6 @@ class Elecciones extends Component
 
             ],
             [
-<<<<<<< Updated upstream
-                "directives" => 'onclick=location.href="/gestion/asamblea";',
-=======
                 "directives" =>  'onclick=location.href="/elecciones/quorum";',
                 'icon' => 'bi-percent',
                 'title' => 'Ver Quorum',
@@ -104,7 +101,6 @@ class Elecciones extends Component
             ],
             [
                 "directives" => 'onclick=location.href="/elecciones/gestion";',
->>>>>>> Stashed changes
                 'icon' => 'bi-ui-checks-grid',
                 'title' => 'Area de Control',
                 'body' => 'Gestión, control y estadisticas de las elecciones actuales',

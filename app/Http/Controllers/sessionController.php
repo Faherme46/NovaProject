@@ -47,14 +47,9 @@ class SessionController extends Controller
         $backupController=new BackupController();
         $response=$backupController->downloadBackup();
 
-<<<<<<< Updated upstream
-        if($response!=200){
-            return redirect()->route(route: 'gestion.report')->with('error', 'Error exportando la base de datos: '.$response);
-=======
         if($response!=200 && $response!=[]){
             dd($response);
             return redirect()->route('home')->with('error', $response);
->>>>>>> Stashed changes
         };
 
         $sessionData = Auth::user();

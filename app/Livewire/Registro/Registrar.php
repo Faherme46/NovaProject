@@ -339,19 +339,11 @@ class Registrar extends Component
             return $this->addError('error','Primero debe ingresar el asistente');
         }
         if ($predio) {
-<<<<<<< Updated upstream
-            if($predio->control){
-                $this->addError('error','Predio ya asignado al control '.$predio->control->id);
-            }else{
-                $this->prediosAvailable[$predioId] = $predio;
-                $this->predioSelected[] = $predioId;
-=======
             if ($predio['control_id']) {
                 $this->addError('error', 'Predio ya asignado al control ' . $predio['control_id']);
             } else {
                 $this->prediosAvailable[$predio['id']] = $predio;
                 $this->predioSelected[] = $predio['id'];
->>>>>>> Stashed changes
             }
 
         }

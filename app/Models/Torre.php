@@ -20,9 +20,6 @@ class Torre extends Model
     public function predios(){
         return $this->hasMany(Predio::class,'numeral1','name')->where('descriptor1', $this->first);
     }
-<<<<<<< Updated upstream
-=======
 
 
->>>>>>> Stashed changes
 }

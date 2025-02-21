@@ -90,10 +90,6 @@ class Control extends Model
     public function attachPredios($arrayPredios)
     {
         foreach ($arrayPredios as $predio) {
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
             $this->predios()->save($predio);
         }
         $this->setCoef();
@@ -126,8 +122,6 @@ class Control extends Model
         return $states[$this->state];
     }
 
-<<<<<<< Updated upstream
-=======
 
 
     public function terminal(){
@@ -153,6 +147,5 @@ class Control extends Model
         }
     }
 
->>>>>>> Stashed changes
 
 }

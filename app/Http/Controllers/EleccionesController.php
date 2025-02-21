@@ -3,13 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Imports\EleccionesImport;
 use App\Imports\PersonasImport;
-<<<<<<< Updated upstream
-use App\Imports\PrediosImport;
-use App\Imports\PredioWithRegistro;
-=======
 use App\Imports\PrediosEleccionesImport;
->>>>>>> Stashed changes
 use App\Imports\UsersImport;
 use App\Models\Asamblea;
 use App\Models\Control;
@@ -48,25 +44,6 @@ class EleccionesController extends Controller
                 return back()->withErrors('No se pueden enviar delegaciones en 0 para: ' . $key);
             }
         }
-<<<<<<< Updated upstream
-        foreach ($request->delegados as $key => $value) {
-            $predios = Predio::where('numeral1', $key);
-            $attributes = [
-                'units' => $predios->count(),
-                'coeficiente' => $predios->sum('coeficiente'),
-                'votos' => $predios->sum('votos'),
-                'delegados' => $value,
-            ];
-            $torre=Torre::where('name',$key)->first();
-            if($torre){
-                $torre->delegados=$value;
-                $torre->save();
-                $unit='actualizado';
-            }else{
-                $attributes['name']=$key;
-                Torre::create($attributes);
-                $unit='creado';
-=======
         $delegados = json_decode($request->delegadosArray,true);
 
         foreach ($delegados as $key => $value) {
@@ -81,17 +58,12 @@ class EleccionesController extends Controller
 
                 Torre::create(['name'=>$value['name'],'first'=>$value['first'],'delegados'=>$value['delegados']]);
                 $message = 'creado';
->>>>>>> Stashed changes
             }
 
-<<<<<<< Updated upstream
-        }
-        return back()->with('success', 'Se han '.$unit. ' las torres con sus delegados');
-=======
         \Illuminate\Support\Facades\Log::channel('custom')->info('Se han ' . $message . ' las torres con sus delegados');
         return back()->with('success', 'Se han ' . $message . ' las torres con sus delegados');
->>>>>>> Stashed changes
     }
+}
 
 
     public function store(Request $request)
@@ -186,8 +158,6 @@ class EleccionesController extends Controller
             return redirect()->route('elecciones.programar')->withErrors($e->getMessage());
         }
     }
-<<<<<<< Updated upstream
-=======
 
 
     public function setCandidatos()
@@ -205,5 +175,4 @@ class EleccionesController extends Controller
             return redirect()->route('elecciones.candidatos')->with('warning', 'No se importaron candidatos ' . $th->getMessage());
         }
     }
->>>>>>> Stashed changes
 }
