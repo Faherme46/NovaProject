@@ -92,12 +92,32 @@ class Elecciones extends Component
 
             ],
             [
+<<<<<<< Updated upstream
                 "directives" => 'onclick=location.href="/gestion/asamblea";',
+=======
+                "directives" =>  'onclick=location.href="/elecciones/quorum";',
+                'icon' => 'bi-percent',
+                'title' => 'Ver Quorum',
+                'body' => 'Consultar el estado del Quorum, separado por cada torre',
+                'visible' => true,
+                'enabled' => (cache('asamblea', false) && cache('asamblea')['h_inicio']),
+            ],
+            [
+                "directives" => 'onclick=location.href="/elecciones/gestion";',
+>>>>>>> Stashed changes
                 'icon' => 'bi-ui-checks-grid',
                 'title' => 'Area de Control',
                 'body' => 'Gestión, control y estadisticas de las elecciones actuales',
                 'visible' => true,
                 'enabled' => ($this->role != 'Operario' && (cache('asamblea', false))),
+            ],
+            [
+                "directives" => 'onclick=location.href="/users";',
+                'icon' => 'bi-people',
+                'title' => 'Usuarios',
+                'body' => 'Crear, Importar y Consultar Usuarios y terminales',
+                'visible' => ($this->role == 'Admin' || $this->role == 'Lider'),
+                'enabled' => ($this->role != 'Operario'),
             ],
             [
                 "directives" => 'data-bs-toggle=modal data-bs-target=#logOutModal',

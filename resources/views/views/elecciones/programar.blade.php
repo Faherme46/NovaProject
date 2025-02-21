@@ -12,6 +12,7 @@
                 @if ($inAsamblea)
                     <form action="{{ route('elecciones.torres.create') }}" method="post">
                         @csrf
+                        <input type="text" name="delegadosArray" value="{{json_encode(cache('asamblea', false) && cache('asamblea')['h_inicio'])($delegados)}}" hidden>
                         <div class="card-body p-0">
                             <table class="list-group">
                                 <thead @if (count($torres) > 8) class="pe-3" @endif>
@@ -19,22 +20,22 @@
                                         <th class="text-end fs-5">Torres :</th>
                                         <th class="fs-5 w-25 ">
                                             <input type="number" class="form-control " name="torres"
-                                                value="{{ count($torres) }}"readonly>
+                                                value="{{ count($torres) }}" readonly>
                                         </th>
                                     </tr>
                                 </thead>
                                 <tbody style="max-height: 60vh; overflow-y: auto;">
                                     @foreach ($torres as $item)
                                         <tr class="list-group-item list-group-item-action">
-                                            <td class="text-end fs-6">Delegados por Torre
+                                            <td class="text-end fs-6">Delegados por {{$item['descriptor1']}}
                                                 <span class="badge text-bg-primary fs-6 p-1 ">
-                                                    {{ $item }}
+                                                    {{ $item['numeral1'] }}
                                                 </span> :
                                             </td>
                                             <td class="w-25">
                                                 <input type="number" class="form-control " min="0"
-                                                    name="delegados[{{ $item }}]"
-                                                    wire:model='delegados.{{ $item }}' required>
+                                                    name="delegados[{{ $item['descriptor1'].$item['numeral1'] }}]"
+                                                    wire:model='delegados.{{ $item['descriptor1'].$item['numeral1'] }}.delegados' required>
                                             </td>
                                         </tr>
                                     @endforeach

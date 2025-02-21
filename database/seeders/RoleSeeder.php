@@ -20,6 +20,7 @@ class RoleSeeder extends Seeder
         $admin= Role::create(['name' => 'Admin']);
         $leader= Role::create(['name' => 'Lider']);
         $operator= Role::create(['name' => 'Operario']);
+        $operator= Role::create(['name' => 'Terminal']);
 
         Permission::create(['name' => 'users.create'])->assignRole([$admin]);
         Permission::create(['name' => 'users.index'])->assignRole([$admin,$leader]);

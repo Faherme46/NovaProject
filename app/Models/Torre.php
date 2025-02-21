@@ -13,11 +13,16 @@ class Torre extends Model
 
 
     public function candidatos(){
-        return $this->belongsToMany(Persona::class,'torres_candidatos');
+        return $this->belongsToMany(Persona::class,'torres_candidato')->withPivot('votos','coeficiente');
     }
 
 
     public function predios(){
-        return $this->hasMany(Predio::class,'numeral1','name');
+        return $this->hasMany(Predio::class,'numeral1','name')->where('descriptor1', $this->first);
     }
+<<<<<<< Updated upstream
+=======
+
+
+>>>>>>> Stashed changes
 }

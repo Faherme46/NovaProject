@@ -113,7 +113,7 @@
                                         <td>{{ $option }}</td>
                                         <td class="text-center">{{ $q->resultNom['option' . $option] }}</td>
                                         <td class="text-center">
-                                            {{ sprintf('%.4f', $q->resultCoef['option' . $option]) }}
+                                            {{ sprintf('%.5f', $q->resultCoef['option' . $option]) }}
                                         </td>
                                         <td>{{ $q['option' . $option] }}</td>
                                     </tr>
@@ -126,7 +126,7 @@
                                     Abstención
                                 </td>
                                 <td class="text-center">{{ $q->resultNom->abstainted }}</td>
-                                <td class="text-center">{{ sprintf('%.4f', $q->resultCoef->abstainted) }}</td>
+                                <td class="text-center">{{ sprintf('%.5f', $q->resultCoef->abstainted) }}</td>
                                 <td></td>
                             </tr>
                             <tr>
@@ -134,7 +134,7 @@
                                     Ausencia
                                 </td>
                                 <td class="text-center">{{ $q->resultNom->absent }}</td>
-                                <td class="text-center">{{ sprintf('%.4f', $q->resultCoef->absent) }}</td>
+                                <td class="text-center">{{ sprintf('%.5f', $q->resultCoef->absent) }}</td>
                                 <td></td>
                             </tr>
                             <tr>
@@ -146,13 +146,13 @@
                                     @endif
                                 </td>
                                 <td class="text-center">{{ $q->resultNom->nule }}</td>
-                                <td class="text-center">{{ sprintf('%.4f', $q->resultCoef->nule) }}</td>
+                                <td class="text-center">{{ sprintf('%.5f', $q->resultCoef->nule) }}</td>
                                 <td></td>
                             </tr>
                             <tr class="bg-secondary-subtle">
                                 <td class="text-center"><b>TOTAL</b></td>
                                 <td class="text-center">{{ $q->resultNom->total }}</td>
-                                <td class="text-center">{{ sprintf('%.4f', $q->resultCoef->total) }}</td>
+                                <td class="text-center">{{ sprintf('%.5f', $q->resultCoef->total) }}</td>
                                 <td></td>
                             </tr>
                         @else

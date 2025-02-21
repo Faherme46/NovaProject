@@ -15,6 +15,13 @@ class Control extends Model
 {
     use HasFactory;
 
+
+    // estados de controles
+    // 1=Activo = Votando
+    // 2=Ausente =
+    // 4=Unsigned = Sin campo
+    // 5=Entregado  = Votado
+
     protected $guarded=[];
     public function asignacion()
     {
@@ -29,7 +36,6 @@ class Control extends Model
     {
         return $this->belongsTo(Persona::class, 'cc_asistente', 'id');
     }
-
 
     public function retirar()
     {
@@ -84,6 +90,10 @@ class Control extends Model
     public function attachPredios($arrayPredios)
     {
         foreach ($arrayPredios as $predio) {
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
             $this->predios()->save($predio);
         }
         $this->setCoef();
@@ -116,5 +126,33 @@ class Control extends Model
         return $states[$this->state];
     }
 
+<<<<<<< Updated upstream
+=======
+
+
+    public function terminal(){
+        return $this->belongsTo(Terminal::class);
+    }
+
+    public function getATerminal(){
+        $terminal = Terminal::where('available', true)->first();
+        if ($terminal) {
+            $terminal->update(['available'=>false]);
+            $this->update(['terminal_id'=>$terminal->id,'state'=>1]);
+            return $terminal->user_name;
+        } else {
+            return false;
+        }
+    }
+
+    public function releaseTerminal(){
+        if ($this->terminal) {
+            $this->terminal->update(['available'=>true]);
+            $this->update(['terminal_id'=>null,'state'=>4]);
+            return true;
+        }
+    }
+
+>>>>>>> Stashed changes
 
 }

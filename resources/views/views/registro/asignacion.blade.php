@@ -38,11 +38,11 @@
                                     <tbody>
                                         @forelse($predioSelected as $predio)
                                             <tr scope="row" style="width: 85%">
-                                                <td>{{ $predio->descriptor1 }} {{ $predio->numeral1 }}
-                                                    {{ $predio->descriptor2 }} {{ $predio->numeral2 }}</td>
+                                                <td>{{ $predio['descriptor1'] }} {{ $predio['numeral1'] }}
+                                                    {{ $predio['descriptor2'] }} {{ $predio['numeral2'] }}</td>
                                                 <td style="text-align: center;">
                                                     <button class="btn p-0"
-                                                        wire:click="dropPredio({{ $predio->id }})">
+                                                        wire:click="dropPredio({{ $predio['id'] }})">
                                                         <i class='bi bi-x-square-fill'></i>
                                                     </button>
                                                 </td>
@@ -57,9 +57,9 @@
                                         @if ($control)
                                             @foreach ($prediosAsigned as $predio)
                                                 <tr scope="row" class="table-active">
-                                                    <td colspan="2">{{ $predio->descriptor1 }}
-                                                        {{ $predio->numeral1 }}
-                                                        {{ $predio->descriptor2 }} {{ $predio->numeral2 }}
+                                                    <td colspan="2">{{ $predio['descriptor1'] }}
+                                                        {{ $predio['numeral1'] }}
+                                                        {{ $predio['descriptor2'] }} {{ $predio['numeral2'] }}
                                                     </td>
 
                                                 </tr>
@@ -89,12 +89,7 @@
                                 </div>
                             </div>
                             <div class="card-body  px-0">
-                                <div class="d-flex px-2  justify-content-between">
-                                    <div class=" col-5">
-                                        <input class="form-control " name="sum_coef" value="{{ $sumCoefA }}"
-                                            id="sumCoef" readonly>
-                                        <small id="helpId" class="text-muted ms-3">Coeficiente</small>
-                                    </div>
+                                <div class="d-flex px-2  justify-content-center">
 
                                     <div class="col-5 ">
                                         <input class="form-control "

@@ -38,7 +38,7 @@ class AllPredios extends Component
             'numeral2' => Predio::distinct()->pluck('numeral2')->toArray(),
         ];
 
-            
+        
         $this->prediosAll = Predio::all();
     }
 
@@ -87,8 +87,10 @@ class AllPredios extends Component
         // Ejecuta la consulta y obtiene los resultados
         $this->prediosAll = $query->get();
     }
-    public function dispatchPredio($id){
-        $this->dispatch('add-predio', predioId: $id);
+    public function dispatchPredio($predio){
+
+        $this->dispatch('add-predio', predio:$predio);
+
     }
     public function dispatchPersona($id){
 

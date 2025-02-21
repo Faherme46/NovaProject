@@ -4,6 +4,12 @@ namespace App\Livewire\Elecciones;
 
 use App\Models\Persona;
 use App\Models\Predio;
+<<<<<<< Updated upstream
+=======
+use App\Models\Terminal;
+use Carbon\Carbon;
+use DateTimeZone;
+>>>>>>> Stashed changes
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Validate;
@@ -32,7 +38,7 @@ class Registro extends Component
 
     public $predioSelected = [];
     public $selectAll = false;
-
+    public $torres=[];
 
 
         public $sumCoef = 0;
@@ -40,7 +46,10 @@ class Registro extends Component
     public function mount()
     {
         $this->tipoId = 'CC';
+<<<<<<< Updated upstream
         $this->poderdantes = collect();
+=======
+>>>>>>> Stashed changes
     }
 
     #[Layout('layout.asistencia')]
@@ -61,6 +70,7 @@ class Registro extends Component
             'poderdantesIDs',
             'prediosAvailable',
             'predioSelected',
+            'prediosAvailable',
             'selectAll'
         ]);
         if ($cedula) {
@@ -71,14 +81,19 @@ class Registro extends Component
 
     public function search($persona = null)
     {
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
         $this->validate();
-
         $this->cleanData(0);
-
         $this->asistente = ($persona) ? $persona : Persona::find($this->cedula);
 
+<<<<<<< Updated upstream
         
 
+=======
+>>>>>>> Stashed changes
         if ($this->asistente) {
 
             $this->name = $this->asistente->nombre;
@@ -109,6 +124,7 @@ class Registro extends Component
         }
     }
 
+<<<<<<< Updated upstream
     public function addPredios($predios)
     {
         foreach ($predios as $predio) {
@@ -121,6 +137,9 @@ class Registro extends Component
         }
         $this->setSumCoef();
     }
+=======
+
+>>>>>>> Stashed changes
     public function updatedSelectAll($value)
     {
         if (!$value) {
@@ -132,6 +151,7 @@ class Registro extends Component
 
     public function updatedPredioSelected()
     {
+<<<<<<< Updated upstream
         $this->selectAll = count($this->predioSelected) === count($this->prediosAvailable);
     }
 
@@ -143,9 +163,13 @@ class Registro extends Component
                 $suma = $suma + $predio->coeficiente;
             }
         }
+=======
 
-        $this->sumCoef = $suma;
+        $this->selectAll = count($this->predioSelected) === count($this->prediosAvailable);
     }
+
+>>>>>>> Stashed changes
+
 
     public function addPoderdante()
     {
@@ -173,9 +197,13 @@ class Registro extends Component
 
     public function dropAllPoderdantes()
     {
-        $this->reset(['ccPoderdante', 'poderdantes', 'poderdantesIDs']);
+        $this->reset(['ccPoderdante', 'poderdantes', 'poderdantesIDs', 'prediosAvailable']);
         $this->mount();
+<<<<<<< Updated upstream
         $this->reset(['prediosAvailable', 'predioSelected']);
+=======
+        $this->reset(['predioSelected']);
+>>>>>>> Stashed changes
         if ($this->asistente) {
             $this->addPredios($this->asistente->predios);
         }
@@ -184,6 +212,7 @@ class Registro extends Component
     public function dropPoderdante($poderdanteId, $prediosId)
     {
 
+<<<<<<< Updated upstream
         $ids = array_map(function ($predio) {
             return $predio['id'];
         }, $prediosId);
@@ -192,15 +221,33 @@ class Registro extends Component
             unset($this->prediosAvailable[$id]);
         }
         $this->predioSelected = array_diff($this->predioSelected, $ids);
+=======
+        $predios = Predio::whereHas('personas', function ($query) use ($poderdanteId) {
+            $query->where('persona_id', $poderdanteId);
+        })->pluck('id')->toArray();
+        $this->predioSelected = array_diff($this->predioSelected, $predios);
+        unset($this->prediosAvailable, $predios);
+>>>>>>> Stashed changes
         $this->poderdantesIDs = array_diff($this->poderdantesIDs, [$poderdanteId]);
         $this->poderdantes = Persona::find(($this->poderdantesIDs));
-        $this->setSumCoef();
+    }
+    public function addPredios($predios)
+    {
+        foreach ($predios as $predio) {
+            if (!array_key_exists($predio->id, $this->prediosAvailable) && !$predio->control) {
+                $this->prediosAvailable[$predio->id] = $predio->toArray();
+                $this->predioSelected[] = $predio->id;
+                if(!in_array($predio->numeral1,$this->torres)){
+                    $this->torres[]=$predio->numeral1;
+                }
+            }
+        }
     }
 
-
     #[On('add-predio')]
-    public function addPredioToList($predioId)
+    public function addPredioToList($predio)
     {
+<<<<<<< Updated upstream
         if(!$this->cedula){
             return $this->addError('error','Primero debe ingresar el asistente');
         }
@@ -213,6 +260,21 @@ class Registro extends Component
                 $this->predioSelected[] = $predioId;
             }
 
+=======
+
+        if (!$this->cedula) {
+            return $this->addError('error', 'Primero debe ingresar el asistente');
+        }
+
+        if ($predio['control_id']) {
+            $this->addError('error', 'Este predio ya se ha registrado');
+        } else {
+            if(!in_array($predio['numeral1'],$this->torres)){
+                $this->torres[]=$predio['numeral1'];
+            }
+            $this->prediosAvailable[$predio['id']] = $predio;
+            $this->predioSelected[] = $predio['id'];
+>>>>>>> Stashed changes
         }
     }
 
@@ -233,4 +295,47 @@ class Registro extends Component
 
         $this->search();
     }
+<<<<<<< Updated upstream
+=======
+
+
+    public function registrar()
+    {
+
+        if (!$this->prediosAvailable || !$this->predioSelected) {
+            return session()->flash('warning', 'No hay predios para asignar');
+        }
+        $prediosToAsign = array_intersect($this->predioSelected, array_keys($this->prediosAvailable));
+
+
+        $terminalFree=Terminal::where('available',true)->exists();
+        if(!$terminalFree){
+            return session()->flash('warning', 'No hay terminales libres, espere a que se libere');
+        }
+        foreach ($this->torres as $torre) {
+
+            $control = Control::create(['cc_asistente' => $this->asistente->id,  'state' => 2]);
+
+            try {
+
+                Predio::where('numeral1',$torre)->whereIn('id',$prediosToAsign)->update(['control_id'=>$control->id]);
+                $control->setCoef();
+                $control->vote = $torre;
+                $control->h_entrega = Carbon::now(new DateTimeZone('America/Bogota'))->format('H:i:s');
+                $control->save();
+                \Illuminate\Support\Facades\Log::channel('custom')->info('Registra el control {control}', ['control' => $control->id, 'predios' => $prediosToAsign, 'persona' => $this->cedula]);
+            } catch (\Exception $e) {
+                $control->predios()->update(['control_id' => null]);
+                $control->delete();
+                return  session()->flash('warning', $e->getMessage());
+            }
+        }
+        $terminal = $control->getATerminal();
+        if ($terminal) {
+            return redirect()->route('elecciones.registrar')->with('terminal', $terminal);
+        } else {
+            return session()->flash('warning', 'No hay terminales libres, espere a que se libere');
+        }
+    }
+>>>>>>> Stashed changes
 }

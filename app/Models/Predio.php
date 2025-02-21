@@ -58,7 +58,7 @@ class Predio extends Model
     }
 
     public function torre(){
-        return $this->belongsTo(Torre::class,'numeral1','name');
+        return $this->belongsTo(Torre::class,'numeral1','name')->where('first',$this->descriptor1);
     }
 
 

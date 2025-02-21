@@ -68,7 +68,7 @@ class LiderSetup extends Component
         }
         try {
 
-            $time = Carbon::now(new DateTimeZone('America/Bogota'))->second(0);
+            $time = Carbon::now(new DateTimeZone('America/Bogota'))->format('H:i:s');
             if (!$this->asamblea->h_inicio) {
 
                 $this->started = true;
@@ -100,13 +100,13 @@ class LiderSetup extends Component
             Storage::disk('externalAsambleas')->put($this->asamblea->name . '/logs.log', file_get_contents($logpath));
 
         }
-            $time = Carbon::now(new DateTimeZone('America/Bogota'))->second(0);
+            $time = Carbon::now(new DateTimeZone('America/Bogota'))->format('H:i:s');
             if (!$this->asamblea->h_cierre) {
 
                 Predio::whereHas('control', function ($query) use ($time) {
                     $query->where('state', 1);
                 })->update(['quorum_end' => true]);
-                Control::whereHas('predios')->whereNull('h_recibe')->update(['h_recibe' => $time->format('H:i')]);
+                Control::whereHas('predios')->whereNull('h_recibe')->update(['h_recibe' => $time]);
                 cache(['predios_end' =>  Predio::where('quorum_end', true)->count()]);
                 cache(['quorum_end' => Control::whereNotIn('state', [4,5])->sum('sum_coef')]);
 

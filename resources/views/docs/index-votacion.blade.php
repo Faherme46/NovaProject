@@ -77,11 +77,11 @@
             <table class="table table-general">
                 <tr>
                     <th class="bb-white text-light bold bg-darkblue text-end" >Cliente:</th>
-                    <td class="ps-2" colspan="3">{{$asambleaR->folder}}</td>
+                    <td class="ps-2" colspan="3">{{strtoupper($asambleaR->folder)}}</td>
                 </tr>
                 <tr>
                     <th class="bb-white text-light bold bg-darkblue text-end" >Referencia:</th>
-                    <td class="ps-2" colspan="3">{{$asambleaR->referencia}}</td>
+                    <td class="ps-2" colspan="3">{{strtoupper($asambleaR->referencia)}}</td>
                 </tr>
                 <tr>
                     <th class="bb-white text-light bold bg-darkblue text-end" >Tipo de Asamblea:</th>

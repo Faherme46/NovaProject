@@ -47,5 +47,9 @@ class User extends Authenticatable
         return $this->hasMany(Persona::class);
     }
 
+    public function terminal(){
+        return $this->hasOne(Terminal::class);
+    }
+
 
 }

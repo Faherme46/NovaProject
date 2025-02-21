@@ -14,6 +14,10 @@ return new class extends Migration
         Schema::create('controls', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('state')->default(4);
+<<<<<<< Updated upstream
+=======
+            $table->unsignedBigInteger('terminal_id')->nullable();
+>>>>>>> Stashed changes
             $table->unsignedBigInteger('cc_asistente')->nullable();
             $table->float('sum_coef_can')->default(0);
             $table->float('sum_coef')->default(0);

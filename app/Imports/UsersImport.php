@@ -33,7 +33,7 @@ class UsersImport implements ToModel, WithHeadingRow
             throw new \Exception('La columna "password" es obligatoria');
         }
 
-        $accepted = ['Admin', 'Operario', 'Lider'];
+        $accepted = ['Admin', 'Operario', 'Lider','Terminal'];
         if (!in_array($rol, $accepted)) {
 
             throw new \Exception('Error2 : el usuario ' . $row['nombre'] . ' ' . $row['apellido'] . ' no tiene un rol valido');

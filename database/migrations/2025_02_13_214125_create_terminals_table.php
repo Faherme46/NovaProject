@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('torres_candidato', function (Blueprint $table) {
+        Schema::create('terminals', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('persona_id')->constrained();
-            $table->foreignId('torre_id')->constrained();
-            $table->integer('votos')->nullable();
-            $table->float('coeficiente')->nullable();
+            $table->unsignedBigInteger('user_id');
+            $table->string('user_name');
+            $table->string('ip_address');
+            $table->string('host');
+            $table->boolean('available');
             $table->timestamps();
         });
     }
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('torres_candidato');
+        Schema::dropIfExists('terminals');
     }
 };

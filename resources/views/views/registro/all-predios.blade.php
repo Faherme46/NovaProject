@@ -70,22 +70,19 @@
                     @if ($predio->control)
                         <tr class="table-active">
                             <td>
-                                <button class="btn pt-0 pb-0 mb-0"
-                                    wire:click="dispatchControl({{ $predio->control->id }})">
-                                    {{ $predio->control->id }}
-                                </button>
+
                             </td>
                         @else
                         <tr>
                             <td>
-                                <button wire:click="dispatchPredio({{ $predio->id }})" class="btn pt-0 pb-0 mb-0">
+                                <button wire:click="dispatchPredio({{ $predio}})" class="btn pt-0 pb-0 mb-0">
                                     <i
                                         class='bi {{ $consulta ? 'bi-question-circle-fill' : 'bi-plus-circle-fill' }}'></i>
                                 </button>
                             </td>
                     @endif
                     <td class="align-items-center ">
-                        <span class="btn py-0 h-100 d-flex" wire:click='dispatchPredio({{ $predio->id }})'
+                        <span class="btn py-0 h-100 d-flex" wire:click="dispatchPredio({{ $predio}})"
                             data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip"
                             data-bs-title="Añadir predio">
                             {{ $predio->getFullName() }}

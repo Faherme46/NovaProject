@@ -25,17 +25,21 @@ class BackupController extends Controller
         $codigoSalida = 0;
 
         Cache::forget('asamblea');
+<<<<<<< Updated upstream
         $tables = ['cache', 'controls', 'personas', 'predios', 'predios_personas', 'questions', 'results', 'session', 'signatures', 'torres', 'torres_candidatos'];
+=======
+        $tables = ['cache', 'controls', 'personas', 'predios','eleccions', 'predios_personas', 'questions', 'results', 'session', 'signatures',  'torres', 'torres_candidatos','terminals'];
+>>>>>>> Stashed changes
         $comando = sprintf("%s --user=\"%s\" --password=\"%s\" --skip-lock-tables --no-create-info %s %s > %s", env("UBICACION_MYSQLDUMP"), env("DB_USERNAME"), env("DB_PASSWORD"), env('DB_DATABASE'), implode(' ', $tables), $ubicacionArchivoTemporal);
         try {
             // Storage::disk('public')->makeDirectory('backups');
 
             exec($comando, $salida, $codigoSalida);
 
+            cache(['asamblea' => $asamblea]);
             if ($codigoSalida !== 0) {
                 return $salida;
             }
-            cache(['asamblea' => $asamblea]);
             \Illuminate\Support\Facades\Log::channel('custom')->info('Se descargo la informacion de la BD.');
         } catch (\Throwable $th) {
             return $th->getMessage();

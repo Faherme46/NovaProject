@@ -333,18 +333,25 @@ class Registrar extends Component
     }
 
     #[On('add-predio')]
-    public function addPredioToList($predioId)
+    public function addPredioToList($predio,)
     {
         if(!$this->cedula){
             return $this->addError('error','Primero debe ingresar el asistente');
         }
-        $predio = Predio::find($predioId);
         if ($predio) {
+<<<<<<< Updated upstream
             if($predio->control){
                 $this->addError('error','Predio ya asignado al control '.$predio->control->id);
             }else{
                 $this->prediosAvailable[$predioId] = $predio;
                 $this->predioSelected[] = $predioId;
+=======
+            if ($predio['control_id']) {
+                $this->addError('error', 'Predio ya asignado al control ' . $predio['control_id']);
+            } else {
+                $this->prediosAvailable[$predio['id']] = $predio;
+                $this->predioSelected[] = $predio['id'];
+>>>>>>> Stashed changes
             }
 
         }

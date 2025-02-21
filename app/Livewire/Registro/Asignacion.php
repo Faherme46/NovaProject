@@ -47,33 +47,21 @@ class Asignacion extends Component
     public function render()
     {
 
-        $this->setSumCoef();
+
         return view('views.registro.asignacion');
     }
 
 
 
-    public function setSumCoef()
-    {
-        $suma = 0;
-        foreach ($this->predioSelected as  $predio) {
-            $suma = $suma + $predio->coeficiente;
-        }
-        $this->sumCoef = $suma;
-        foreach ($this->prediosAsigned as  $predio) {
-            $suma = $suma + $predio->coeficiente;
-        }
-        $this->sumCoefA = $suma;
-        $suma = 0;
-    }
+
 
     #[On('add-predio')]
-    public function addPredio($predioId)
+    public function addPredio($predio)
     {
-        $predio = Predio::find($predioId);
+
         if ($predio) {
-            if ($predio->control) {
-                $this->addError('error', 'Predio ya asignado al control ' . $predio->control->id);
+            if ($predio['control']) {
+                $this->addError('error', 'Predio ya asignado al control ' . $predio['id']);
             } else {
                 $this->addPredioToList($predio);
             }
@@ -95,12 +83,13 @@ class Asignacion extends Component
     public function addPredioToList($predio)
     {
 
-        if ($predio->control) {
-            $this->control = $predio->control;
+        if ($predio['control_id']) {
+            $this->control = $predio['control_id'];
             $this->updatedControl();
         } else {
-            $this->predioSelected[$predio->id] = $predio;
+            $this->predioSelected[$predio['id']] = $predio;
         }
+        
     }
 
     #[On('add-poderdante')]
@@ -156,7 +145,7 @@ class Asignacion extends Component
             // Obtener el control por su ID
             foreach ($this->control->predios as $predio) {
                 # code...
-                $this->prediosAsigned[$predio->id] = $predio;
+                $this->prediosAsigned[$predio->id] = $predio->toArray();
             }
         }
     }
@@ -213,7 +202,7 @@ class Asignacion extends Component
         try {
 
             $control->state = 1;
-            $control->attachPredios($this->predioSelected);
+            Predio::whereIn('id',array_keys($this->predioSelected))->update(['control_id'=>$control->id]);
             $control->setCoef();
             $control->h_entrega = Carbon::now(new DateTimeZone('America/Bogota'))->second(0)->format('H:i');
             $control->save();

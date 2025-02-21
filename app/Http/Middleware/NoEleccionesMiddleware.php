@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class isLogged
+class NoEleccionesMiddleware
 {
     /**
      * Handle an incoming request.
@@ -16,11 +16,10 @@ class isLogged
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check()) {
-            // Redirigir al usuario a la página de inicio de sesión si no está autenticado
-            return redirect()->route('home');
+        if (!(cache('asamblea'))?cache('asamblea')['eleccion']:true) {
+            Auth::logout();
+            return redirect()->route('login')->with('warning','Esta asamblea no es Electoral');
         }
-        
         return $next($request);
     }
 }

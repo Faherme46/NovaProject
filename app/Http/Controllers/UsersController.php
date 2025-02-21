@@ -18,14 +18,53 @@ use Exception;
 class UsersController extends Controller
 {
 
+    public function validateFields(Request $request, $updating)
+    {
+        // Validar los datos del formulario
+        // Mensajes de error personalizados
+        $messages = [
+            'nombre.required' => 'El nombre es obligatorio.',
+            'username.required' => 'El nombre de usuario es obligatorio.',
+            'password.required' => 'La contraseña es obligatoria.',
+            'role.in' => 'El rol seleccionado no es válido. Debe ser Admin, Lider u Operario.',
+        ];
+
+        // Validar los datos del formulario
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'lastname' => 'max:255',
+            'cedula' => 'max:20',
+            'telefono' => 'max:15',
+            'role' => 'required|in:Admin,Lider,Operario,Terminal',
+            'username' => 'required|string|max:255',
+            'password' => 'required|string',
+        ], $messages);
+
+        if (!$updating) {
+            $users = User::pluck('username')->toArray();
+            if (in_array($request->username, $users)) {
+                return 400;
+            }
+        }
+
+        if ($validator->fails()) {
+
+            return $validator->errors();
+        } else {
+            return 200;
+        }
+    }
     public function createUser(Request $request)
     {
         $validator = $this->validateFields($request,false);
-        if ($validator == 400) {
-            return back()->withErrors('El nombre de usuario ya esta en uso')->withInput();
-        } elseif ($validator != 200) {
+        if ($validator instanceof \Illuminate\Support\MessageBag) {
             return back()->withErrors($validator)->withInput();
         }
+
+        if ($validator === 400) {
+            return back()->withErrors('El nombre de usuario ya está en uso')->withInput();
+        }
+
         // Crear el nuevo usuario
         try {
             User::create([
@@ -47,10 +86,12 @@ class UsersController extends Controller
     public function updateUser(Request $request)
     {
         $validator = $this->validateFields($request,true);
-        if ($validator == 400) {
-            return back()->withErrors('El nombre de usuario ya esta en uso')->withInput();
-        } elseif ($validator != 200) {
+        if ($validator instanceof \Illuminate\Support\MessageBag) {
             return back()->withErrors($validator)->withInput();
+        }
+
+        if ($validator === 400) {
+            return back()->withErrors('El nombre de usuario ya está en uso')->withInput();
         }
         // Crear el nuevo usuario
         try {
@@ -64,6 +105,7 @@ class UsersController extends Controller
                 'passwordTxt' => $request->password,
                 'roleTxt'=>$request->role
             ]);
+            $user->syncRoles([]);
             $user->assignRole($request->role);
 
             $this->exportUsers();
@@ -73,48 +115,6 @@ class UsersController extends Controller
         }
     }
 
-    public function validateFields(Request $request, $updating)
-    {
-        // Validar los datos del formulario
-        // Mensajes de error personalizados
-        $messages = [
-            'nombre.required' => 'El nombre es obligatorio.',
-            'apellido.required' => 'El apellido es obligatorio.',
-            'cedula.required' => 'La cédula es obligatoria.',
-            'cedula.unique' => 'La cédula ya está en uso.',
-            'telefono.required' => 'El teléfono es obligatorio.',
-            'username.required' => 'El nombre de usuario es obligatorio.',
-            'username.unique' => 'El nombre de usuario ya está en uso.',
-            'password.required' => 'La contraseña es obligatoria.',
-            'password.confirmed' => 'La confirmación de la contraseña no coincide.',
-            'role.in' => 'El rol seleccionado no es válido. Debe ser Admin, Lider u Operario.',
-        ];
-
-        // Validar los datos del formulario
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'lastname' => 'string|max:255',
-            'cedula' => 'string|max:20',
-            'telefono' => 'string|max:15',
-            'role' => 'required|in:Admin,Lider,Operario',
-            'username' => 'required|string|max:255',
-            'password' => 'required|string',
-        ], $messages);
-
-        if (!$updating) {
-            $users = User::pluck('username')->toArray();
-            if (in_array($request->username, $users)) {
-                return 400;
-            }
-        }
-
-        if ($validator->fails()) {
-
-            return $validator;
-        } else {
-            return 200;
-        }
-    }
 
     public function deleteUser(Request $request)
     {

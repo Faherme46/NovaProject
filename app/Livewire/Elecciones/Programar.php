@@ -18,7 +18,7 @@ class Programar extends Component
     public $inPredios = false;
     public $desc;
     public $torres;
-    public $delegados=[];
+    public $delegados = [];
     public $delegadosAll = 0;
 
     public function mount()
@@ -28,14 +28,26 @@ class Programar extends Component
         $this->inAsamblea = (bool) cache('asamblea', false);
         $this->predios = Predio::all();
         $this->personas = Persona::all();
-        $this->torres = Predio::distinct()->pluck('numeral1');
-        $torres=Torre::all();
-        if($torres->isNotEmpty()){
+        $this->torres = Predio::select('numeral1', 'descriptor1')->distinct()->get()->toArray();
+
+        $torres = Torre::all();
+        if ($torres->isNotEmpty()) {
             foreach ($torres as $t) {
-                $this->delegados[$t->name]=$t->delegados;
+                $this->delegados[$t->first . $t->name] = [
+                    'delegados' => $t->delegados,
+                    'name' => $t->name,
+                    'first' => $t->first
+                ];
+            }
+        }else{
+            foreach ($this->torres as $t) {
+                $this->delegados[$t['descriptor1'].$t['numeral1']] = [
+                    'delegados' => 0,
+                    'name' => $t['numeral1'],
+                    'first' => $t['descriptor1']
+                ];
             }
         }
-
     }
     #[Layout('layout.full-page')]
     public function render()
@@ -76,7 +88,7 @@ class Programar extends Component
     {
 
         foreach ($this->torres as $value) {
-            $this->delegados[$value] = $this->delegadosAll;
+            $this->delegados[$value['descriptor1'] . $value['numeral1']]['delegados'] =$this->delegadosAll;
         };
     }
 }

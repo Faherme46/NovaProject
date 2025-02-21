@@ -13,11 +13,13 @@ return new class extends Migration
     {
         Schema::create('torres', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
-            $table->integer('units');
-            $table->integer('delegados');
-            $table->integer('votos');
-            $table->float('coeficiente');
+            $table->string('first');
+            $table->string('name');
+            $table->integer('delegados')->default(0);
+            $table->integer('votos')->default(0);
+            $table->float('coeficiente')->default(0);
+            $table->integer('votosBlanco')->default(0);
+            $table->float('coeficienteBlanco')->default(0);
             $table->timestamps();
         });
     }

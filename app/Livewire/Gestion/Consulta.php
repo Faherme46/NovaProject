@@ -58,12 +58,12 @@ class Consulta extends Component
     public $cedulaSearch;
     public $controlIdSearch;
 
-    public $predioIdSearch=null;
+    public $predioIdSearch = null;
 
-    public $distincts =[
-        'descriptor1'=>[],
-        'descriptor2'=>[],
-        'numeral1'=>[]
+    public $distincts = [
+        'descriptor1' => [],
+        'descriptor2' => [],
+        'numeral1' => []
     ];
 
 
@@ -83,7 +83,7 @@ class Consulta extends Component
     ];
 
 
-    public function cleanData($value,$tab=5)
+    public function cleanData($value, $tab = 5)
     {
 
         if ($value) {
@@ -109,7 +109,7 @@ class Consulta extends Component
         $this->mount($tab);
         $this->dispatch('$refresh');
     }
-    public function mount($tab=5)
+    public function mount($tab = 5)
     {
         $this->tab = $tab;
         $this->tiposId = Persona::distinct()->pluck('tipo_id');
@@ -360,7 +360,7 @@ class Consulta extends Component
         try {
             $controlR = Control::find($this->controlIdR);
             $controlL = Control::find($this->controlIdL);
-            $prediosChange=array_diff(array_keys($this->prediosR),$controlR->predios->pluck('id')->toArray());
+            $prediosChange = array_diff(array_keys($this->prediosR), $controlR->predios->pluck('id')->toArray());
 
 
 
@@ -392,7 +392,7 @@ class Consulta extends Component
                 $controlL->retirar();
             }
 
-            \Illuminate\Support\Facades\Log::channel('custom')->info('Se cambian los predios del control {controlA} al control {controlB}',['controlA' =>$controlL->id,'controlB' =>$controlR->id,'predios'=>array_values($prediosChange)]);
+            \Illuminate\Support\Facades\Log::channel('custom')->info('Se cambian los predios del control {controlA} al control {controlB}', ['controlA' => $controlL->id, 'controlB' => $controlR->id, 'predios' => array_values($prediosChange)]);
             $this->success();
         } catch (\Throwable $th) {
             $this->addError('error', '5 ' . $th->getMessage());
@@ -433,44 +433,45 @@ class Consulta extends Component
                 $controlL->retirar();
             }
             $controlL->setCoef();
-            \Illuminate\Support\Facades\Log::channel('custom')->info('Se le retiran los predios al control {control}',['control' =>$controlL->id,'predios'=>array_keys($this->prediosR)]);
+            \Illuminate\Support\Facades\Log::channel('custom')->info('Se le retiran los predios al control {control}', ['control' => $controlL->id, 'predios' => array_keys($this->prediosR)]);
             $this->success();
         } catch (\Throwable $th) {
             $this->addError('error', '6 ' . $th->getMessage());
         }
     }
-    public function searchPredio($predioId=null)
+    public function searchPredio($predio)
     {
-        if(!$predioId){
-            $predioId=$this->predioIdSearch;
-        }
-        if(!$predioId){
-    return;
+
+        if (!$predio) {
+            $predioId = $this->predioIdSearch;
+        }else{
+            $predioId=$predio['id'];
         }
         $this->updatedTab(3);
         if (!$predioId) {
             return;
         }
-        $this->Predio = Predio::find($predioId);
-        if(!$this->Predio){
-            session()->flash('warning','No se encontró');
+        $this->Predio = Predio::find($predio['id']);
+        if (!$this->Predio) {
+            session()->flash('warning', 'No se encontró');
         }
     }
 
 
-    public function forgetPredio(){
-        $this->reset(['Predio','predioIdSearch']);
+    public function forgetPredio()
+    {
+        $this->reset(['Predio', 'predioIdSearch']);
         $this->updatedTab(3);
     }
 
-    public function createPredio(){
+    public function createPredio()
+    {
         $this->distincts = [
             'descriptor1' => Predio::distinct()->pluck('descriptor1'),
             'numeral1' => Predio::distinct()->pluck('numeral1'),
             'descriptor2' => Predio::distinct()->pluck('descriptor2'),
         ];
         $this->dispatch('crearPredioModalShow');
-
     }
 
 

@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Imports\PersonasImport;
+<<<<<<< Updated upstream
 use App\Imports\PrediosImport;
 use App\Imports\PredioWithRegistro;
+=======
+use App\Imports\PrediosEleccionesImport;
+>>>>>>> Stashed changes
 use App\Imports\UsersImport;
 use App\Models\Asamblea;
 use App\Models\Control;
@@ -44,6 +48,7 @@ class EleccionesController extends Controller
                 return back()->withErrors('No se pueden enviar delegaciones en 0 para: ' . $key);
             }
         }
+<<<<<<< Updated upstream
         foreach ($request->delegados as $key => $value) {
             $predios = Predio::where('numeral1', $key);
             $attributes = [
@@ -61,10 +66,31 @@ class EleccionesController extends Controller
                 $attributes['name']=$key;
                 Torre::create($attributes);
                 $unit='creado';
+=======
+        $delegados = json_decode($request->delegadosArray,true);
+
+        foreach ($delegados as $key => $value) {
+            $predios = Predio::where('numeral1', $key);
+
+            $torre = Torre::where('name', $value['name'])->where('first')->first();
+            if ($torre) {
+                $torre->delegados = $value;
+                $torre->save();
+                $message = 'actualizado';
+            } else {
+
+                Torre::create(['name'=>$value['name'],'first'=>$value['first'],'delegados'=>$value['delegados']]);
+                $message = 'creado';
+>>>>>>> Stashed changes
             }
 
+<<<<<<< Updated upstream
         }
         return back()->with('success', 'Se han '.$unit. ' las torres con sus delegados');
+=======
+        \Illuminate\Support\Facades\Log::channel('custom')->info('Se han ' . $message . ' las torres con sus delegados');
+        return back()->with('success', 'Se han ' . $message . ' las torres con sus delegados');
+>>>>>>> Stashed changes
     }
 
 
@@ -140,7 +166,7 @@ class EleccionesController extends Controller
                 throw new FileNotFoundException("El archivo no se encontró en la ruta: {$externalFilePathPredios}");
             }
             Excel::import(new PersonasImport, $externalFilePathPersonas);
-            Excel::import(new PredioWithRegistro, $externalFilePathPredios);
+            Excel::import(new PrediosEleccionesImport, $externalFilePathPredios);
             if (file_exists('C:/Asambleas/usuarios.xlsx')) {
                 Excel::import(new UsersImport, 'C:/Asambleas/usuarios.xlsx');
             }
@@ -160,4 +186,24 @@ class EleccionesController extends Controller
             return redirect()->route('elecciones.programar')->withErrors($e->getMessage());
         }
     }
+<<<<<<< Updated upstream
+=======
+
+
+    public function setCandidatos()
+    {
+        try {
+            $externalFilePathPersonas = 'C:/Asambleas/Clientes/' . cache('asamblea')['folder'] . '/personas.xlsx';
+            if (file_exists($externalFilePathPersonas)) {
+                Excel::import(new EleccionesImport, $externalFilePathPersonas);
+                \Illuminate\Support\Facades\Log::channel('custom')->info('Se importaron candidatos de excel');
+                return redirect()->route('elecciones.candidatos')->with('success', 'Candidatos importados Correctamente');
+            } else {
+                return redirect()->route('elecciones.candidatos')->with('warning', 'No se importaron candidatos, el archivo personas.xlsx no fue encontrado');
+            }
+        } catch (\Throwable $th) {
+            return redirect()->route('elecciones.candidatos')->with('warning', 'No se importaron candidatos ' . $th->getMessage());
+        }
+    }
+>>>>>>> Stashed changes
 }

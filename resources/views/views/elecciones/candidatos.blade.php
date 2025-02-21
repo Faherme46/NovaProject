@@ -7,7 +7,7 @@
                     @foreach ($torres as $t)
                         <tr class="list-group-item list-group-item-action fs-6 @if ($t->id == $torre->id) active @endif"
                             wire:click='setPersonasTorre({{ $t->id }})'>
-                            <td>Torre {{ $t->name }}</td>
+                            <td>{{$t->first}} {{ $t->name }}</td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -93,7 +93,7 @@
                 <div class="card px-0">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="card-title mb-0">
-                            Candidatos para <span class="badge text-bg-primary fs-5 py-1">Torre
+                            Candidatos para <span class="badge text-bg-primary fs-5 py-1">{{$t->first}}
                                 {{ $torre->name }}</span>
                         </h5>
                         <input type="number" name="number" id="" disabled class="form-control fs-5 w-10"
@@ -163,7 +163,11 @@
             <div class="card">
                 <div class="card-header">
                     <h5 class="card-title mb-0">
+<<<<<<< Updated upstream
                         Personas de la Torre
+=======
+                        Personas de {{$t->first}} {{$torre->name}}
+>>>>>>> Stashed changes
                     </h5>
                 </div>
                 <div class="card-body table-responsive table-fixed-header p-0 table-h100">

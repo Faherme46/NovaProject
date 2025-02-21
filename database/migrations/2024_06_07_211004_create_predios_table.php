@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('predios', function (Blueprint $table) {
             $table->id();
-            $table->string('descriptor1')->default('-');
-            $table->string('numeral1')->default('-');
-            $table->string('descriptor2')->default('-');
-            $table->string('numeral2')->default('-');
+            $table->string('descriptor1')->default('');
+            $table->string('numeral1')->default('');
+            $table->string('descriptor2')->default('');
+            $table->string('numeral2')->default('');
             $table->integer('votos')->default(1);
             $table->float('coeficiente');
             $table->boolean('vota');

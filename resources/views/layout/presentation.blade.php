@@ -127,7 +127,7 @@
     </div>
 
 
-    <div class="px-3">
+    <div class="p-0">
 
         <div class="z-2">
             {{ $slot }}
@@ -143,7 +143,7 @@
 </body>
 <script>
     document.getElementById('fullscreen-button').addEventListener('click', function() {
-        
+
         if (!document.fullscreenElement) {
             // Entrar en pantalla completa
             document.documentElement.requestFullscreen().catch((err) => {

@@ -23,7 +23,7 @@ use App\Http\Middleware\EleccionesMiddleware;
 use App\Http\Middleware\EnsureAsambleaOff;
 use App\Http\Middleware\isAsambleaInit;
 use App\Http\Middleware\isLogged;
-
+use App\Http\Middleware\NoEleccionesMiddleware;
 use App\Livewire\Main;
 
 use App\Livewire\Gestion\LiderSetup;
@@ -51,8 +51,8 @@ use App\Livewire\Elecciones\Registro;
 use App\Livewire\Elecciones\Candidatos;
 use App\Livewire\Elecciones\Elecciones;
 use App\Livewire\Elecciones\Programar;
-
-
+use App\Livewire\Elecciones\Quorum;
+use App\Livewire\Elecciones\Terminale;
 
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Admin')]], function () {
     Route::get('gestion/informes/Informe', [ReportController::class, 'createReport'])->name('gestion.report.docs');
@@ -79,7 +79,7 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::get('questions/show/{questionId}/{plancha?}/{plazas?}', PresentQuestion::class)->name('questions.show');
     Route::get('questions/view/{questionId}', ViewQuestion::class)->name('questions.view');
     Route::get('elecciones/programar', Programar::class)->name('elecciones.programar')->withoutMiddleware(EnsureAsambleaOn::class);
-    Route::get('elecciones/registrar', Registro::class)->name('elecciones.registrar');
+
     Route::get('elecciones/candidatos', Candidatos::class)->name('elecciones.candidatos');
 
 
@@ -104,6 +104,8 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Admin|Lider|Operario')]], function () {
     Route::get('/', Main::class)->name('home')->withoutMiddleware(EnsureAsambleaOn::class)->middleware(EleccionesMiddleware::class);
     Route::get('elecciones',  Elecciones::class)->name('home.elecciones')->withoutMiddleware(EnsureAsambleaOn::class);
+    Route::get('elecciones/quorum',  Quorum::class)->name('elecciones.quorum');
+    Route::get('elecciones/registrar', Registro::class)->name('elecciones.registrar');
     Route::get('asistencia/asignacion', Asignacion::class)->name('asistencia.asignacion')->middleware(isAsambleaEnd::class);
     Route::get('asistencia/firmas', Signs::class)->name('asistencia.signs')->middleware(isAsambleaEnd::class);
     Route::get('asistencia/firmando', Signing::class)->name('asistencia.signing')->middleware(isAsambleaEnd::class);
@@ -114,16 +116,17 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::get('quorum', QuorumFull::class)->name('quorum.show');
     Route::post('gestion/saveSign', [FileController::class, 'saveSignImg'])->name('gestion.sign.save')->middleware(isAsambleaEnd::class);
 });
-//rutas para livewire
-
-
+//rutas para terminales
+Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Terminal')]], function () {
+Route::get('/terminal', Terminale::class)->name('terminal')->withoutMiddleware(EnsureAsambleaOn::class)->middleware(NoEleccionesMiddleware::class);
+});
 //Rutas de autenticacion
 Route::get('/login', [LoginController::class, 'logView'])->name('login')->middleware(isLogged::class)->withoutMiddleware(ValidateLogin::class)->withoutMiddleware(EnsureAsambleaOn::class);
 Route::post('/login', [LoginController::class, 'authenticate'])->name('users.authenticate')->withoutMiddleware(ValidateLogin::class)->withoutMiddleware(EnsureAsambleaOn::class);;
 Route::get('/logout', [LoginController::class, 'logout'])->name('users.logout')->withoutMiddleware(EnsureAsambleaOn::class);
 
 //rutas de prueba
-// Route::get('/proofAsignacion', [Asignacion::class, 'proofAsignacion'])->name('proofAsignacion');
+Route::get('/proofAsignacion', [Asignacion::class, 'proofAsignacion'])->name('proofAsignacion');
 // Route::get('proofQuestion', [FileController::class, 'exportAllQuestions
 // Route::get('proofVotacion', [QuestionController::class, 'crearGraficasProof']);
 

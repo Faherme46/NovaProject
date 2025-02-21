@@ -44,13 +44,12 @@
                                     <img src="/storage/images/logo.png"
                                         style="width: 185px;" alt="logo">
                                 </div>
-
                                 <form action="{{ route('users.authenticate') }}" method="POST">
                                     @csrf
 
                                     <div class="form-outline mb-4">
                                         <input type="text" id="form2Example11" class="form-control"
-                                             name="username" />
+                                            name="username" />
                                         <small class="form-label text-muted" for="form2Example11">Usuario</small>
 
                                     </div>

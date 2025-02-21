@@ -32,7 +32,7 @@
                                 <div class="input-group mb-3">
                                     <span class="input-group-text">Apellido</span>
                                     <input type="text" class="form-control" id="lastname" name="lastname"
-                                        value="{{ old('lastname') }}" required>
+                                        value="{{ old('lastname') }}" >
                                 </div>
                             </div>
                         </div>
@@ -42,14 +42,14 @@
                                 <div class="input-group mb-3">
                                     <span class="input-group-text">Cédula</span>
                                     <input type="text" class="form-control" id="cedula" name="cedula"
-                                        value="{{ old('cedula') }}" required>
+                                        value="{{ old('cedula') }}" >
                                 </div>
                             </div>
                             <div class="col-5">
                                 <div class="input-group mb-3">
                                     <span class="input-group-text">Teléfono</span>
                                     <input type="text" class="form-control" id="telefono" name="telefono"
-                                        value="{{ old('telefono') }}" required>
+                                        value="{{ old('telefono') }}" >
                                 </div>
 
                             </div>
@@ -81,14 +81,13 @@
 
                         <div class="input-group ms-3 w-30 ">
                             <span class="input-group-text bg-primary text-light">Rol</span>
-                            <select name="role" id="role" class="form-control" wire:click.prevent=''>
-
+                            <select name="role" id="role" class="form-control" >
+                                <option value="Terminal" selected>Terminal</option>
                                 <option value="Operario" selected>Operario</option>
                                 <option value="Lider">Lider</option>
                                 @if ($isAdmin)
                                     <option value="Admin">Administrador</option>
                                 @endif
-
                             </select>
                         </div>
                         <button type="submit"

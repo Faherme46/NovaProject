@@ -7,12 +7,15 @@ use App\Models\Session;
 use App\Models\Predio;
 use App\Models\Persona;
 use App\Models\Control;
+use App\Models\Eleccion;
 use App\Models\PrediosPersona;
 use App\Models\Question;
 use App\Models\QuestionType;
 use App\Models\Result;
 use App\Models\Signature;
+use App\Models\Terminal;
 use App\Models\Torre;
+use App\Models\TorresCandidato;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 
@@ -44,15 +47,21 @@ class SessionController extends Controller
         $backupController=new BackupController();
         $response=$backupController->downloadBackup();
 
+<<<<<<< Updated upstream
         if($response!=200){
             return redirect()->route(route: 'gestion.report')->with('error', 'Error exportando la base de datos: '.$response);
+=======
+        if($response!=200 && $response!=[]){
+            dd($response);
+            return redirect()->route('home')->with('error', $response);
+>>>>>>> Stashed changes
         };
 
         $sessionData = Auth::user();
 
-
-        session()->flush();
         $this->deleteAsambleaFiles();
+        session()->flush();
+
         //se limpiaran las tablas
         $this->destroyOnError();
 
@@ -73,6 +82,8 @@ class SessionController extends Controller
         Question::truncate();
         Signature::truncate();
         Torre::truncate();
+        TorresCandidato::truncate();
+        Terminal::truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
     public function deleteAsambleaFiles()
