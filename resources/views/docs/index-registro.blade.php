@@ -57,7 +57,7 @@
     <footer class="bg-pr">
         <hr class="w-25 mb-1">
         <span style="font-size: 8pt;">
-            Los datos utilizados por TECNOVIS para la elaboración de los anexos relacionados en este informe (incluye los cálculos para las votaciones), y que comprende la lista de delegados, tiene como base la información suministrada por la Administración de {{$asamblea->folder}} a TECNOVIS, para el desarrollo de esta Asamblea.
+            Los datos utilizados por TECNOVIS para la elaboración de los anexos relacionados en este informe (incluye los cálculos para las votaciones), y que comprende la lista de delegados, tiene como base la información suministrada por la Administración de {{$asambleaR->folder}} a TECNOVIS, para el desarrollo de esta Asamblea.
             <hr>
         </span>
     </footer>
@@ -78,6 +78,7 @@
             <br>
             <h5>Información General</h5>
             <br>
+            
             <table class="table table-general">
                 <tr>
                     <th class="bb-white text-light bold bg-darkblue text-end" colspan="2">Cliente:</th>

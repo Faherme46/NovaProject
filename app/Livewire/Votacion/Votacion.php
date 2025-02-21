@@ -299,9 +299,9 @@ class Votacion extends Component
         } elseif ($this->plazas < 0 || !is_int($this->plazas)) {
             $this->addError('error', 'El numero de plaznas no es valido');
         }
-
-        $quorum = Control::whereNot('state', 4)->sum('sum_coef');
-        if ($quorum <= 0) {
+        $controlesRegistrados=Control::whereNot('state', 4)->get();
+        $quorum = $controlesRegistrados->sum('sum_coef');
+        if ($controlesRegistrados->isEmpty()) {
             $this->addError('error', 'No se han registrado asistentes');
             $error = 1;
         }

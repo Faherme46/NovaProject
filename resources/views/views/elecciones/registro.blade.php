@@ -70,86 +70,8 @@
 
                     </div>
 
-<<<<<<< Updated upstream
 
-                    <div class="mb-3 ">
-                        <input name="nombre" id="txtName" rows="1" cols="12" class="form-control"
-                            value="{{ $asistente ? $asistente->nombre : '' }}" disabled placeholder="Nombre"></input>
 
-                    </div>
-                    <div class="mb-3">
-                        <input name="nombre" id="txtLastName" rows="1" cols="12" class="form-control"
-                            value="{{ $asistente ? $asistente->apellido : '' }}" disabled placeholder="Apellido">
-                    </div>
-
-                </div>
-
-            </div>
-
-            <!-- Mostrar el nombre de la persona encontrada aquí -->
-        </div>
-
-        {{-- poderdantes --}}
-        <div class="col-8">
-            @if (session('errorPropietarios'))
-                <div class="alert alert-danger position-absolute alert-dismissible z-3 " role="alert">
-                    {{ session('errorPropietarios') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
-            <div class="card ">
-                <div class="card-header mb-0 d-flex align-items-center justify-content-between">
-                    <h5 class="card-title  mb-0 me-5">Poderdantes</h5>
-                    <div class="d-flex align-items-baseline ">
-
-                        <input placeholder="Cédula" onkeypress="return onlyNumbers(event)" type="text"
-                            name="cedulaPropietario" id="cc" class="form-control"
-                            wire:keydown.enter='addPoderdante' aria-describedby="helpId" wire:model='ccPoderdante'
-                            onclick="this.select()" />
-                        <button type="submit" class="btn ms-1 btn-primary" wire:click='addPoderdante'>
-                            <i class='bi bi-arrow-right-circle-fill'></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="card-body table-responsive table-fixed-header pt-0 table-23 ">
-
-                    <table class="table ">
-                        <thead>
-                            <tr>
-                                <th>Nombre</th>
-                                <th>Cédula</th>
-                                <th>
-                                    <a class="btn p-0" wire:click='dropAllPoderdantes'
-                                    data-bs-toggle="tooltip" data-bs-placement="top"
-                                    data-bs-custom-class="custom-tooltip"
-                                    data-bs-title="Quitar todos los poderdantes">
-                                        <i class='bi bi-x-square-fill'></i>
-                                    </a>
-                                </th>
-
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if ($poderdantes ? !$poderdantes->isEmpty() : false)
-                                @foreach ($poderdantes as $p)
-                                    <tr>
-                                        <td>{{ $p->nombre }} {{ $p->apellido }} </td>
-                                        <td>{{ $p->id }}</td>
-                                        <td>
-                                            <button class="btn p-0" data-bs-toggle="tooltip" data-bs-placement="top"
-                                            data-bs-custom-class="custom-tooltip"
-                                            data-bs-title="Quitar poderdante"
-                                                wire:click="dropPoderdante({{ $p->id }},{{ $p->predios }})">
-                                                <i class='bi bi-x-square-fill'></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @endif
-                        </tbody>
-                    </table>
-=======
->>>>>>> Stashed changes
                 </div>
             </div>
             <div class="row px-2">

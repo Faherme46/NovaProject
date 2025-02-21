@@ -12,8 +12,8 @@
         @endif
         @if ($distincts['descriptor1'][0] != '' && $distincts['numeral1'][0] != '')
             <div class="col-2">
-                <select wire:model.live='descriptor1' wire:keypress='search' class="form-control px-1" name="descriptor1"
-                    id="">
+                <select wire:model.live='descriptor1' wire:keypress='search' class="form-control px-1"
+                    name="descriptor1" id="">
                     @foreach ($distincts['descriptor1'] as $item)
                         <option value="{{ $item }}">{{ $item }}</option>
                     @endforeach
@@ -39,7 +39,7 @@
         </div>
         <div class="col-2">
             <input wire:model.live='numeral2' type="text" wire:keypress='search' class="form-control" placeholder="#"
-                 maxlength="10" onclick="this.select()">
+                maxlength="10" onclick="this.select()">
         </div>
         <div class="col-1 ms-auto">
             <button wire:click='clean' class=" btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top"
@@ -69,20 +69,20 @@
                 @forelse ($prediosAll as $predio)
                     @if ($predio->control)
                         <tr class="table-active">
-                            <td>
-
+                            <td class="text-center align-middle">
+                                {{ $predio->control->id }}
                             </td>
                         @else
                         <tr>
-                            <td>
-                                <button wire:click="dispatchPredio({{ $predio}})" class="btn pt-0 pb-0 mb-0">
+                            <td class="text-center align-middle">
+                                <button wire:click="dispatchPredio({{ $predio }})" class="btn pt-0 pb-0 mb-0">
                                     <i
                                         class='bi {{ $consulta ? 'bi-question-circle-fill' : 'bi-plus-circle-fill' }}'></i>
                                 </button>
                             </td>
                     @endif
                     <td class="align-items-center ">
-                        <span class="btn py-0 h-100 d-flex" wire:click="dispatchPredio({{ $predio}})"
+                        <span class="btn py-0 h-100 d-flex" wire:click="dispatchPredio({{ $predio }})"
                             data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip"
                             data-bs-title="Añadir predio">
                             {{ $predio->getFullName() }}

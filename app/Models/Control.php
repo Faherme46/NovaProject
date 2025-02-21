@@ -57,8 +57,9 @@ class Control extends Model
     {
         $this->state = $value;
         if ($value == 5) {
-            $this->h_recibe = Carbon::now(new DateTimeZone('America/Bogota'));
+            $this->h_recibe = Carbon::now(new DateTimeZone('America/Bogota'))->format('h:m');
         }
+        
         $this->save();
     }
 

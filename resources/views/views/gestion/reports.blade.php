@@ -38,8 +38,11 @@
                                     <span class="input-group-text">
                                         Tipo:
                                     </span>
-                                    <input type="text" class="form-control fs-5 " value="{{ $asambleaa->tipo }}"
-                                        name="tipo">
+                                    <select name="tipo" id="" class="form-control fs-5" required>
+                                        <option value="Presencial" selected>Presencial</option>
+                                        <option value="Virtual">Virtual</option>
+                                        <option value="Mixta">Mixta</option>
+                                    </select>
                                     <span class="input-group-text">
                                         Controles:
                                     </span>

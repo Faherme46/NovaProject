@@ -84,61 +84,62 @@
 
 
 
-
-    <div class="modal fade" id="modalImport" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
-        role="dialog" >
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title fs-5 " id="modalTitleId">
-                        ¿Importar los votos y generar la gráfica para la pregunta {{ $question->id }} ?
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        Cerrar
-                    </button>
-                    <form action="{{ route('question.import') }}" method="post">
-                        @csrf
-                        <input type="hidden" name="idQuestion" value="{{ $question->id }}">
-                        <button type="submit" class="btn btn-primary">Importar</button>
-                    </form>
+    @if ($question)
+        <div class="modal fade" id="modalImport" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+            role="dialog">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title fs-5 " id="modalTitleId">
+                            ¿Importar los votos y generar la gráfica para la pregunta {{ $question->id }} ?
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Cerrar
+                        </button>
+                        <form action="{{ route('question.import') }}" method="post">
+                            @csrf
+                            <input type="hidden" name="idQuestion" value="{{ $question->id }}">
+                            <button type="submit" class="btn btn-primary">Importar</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="modal fade" id="modalChart" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
-    role="dialog" >
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title fs-5 " id="modalTitleId">
-                    Generar la gráfica con los valores de resultado para la pregunta {{ $question->id }}
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal fade" id="modalChart" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+            role="dialog">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title fs-5 " id="modalTitleId">
+                            Generar la gráfica con los valores de resultado para la pregunta {{ $question->id }}
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Cerrar
+                        </button>
+                        <form action="{{ route('question.createChart') }}" method="post">
+                            @csrf
+                            <input type="hidden" name="idQuestion" value="{{ $question->id }}">
+                            <button type="submit" class="btn btn-info">Continuar</button>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    Cerrar
-                </button>
-                <form action="{{ route('question.createChart') }}" method="post">
-                    @csrf
-                    <input type="hidden" name="idQuestion" value="{{ $question->id }}">
-                    <button type="submit" class="btn btn-info">Continuar</button>
-                </form>
-            </div>
-        </div>
-    </div>
+    @endif
 </div>
 
-    <!-- Optional: Place to the bottom of scripts -->
-    <script>
-        const myModal = new bootstrap.Modal(
-            document.getElementById("modalId"),
-            options,
-        );
-    </script>
+<!-- Optional: Place to the bottom of scripts -->
+<script>
+    const myModal = new bootstrap.Modal(
+        document.getElementById("modalId"),
+        options,
+    );
+</script>
 
 </div>

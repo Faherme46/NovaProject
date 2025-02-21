@@ -42,7 +42,7 @@ class Registrar extends Component
     public $selectAll = false;
 
     public $asistenteControls;
-    public $controlH;
+    public $controlH=null;
 
 
     #asignacion
@@ -195,12 +195,11 @@ class Registrar extends Component
         foreach ($predios as $predio) {
             if (!array_key_exists($predio->id, $this->prediosAvailable) && !$predio->control) {
                 if (!$predio->control) {
-                    $this->prediosAvailable[$predio->id] = $predio;
+                    $this->prediosAvailable[$predio->id] = $predio->toArray();
                     $this->predioSelected[] = $predio->id;
                 }
             }
         }
-        $this->setSumCoef();
     }
 
 
@@ -227,7 +226,6 @@ class Registrar extends Component
         $this->predioSelected = array_diff($this->predioSelected, $ids);
         $this->poderdantesIDs = array_diff($this->poderdantesIDs, [$poderdanteId]);
         $this->poderdantes = Persona::find(($this->poderdantesIDs));
-        $this->setSumCoef();
     }
 
 
@@ -246,17 +244,7 @@ class Registrar extends Component
     }
 
 
-    public function setSumCoef()
-    {
-        $suma = 0;
-        foreach ($this->prediosAvailable as $key => $predio) {
-            if (in_array($key, $this->predioSelected)) {
-                $suma = $suma + $predio->coeficiente;
-            }
-        }
 
-        $this->sumCoef = $suma;
-    }
 
 
     public function asignar($option)
@@ -275,16 +263,15 @@ class Registrar extends Component
         session(['controlTurn' => strval($this->controlId + 1)]);
         //control Uso
 
-        $prediosToAsign = [];
-        foreach ($this->predioSelected as $value) {
-            $prediosToAsign[] = $this->prediosAvailable[$value];
-        }
+        $prediosToAsign = array_map(fn($value) => $this->prediosAvailable[$value], $this->predioSelected);
+        $prediosToAsign = array_intersect_key($this->prediosAvailable, array_flip($this->predioSelected));
+
         try {
 
             if ($option) {
 
                 $controlH = $this->asistenteControls[$this->controlH];
-                $controlH->attachPredios($prediosToAsign);
+                Predio::whereIn('id',array_keys($prediosToAsign))->update(['control_id'=>$controlH->id]);
                 $controlH->setCoef();
                 \Illuminate\Support\Facades\Log::channel('custom')->info('Agrega predios al control {control}',['control' =>$control->id,'predios'=>array_values($this->predioSelected),'persona'=>$this->cedula]);
             } else {
@@ -294,10 +281,9 @@ class Registrar extends Component
                     return session()->flash('warning', 'El control ya esta en uso');
                 };
                 $control->cc_asistente = $this->cedula;
-                $control->attachPredios($prediosToAsign);
                 $control->setCoef();
                 $control->h_entrega = Carbon::now(new DateTimeZone('America/Bogota'))->second(0)->format('H:i');
-
+                Predio::whereIn('id',array_keys($prediosToAsign))->update(['control_id'=>$control->id]);
                 $control->state = 1;
                 $control->save();
                 $control->persona()->update([
@@ -333,7 +319,7 @@ class Registrar extends Component
     }
 
     #[On('add-predio')]
-    public function addPredioToList($predio,)
+    public function addPredioToList($predio)
     {
         if(!$this->cedula){
             return $this->addError('error','Primero debe ingresar el asistente');

@@ -7,10 +7,8 @@ use App\Models\Session;
 use App\Models\Predio;
 use App\Models\Persona;
 use App\Models\Control;
-use App\Models\Eleccion;
 use App\Models\PrediosPersona;
 use App\Models\Question;
-use App\Models\QuestionType;
 use App\Models\Result;
 use App\Models\Signature;
 use App\Models\Terminal;
@@ -76,9 +74,9 @@ class SessionController extends Controller
         PrediosPersona::truncate();
         Question::truncate();
         Signature::truncate();
-        Torre::truncate();
-        TorresCandidato::truncate();
-        Terminal::truncate();
+        // Torre::truncate
+        // TorresCandidato::truncate();
+        // Terminal::truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
     public function deleteAsambleaFiles()
