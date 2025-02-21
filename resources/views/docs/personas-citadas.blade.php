@@ -111,7 +111,7 @@
                         <td>{{ $predio->numeral2 }}</td>
                         <td>{{ $predio->coeficiente }}</td>
 
-                        @if ($predio->apoderado || ($predio->control&&$predio->control->persona&&!in_array($predio->control->persona->id,$predio->personas->pluck('id')->toArray())))
+                        @if (($predio->control&&$predio->control->persona&&!in_array($predio->control->persona->id,$predio->personas->pluck('id')->toArray())))
                             <td></td>
                             <td>X</td>
                         @else
