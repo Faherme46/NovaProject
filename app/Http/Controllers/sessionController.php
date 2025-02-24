@@ -147,6 +147,7 @@ class SessionController extends Controller
 
     public function sessionConnect(Request $request)
     {
+
         $ip=$request->ip;
 
         $request->validate([
@@ -164,5 +165,16 @@ class SessionController extends Controller
 
             return back()->with('warning','No se ha encontrado un servicio mysql para la ip destinada');
         }
+    }
+
+    public function sessionDisconnect(){
+
+        if(Storage::exists('db_host.txt')){
+            Storage::delete('db_host.txt');
+        return back()->with('success','Se ha realizado la desconexión');
+        }else{
+            return back()->with('warning','No hay conexiones activas');
+        };
+
     }
 }

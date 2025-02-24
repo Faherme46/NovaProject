@@ -8,7 +8,7 @@ use App\Models\Predio;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Storage;
 
 class Main extends Component
 {
@@ -20,7 +20,7 @@ class Main extends Component
     public $desc=true;
 
     public $panels;
-
+    public $host;
 
     public function mount()
     {
@@ -29,7 +29,8 @@ class Main extends Component
 
         $this->predios = Predio::all();
         $this->personas = Persona::all();
-
+        $this->host=Storage::get('db_host.txt');
+        
         $this->role=Auth::user()->getRoleNames()[0];
 
         $this->setPanels();

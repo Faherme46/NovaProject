@@ -121,7 +121,8 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::get('/terminal', Terminale::class)->name('terminal')->withoutMiddleware(EnsureAsambleaOn::class)->middleware(NoEleccionesMiddleware::class);
 });
 
-Route::post('/session/connect',[SessionController::class,'sessionConnect'])->name('session.connect  ')->withoutMiddleware(ValidateLogin::class)->withoutMiddleware(EnsureAsambleaOn::class);
+Route::post('/session/connect',[SessionController::class,'sessionConnect'])->name('session.connect')->withoutMiddleware(ValidateLogin::class)->withoutMiddleware(EnsureAsambleaOn::class);
+Route::post('/session/disconnect',[SessionController::class,'sessionDisconnect'])->name('session.disconnect')->withoutMiddleware(ValidateLogin::class)->withoutMiddleware(EnsureAsambleaOn::class);
 //Rutas de autenticacion
 Route::get('/login', [LoginController::class, 'logView'])->name('login')->middleware(isLogged::class)->withoutMiddleware(ValidateLogin::class)->withoutMiddleware(EnsureAsambleaOn::class);
 Route::post('/login', [LoginController::class, 'authenticate'])->name('users.authenticate')->withoutMiddleware(ValidateLogin::class)->withoutMiddleware(EnsureAsambleaOn::class);

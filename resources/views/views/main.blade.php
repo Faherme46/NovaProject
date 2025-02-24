@@ -1,7 +1,9 @@
 <div>
     <x-alerts />
     <div class="row justify-content-center px-5">
-
+        @if ($host)
+            <h1>Conectado al servidor: {{ $host }}</h1>
+        @endif
         @foreach ($panels as $panel)
             @if ($panel['visible'])
                 <button class="btn p-0 mx-1 my-1 " style="width: 300px;" {{ $panel['directives'] }}
@@ -325,26 +327,44 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="connectionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="connectionModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog  modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Conectarse a una sesión</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{route('session.connect  ')}}" method="POST">
-                    @csrf
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="ip">Por favor digite el número de la ip del servidor:</label>
-                            <input type="text" class="form-control" placeholder="IP" id="ip" name="ip" >
+                @if ($host)
+                    <form action="{{ route('session.disconnect') }}" method="POST">
+                        @csrf
+                        <div class="modal-body d-flex align-items-center justify-content-between">
+
+                            <span for="ip">Desconectarse del servidor</span>
+                            <button type="submit" class="btn btn-danger"
+                                data-bs-dismiss="modal">Desconectar</button>
+
+
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-success" data-bs-dismiss="modal">Conectar</button>
-                    </div>
-                </form>
+                    </form>
+                @else
+                    <form action="{{ route('session.connect') }}" method="POST">
+                        @csrf
+                        <div class="modal-body d-flex align-items-center justify-content-between">
+                            <div class="form-group">
+                                <label for="ip">Por favor digite la ip del servidor:</label>
+                                <input type="text" class="form-control" placeholder="IP" id="ip"
+                                    name="ip">
+                            </div>
+                            <div class=" ms-2">
+                                <button type="submit" class="btn btn-success"
+                                    data-bs-dismiss="modal">Conectar</button>
+                            </div>
+
+                        </div>
+                    </form>
+                @endif
+
             </div>
         </div>
     </div>
