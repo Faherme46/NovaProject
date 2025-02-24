@@ -12,7 +12,7 @@
                 <div class="card-body ">
                     @if (!$inAsamblea)
 
-                        <form id="asamblea-form" action="{{ route('elecciones.store') }}" method="POST">
+                        <form id="asamblea-form" action="{{ route('asambleas.store') }}" method="POST">
                             @csrf
                             <div class="form-group col-12">
                                 <label for="folder">Cliente</label>
@@ -105,7 +105,9 @@
 
                             </div>
 
-
+                            <div class="row mt-2">
+                                <button type="submit" class="btn btn-success"> Guardar</button>
+                            </div>
                             <script>
                                 // Obtener la fecha y hora actual
                                 var today = new Date();
