@@ -39,8 +39,9 @@ def connectDB():
             password="",
             database="novaDB",
             connect_timeout=5  # Tiempo límite para la conexión
-        )
-        print('Servicio mysql no encontrado en la ip, conectandose al localhost')
+            )
+
+            print('Servicio mysql no encontrado en la ip, conectandose al localhost')
     except Exception as e:
         conn = mysql.connector.connect(
             host="localhost",

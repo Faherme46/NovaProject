@@ -174,8 +174,7 @@
                             <th>Predio</th>
                             <th>Coef.</th>
                             <th>
-                                <input class="form-check-input" type="checkbox" wire:model='selectAll'
-                                    wire:click="setSumCoef" />
+                                <input class="form-check-input" type="checkbox" wire:model='selectAll'/>
                             </th>
                         </thead>
                         <tbody>
