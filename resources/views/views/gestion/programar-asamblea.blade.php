@@ -9,8 +9,9 @@
                 <div class="card-header">
                     <h2 class="card-title mb-0">Programar Elecciones</h2>
                 </div>
-                @if (!$inAsamblea)
-                    <div class="card-body ">
+                <div class="card-body ">
+                    @if (!$inAsamblea)
+
                         <form id="asamblea-form" action="{{ route('elecciones.store') }}" method="POST">
                             @csrf
                             <div class="form-group col-12">
@@ -119,150 +120,152 @@
                             </script>
 
                         </form>
-                    </div>
-            </div>
-            @endif
-        </div>
-    </div>
 
-    <div class="col-8">
-        <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h2 class="card-title mb-0">Archivo de personas</h2>
 
-                <button type="button" class="btn btn-primary fs-4 py-1" wire:click='setInPredios'>
-                    @if ($inPredios)
-                        Personas
-                    @else
-                        Predios
                     @endif
-                </button>
+                </div>
             </div>
-            <div class="card-body table-responsive px-0 table-fixed-header table-70">
-                @if ($inPredios)
-                    <table class="table table-bordered table-striped   mb-3">
-                        <thead>
-                            <tr>
-                                <th class="fs-5">ID</th>
-                                <th class="fs-5">Descriptor </th>
-                                <th class="fs-5">Coef...</th>
-                                <th class="fs-5">Vota</th>
-                                @if ($asamblea['registro'])
-                                    <th class="fs-5">Propietarios</th>
-                                    <th class="fs-5">Cedula</th>
-                                    <th class="fs-5">Apoderado</th>
-                                @endif
+        </div>
 
-                            </tr>
-                        </thead>
-                        <tbody>
 
-                            @forelse ($predios as $p)
+        <div class="col-8">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h2 class="card-title mb-0">Archivo de personas</h2>
+
+                    <button type="button" class="btn btn-primary fs-4 py-1" wire:click='setInPredios'>
+                        @if ($inPredios)
+                            Personas
+                        @else
+                            Predios
+                        @endif
+                    </button>
+                </div>
+                <div class="card-body table-responsive px-0 table-fixed-header table-70">
+                    @if ($inPredios)
+                        <table class="table table-bordered table-striped   mb-3">
+                            <thead>
                                 <tr>
-                                    <td>{{ $p->id }}</td>
-                                    <td class="align-middle">{{ $p->getFullName() }}</td>
-                                    <td>{{ $p->coeficiente }}</td>
-                                    <td>{{ $p->vota ? 'Si' : 'No' }}</td>
+                                    <th class="fs-5">ID</th>
+                                    <th class="fs-5">Descriptor </th>
+                                    <th class="fs-5">Coef...</th>
+                                    <th class="fs-5">Vota</th>
                                     @if ($asamblea['registro'])
-                                        <td>
-                                            @foreach ($p->personas as $persona)
-                                                {{ $persona->nombre }} {{ $persona->apellido }}
-                                                <br>
-                                            @endforeach
-                                        </td>
-                                        <td>
-                                            @foreach ($p->personas as $persona)
-                                                {{ $persona->id }}
-                                                <br>
-                                            @endforeach
-                                        </td>
-                                        <td>
-                                            {{ $p->cc_apoderado }}
-                                        </td>
+                                        <th class="fs-5">Propietarios</th>
+                                        <th class="fs-5">Cedula</th>
+                                        <th class="fs-5">Apoderado</th>
                                     @endif
 
                                 </tr>
-                            @empty
+                            </thead>
+                            <tbody>
+
+                                @forelse ($predios as $p)
+                                    <tr>
+                                        <td>{{ $p->id }}</td>
+                                        <td class="align-middle">{{ $p->getFullName() }}</td>
+                                        <td>{{ $p->coeficiente }}</td>
+                                        <td>{{ $p->vota ? 'Si' : 'No' }}</td>
+                                        @if ($asamblea['registro'])
+                                            <td>
+                                                @foreach ($p->personas as $persona)
+                                                    {{ $persona->nombre }} {{ $persona->apellido }}
+                                                    <br>
+                                                @endforeach
+                                            </td>
+                                            <td>
+                                                @foreach ($p->personas as $persona)
+                                                    {{ $persona->id }}
+                                                    <br>
+                                                @endforeach
+                                            </td>
+                                            <td>
+                                                {{ $p->cc_apoderado }}
+                                            </td>
+                                        @endif
+
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="7">No hay entradas</td>
+                                    </tr>
+                                @endforelse
+
+                            </tbody>
+                        </table>
+                    @else
+                        <table class="table table-bordered table-striped  ">
+                            <thead>
                                 <tr>
-                                    <td colspan="7">No hay entradas</td>
+                                    <th>
+                                        <button type="button" class="btn btn-black  p-0 fs-5"
+                                            wire:click='orderPersonasByName'>
+                                            Nombre
+                                        </button>
+                                    </th>
+                                    <th>
+                                        <button type="button" class="btn btn-black  p-0 fs-5"
+                                            wire:click='orderPersonasByCc'>
+                                            Cedula
+                                        </button>
+                                    </th>
+                                    <th class="fs-5">Predios en propiedad</th>
+                                    <th class="fs-5">Predios en poder</th>
                                 </tr>
-                            @endforelse
+                            </thead>
+                            <tbody>
 
-                        </tbody>
-                    </table>
-                @else
-                    <table class="table table-bordered table-striped  ">
-                        <thead>
-                            <tr>
-                                <th>
-                                    <button type="button" class="btn btn-black  p-0 fs-5"
-                                        wire:click='orderPersonasByName'>
-                                        Nombre
-                                    </button>
-                                </th>
-                                <th>
-                                    <button type="button" class="btn btn-black  p-0 fs-5"
-                                        wire:click='orderPersonasByCc'>
-                                        Cedula
-                                    </button>
-                                </th>
-                                <th class="fs-5">Predios en propiedad</th>
-                                <th class="fs-5">Predios en poder</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                            @forelse ($personas as $persona)
-                                <tr>
+                                @forelse ($personas as $persona)
+                                    <tr>
 
 
-                                    <td class="align-middle">{{ $persona->fullName() }}</td>
-                                    <td class="align-middle">{{ $persona->id }}</td>
-                                    <td>
-                                        @forelse ($persona->predios as $p)
-                                            {{ $p->getFullName() }}
-                                            <br>
-                                        @empty
-                                            -
-                                        @endforelse
-                                    </td>
-                                    <td>
-                                        @forelse ($persona->prediosEnPoder as $p)
-                                            {{ $p->getFullName() }}
-                                            <br>
-                                        @empty
-                                            -
-                                        @endforelse
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="7">No hay entradas</td>
-                                </tr>
-                            @endforelse
+                                        <td class="align-middle">{{ $persona->fullName() }}</td>
+                                        <td class="align-middle">{{ $persona->id }}</td>
+                                        <td>
+                                            @forelse ($persona->predios as $p)
+                                                {{ $p->getFullName() }}
+                                                <br>
+                                            @empty
+                                                -
+                                            @endforelse
+                                        </td>
+                                        <td>
+                                            @forelse ($persona->prediosEnPoder as $p)
+                                                {{ $p->getFullName() }}
+                                                <br>
+                                            @empty
+                                                -
+                                            @endforelse
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="7">No hay entradas</td>
+                                    </tr>
+                                @endforelse
 
-                        </tbody>
-                    </table>
-                @endif
-
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<div class="modal fade" id="spinnerModal" tabindex="-1">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
-        <div class="modal-content">
-
-            <div class="modal-body d-flex justify-content-center align-items-center">
-                <div class="spinner-grow text-primary" style="width: 4rem; height: 4rem;" role="status">
+                            </tbody>
+                        </table>
+                    @endif
 
                 </div>
-                <span class="ms-3 " style="font-size: 5rem">Cargando ...</span>
             </div>
+        </div>
 
+    </div>
+
+    <div class="modal fade" id="spinnerModal" tabindex="-1">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-body d-flex justify-content-center align-items-center">
+                    <div class="spinner-grow text-primary" style="width: 4rem; height: 4rem;" role="status">
+
+                    </div>
+                    <span class="ms-3 " style="font-size: 5rem">Cargando ...</span>
+                </div>
+
+            </div>
         </div>
     </div>
-</div>
 </div>
