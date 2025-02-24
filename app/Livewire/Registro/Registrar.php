@@ -281,9 +281,10 @@ class Registrar extends Component
                     return session()->flash('warning', 'El control ya esta en uso');
                 };
                 $control->cc_asistente = $this->cedula;
-                $control->setCoef();
+
                 $control->h_entrega = Carbon::now(new DateTimeZone('America/Bogota'))->second(0)->format('H:i');
                 Predio::whereIn('id',array_keys($prediosToAsign))->update(['control_id'=>$control->id]);
+                $control->setCoef();
                 $control->state = 1;
                 $control->save();
                 $control->persona()->update([

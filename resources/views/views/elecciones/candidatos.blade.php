@@ -163,11 +163,7 @@
             <div class="card">
                 <div class="card-header">
                     <h5 class="card-title mb-0">
-<<<<<<< Updated upstream
-                        Personas de la Torre
-=======
-                        Personas de {{$t->first}} {{$torre->name}}
->>>>>>> Stashed changes
+                        Personas de la Torre {{$torre->name}}
                     </h5>
                 </div>
                 <div class="card-body table-responsive table-fixed-header p-0 table-h100">

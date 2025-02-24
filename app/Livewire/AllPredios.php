@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Livewire;
+
 use Livewire\Attributes\On;
 
 use Livewire\Component;
@@ -10,36 +11,35 @@ use App\Models\Control;
 class AllPredios extends Component
 {
     public $distincts;
-    public $searchId = '';
-    public $prediosAll;
+    public $prediosAll = [];
+    public $search=[
+        'descriptor1' => '',
+        'numeral1' => '',
+        'descriptor2' => '',
+        'numeral2' => '',
+    ];
 
-    public $descriptor1 = '';
-    public $descriptor2 = '';
-    public $numeral1 = '';
-    public $numeral2 = '';
-
-    public $Predio;
-    public $Persona;
-
-    public $Control;
 
     public $consulta;
     public function mount()
     {
 
-        $url=url()->current();
-        if ($url=='http://nova.local/consulta'){
-            $this->consulta=true;
+        $url = url()->current();
+        if ($url == 'http://nova.local/consulta') {
+            $this->consulta = true;
         }
         $this->distincts = [
             'descriptor1' => Predio::distinct()->pluck('descriptor1')->toArray(),
             'numeral1' => Predio::distinct()->pluck('numeral1')->toArray(),
             'descriptor2' => Predio::distinct()->pluck('descriptor2')->toArray(),
-            'numeral2' => Predio::distinct()->pluck('numeral2')->toArray(),
         ];
 
-        
-        $this->prediosAll = Predio::all();
+        $this->search = [
+            'descriptor1' => $this->distincts['descriptor1'][0],
+            'numeral1' => $this->distincts['numeral1'][0],
+            'descriptor2' => $this->distincts['descriptor2'][0],
+        ];
+        $this->search();
     }
 
     public function clean()
@@ -62,46 +62,36 @@ class AllPredios extends Component
     }
 
 
-    public function search(){
-        $query = Predio::query();
-
-
-        // Aplica los filtros condicionalmente
-        if ($this->searchId) {
-            $query->where('cc_propietario', 'like', '%' . $this->searchId . '%');
-        }
-        if ($this->descriptor1) {
-            $query->where('descriptor1', 'like', '%' . $this->descriptor1 . '%');
-        }
-        if ($this->descriptor2) {
-            $query->where('descriptor2', 'like', '%' . $this->descriptor2 . '%');
-        }
-        if ($this->numeral1) {
-
-            $query->where('numeral1', 'like', '%' . $this->numeral1 . '%');
-        }
-        if ($this->numeral2) {
-            $query->where('numeral2', 'like', '%' . $this->numeral2 . '%');
-        }
-
+    public function search()
+    {
+        
         // Ejecuta la consulta y obtiene los resultados
-        $this->prediosAll = $query->get();
+        $this->prediosAll = Predio::where('descriptor1',$this->search['descriptor1'])
+                            ->where('numeral1',$this->search['numeral1'])
+                            ->where('descriptor2',$this->search['descriptor2'])->get()->toArray();
     }
-    public function dispatchPredio($predio){
 
-        $this->dispatch('add-predio', predio:$predio);
-
+    public function updatedSearch($value){
+        $this->search();
     }
-    public function dispatchPersona($id){
+    public function dispatchPredio($predio)
+    {
+
+        $this->dispatch('add-predio', predio: $predio);
+    }
+    public function dispatchPersona($id)
+    {
 
         $this->dispatch('search-persona', personaId: $id);
     }
-    public function dispatchPoderdante($id){
+    public function dispatchPoderdante($id)
+    {
 
-        $this->dispatch('add-poderdante', poderdanteId: $id,personaId:$id);
+        $this->dispatch('add-poderdante', poderdanteId: $id, personaId: $id);
     }
 
-    public function dispatchControl($id){
+    public function dispatchControl($id)
+    {
         $this->dispatch('set-control', controlId: $id);
     }
 
@@ -129,26 +119,28 @@ class AllPredios extends Component
     //     }
 
     // }
-    #[On('find-control')]
-    public function showControl($id){
-        if(!$id){
-            return;
-        }
-        $this->Control=Control::find($id);
-        if($this->Control){
-            $this->dispatch('showModalControl');
-        }else{
-            $this->addError('error','No fue encontrado');
-        }
-    }
+    // #[On('find-control')]
+    // public function showControl($id)
+    // {
+    //     if (!$id) {
+    //         return;
+    //     }
+    //     $this->Control = Control::find($id);
+    //     if ($this->Control) {
+    //         $this->dispatch('showModalControl');
+    //     } else {
+    //         $this->addError('error', 'No fue encontrado');
+    //     }
+    // }
 
     #[On('refresh-predios')]
-    public function refreshPredios(){
+    public function refreshPredios()
+    {
         $this->dispatch('$refresh');
     }
 
-    public function Proof(){
+    public function Proof()
+    {
         dd($this->prediosAll);
     }
-
 }

@@ -1,5 +1,5 @@
 <div>
-    <x-alerts/>
+    <x-alerts />
     <div class="row justify-content-center px-5">
 
         @foreach ($panels as $panel)
@@ -104,7 +104,7 @@
                                             if (!$('#registro1').is(':checked')) {
                                                 $('#signature').prop('checked', false);
                                                 $('#signature').prop('disabled', true);
-                                            }else{
+                                            } else {
                                                 $('#signature').prop('disabled', false);
                                             }
                                         }
@@ -122,7 +122,7 @@
                             <div class="col-6 ps-2 d-flex align-items-center justify-content-end">
                                 <div class="form-check pt-1">
                                     <input class="form-check-input" type="checkbox" value="1" name="signature"
-                                        id="signature" >
+                                        id="signature">
                                     <label class="form-check-label" for="signature">
                                         Firma electronica
                                     </label>
@@ -147,7 +147,7 @@
                     </div>
                     <div class="modal-footer justify-content-end">
                         <button type="submit" class="btn btn-success w-25" id="submit-button"
-                        data-bs-toggle="modal" data-bs-target="#spinnerModal">Crear</button>
+                            data-bs-toggle="modal" data-bs-target="#spinnerModal">Crear</button>
                     </div>
                 </form>
             </div>
@@ -325,6 +325,31 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="connectionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Conectarse a una sesión</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{route('session.connect  ')}}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="ip">Por favor digite el número de la ip del servidor:</label>
+                            <input type="text" class="form-control" placeholder="IP" id="ip" name="ip" >
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-success" data-bs-dismiss="modal">Conectar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
 </div>
 <script>
     document.addEventListener('livewire:init', () => {

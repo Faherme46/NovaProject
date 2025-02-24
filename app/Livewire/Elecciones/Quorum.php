@@ -15,8 +15,6 @@ class Quorum extends Component
     public function mount(){
         $this->quorum['total']=Control::all()->sum('sum_coef_can');
         $this->nominal['total']=Control::all()->sum('predios_total');
-
-        
     }
 
     #[Layout('layout.full-page')]

@@ -30,9 +30,16 @@
     /* Ajusta según sea necesario */
     overflow: auto;
 }
+
+.table-responsive-horizontal {
+    padding: 0;
+    padding-inline: 0.5rem;
+    padding-bottom: 0rem;
+    position: relative;
+    max-width: 100%;
+    overflow-x:auto;
+}
 .table-20{
-    min-height: 20vh;
-    height: 20vh !important;
     max-height: 20vh;
 }
 .table-23{

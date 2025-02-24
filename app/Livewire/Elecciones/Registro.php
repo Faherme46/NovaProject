@@ -242,9 +242,10 @@ class Registro extends Component
             try {
 
                 Predio::where('numeral1',$torre)->whereIn('id',$prediosToAsign)->update(['control_id'=>$control->id]);
-                $control->setCoef();
+
                 $control->vote = $torre;
                 $control->h_entrega = Carbon::now(new DateTimeZone('America/Bogota'))->format('H:i:s');
+                $control->setCoef();
                 $control->save();
                 \Illuminate\Support\Facades\Log::channel('custom')->info('Registra el control {control}', ['control' => $control->id, 'predios' => $prediosToAsign, 'persona' => $this->cedula]);
             } catch (\Exception $e) {

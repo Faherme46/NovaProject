@@ -208,7 +208,7 @@ class QuestionController extends Controller
 
         foreach ($additionalOptions as $key => $label) {
             $labels[] = $label;
-            $values[] = $result->$key;
+            $values[] =  round($result->$key);
         }
 
         $fileController = new FileController;

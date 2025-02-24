@@ -58,9 +58,9 @@ class Asignacion extends Component
     #[On('add-predio')]
     public function addPredio($predio)
     {
-
+        
         if ($predio) {
-            if ($predio['control']) {
+            if ($predio['control_id']) {
                 $this->addError('error', 'Predio ya asignado al control ' . $predio['id']);
             } else {
                 $this->addPredioToList($predio);
@@ -89,7 +89,7 @@ class Asignacion extends Component
         } else {
             $this->predioSelected[$predio['id']] = $predio;
         }
-        
+
     }
 
     #[On('add-poderdante')]

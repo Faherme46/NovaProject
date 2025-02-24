@@ -1,129 +1,79 @@
 <div class="card">
-
-
-    <div class="card-header row g-1">
-        {{-- <button type="button" class="btn btn-danger" wire:click='Proof'> proof</button> --}}
-        @if ($asamblea['registro'])
-            <div class="col-3">
-                <input wire:model.live='searchId' wire:keypress='search' type="text" id="searchId" name="cc_propietario"
-                    class="form-control" placeholder="Propietario" onkeypress="return onlyNumbers(event)"
-                    onclick="this.select()">
-            </div>
-        @endif
-        @if ($distincts['descriptor1'][0] != '' && $distincts['numeral1'][0] != '')
-            <div class="col-2">
-                <select wire:model.live='descriptor1' wire:keypress='search' class="form-control px-1"
-                    name="descriptor1" id="">
-                    @foreach ($distincts['descriptor1'] as $item)
-                        <option value="{{ $item }}">{{ $item }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="col-1">
-                <select wire:model.live='numeral1' wire:change='search' class="form-control px-1" name="numeral1">
-                    <option value="">#</option>
-                    @foreach ($distincts['numeral1'] as $item)
-                        <option value="{{ $item }}">{{ $item }}</option>
-                    @endforeach
-                </select>
-            </div>
-        @endif
-
-        <div class="col-2">
-            <select class="form-control px-1" name="descriptor2" wire:model='descriptor2 ' wire:change='search'>
-
-                @foreach ($distincts['descriptor2'] as $item)
-                    <option value="{{ $item }}">{{ $item }}</option>
+    @if ($distincts['descriptor1'][0] !== '')
+        <div class="card-header">
+            <div class="row g-1">
+                @foreach ($distincts['descriptor1'] as $descriptor1)
+                    <div class="col-auto">
+                        <input type="radio" class="btn-check" name="descriptor1" id="{{ $descriptor1 }}"
+                            value="{{ $descriptor1 }}" wire:model.live='search.descriptor1'>
+                        <label class="btn btn-outline-primary me-2 "
+                            for="{{ $descriptor1 }}">{{ $descriptor1 }}</label>
+                    </div>
                 @endforeach
-            </select>
+            </div>
         </div>
-        <div class="col-2">
-            <input wire:model.live='numeral2' type="text" wire:keypress='search' class="form-control" placeholder="#"
-                maxlength="10" onclick="this.select()">
+    @endif
+    @if ($distincts['numeral1'][0] !== '')
+        <div class="card-header table-20 table-responsive py-1">
+            <div class="row g-1">
+                @foreach ($distincts['numeral1'] as $numeral1)
+                    <div class="col-auto">
+                        <input type="radio" class="btn-check" name="numeral1" value="{{ $numeral1 }}"
+                            id="{{ $numeral1 }}" wire:model.live='search.numeral1'>
+                        <label class="btn btn-outline-primary" for="{{ $numeral1 }}">{{ $numeral1 }}</label>
+                    </div>
+                @endforeach
+            </div>
         </div>
-        <div class="col-1 ms-auto">
-            <button wire:click='clean' class=" btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top"
-                data-bs-custom-class="custom-tooltip" data-bs-title="Limpiar Busqueda">
-                <i class='bi bi-x-circle-fill '></i>
-            </button>
+    @endif
+    @if ($distincts['descriptor2'][0] !== '')
+        <div class="card-header ">
+            <div class="row g-1">
+                @foreach ($distincts['descriptor2'] as $descriptor2)
+                    <div class="col-auto">
+                        <input type="radio" class="btn-check" name="descriptor2" id="{{ $descriptor2 }}"
+                            value="{{ $descriptor2 }}" wire:model.live='search.descriptor2'>
+                        <label class="btn btn-outline-primary" for="{{ $descriptor2 }}">{{ $descriptor2 }}</label>
+                    </div>
+                @endforeach
+            </div>
         </div>
+    @endif
+    <div class="card-body  ">
+        <div class="row g-1 ">
+            @forelse ($prediosAll as $predio)
+                <div class="col-auto">
+                    @if ($consulta)
+                        <input type="radio" class="btn-check" id="btn-check-{{ $predio['numeral2'] }}"
+                            name='predio-check' >
+                        <label class="btn btn-outline-info  fs-5" for="btn-check-{{ $predio['numeral2'] }}"
+                            data-bs-toggle="tooltip" data-bs-title='Consultar Predio'
+                            wire:click='dispatchPredio(@json($predio))'>
+                            {{ $predio['numeral2'] }}
+                        </label>
 
 
-    </div>
-    <div class="card-body table-responsive table-fixed-header table-h100 px-0 pt-0">
-
-        <table class="table table-striped-columns   ">
-
-            <thead>
-                <th class="text-center w-10">
-                </th>
-                <th class="ps-4 text-center">Predio</th>
-                @if ($asamblea['registro'])
-                    <th>Propietario</th>
-                @else
-                    <th>Coef</th>
-                @endif
-                <th>Vota</th>
-            </thead>
-            <tbody>
-                @forelse ($prediosAll as $predio)
-                    @if ($predio->control)
-                        <tr class="table-active">
-                            <td class="text-center align-middle">
-                                {{ $predio->control->id }}
-                            </td>
-                        @else
-                        <tr>
-                            <td class="text-center align-middle">
-                                <button wire:click="dispatchPredio({{ $predio }})" class="btn pt-0 pb-0 mb-0">
-                                    <i
-                                        class='bi {{ $consulta ? 'bi-question-circle-fill' : 'bi-plus-circle-fill' }}'></i>
-                                </button>
-                            </td>
-                    @endif
-                    <td class="align-items-center ">
-                        <span class="btn py-0 h-100 d-flex" wire:click="dispatchPredio({{ $predio }})"
-                            data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip"
-                            data-bs-title="Añadir predio">
-                            {{ $predio->getFullName() }}
-                        </span>
-                    </td>
-
-
-                    @if ($asamblea['registro'])
-                        <td>
-                            @foreach ($predio->personas as $persona)
-                                @if (!$consulta)
-                                    <button type="button" class="btn p-0"
-                                        wire:click='dispatchPersona({{ $persona->id }})'
-                                        wire:confirm='¿Deseas cambiar el Asistente?' data-bs-toggle="tooltip"
-                                        data-bs-placement="top" data-bs-custom-class="custom-tooltip"
-                                        data-bs-title="Cambiar Asistente">
-                                        <i class="bi bi-person-fill"></i>
-                                    </button>
-                                @endif
-
-
-                                <button class="btn p-0 mb-0" wire:click='dispatchPoderdante({{ $persona->id }})'
-                                    data-bs-toggle="tooltip" data-bs-placement="top"
-                                    data-bs-custom-class="custom-tooltip" data-bs-title="Añadir Poderdante">
-                                    {{ $persona->id }}
-                                </button>
-                                <br>
-                            @endforeach
-                        </td>
                     @else
-                        <td>{{ $predio->coeficiente }}</td>
+                        <input type="checkbox" class="btn-check" id="btn-check-{{ $predio['numeral2'] }}"
+                            onchange="this.checked = true;" @disabled($predio['control_id'])>
+                        <label
+                            class="btn @if ($predio['control_id']) btn-warning @else btn-outline-info @endif fs-5"
+                            for="btn-check-{{ $predio['numeral2'] }}" data-bs-toggle="tooltip"
+                            data-bs-title='Agregar Predio' wire:click='dispatchPredio(@json($predio))'>
+                            {{ $predio['numeral2'] }}
+                        </label>
                     @endif
-                    <td class="text-center">{{ $predio->vota ? 'SI' : 'No' }}</td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="4">No se hallaron Predios</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
+
+                </div>
+
+            @empty
+                <div class="col">
+                    <p>No se hallaron Predios</p>
+                </div>
+            @endforelse
+        </div>
+
+
     </div>
 
 

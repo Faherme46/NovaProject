@@ -78,13 +78,20 @@ class Main extends Component
                 'visible'=> ($this->role=='Admin' || $this->role=='Lider'),
                 'enabled'=>!(cache('asamblea',false)),
             ],[
+                "directives"=> 'data-bs-toggle=modal data-bs-target=#connectionModal @disabled($asambleaOn)',
+                'icon'=> 'bi-router',
+                'title'=> 'Conectarse a una sesión',
+                'body'=> 'Ingrese la ip del host',
+                'visible'=> true,
+                'enabled'=>true,
+            ],[
                 "directives"=> 'onclick=location.href="/elecciones";',
                 'icon'=> 'bi-person-badge',
                 'title'=> 'Elecciones',
                 'body'=> 'Representantes para asambleas',
                 'visible'=> !(cache('asamblea',false)),
                 // 'enabled'=>!(cache('asamblea',false)),
-                'enabled'=>false    
+                'enabled'=>false
             ],[
                 "directives"=> 'onclick=location.href="/gestion/informes";',
                 'icon'=> 'bi-file-earmark-richtext',
@@ -189,6 +196,10 @@ class Main extends Component
         ];
     }
 
+
+    public function verifyDevice(){
+
+    }
 
 
 }
