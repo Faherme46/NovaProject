@@ -16,10 +16,10 @@
                 <div class="card-header">
                     <h2 class="card-title mb-0">{{ $asamblea['folder'] }}</h2>
                 </div>
-                <div class="card-body px-0 pt-0">
+                <div class="card-body p-0">
 
 
-                    <table class="table table-bordered table-striped table-no-outer-borders">
+                    <table class="table table-bordered table-striped table-no-outer-borders mb-0">
                         <tbody>
                             <tr>
                                 <td class="text-end">Fecha:</td>
@@ -30,8 +30,13 @@
                                 <td class="text-start"> {{ $asamblea['hora'] }}</td>
                             </tr>
                             <tr>
-                                <td class="text-end">Controles:</td>
-                                <td class="text-start">{{ $asamblea['controles'] }}</td>
+                                <td class="text-end  ">Controles:</td>
+                                <td class="text-start text-info">{{ $asamblea['controles'] }}</td>
+                            </tr>
+
+                            <tr>
+                                <td class="text-end ">Predios totales:</td>
+                                <td class="text-start text-info">{{ $values['prediosTotal'] }}</td>
                             </tr>
                             <tr>
                                 <td class="text-end">Controles registrados:</td>
@@ -39,29 +44,29 @@
                             </tr>
                             <tr>
                                 <td class="text-end">Predios registrados:</td>
-                                <td class="text-start">{{ $prediosTotal }}</td>
+                                <td class="text-start">{{ $values['prediosRegistered'] }}</td>
                             </tr>
 
                             <tr>
                                 <td class="text-end">Predios Presentes:</td>
-                                <td class="text-start">{{ $prediosPresente }}</td>
+                                <td class="text-start">{{ $values['prediosPresente'] }}</td>
                             </tr>
                             <tr>
                                 <td class="text-end">Predios Ausentes:</td>
-                                <td class="text-start">{{ $prediosAbsent}}</td>
+                                <td class="text-start">{{ $values['prediosAbsent']}}</td>
                             </tr>
 
                             <tr>
                                 <td class="text-end">Quorum Registrado:</td>
-                                <td class="text-start">{{ round($quorumTotal,6) }}</td>
+                                <td class="text-start">{{ round($values['quorumTotal'],6) }}</td>
                             </tr>
                             <tr>
                                 <td class="text-end">Quorum Presente:</td>
-                                <td class="text-start">{{ round($quorumPresente,6) }}</td>
+                                <td class="text-start">{{ round($values['quorumPresente'],6) }}</td>
                             </tr>
                             <tr>
                                 <td class="text-end">Quorum Ausente:</td>
-                                <td class="text-start">{{ round($quorumAbsent,6) }}</td>
+                                <td class="text-start">{{ round($values['quorumAbsent'],6) }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -125,7 +130,7 @@
                                         @endforeach
                                     </td>
                                     <td>{{ round($control->sum_coef,6) }}</td>
-                                    <td>{{ round($control->sum_coef_can,6) }}</td>
+                                    <td>{{ round($control->predios_vote,6) }}</td>
                                     <td>
                                         <span
                                             class="badge p-1 fs-6 {{ $colors[$control->state] }}">{{ $control->getStateTxt() }}</span>

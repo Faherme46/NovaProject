@@ -25,7 +25,7 @@ class AllPredios extends Component
     {
 
         $url = url()->current();
-        if ($url == 'http://nova.local/consulta') {
+        if (strpos($url,'consulta')) {
             $this->consulta = true;
         }
         $this->distincts = [
@@ -64,7 +64,7 @@ class AllPredios extends Component
 
     public function search()
     {
-        
+
         // Ejecuta la consulta y obtiene los resultados
         $this->prediosAll = Predio::where('descriptor1',$this->search['descriptor1'])
                             ->where('numeral1',$this->search['numeral1'])

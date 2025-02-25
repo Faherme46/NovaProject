@@ -36,25 +36,7 @@ class Main extends Component
         return view('views.main');
     }
 
-    public function orderPersonasByCc(){
-
-        if ($this->desc) {
-            $this->personas=$this->personas->sortByDesc('id');
-        }else{
-            $this->personas=$this->personas->sortBy('id');
-        }
-        $this->desc = !$this->desc;
-        $this->dispatch('showModalFilePersonas');
-    }
-    public function orderPersonasByName(){
-        if ($this->desc) {
-            $this->personas=$this->personas->sortByDesc('name');
-        }else{
-            $this->personas=$this->personas->sortBy('name');
-        }
-        $this->desc = !$this->desc;
-        $this->dispatch('showModalFilePersonas');
-    }
+    
 
     public function setPanels(){
         $this->panels=[

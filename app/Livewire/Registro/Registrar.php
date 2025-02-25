@@ -38,7 +38,6 @@ class Registrar extends Component
     public $prediosAvailable = [];
     public $prediosUnavailable = [];
 
-    public $predioSelected = [];
     public $selectAll = false;
 
     public $asistenteControls;
@@ -87,7 +86,6 @@ class Registrar extends Component
             'poderdantes',
             'poderdantesIDs',
             'prediosAvailable',
-            'predioSelected',
             'selectAll'
         ]);
         if ($cedula) {
@@ -194,7 +192,6 @@ class Registrar extends Component
             if (!array_key_exists($predio->id, $this->prediosAvailable) && !$predio->control) {
                 if (!$predio->control) {
                     $this->prediosAvailable[$predio->id] = $predio->toArray();
-                    $this->predioSelected[] = $predio->id;
                 }
             }
         }
@@ -205,7 +202,7 @@ class Registrar extends Component
     {
         $this->reset(['ccPoderdante', 'poderdantes', 'poderdantesIDs']);
         $this->mount();
-        $this->reset(['prediosAvailable', 'predioSelected']);
+        $this->reset(['prediosAvailable']);
         if ($this->asistente) {
             $this->addPredios($this->asistente->predios);
         }
@@ -221,25 +218,21 @@ class Registrar extends Component
         foreach ($ids as $id) {
             unset($this->prediosAvailable[$id]);
         }
-        $this->predioSelected = array_diff($this->predioSelected, $ids);
+
         $this->poderdantesIDs = array_diff($this->poderdantesIDs, [$poderdanteId]);
         $this->poderdantes = Persona::find(($this->poderdantesIDs));
     }
 
 
-    public function updatedSelectAll($value)
+    public function unsetAllPredios()
     {
-        if (!$value) {
-            $this->predioSelected = [];
-        } else {
-            $this->predioSelected = array_keys($this->prediosAvailable);
-        }
+        $this->reset('prediosAvailable');
     }
 
-    public function updatedPredioSelected()
+    public function unsetPredio($id)
     {
 
-        $this->selectAll = count($this->predioSelected) === count($this->prediosAvailable);
+        unset($this->prediosAvailable[$id]);
     }
 
 
@@ -251,32 +244,31 @@ class Registrar extends Component
         #option 0 to asign 1 to edit
         $this->validate();
 
-        if (!$this->prediosAvailable || !$this->predioSelected) {
+        if (!$this->prediosAvailable ) {
             return session()->flash('warning', 'No hay predios para asignar');
         }
         if (!$this->controlId) {
             return session()->flash('warning', 'No hay Control Seleccionado');
         }
         foreach($this->prediosAvailable as $predio){
-            if($predio['control_id']!='' || $predio['control_id']!=null){
-                return $this->addError('error','El predio '.$predio['numeral2']. ' ya tiene el control '.$predio['control_id']);
+            if($predio['control_id']){
+                return $this->addError('error','El predio '.$predio['numeral2']. ' ya está asignado el control '.$predio['control_id']);
             }
         }
         $control = Control::find($this->controlId);
         session(['controlTurn' => strval($this->controlId + 1)]);
         //control Uso
 
-        $prediosToAsign = array_map(fn($value) => $this->prediosAvailable[$value], $this->predioSelected);
-        $prediosToAsign = array_intersect_key($this->prediosAvailable, array_flip($this->predioSelected));
+
 
         try {
 
             if ($option) {
 
                 $controlH = $this->asistenteControls[$this->controlH];
-                Predio::whereIn('id',array_keys($prediosToAsign))->update(['control_id'=>$controlH->id]);
+                Predio::whereIn('id',array_keys($this->prediosAvailable))->update(['control_id'=>$controlH->id]);
                 $controlH->setCoef();
-                \Illuminate\Support\Facades\Log::channel('custom')->info('Agrega predios al control {control}',['control' =>$control->id,'predios'=>array_values($this->predioSelected),'persona'=>$this->cedula]);
+                \Illuminate\Support\Facades\Log::channel('custom')->info('Agrega predios al control {control}',['control' =>$control->id,'predios'=>array_values($this->prediosAvailable),'persona'=>$this->cedula]);
             } else {
                 if ($control->asignacion()) {
                     $this->getAvailableControls();
@@ -287,7 +279,7 @@ class Registrar extends Component
 
                 $control->h_entrega = Carbon::now(new DateTimeZone('America/Bogota'))->second(0)->format('H:i');
 
-                Predio::whereIn('id',array_keys($prediosToAsign))->update(['control_id'=>$control->id]);
+                Predio::whereIn('id',array_keys($this->prediosAvailable))->update(['control_id'=>$control->id]);
                 $control->setCoef();
                 $control->state = 1;
                 $control->save();
@@ -295,7 +287,7 @@ class Registrar extends Component
                     'registered' => true,
                     'user_id' => auth()->id()
                 ]);
-                \Illuminate\Support\Facades\Log::channel('custom')->info('Registra el control {control}',['control' =>$control->id,'predios'=>array_values($this->predioSelected),'persona'=>$this->cedula]);
+                \Illuminate\Support\Facades\Log::channel('custom')->info('Registra el control {control}',['control' =>$control->id,'predios'=>array_keys($this->prediosAvailable),'persona'=>$this->cedula]);
             }
         } catch (QueryException $e) {
             if ($e->errorInfo[1] == 1062) {
@@ -310,9 +302,9 @@ class Registrar extends Component
 
 
 
-        if (count($this->prediosAvailable) == count($this->predioSelected)) {
-            $this->cleanData(1);
-        }
+
+        $this->cleanData(1);
+
         session()->flash('success', 'Predios Asignados con exito');
         return redirect()->route('asistencia.registrar');
     }
@@ -334,7 +326,6 @@ class Registrar extends Component
                 $this->addError('error', 'Predio ya asignado al control ' . $predio['control_id']);
             } else {
                 $this->prediosAvailable[$predio['id']] = $predio;
-                $this->predioSelected[] = $predio['id'];
             }
         }
     }

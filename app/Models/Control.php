@@ -92,9 +92,7 @@ class Control extends Model
     #agrega predios desde un array de predios
     public function attachPredios($arrayPredios)
     {
-        foreach ($arrayPredios as $predio) {
-            $this->predios()->save($predio);
-        }
+        Predio::whereIn('id',array_keys($arrayPredios))->update(['control_id'=>$this->id]);
         $this->setCoef();
         return $this;
     }
@@ -103,8 +101,8 @@ class Control extends Model
     #elimina predios desde un array de predios
     public function deletePredios($prediosArray)
     {
-        
-        Predio::whereIn('id',$prediosArray)->where('control_id',$this->id)->update(['control_id'=>null]);
+
+        $predios=Predio::whereIn('id',array_keys($prediosArray))->where('control_id',$this->id)->update(['control_id'=>null]);
         $this->setCoef();
     }
 
