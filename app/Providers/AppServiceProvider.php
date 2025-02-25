@@ -24,14 +24,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        static $dbHost = null;
+        // static $dbHost = null;
 
-        if ($dbHost === null) {
-            $filePath = storage_path('app/db_host.txt');
-            $dbHost = file_exists($filePath) ? trim(file_get_contents($filePath)) : env('DB_HOST', '127.0.0.1');
-        }
+        // if ($dbHost === null) {
+        //     $filePath = storage_path('app/db_host.txt');
+        //     $dbHost = file_exists($filePath) ? trim(file_get_contents($filePath)) : env('DB_HOST', '127.0.0.1');
+        // }
 
-        Config::set('database.connections.mariadb.host', $dbHost);
+        // Config::set('database.connections.mariadb.host', $dbHost);
 
 
 
