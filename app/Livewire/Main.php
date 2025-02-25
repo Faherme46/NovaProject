@@ -80,7 +80,7 @@ class Main extends Component
             //     'body'=> 'Ingrese la ip del host',
             //     'visible'=> true,
             //     'enabled'=>true,
-            // ],[
+            ],[
                 "directives"=> 'onclick=location.href="/elecciones";',
                 'icon'=> 'bi-person-badge',
                 'title'=> 'Elecciones',
