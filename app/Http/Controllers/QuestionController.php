@@ -98,13 +98,12 @@ class QuestionController extends Controller
         $valuesCoef['abstainted'] += $controlsAssigned->whereNull('vote')->sum('sum_coef');
         $valuesNom['abstainted']  +=  $controlsAssigned->whereNull('vote')->sum('predios_total');
         if ($this->question->type == 5) {
-
             $valuesNom['optionA'] += $controlsAssigned->where('vote', 'A')->sum('predios_total');
             $valuesCoef['optionA'] += $controlsAssigned->where('vote', 'A')->sum('sum_coef');
             $valuesNom['optionB'] += $controlsAssigned->where('vote', 'B')->sum('predios_total');
             $valuesCoef['optionB'] += $controlsAssigned->where('vote', 'B')->sum('sum_coef');
-            $valuesNom['nule'] += $controlsAssigned->whereNotIn('vote', ['A', 'B'])->sum('predios_total');
-            $valuesCoef['nule'] += $controlsAssigned->whereNotIn('vote', ['A', 'B'])->sum('sum_coef');
+            $valuesNom['nule'] += $controlsAssigned->whereNotIn('vote', ['A', 'B',null])->sum('predios_total');
+            $valuesCoef['nule'] += $controlsAssigned->whereNotIn('vote', ['A', 'B',null])->sum('sum_coef');
             Control::where('state', 1)
                 ->whereIn('vote', ['A', 'B'])
                 ->update(['t_publico' => DB::raw('CASE WHEN vote = "A" THEN 1 ELSE 0 END')]);

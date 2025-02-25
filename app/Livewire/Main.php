@@ -73,14 +73,14 @@ class Main extends Component
                 'body'=> 'Cargar y eliminar las asambleas guardadas',
                 'visible'=> ($this->role=='Admin' || $this->role=='Lider'),
                 'enabled'=>!(cache('asamblea',false)),
-            ],[
-                "directives"=> 'data-bs-toggle=modal data-bs-target=#connectionModal @disabled($asambleaOn)',
-                'icon'=> 'bi-router',
-                'title'=> 'Conectarse a una sesión',
-                'body'=> 'Ingrese la ip del host',
-                'visible'=> true,
-                'enabled'=>true,
-            ],[
+            // ],[
+            //     "directives"=> 'data-bs-toggle=modal data-bs-target=#connectionModal @disabled($asambleaOn)',
+            //     'icon'=> 'bi-router',
+            //     'title'=> 'Conectarse a una sesión',
+            //     'body'=> 'Ingrese la ip del host',
+            //     'visible'=> true,
+            //     'enabled'=>true,
+            // ],[
                 "directives"=> 'onclick=location.href="/elecciones";',
                 'icon'=> 'bi-person-badge',
                 'title'=> 'Elecciones',

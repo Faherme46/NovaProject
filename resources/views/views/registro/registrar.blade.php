@@ -128,11 +128,11 @@
 
 
                         @if ($asistenteControls)
-                            <span class="mb-0 me-2 text-muted">Control Asignado</span>
+                            <span class="mb-0 me-2 text-muted">Control</span>
                             <form id="formPredios" class="d-flex w-auto" wire:submit='asignar(1)' method="GET">
 
                                 <select name="control" id="id_control_selected" wire:model="controlH"
-                                    wire:change='changePredios' class="form-control " required>
+                                    wire:change='changePredios' class="form-control px-1 " required>
                                     @foreach ($asistenteControls as $control)
                                         <option value="{{ $control->id }}">
                                             {{ $control->id }} </option>
@@ -148,7 +148,7 @@
                         @else
                             <span class="mb-0 me-2 text-muted">Control </span>
                             <form id="formPredios" class=" d-flex" wire:submit='asignar(0)' method="GET">
-                                <select name="control" id="id_control" class="form-control ms-2" required
+                                <select name="control" id="id_control" class="form-control ms-2 px-1" required
                                     wire:model="controlId">
                                     @foreach ($controlIds as $control)
                                         <option value="{{ $control }}" @selected($control == $controlId)>
@@ -162,8 +162,8 @@
                         @endif
                     </div>
                     <div class="d-flex text-right align-items-center w-30">
-                        <span class="me-2">Coef. </span>
-                        <input class="form-control" name="sum_coef" value="{{ $sumCoef }}" id="sumCoef"
+                        <span class="me-2">Predios </span>
+                        <input class="form-control" name="sum_coef" value="{{ count($predioSelected) }}" id="sumCoef"
                             readonly></input>
                     </div>
 
@@ -174,7 +174,7 @@
                             <th>Predio</th>
                             <th>Coef.</th>
                             <th>
-                                <input class="form-check-input" type="checkbox" wire:model='selectAll'/>
+                                <input class="form-check-input" type="checkbox" wire:model.live='selectAll'/>
                             </th>
                         </thead>
                         <tbody>
@@ -184,8 +184,8 @@
                                     </td>
                                     <td>{{ $predio['coeficiente'] }}</td>
                                     <td>
-                                        <input class="form-check-input" type="checkbox" wire:click="setSumCoef"
-                                            wire:model="predioSelected" value="{{ $predio['id'] }}">
+                                        <input class="form-check-input" type="checkbox"
+                                            wire:model.live="predioSelected" value="{{ $predio['id'] }}">
                                     </td>
                                 </tr>
                             @empty

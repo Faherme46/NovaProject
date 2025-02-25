@@ -42,12 +42,11 @@ class Registrar extends Component
     public $selectAll = false;
 
     public $asistenteControls;
-    public $controlH=null;
+    public $controlH=0;
 
 
     #asignacion
     public $controlId;
-    public $sumCoef = 0;
 
     public function mount()
     {
@@ -82,7 +81,6 @@ class Registrar extends Component
             'name',
             'lastName',
             'ccPoderdante',
-            'sumCoef',
             'controlId',
             'asistenteControls',
             'controlH',
@@ -240,6 +238,7 @@ class Registrar extends Component
 
     public function updatedPredioSelected()
     {
+
         $this->selectAll = count($this->predioSelected) === count($this->prediosAvailable);
     }
 
@@ -253,12 +252,16 @@ class Registrar extends Component
         $this->validate();
 
         if (!$this->prediosAvailable || !$this->predioSelected) {
-            return session()->flash('warning', 'No hay predios para asignar1');
+            return session()->flash('warning', 'No hay predios para asignar');
         }
         if (!$this->controlId) {
             return session()->flash('warning', 'No hay Control Seleccionado');
         }
-
+        foreach($this->prediosAvailable as $predio){
+            if($predio['control_id']!='' || $predio['control_id']!=null){
+                return $this->addError('error','El predio '.$predio['numeral2']. ' ya tiene el control '.$predio['control_id']);
+            }
+        }
         $control = Control::find($this->controlId);
         session(['controlTurn' => strval($this->controlId + 1)]);
         //control Uso
@@ -283,6 +286,7 @@ class Registrar extends Component
                 $control->cc_asistente = $this->cedula;
 
                 $control->h_entrega = Carbon::now(new DateTimeZone('America/Bogota'))->second(0)->format('H:i');
+
                 Predio::whereIn('id',array_keys($prediosToAsign))->update(['control_id'=>$control->id]);
                 $control->setCoef();
                 $control->state = 1;
@@ -332,7 +336,6 @@ class Registrar extends Component
                 $this->prediosAvailable[$predio['id']] = $predio;
                 $this->predioSelected[] = $predio['id'];
             }
-
         }
     }
 
