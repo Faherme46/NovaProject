@@ -44,26 +44,26 @@ class EleccionesController extends Controller
                 return back()->withErrors('No se pueden enviar delegaciones en 0 para: ' . $key);
             }
         }
-        $delegados = json_decode($request->delegadosArray,true);
-
+        $delegados = json_decode($request->delegadosArray, true);
         foreach ($delegados as $key => $value) {
+
             $predios = Predio::where('numeral1', $key);
 
-            $torre = Torre::where('name', $value['name'])->where('first')->first();
+            $torre = Torre::where('name', $key)->first();
             if ($torre) {
-                $torre->delegados = $value;
+                $torre->delegados = $value['delegados'];
                 $torre->save();
                 $message = 'actualizado';
             } else {
 
-                Torre::create(['name'=>$value['name'],'first'=>$value['first'],'delegados'=>$value['delegados']]);
+                Torre::create(['name' => $key, 'delegados' => $value['delegados']]);
                 $message = 'creado';
             }
 
-        \Illuminate\Support\Facades\Log::channel('custom')->info('Se han ' . $message . ' las torres con sus delegados');
+            \Illuminate\Support\Facades\Log::channel('custom')->info('Se han ' . $message . ' las torres con sus delegados');
+        }
         return back()->with('success', 'Se han ' . $message . ' las torres con sus delegados');
     }
-}
 
 
     public function store(Request $request)
@@ -160,7 +160,7 @@ class EleccionesController extends Controller
     }
 
 
-    public function setCandidatos()
+    public function importCandidatos()
     {
         try {
             $externalFilePathPersonas = 'C:/Asambleas/Clientes/' . cache('asamblea')['folder'] . '/personas.xlsx';

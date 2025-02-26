@@ -68,6 +68,7 @@ class Main extends Component
                 'title'=> 'Elecciones',
                 'body'=> 'Representantes para asambleas',
                 'visible'=> !(cache('asamblea',false)),
+
                 // 'enabled'=>!(cache('asamblea',false)),
                 'enabled'=>false
             ],[

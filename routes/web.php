@@ -82,7 +82,7 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::get('questions/view/{questionId}', ViewQuestion::class)->name('questions.view');
     Route::get('elecciones/programar', Programar::class)->name('elecciones.programar')->withoutMiddleware(EnsureAsambleaOn::class);
     Route::get('elecciones/candidatos', Candidatos::class)->name('elecciones.candidatos');
-
+    Route::get('elecciones/candidatos/import', [EleccionesController::class,'importCandidatos'])->name('elecciones.candidatos.import');
 
     Route::post('asambleas/store', [AsambleaController::class, 'store'])->name('asambleas.store')->withoutMiddleware(EnsureAsambleaOn::class);
     Route::post('predios/import', [PrediosController::class, 'import'])->name('predios.import');
@@ -96,6 +96,7 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::post('personas/export', [PersonasController::class, 'signsExports'])->name('personas.export');
     Route::post('elecciones/torres/create', [EleccionesController::class, 'createTorres'])->name('elecciones.torres.create');
     Route::post('elecciones/store', [EleccionesController::class, 'store'])->name('elecciones.store')->withoutMiddleware([EnsureAsambleaOn::class]);
+
 
     Route::delete('session/destroy', [SessionController::class, 'destroyAll'])->name('session.destroy');
     Route::delete('asamblea/delete', [AsambleaController::class, 'deleteAsamblea'])->name('asamblea.delete')->withoutMiddleware(EnsureAsambleaOn::class);
