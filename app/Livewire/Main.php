@@ -83,8 +83,8 @@ class Main extends Component
                 'title'=> 'Elecciones',
                 'body'=> 'Representantes para asambleas',
                 'visible'=> !(cache('asamblea',false)),
-                // 'enabled'=>!(cache('asamblea',false)),
-                'enabled'=>false    
+                'enabled'=>!(cache('asamblea',false)),
+                // 'enabled'=>false
             ],[
                 "directives"=> 'onclick=location.href="/gestion/informes";',
                 'icon'=> 'bi-file-earmark-richtext',

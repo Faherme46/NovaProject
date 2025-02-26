@@ -12,7 +12,7 @@
                 @if ($inAsamblea)
                     <form action="{{ route('elecciones.torres.create') }}" method="post">
                         @csrf
-                        <input type="text" name="delegadosArray" value="{{json_encode(cache('asamblea', false) && cache('asamblea')['h_inicio'])($delegados)}}" hidden>
+                        <input type="text" name="delegadosArray" value="{{json_encode($delegados)}}" hidden>
                         <div class="card-body p-0">
                             <table class="list-group">
                                 <thead @if (count($torres) > 8) class="pe-3" @endif>
@@ -25,17 +25,17 @@
                                     </tr>
                                 </thead>
                                 <tbody style="max-height: 60vh; overflow-y: auto;">
-                                    @foreach ($torres as $item)
+                                    @foreach ($torres as $torre)
                                         <tr class="list-group-item list-group-item-action">
-                                            <td class="text-end fs-6">Delegados por {{$item['descriptor1']}}
+                                            <td class="text-end fs-6">Delegados por {{$torre['numeral1']}}
                                                 <span class="badge text-bg-primary fs-6 p-1 ">
-                                                    {{ $item['numeral1'] }}
+                                                    {{ $torre['numeral1'] }}
                                                 </span> :
                                             </td>
                                             <td class="w-25">
                                                 <input type="number" class="form-control " min="0"
-                                                    name="delegados[{{ $item['descriptor1'].$item['numeral1'] }}]"
-                                                    wire:model='delegados.{{ $item['descriptor1'].$item['numeral1'] }}.delegados' required>
+                                                    name="delegados[{{ $torre['numeral1']}}]"
+                                                    wire:model='delegados.{{ $torre['numeral1'] }}.delegados' required>
                                             </td>
                                         </tr>
                                     @endforeach

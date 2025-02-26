@@ -2,6 +2,16 @@
     <x-alerts />
     <div class="row g-4">
         <div class="col-2">
+            <div class="card mb-2">
+                <div class="card-body justify-content-center d-flex">
+                    <form action="{{route('elecciones.candidatos.import')}}" method="get"
+                    class="text-center">
+                        @csrf
+                        <button class="btn btn-warning w-80">Importar Candidatos</button>
+
+                    </form>
+                </div>
+            </div>
             <table class="list-group pe-0 border mt-23 " style="max-height: 80vh; overflow-y: auto;">
                 <tbody>
                     @foreach ($torres as $t)
@@ -96,7 +106,7 @@
                             Candidatos para <span class="badge text-bg-primary fs-5 py-1">{{$t->first}}
                                 {{ $torre->name }}</span>
                         </h5>
-                        <input type="number" name="number" id="" disabled class="form-control fs-5 w-10"
+                        <input type="number" name="number" id="" disabled class="form-control pe-0 ps-1 w-10"
                             value="{{ count($candidatos) + count($candidatosPrevios) }}">
                         <button type="button" class="btn btn-success" wire:click='storeCandidatos'>
                             Guardar
@@ -163,11 +173,7 @@
             <div class="card">
                 <div class="card-header">
                     <h5 class="card-title mb-0">
-<<<<<<< Updated upstream
-                        Personas de la Torre
-=======
-                        Personas de {{$t->first}} {{$torre->name}}
->>>>>>> Stashed changes
+                        Personas de  {{$torre->name}}
                     </h5>
                 </div>
                 <div class="card-body table-responsive table-fixed-header p-0 table-h100">
@@ -179,7 +185,6 @@
                         </thead>
                         <tbody>
                             @foreach ($personas as $persona)
-                                @if ($persona)
                                     <tr>
                                         <td class="align-middle" width="50%">
                                             <button type="button" class="btn btn-black text-start p-0"
@@ -208,7 +213,6 @@
                                             @endforeach
                                         </td>
                                     </tr>
-                                @endif
                             @endforeach
                         </tbody>
                     </table>
