@@ -35,8 +35,9 @@ class Signing extends Component
         $fileController= new FileController;
         $validImage = $this->dataUrlToImage($image  );
         $fileController->exportPdf($path,$validImage);
+        //TODO quitar signature
         $sign=Signature::create([
-            'signature'=>$image,
+            'signature'=> '1',
             'persona_id'=>$this->persona_id
         ]);
 

@@ -2,15 +2,10 @@
 
 namespace App\Providers;
 
-use App\Http\Controllers\AsambleaController;
-use App\Http\Controllers\sessionController;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Maatwebsite\Excel\ExcelServiceProvider;
-
-use App\Models\State;
-
-use Illuminate\Support\Facades\Auth;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,12 +24,18 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // static $dbHost = null;
+
+        // if ($dbHost === null) {
+        //     $filePath = storage_path('app/db_host.txt');
+        //     $dbHost = file_exists($filePath) ? trim(file_get_contents($filePath)) : env('DB_HOST', '127.0.0.1');
+        // }
+
+        // Config::set('database.connections.mariadb.host', $dbHost);
 
 
 
         View::composer('*', function ($view) {
-
-
 
             $view->with(
                 [

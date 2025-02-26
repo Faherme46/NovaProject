@@ -53,6 +53,7 @@ use App\Livewire\Elecciones\Elecciones;
 use App\Livewire\Elecciones\Programar;
 use App\Livewire\Elecciones\Quorum;
 use App\Livewire\Elecciones\Terminale;
+use App\Livewire\Gestion\ProgramarAsamblea;
 
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Admin')]], function () {
     Route::get('gestion/informes/Informe', [ReportController::class, 'createReport'])->name('gestion.report.docs');
@@ -67,6 +68,7 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Admin|Lider')]], function () {
 
     Route::get('asambleas', LoadAsamblea::class)->name('asambleas')->middleware(EnsureAsambleaOff::class)->withoutMiddleware(EnsureAsambleaOn::class);
+    Route::get('asambleas/programar', ProgramarAsamblea::class)->name('asambleas.programar')->withoutMiddleware(EnsureAsambleaOn::class);
     Route::get('asambleas/load', [AsambleaController::class, 'loadAsambleas'])->name('asambleas.load')->withoutMiddleware(EnsureAsambleaOn::class)->middleware(EnsureAsambleaOff::class);
     Route::get('gestion/informes', Reports::class)->name('gestion.report');
     Route::get('setup', Setup::class)->name('setup.main')->withoutMiddleware(EnsureAsambleaOn::class);
@@ -79,7 +81,6 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::get('questions/show/{questionId}/{plancha?}/{plazas?}', PresentQuestion::class)->name('questions.show');
     Route::get('questions/view/{questionId}', ViewQuestion::class)->name('questions.view');
     Route::get('elecciones/programar', Programar::class)->name('elecciones.programar')->withoutMiddleware(EnsureAsambleaOn::class);
-
     Route::get('elecciones/candidatos', Candidatos::class)->name('elecciones.candidatos');
     Route::get('elecciones/candidatos/import', [EleccionesController::class,'importCandidatos'])->name('elecciones.candidatos.import');
 
@@ -119,11 +120,14 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
 });
 //rutas para terminales
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Terminal')]], function () {
-Route::get('/terminal', Terminale::class)->name('terminal')->withoutMiddleware(EnsureAsambleaOn::class)->middleware(NoEleccionesMiddleware::class);
+    Route::get('/terminal', Terminale::class)->name('terminal')->withoutMiddleware(EnsureAsambleaOn::class)->middleware(NoEleccionesMiddleware::class);
 });
+
+Route::post('/session/connect',[SessionController::class,'sessionConnect'])->name('session.connect')->withoutMiddleware(ValidateLogin::class)->withoutMiddleware(EnsureAsambleaOn::class);
+Route::post('/session/disconnect',[SessionController::class,'sessionDisconnect'])->name('session.disconnect')->withoutMiddleware(ValidateLogin::class)->withoutMiddleware(EnsureAsambleaOn::class);
 //Rutas de autenticacion
 Route::get('/login', [LoginController::class, 'logView'])->name('login')->middleware(isLogged::class)->withoutMiddleware(ValidateLogin::class)->withoutMiddleware(EnsureAsambleaOn::class);
-Route::post('/login', [LoginController::class, 'authenticate'])->name('users.authenticate')->withoutMiddleware(ValidateLogin::class)->withoutMiddleware(EnsureAsambleaOn::class);;
+Route::post('/login', [LoginController::class, 'authenticate'])->name('users.authenticate')->withoutMiddleware(ValidateLogin::class)->withoutMiddleware(EnsureAsambleaOn::class);
 Route::get('/logout', [LoginController::class, 'logout'])->name('users.logout')->withoutMiddleware(EnsureAsambleaOn::class);
 
 //rutas de prueba

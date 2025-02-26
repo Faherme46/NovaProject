@@ -11,7 +11,7 @@ class QuorumState extends Component
 
 
     public function mount() {
-
+        
     }
     public function render()
     {

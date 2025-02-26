@@ -8,6 +8,7 @@
 /storage/logs/*.log
 /storage/app/public/backups
 /storage/app/public/images/results
+/storage/app/db_host.txt
 
 /scripts/nova.python/venv
 /scripts/nova.python/__pycache__

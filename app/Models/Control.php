@@ -41,8 +41,10 @@ class Control extends Model
     {
         $this->state = 4;
 
-        $this->predios()->delete();
+        $this->predios()->update(['control_id'=>null]);
+
         $this->setCoef();
+
         $this->cc_asistente = null;
         $this->save();
     }
@@ -59,7 +61,7 @@ class Control extends Model
         if ($value == 5) {
             $this->h_recibe = Carbon::now(new DateTimeZone('America/Bogota'))->format('h:m');
         }
-        
+
         $this->save();
     }
 
@@ -90,9 +92,7 @@ class Control extends Model
     #agrega predios desde un array de predios
     public function attachPredios($arrayPredios)
     {
-        foreach ($arrayPredios as $predio) {
-            $this->predios()->save($predio);
-        }
+        Predio::whereIn('id',array_keys($arrayPredios))->update(['control_id'=>$this->id]);
         $this->setCoef();
         return $this;
     }
@@ -101,13 +101,8 @@ class Control extends Model
     #elimina predios desde un array de predios
     public function deletePredios($prediosArray)
     {
-        foreach ($prediosArray as $predio) {
-            if ($predio->control_id == $this->id) {
-                $predio->control_id = null;
-                $predio->save();
-            }
-            # code...
-        }
+
+        $predios=Predio::whereIn('id',array_keys($prediosArray))->where('control_id',$this->id)->update(['control_id'=>null]);
         $this->setCoef();
     }
 

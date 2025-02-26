@@ -16,7 +16,6 @@ use App\Models\Predio;
 use setasign\Fpdi\Fpdi;
 use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf;
-use DateTimeZone;
 use setasign\Fpdi\PdfParser\StreamReader;
 
 class ReportController extends Controller

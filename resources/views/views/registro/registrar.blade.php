@@ -67,17 +67,24 @@
                 @endif
                 {{-- poderdantes --}}
                 <div class="card px-0">
-                    <div class="card-header mb-0 d-flex align-items-center justify-content-between">
-                        <h5 class="card-title  mb-0 me-5">Poderdantes</h5>
-                        <div class="d-flex align-items-baseline ">
+                    <div class="card-header mb-0 ">
+                        <div class="row">
+                            <h6 class="card-title  mb-0 text-muted">Poderdantes</h6>
+                        </div>
 
-                            <input placeholder="Cédula" onkeypress="return onlyNumbers(event)" type="text"
-                                name="cedulaPropietario" id="cc" class="form-control"
-                                wire:keypress.enter='addPoderdante' aria-describedby="helpId" wire:model='ccPoderdante'
-                                onclick="this.select()" />
-                            <button type="submit" class="btn ms-1 btn-primary" wire:click='addPoderdante'>
-                                <i class='bi bi-arrow-right-circle-fill'></i>
-                            </button>
+
+
+                        <div class="d-flex align-items-center justify-content-end">
+                            <div class="d-flex align-items-baseline ">
+
+                                <input placeholder="Cédula" onkeypress="return onlyNumbers(event)" type="text"
+                                    name="cedulaPropietario" id="cc" class="form-control"
+                                    wire:keypress.enter='addPoderdante' aria-describedby="helpId"
+                                    wire:model='ccPoderdante' onclick="this.select()" />
+                                <button type="submit" class="btn ms-1 btn-primary" wire:click='addPoderdante'>
+                                    <i class='bi bi-arrow-right-circle-fill'></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                     <div class="card-body table-responsive table-fixed-header pt-0 table-40">
@@ -128,16 +135,21 @@
 
 
                         @if ($asistenteControls)
-                            <span class="mb-0 me-2 text-muted">Control Asignado</span>
-                            <form id="formPredios" class="d-flex w-auto" wire:submit='asignar(1)' method="GET">
 
-                                <select name="control" id="id_control_selected" wire:model="controlH"
-                                    wire:change='changePredios' class="form-control " required>
-                                    @foreach ($asistenteControls as $control)
-                                        <option value="{{ $control->id }}">
-                                            {{ $control->id }} </option>
-                                    @endforeach
-                                </select>
+                            <form id="formPredios" class="d-flex w-auto" wire:submit='asignar(1)' method="GET">
+                                <div class="input-group">
+                                    <span class="py-0 input-group-text text-muted fs-5">
+                                        <i class="bi bi-building"></i>
+                                    </span>
+                                    <select name="control" id="id_control_selected" wire:model="controlH"
+                                        wire:change='changePredios' class="form-control px-1 " required>
+                                        @foreach ($asistenteControls as $control)
+                                            <option value="{{ $control->id }}">
+                                                {{ $control->id }} </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
                                 <button type="submit" class="btn btn-primary mx-2">
                                     Agregar
                                 </button>
@@ -146,15 +158,20 @@
                                 </button>
                             </form>
                         @else
-                            <span class="mb-0 me-2 text-muted">Control </span>
                             <form id="formPredios" class=" d-flex" wire:submit='asignar(0)' method="GET">
-                                <select name="control" id="id_control" class="form-control ms-2" required
-                                    wire:model="controlId">
-                                    @foreach ($controlIds as $control)
-                                        <option value="{{ $control }}" @selected($control == $controlId)>
-                                            {{ $control }} </option>
-                                    @endforeach
-                                </select>
+                                <div class="input-group">
+                                    <span class="py-0 input-group-text text-muted fs-5">
+                                        <i class="bi bi-building"></i>
+                                    </span>
+                                    <select name="control" id="id_control" class="form-control  px-1" required
+                                        wire:model="controlId">
+                                        @foreach ($controlIds as $control)
+                                            <option value="{{ $control }}" @selected($control == $controlId)>
+                                                {{ $control }} </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
                                 <button type="submit" class="btn btn-primary ms-2">
                                     Asignar
                                 </button>
@@ -162,9 +179,9 @@
                         @endif
                     </div>
                     <div class="d-flex text-right align-items-center w-30">
-                        <span class="me-2">Coef. </span>
-                        <input class="form-control" name="sum_coef" value="{{ $sumCoef }}" id="sumCoef"
-                            readonly></input>
+                        <span class="me-2">Predios </span>
+                        <input class="form-control" name="sum_coef" value="{{ count($prediosAvailable) }}"
+                            id="sumCoef" readonly></input>
                     </div>
 
                 </div>
@@ -174,19 +191,23 @@
                             <th>Predio</th>
                             <th>Coef.</th>
                             <th>
-                                <input class="form-check-input" type="checkbox" wire:model='selectAll'
-                                    wire:click="setSumCoef" />
+                                <a class="btn p-0" wire:click='unsetAllPredios' data-bs-toggle="tooltip"
+                                    data-bs-title="Quitar todos los predios">
+                                    <i class='bi bi-x-square-fill'></i>
+                                </a>
                             </th>
                         </thead>
                         <tbody>
                             @forelse ($prediosAvailable as $predio)
-                                <tr>
-                                    <td>{{ $predio['descriptor1'] . ' ' . $predio['numeral1'] . ' ' . $predio['descriptor2'] . ' ' . $predio['numeral2'] }}
+                                <tr >
+                                    <td @if($predio['control_id'])class="text-danger"@endif>{{ $predio['descriptor1'] . ' ' . $predio['numeral1'] . ' ' . $predio['descriptor2'] . ' ' . $predio['numeral2'] }}
                                     </td>
                                     <td>{{ $predio['coeficiente'] }}</td>
                                     <td>
-                                        <input class="form-check-input" type="checkbox" wire:click="setSumCoef"
-                                            wire:model="predioSelected" value="{{ $predio['id'] }}">
+                                        <a class="btn p-0" wire:click='unsetPredio({{ $predio['id'] }})'
+                                            data-bs-toggle="tooltip" data-bs-title="Quitar predio">
+                                            <i class='bi bi-x-square'></i>
+                                        </a>
                                     </td>
                                 </tr>
                             @empty
@@ -199,9 +220,7 @@
                                 @foreach ($asistenteControls[$controlH]->predios as $predio)
                                     <tr class="table-active">
 
-                                        <td><span class="badge p-1 fs-6 text-bg-info">
-                                                {{ $predio->getRelationPersona($asistente->id) }}
-                                            </span></td>
+
                                         <td>{{ $predio->descriptor1 }} {{ $predio->numeral1 }}
                                             {{ $predio->descriptor2 }} {{ $predio->numeral2 }} </td>
                                         <td colspan="2">{{ $predio->coeficiente }}</td>

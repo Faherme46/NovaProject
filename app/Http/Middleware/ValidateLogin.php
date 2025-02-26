@@ -16,6 +16,7 @@ class ValidateLogin{
     {
 
         if (!Auth::check()) {
+            // Auth::attempt(['username'=>'ehernandez','password'=>'ehernandez']);
             // Redirigir al usuario a la página de inicio de sesión si no está autenticado
             return redirect()->route('login');
         }

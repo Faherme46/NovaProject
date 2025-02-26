@@ -126,15 +126,15 @@
                                             @forelse ($prediosL as $predio)
                                                 <tr scope="row">
 
-                                                    <td style="width: 85%">{{ $predio->descriptor1 }}
-                                                        {{ $predio->numeral1 }}
-                                                        {{ $predio->descriptor2 }} {{ $predio->numeral2 }}
+                                                    <td style="width: 85%">{{ $predio['descriptor1'] }}
+                                                        {{ $predio['numeral1'] }}
+                                                        {{ $predio['descriptor2'] }} {{ $predio['numeral2'] }}
                                                     </td>
 
                                                     <td>
                                                         @if ($tab < 3)
                                                             <button type="button" class="btn p-0"
-                                                                wire:click="toRight({{ $predio->id }})">
+                                                                wire:click="toRight({{ $predio['id'] }})">
                                                                 <i class='bi bi-arrow-right-square-fill'></i>
                                                             </button>
                                                         @endif
@@ -210,34 +210,23 @@
                                         <tbody>
                                             @forelse ($prediosR as $predio)
                                                 <tr scope="row"
-                                                    class="@if ($predio->control->id == $controlIdR) table-active @endif">
-                                                    <td>{{ $predio->descriptor1 }} {{ $predio->numeral1 }}
-                                                        {{ $predio->descriptor2 }} {{ $predio->numeral2 }}
+                                                    class="@if ($predio['control_id']== $controlIdR) table-active @endif">
+                                                    <td>{{ $predio['descriptor1'] }} {{ $predio['numeral1'] }}
+                                                        {{ $predio['descriptor2'] }} {{ $predio['numeral2'] }}
                                                     </td>
 
                                                     <td>
-                                                        @if (($tab == 2 || $predio->control->id != $controlIdR) && $tab != 4)
+                                                        @if (($tab == 2 || $predio['control_id'] != $controlIdR) && $tab != 4)
                                                             <button type="button" class="btn p-0"
-                                                                wire:click="toLeft({{ $predio->id }})">
+                                                                wire:click="toLeft({{ $predio['id'] }})">
                                                                 <i class='bi bi-arrow-left-square-fill'></i>
                                                             </button>
                                                         @endif
-                                                        @if ($tab == 4)
-                                                            @isset($Persona)
-                                                                @if ($predio->getRelationPersona($Persona->id) == 'Propietario')
-                                                                    <span class="text-primary">
-                                                                    @else
-                                                                        <span>
-                                                                @endif
-                                                                {{ $predio->getRelationPersona($Persona->id) }}
-                                                                </span>
-                                                            @endisset
-                                                        @endif
                                                     </td>
-                                                    <td>
+                                                    <td class="text-end">
                                                         @if ($tab == 4)
                                                             @isset($Persona)
-                                                                {{ $predio->control->id }}
+                                                                {{ $predio['control_id'] }}
                                                             @endisset
                                                         @endif
                                                     </td>

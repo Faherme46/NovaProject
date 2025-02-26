@@ -129,12 +129,12 @@ class Consulta extends Component
     {
         $suma = 0;
         foreach ($this->prediosR as  $predio) {
-            $suma = $suma + $predio->coeficiente;
+            $suma = $suma + $predio['coeficiente'];
         }
         $this->sumCoefR = $suma;
         $suma = 0;
         foreach ($this->prediosL as  $predio) {
-            $suma = $suma + $predio->coeficiente;
+            $suma = $suma + $predio['coeficiente'];
         }
         $this->sumCoefL = $suma;
     }
@@ -235,12 +235,12 @@ class Consulta extends Component
             if ($left) {
                 $this->messageL = $this->messages[$control->state];
                 foreach ($predios as $predio) {
-                    $this->prediosL[$predio->id] = $predio;
+                    $this->prediosL[$predio->id] = $predio->toArray();
                 }
             } else {
                 $this->messageL = $this->messages[$control->state];
                 foreach ($predios as $predio) {
-                    $this->prediosR[$predio->id] = $predio;
+                    $this->prediosR[$predio->id] = $predio->toArray();
                 }
             }
         }
@@ -439,7 +439,7 @@ class Consulta extends Component
             $this->addError('error', '6 ' . $th->getMessage());
         }
     }
-    public function searchPredio($predio)
+    public function searchPredio($predio=null)
     {
 
         if (!$predio) {
@@ -451,7 +451,7 @@ class Consulta extends Component
         if (!$predioId) {
             return;
         }
-        $this->Predio = Predio::find($predio['id']);
+        $this->Predio = Predio::find($predioId);
         if (!$this->Predio) {
             session()->flash('warning', 'No se encontró');
         }

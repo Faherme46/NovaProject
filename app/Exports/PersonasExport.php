@@ -19,8 +19,8 @@ class PersonasExport implements FromCollection,WithHeadings{
         return [
             'tipo_id',
             'cc_propietario',
-            'nombres',
-            'apellidos'
+            'nombre',
+            'apellidox'
         ];
     }
 }

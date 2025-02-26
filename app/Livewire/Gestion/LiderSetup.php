@@ -18,15 +18,17 @@ use Illuminate\Support\Facades\Storage;
 class LiderSetup extends Component
 {
     public $allControls;
-    public $prediosRegistered;
 
-    public $prediosTotal;
-    public $prediosAbsent;
-    public $prediosPresente;
-    public $quorumPresente;
-    public $quorumAbsent;
+    public $values = [
+        'prediosTotal' => 0,
+        'prediosRegistered'=>0,
+        'prediosAbsent' => 0,
+        'prediosPresente' => 0,
+        'quorumPresente' => 0,
+        'quorumAbsent' => 0,
+        'quorumTotal' => 0,
 
-    public $quorumTotal;
+    ];
 
     public $asamblea;
     public $started = false;
@@ -46,13 +48,14 @@ class LiderSetup extends Component
     {
         $this->allControls = Control::whereNotIn('state', [4])->get();
 
-        $this->prediosPresente = $this->allControls->where('state',1)->sum('predios_vote');
-        $this->prediosTotal = $this->allControls->sum('predios_vote');
-        $this->prediosAbsent = $this->allControls->whereNotIn('state',[1,4])->sum('predios_vote');
+        $this->values['prediosPresente'] = $this->allControls->where('state', 1)->sum('predios_vote');
+        $this->values['prediosRegistered'] = $this->allControls->sum('predios_vote');
+        $this->values['prediosTotal'] =Predio::count();
+        $this->values['prediosAbsent'] = $this->allControls->whereNotIn('state', [1, 4])->sum('predios_vote');
 
-        $this->quorumPresente = $this->allControls->where('state',1)->sum('sum_coef');
-        $this->quorumTotal = $this->allControls->sum('sum_coef');
-        $this->quorumAbsent = $this->allControls->whereNotIn('state',[1,4])->sum('sum_coef');
+        $this->values['quorumPresente'] = $this->allControls->where('state', 1)->sum('sum_coef');
+        $this->values['quorumTotal'] = $this->allControls->sum('sum_coef');
+        $this->values['quorumAbsent'] = $this->allControls->whereNotIn('state', [1, 4])->sum('sum_coef');
 
         $this->asamblea = Asamblea::find(cache('id_asamblea'));
 
@@ -80,7 +83,7 @@ class LiderSetup extends Component
                 $this->asamblea->h_inicio = $time;
                 $this->asamblea->save();
                 cache(['asamblea' => $this->asamblea]);
-                \Illuminate\Support\Facades\Log::channel('custom')->notice('Se Inicia la asamblea',['HORA'=>$time]);
+                \Illuminate\Support\Facades\Log::channel('custom')->notice('Se Inicia la asamblea', ['HORA' => $time]);
                 session()->flash('info', 'Se ha iniciado la asamblea en: ' . $time);
             } else {
                 session()->flash('warning', 'Ya se establecio el inicio en: ' . $this->asamblea->h_inicio);
@@ -94,12 +97,11 @@ class LiderSetup extends Component
     {
 
         try {
-        $logpath=storage_path('logs/myLog.log');
+            $logpath = storage_path('logs/myLog.log');
 
-        if(File::exists($logpath)){
-            Storage::disk('externalAsambleas')->put($this->asamblea->name . '/logs.log', file_get_contents($logpath));
-
-        }
+            if (File::exists($logpath)) {
+                Storage::disk('externalAsambleas')->put($this->asamblea->name . '/logs.log', file_get_contents($logpath));
+            }
             $time = Carbon::now(new DateTimeZone('America/Bogota'))->format('H:i:s');
             if (!$this->asamblea->h_cierre) {
 
@@ -108,19 +110,19 @@ class LiderSetup extends Component
                 })->update(['quorum_end' => true]);
                 Control::whereHas('predios')->whereNull('h_recibe')->update(['h_recibe' => $time]);
                 cache(['predios_end' =>  Predio::where('quorum_end', true)->count()]);
-                cache(['quorum_end' => Control::whereNotIn('state', [4,5])->sum('sum_coef')]);
+                cache(['quorum_end' => Control::whereNotIn('state', [4, 5])->sum('sum_coef')]);
 
 
                 $fileController = new FileController;
-                if(!$fileController->exportTables()){
-                    $this->addError('Error','Problema exportando las tablas de excel');
+                if (!$fileController->exportTables()) {
+                    $this->addError('Error', 'Problema exportando las tablas de excel');
                 };
 
                 $this->asamblea->h_cierre = $time;
                 $this->asamblea->save();
                 cache(['asamblea' => $this->asamblea]);
                 $this->finished = true;
-                \Illuminate\Support\Facades\Log::channel('custom')->notice('Se termina la asamblea',['HORA'=>$time]);
+                \Illuminate\Support\Facades\Log::channel('custom')->notice('Se termina la asamblea', ['HORA' => $time]);
                 session()->flash('info', 'Se ha terminado la asamblea en: ' . $time);
             } else {
                 session()->flash('warning', 'Ya se establecio el cierre en: ' . $this->asamblea->h_cierre);

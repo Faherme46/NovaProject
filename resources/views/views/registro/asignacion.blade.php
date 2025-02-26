@@ -72,7 +72,7 @@
                         </div>
                     </div>
 
-                    <div class="col-5 align-items-center my-auto mx-auto">
+                    <div class="col-5  mx-auto">
                         <div class="card">
                             <div class="card-header">
                                 <div class="d-flex justify-content-center">

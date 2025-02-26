@@ -11,9 +11,7 @@ use App\Models\PrediosPersona;
 use App\Models\Question;
 use App\Models\Result;
 use App\Models\Signature;
-use App\Models\Terminal;
-use App\Models\Torre;
-use App\Models\TorresCandidato;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 
@@ -26,9 +24,9 @@ class SessionController extends Controller
     public function destroyAll()
     {
         $nameAsamblea = cache('asamblea')['name'];
-        $logpath=storage_path('logs/myLog.log');
+        $logpath = storage_path('logs/myLog.log');
 
-        if(File::exists($logpath)){
+        if (File::exists($logpath)) {
             Storage::disk('externalAsambleas')->put($nameAsamblea . '/logs.log', file_get_contents($logpath));
             File::delete($logpath);
         }
@@ -39,13 +37,13 @@ class SessionController extends Controller
                 return back()->withErrors('Error', 'Problema exportando las tablas de excel');
             };
         } catch (\Throwable $th) {
-            return back()->withErrors('Error', 'Problema exportando las tablas de excel '.$th->getMessage());
+            return back()->withErrors('Error', 'Problema exportando las tablas de excel ' . $th->getMessage());
         }
         //se descargan las tablas
-        $backupController=new BackupController();
-        $response=$backupController->downloadBackup();
+        $backupController = new BackupController();
+        $response = $backupController->downloadBackup();
 
-        if($response!=200 && $response!=[]){
+        if ($response != 200 && $response != []) {
             dd($response);
             return redirect()->route('home')->with('error', $response);
         };
@@ -58,7 +56,7 @@ class SessionController extends Controller
         //se limpiaran las tablas
         $this->destroyOnError();
 
-        Auth::attempt([ "username"=> $sessionData->username,"password"=> $sessionData["passwordTxt"]]);
+        Auth::attempt(["username" => $sessionData->username, "password" => $sessionData["passwordTxt"]]);
         return redirect()->route('home')->with('success', 'Sesion reestablecida');
     }
 
@@ -82,7 +80,7 @@ class SessionController extends Controller
     public function deleteAsambleaFiles()
     {
         $disk = Storage::disk('results');
-        $asambleaName=cache('asamblea')['name'];
+        $asambleaName = cache('asamblea')['name'];
         // Verifica si el disco existe
         if ($disk->exists($asambleaName)) {
             Storage::disk('results')->deleteDirectory($asambleaName);
@@ -147,7 +145,36 @@ class SessionController extends Controller
         $sessionOn->update($session);
     }
 
-    public function downloadTables(){
+    public function sessionConnect(Request $request)
+    {
+
+        $ip=$request->ip;
+
+        $request->validate([
+            'ip' => 'required|ip',
+        ], [
+            'ip.required' => 'El campo de la IP es requerido',
+        ]);
+        $connection = @fsockopen($ip, 3306, $errno, $errstr, 2);
+
+        if ($connection) {
+            fclose($connection);
+            Storage::put('db_host.txt', $ip);
+            return back()->with('success','Se ha establecido conexión');
+        } else {
+
+            return back()->with('warning','No se ha encontrado un servicio mysql para la ip destinada');
+        }
+    }
+
+    public function sessionDisconnect(){
+
+        if(Storage::exists('db_host.txt')){
+            Storage::delete('db_host.txt');
+        return back()->with('success','Se ha realizado la desconexión');
+        }else{
+            return back()->with('warning','No hay conexiones activas');
+        };
 
     }
 }
