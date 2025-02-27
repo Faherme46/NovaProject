@@ -62,7 +62,9 @@ class SessionController extends Controller
 
     public function destroyOnError()
     {
+        DB::statement('LOCK TABLES `cache` WRITE;');
         Cache::flush();
+        DB::statement('UNLOCK TABLES;');
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         Session::truncate();
         Predio::truncate();
