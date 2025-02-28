@@ -34,7 +34,7 @@ class ReportController extends Controller
         $date = explode('-', $this->asamblea->fecha);
         $meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
         $dateString = $date[2] . ' de ' . $meses[(int)$date[1] - 1] . ' de ' . $date[0];
-        // $this->predios = Predio::where('id', '<', 5)->get();
+        // $this->predios = Predio::where('id', '<', 200)->get();
         $this->predios = Predio::all();
         $this->questions = Question::where('isValid', true)->whereHas('resultCoef')->with('results')->get();
 
@@ -78,7 +78,8 @@ class ReportController extends Controller
                 }else if($response->getStatusCode()!=200){
                     return redirect()->route('gestion.report')->with('error', 'Error desconocido');
                 }
-                $anexos = ($this->asamblea->ordenDia) ? [
+                $anexos = ($this->asamblea->ordenDia) ?
+                [
                     'Listado de Personas Citadas a la Asamblea ',
                     'Asistencia Para Quorum',
                     'Listado Total de Participantes en la Asamblea',
@@ -90,14 +91,10 @@ class ReportController extends Controller
                     'Listado Total de Participantes en la Asamblea',
                     'Informe Resultado de Votaciones'
                 ];
-                $this->variables += [
-                    'anexos' => $anexos,
-                ];
+                $this->variables['anexos'] = $anexos;
                 $this->createDocument('index-registro');
-
                 $this->variables['index'] = 0;
                 $this->createDocument('personas-citadas');
-
                 $this->variables['index'] = 1;
                 $this->createDocument('asistencia-quorum');
                 $this->variables['index'] = 2;
@@ -110,7 +107,7 @@ class ReportController extends Controller
                 }
             }
 
-            $this->createDocument('votaciones');
+            // $this->createDocument('votaciones');
             $fileController = new FileController();
             $filePath = $fileController->getAsambleaFolderPath();
             $filePath = $filePath . '/Informe';
