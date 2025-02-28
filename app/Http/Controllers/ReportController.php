@@ -208,11 +208,5 @@ class ReportController extends Controller
     }
 
 
-    public function updatePredios(){
-        $predios=Predio::all();
-        foreach($predios as $predio){
-            $h_entrega=$predio->control->h_entrega;
-            $predio->update(['quorum_start'=>])
-        }
-    }
+    
 }
