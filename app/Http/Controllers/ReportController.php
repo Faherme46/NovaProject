@@ -28,25 +28,33 @@ class ReportController extends Controller
     public $predios;
     public function __construct()
     {
+        ini_set('memory_limit', '1024M');
         $this->variables['date'] = Carbon::now()->locale('es')->isoFormat('MMMM YYYY');
         $this->variables['quorum'] = Control::whereNotIn('state', [4])->sum('sum_coef');
         $this->asamblea = Asamblea::find(cache('asamblea')['id_asamblea']);
         $date = explode('-', $this->asamblea->fecha);
         $meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
         $dateString = $date[2] . ' de ' . $meses[(int)$date[1] - 1] . ' de ' . $date[0];
-        $this->predios = Predio::where('id', '<', 177)->get();
-        // $this->predios = Predio::with(['personas','apoderado'])->get()->map(function ($predio) {
-        //     return [
-        //         'id' => $predio->id,
-        //         'nombre' => $predio->getFullName(),
-        //         'personas' => $predio->personas->map(function($persona){
-        //             return ['id'=>$persona->id,'nombre'=>];
-        //         })->toArray(),
-        //         'apoderado' => $predio->apoderado ? $predio->apoderado->toArray() : null,
-        //         'quorum_start'=>$predio->quorum_start
-        //     ];
-        // })->toArray();
-        // dd($this->predios[0]);
+        // $this->predios = Predio::where('id', '<', 177)->get();
+        $this->predios = Predio::with(['personas','apoderado'])->get()->map(function ($predio) {
+            return [
+                'id' => $predio->id,
+                'nombre' => $predio->getFullName(),
+                'numeral1'=>$predio->numeral1,
+                'numeral2'=>$predio->numeral2,
+                'control_id'=>$predio->control_id,
+                'coeficiente'=>$predio->coeficiente,
+                'personas' => $predio->personas->map(function($persona){
+                    return ['id'=>$persona->id,'nombre'=>$persona->fullName()];
+                })->toArray(),
+                'apoderado' => $predio->apoderado ? $predio->apoderado->toArray() : null,
+                'quorum_start'=>$predio->quorum_start,
+                'quorum_end'=>$predio->quorum_end,
+                'h_entrega'=>($predio->control)?$predio->control->h_entrega:false,
+                'h_recibe'=>($predio->control)?$predio->control->h_recibe:false,
+            ];
+        })->toArray();
+
 
         $this->questions = Question::where('isValid', true)->whereHas('resultCoef')->with('results')->get();
 
@@ -55,7 +63,7 @@ class ReportController extends Controller
             'asambleaR' => $this->asamblea,
             'dateString' => $dateString,
             'predios' => $this->predios,
-            'prediosCount' => $this->predios->whereNotNull('control_id')->count(),
+            'prediosCount' => Predio::whereNotNull('control_id')->count(),
             'questions' => $this->questions
         ];
     }
@@ -129,7 +137,7 @@ class ReportController extends Controller
             $output = $this->mergePdf();
             $fileController->exportPdf($this->asamblea->name . '/Informe/Informe.pdf', $output);
 
-
+            ini_set('memory_limit', '512M');
             return response($output, 200)
                 ->header('Content-Type', 'application/pdf')
                 ->header('Content-Disposition', 'inline; filename="Informe.pdf"');
@@ -148,7 +156,9 @@ class ReportController extends Controller
             'defaultFont' => 'Helvetica',
             'isPhpEnabled' => true,
         ]);
+        $fileController = new FileController();
         $pdf->setPaper('A4', 'portrait');
+        $fileController->exportPdf($this->asamblea->name . '/Informe/'.$name.'.pdf', $pdf->output());
         $this->docs[$name] = $pdf->output();
     }
     function mergePdf()

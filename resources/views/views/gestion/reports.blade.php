@@ -145,11 +145,11 @@
                                     </div>
                                 @endif
 
-                                {{-- @if (!$ordenDia)
+                                @if (cache('asamblea',[])['registro']&&!cache('prepared',false))
                                     <div class="text-danger text-center mt-2">
-                                        <small>No se ha guardado Orden del Dia</small>
+                                        <small>No se han preparado los predios</small>
                                     </div>
-                                @endif --}}
+                                @endif
                                 <div class="row justify-content-center px-4 mt-3">
                                     <button type="button" class="btn btn-success p-1" wire:click='setView(0)'
                                         @disabled($questions->isEmpty())>
@@ -161,7 +161,20 @@
                                             </div>
                                         </div>
                                     </button>
-                                    <button type="button" class="btn btn-info p-1 mt-2" @disabled(!$asambleaa || !$allQuestionsVerified)
+                                    @if (cache('asamblea',[])['registro']  )
+                                    <button type="button" class="btn btn-warning p-1 mt-2"
+                                    onclick=location.href='/predios/repare'; @disabled(!$asambleaVerified)
+                                    data-bs-toggle="modal" data-bs-target="#cargandoModal">
+                                        <div class="card ">
+                                            <div
+                                                class="card-body d-flex align-items-center p-1 justify-content-center">
+                                                <i class="bi bi-file-earmark-binary" style="font-size:40px"></i>
+                                                <h5 class="card-title mb-0 ms-2">Preparar Predios </h5>
+                                            </div>
+                                        </div>
+                                    </button>
+                                    @endif
+                                    <button type="button" class="btn btn-info p-1 mt-2" @disabled(!$asambleaa || !$allQuestionsVerified || !$asambleaVerified  || !cache('prepared',false))
                                         wire:click='verifyForm'>
                                         <div class="card ">
                                             <div
@@ -181,8 +194,6 @@
                                             </div>
                                         </div>
                                     </button>
-
-
                                 </div>
                             </div>
                         </div>
@@ -251,6 +262,21 @@
         </div>
 
     @endif
+
+    <div class="modal fade" id="cargandoModal" tabindex="-1">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-body d-flex justify-content-center align-items-center">
+                    <div class="spinner-grow text-primary" style="width: 4rem; height: 4rem;" role="status">
+
+                    </div>
+                    <span class="ms-3 " style="font-size: 5rem">Cargando...</span>
+                </div>
+
+            </div>
+        </div>
+    </div>
     <div class="modal fade" id="spinnerModal" tabindex="-1">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">

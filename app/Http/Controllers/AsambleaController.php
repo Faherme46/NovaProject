@@ -140,26 +140,14 @@ class AsambleaController extends Controller
             return back()->withErrors('No se puede reducir el numero de controles')->withInput();
         }
 
-        if($request->h_inicio!=$asamblea->h_inicio){
-            $controles=Control::all();
-            foreach ($controles as $control) {
-
-            if(strtotime($request->h_inicio) < strtotime($control->h_entrega)){
-                $control->predios()->update(['quorum_start'=>false]);
-            }else{
-                $control->predios()->update(['quorum_start'=>true]);
-            };
-            }
-
-
-        }
+        cache(['prepared'=>false]);
         if ($asamblea) {
             $asamblea->update($request->all());
             if (!$request->signature) {
                 $asamblea->signature = false;
                 $asamblea->save();
             }
-            cache(['asamblea' => $asamblea->toArray()]);
+            cache(['asamblea' => $asamblea]);
             return back()->with('success', 'Asamblea actualizada con éxito.');
         } else {
             return back()->withErrors('No se encontro la asamblea')->withInput();

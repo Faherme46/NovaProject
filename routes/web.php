@@ -133,6 +133,6 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('users.logout')-
 //rutas de prueba
 Route::get('/proofAsignacion', [Asignacion::class, 'proofAsignacion'])->name('proofAsignacion');
 // Route::get('proofQuestion', [FileController::class, 'exportAllQuestions
-// Route::get('proofVotacion', [QuestionController::class, 'crearGraficasProof']);
+Route::get('predios/repare', [PrediosController::class, 'repairPredios'])->name('predios.repair');
 
 //Route::get('proofExport',[PrediosController::class,'export']);
