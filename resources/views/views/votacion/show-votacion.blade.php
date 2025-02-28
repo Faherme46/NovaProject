@@ -64,6 +64,7 @@
                                 <a target="_blank" href="/storage/images/results/{{ $question->resultNom->chartPath }}">
                                     <img src="/storage/images/results/{{ $question->resultNom->chartPath }}"
                                         alt="No se encontro imagen" style="max-width: 100%">
+                                </a>
                             @endif
                         @else
                             <div class="d-flex mt-2 justify-content-center">

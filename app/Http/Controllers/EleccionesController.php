@@ -182,6 +182,7 @@ class EleccionesController extends Controller
 
     public function generarGraficas()
     {
+        cache(['graficas'=>true]);
         $torres = Torre::all();
         foreach ($torres as $torre) {
             $nombres = [];
@@ -202,7 +203,7 @@ class EleccionesController extends Controller
                 }
 
                 $this->createChart($torre->id, $torre->name, $nombres, $valuesNom, 'nominalChart', $torre->delegados, $torre->votosBlanco);
-                
+
             } catch (Throwable $th) {
                 return redirect()->route('elecciones.resultados')->with('error', $th->getMessage());
             }

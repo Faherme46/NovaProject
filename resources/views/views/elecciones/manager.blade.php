@@ -43,7 +43,7 @@
                                 <td class="text-start text-info">{{ $values['prediosTotal'] }}</td>
                             </tr>
                             <tr>
-                                <td class="text-end">Votantes:</td>
+                                <td class="text-end">Votantes Totales:</td>
                                 <td class="text-start text-info">{{ cache('votantes',0) }}</td>
                             </tr>
                             <tr>
