@@ -18,6 +18,7 @@ use App\Imports\PrediosImport;
 
 use App\Imports\PredioWithRegistro;
 use App\Imports\UsersImport;
+use App\Models\Predio;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
@@ -137,6 +138,20 @@ class AsambleaController extends Controller
             }
         }else{
             return back()->withErrors('No se puede reducir el numero de controles')->withInput();
+        }
+
+        if($request->h_inicio!=$asamblea->h_inicio){
+            $controles=Control::all();
+            foreach ($controles as $control) {
+
+            if(strtotime($request->h_inicio) < strtotime($control->h_entrega)){
+                $control->predios()->update(['quorum_start'=>false]);
+            }else{
+                $control->predios()->update(['quorum_start'=>true]);
+            };
+            }
+
+
         }
         if ($asamblea) {
             $asamblea->update($request->all());

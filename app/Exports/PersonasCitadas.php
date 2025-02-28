@@ -12,7 +12,7 @@ class PersonasCitadas implements FromArray, WithEvents
      * @return \Illuminate\Support\Collection
      */
 
-     public $data;
+    public $data;
     public function __construct($data)
     {
         //Array con el id de las questions
@@ -27,35 +27,43 @@ class PersonasCitadas implements FromArray, WithEvents
 
     public function buildArray()
     {
-        $array[]=[
-            ['Predio','','Coeficiente','Asistente','','Nombre'],
-            ['Torre','Apto.','','Propietario','Apoderado','Propietario','Apoderado']
+        $array[] = [
+            ['Predio', '', 'Coeficiente', 'Asistente', '', 'Nombre'],
+            ['Torre', 'Apto.', '', 'Propietario', 'Apoderado', 'Propietario', 'Apoderado']
         ];
         $array += $this->data->map(function ($predio) {
-            $predioArray[]=$predio->numeral1;
-            $predioArray[]=$predio->numeral2;
-            $predioArray[]=$predio->coeficiente;
-            if($predio->apoderado){
-                $predioArray[]='';
-                $predioArray[]='X';
+            $predioArray[] = $predio->numeral1;
+            $predioArray[] = $predio->numeral2;
+            $predioArray[] = $predio->coeficiente;
+            $apoderado=false;
+            if ($predio->control) {
+                $apoderado = !in_array($predio->control->persona->id, $predio->personas->pluck('id')->toArray());
+                if ($apoderado) {
+                    $predioArray[] = '';
+                    $predioArray[] = 'X';
+                } else {
+                    $predioArray[] = 'X';
+                    $predioArray[] = '';
+                }
             }else{
-                $predioArray[]='X';
-                $predioArray[]='';
+                $predioArray[] = 'X';
+                $predioArray[] = '';
             }
-            // Convierte el predio a array
-            $names='';
-            if ($predio->personas->count()==1) {
-                $names.=$predio->personas[0]->fullName();
-            }else{
-                foreach ($predio->personas as $persona) {
-                    $names.=$persona->fullName()."\n";
 
+
+            $names = '';
+            if ($predio->personas->count() == 1) {
+                $names .= $predio->personas[0]->fullName();
+            } else {
+                foreach ($predio->personas as $persona) {
+                    $names .= $persona->fullName() . "\n";
                 }
             }
-
-            $predioArray[]=$names;
-            if($predio->apoderado){
-                $predioArray[]=$predio->apoderado->fullName();
+            $predioArray[] = $names;
+            if($predio->control){
+                if ($apoderado) {
+                    $predioArray[] = $predio->control->persona->fullName();
+                }
             }
 
 
@@ -73,7 +81,7 @@ class PersonasCitadas implements FromArray, WithEvents
             AfterSheet::class => function (AfterSheet $event) {
                 $sheet = $event->sheet->getDelegate();
 
-                $cellsToMerge=[
+                $cellsToMerge = [
                     'A1:B1',
                     'C1:C2',
                     'D1:E1',
@@ -102,7 +110,7 @@ class PersonasCitadas implements FromArray, WithEvents
                     ],
                 ]);
                 $sheet->getStyle('E3:F1000')->getAlignment()->setWrapText(true);
-                $cols=['A','B','C','D','E','F','G'];
+                $cols = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
                 foreach ($cols as $col) {
                     $sheet->getColumnDimension($col)->setAutoSize(true);
                 }

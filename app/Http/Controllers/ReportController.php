@@ -34,8 +34,8 @@ class ReportController extends Controller
         $date = explode('-', $this->asamblea->fecha);
         $meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
         $dateString = $date[2] . ' de ' . $meses[(int)$date[1] - 1] . ' de ' . $date[0];
-        // $this->predios = Predio::where('id', '<', 5)->get();
-        $this->predios = Predio::all();
+        $this->predios = Predio::where('id', '<', 5)->get();
+        // $this->predios = Predio::all();
         $this->questions = Question::where('isValid', true)->whereHas('resultCoef')->with('results')->get();
 
         $this->variables += [
@@ -204,6 +204,15 @@ class ReportController extends Controller
             return response()->json(['success' => 'Archivos Exportados correctamente'], 200);
         } catch (\Throwable $th) {
             return response()->json('Falla en la exportacion de excel: '.$th->getMessage(), 500);
+        }
+    }
+
+
+    public function updatePredios(){
+        $predios=Predio::all();
+        foreach($predios as $predio){
+            $h_entrega=$predio->control->h_entrega;
+            $predio->update(['quorum_start'=>])
         }
     }
 }

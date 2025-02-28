@@ -114,6 +114,7 @@
             </thead>
             <tbody class="fs-12px">
                 @foreach ($predios as $predio)
+                @dd($predio)
                     <tr>
                         <td class="p-0 px-1 ">{{ $predio->numeral1 }}</td>
                         <td class="p-0 px-1 ">{{ $predio->numeral2 }}</td>

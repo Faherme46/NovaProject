@@ -48,7 +48,7 @@ class LiderSetup extends Component
     {
         $this->allControls = Control::whereNotIn('state', [4])->get();
 
-        $this->values['prediosPresente'] = $this->allControls->where('state', 1)->sum('predios_vote');
+$this->values['prediosPresente'] = $this->allControls->where('state', 1)->sum('predios_vote');
         $this->values['prediosRegistered'] = $this->allControls->sum('predios_vote');
         $this->values['prediosTotal'] =Predio::count();
         $this->values['prediosAbsent'] = $this->allControls->whereNotIn('state', [1, 4])->sum('predios_vote');
@@ -70,15 +70,11 @@ class LiderSetup extends Component
             return $this->addError('error', 'No se han registrado controles');
         }
         try {
-
             $time = Carbon::now(new DateTimeZone('America/Bogota'))->format('H:i:s');
             if (!$this->asamblea->h_inicio) {
-
                 $this->started = true;
                 cache(['predios_init' =>  Predio::whereHas('control')->count()]);
                 cache(['quorum_init' => Control::whereNotIn('state', [4])->sum('sum_coef')]);
-
-
                 Predio::whereHas('control')->update(['quorum_start' => true]);
                 $this->asamblea->h_inicio = $time;
                 $this->asamblea->save();
