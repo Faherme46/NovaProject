@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\isAsambleaEnd;
+use App\Livewire\Elecciones\Resultados;
 use Illuminate\Support\Facades\Route;
 
 
@@ -50,6 +51,7 @@ use App\Livewire\Votacion\Votacion;
 use App\Livewire\Elecciones\Registro;
 use App\Livewire\Elecciones\Candidatos;
 use App\Livewire\Elecciones\Elecciones;
+use App\Livewire\Elecciones\Manager;
 use App\Livewire\Elecciones\Programar;
 use App\Livewire\Elecciones\Quorum;
 use App\Livewire\Elecciones\Terminale;
@@ -81,8 +83,16 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::get('questions/show/{questionId}/{plancha?}/{plazas?}', PresentQuestion::class)->name('questions.show');
     Route::get('questions/view/{questionId}', ViewQuestion::class)->name('questions.view');
     Route::get('elecciones/programar', Programar::class)->name('elecciones.programar')->withoutMiddleware(EnsureAsambleaOn::class);
+    Route::get('elecciones/gestion', Manager::class)->name('elecciones.gestion');
     Route::get('elecciones/candidatos', Candidatos::class)->name('elecciones.candidatos');
     Route::get('elecciones/candidatos/import', [EleccionesController::class,'importCandidatos'])->name('elecciones.candidatos.import');
+    Route::get('elecciones/desiniciar', [Manager::class,'desiniciar'])->name('elecciones.desiniciar');
+    Route::get('elecciones/desterminar', [Manager::class,'desterminar'])->name('elecciones.desterminar');
+    Route::get('elecciones/resultados/grafica', [EleccionesController::class,'generarGraficas'])->name('elecciones.resultados.grafica');
+
+
+
+
 
     Route::post('asambleas/store', [AsambleaController::class, 'store'])->name('asambleas.store')->withoutMiddleware(EnsureAsambleaOn::class);
     Route::post('predios/import', [PrediosController::class, 'import'])->name('predios.import');
@@ -106,8 +116,8 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Admin|Lider|Operario')]], function () {
     Route::get('/', Main::class)->name('home')->withoutMiddleware(EnsureAsambleaOn::class)->middleware(EleccionesMiddleware::class);
     Route::get('elecciones',  Elecciones::class)->name('home.elecciones')->withoutMiddleware(EnsureAsambleaOn::class);
-    Route::get('elecciones/quorum',  Quorum::class)->name('elecciones.quorum');
     Route::get('elecciones/registrar', Registro::class)->name('elecciones.registrar');
+    Route::get('elecciones/resultados', Resultados::class)->name('elecciones.resultados');
     Route::get('asistencia/asignacion', Asignacion::class)->name('asistencia.asignacion')->middleware(isAsambleaEnd::class);
     Route::get('asistencia/firmas', Signs::class)->name('asistencia.signs')->middleware(isAsambleaEnd::class);
     Route::get('asistencia/firmando', Signing::class)->name('asistencia.signing')->middleware(isAsambleaEnd::class);

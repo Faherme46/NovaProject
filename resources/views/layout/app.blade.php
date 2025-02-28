@@ -146,7 +146,7 @@
                                 <i class='bi bi-person-video2 ms-1 fs-3'></i>
                             </a>
 
-                            <a href="{{ route('gestion.asamblea') }}" class="nav_link" data-bs-toggle="tooltip"
+                            <a href="{{ route('elecciones.gestion') }}" class="nav_link" data-bs-toggle="tooltip"
                                 data-bs-placement="bottom" data-bs-title="Control">
                                 <i class='bi bi-ui-checks-grid nav_icon'></i>
                             </a>

@@ -167,7 +167,7 @@ def create_plot(title, labels, values, output_path,nameAsamblea):
     bars = ax.bar(labels, values, width=bar_width, color=['red', 'orange', 'green', 'yellow', 'purple', 'cyan', 'saddlebrown', 'pink', 'lime'], edgecolor='black', zorder=3)
 
 
-    # Añadir los valores sobre las columnas
+    # Añadir los values sobre las columnas
     for bar in bars:
         yval = bar.get_height()
         ax.text(bar.get_x() + bar.get_width() / 2, yval, yval,
@@ -215,3 +215,69 @@ def create():
     create_plot(data['title'], data['labels'], data['values'], data['output'],data['nameAsamblea'])
     return "200"
     # return render_template('hello.html', person=name,person2=name2)
+
+
+
+def create_plot_elecciones(title,labels,values,output_path,nameAsamblea,delegados,blanco):
+
+
+
+    # Ordenar los datos de mayor a menor
+    labels.insert(0,'VOTO EN BLANCO')
+    values.insert(0,blanco)
+
+    max_valor = max(values)
+    limite_x = max_valor / 0.95
+    colores = [ '#318CE7' if i < delegados else '#00C040' for i in range(len(labels))]
+    # colores.append("#AFCDEA")
+    colores.insert(0,'#bceeff')
+    # Ajustar tamaño de la figura dinámicamente según la cantidad de datos
+    fig, ax = plt.subplots(figsize=(14, 0.5 * len(labels) + 2))
+    ax.set_xlim(0, limite_x)
+    # Crear gráfico de barras horizontales
+    ax.barh(labels, values, color=colores, edgecolor='black', height=0.6)
+
+
+    # Agregar values al final de cada barra
+    for i, v in enumerate(values):
+        ax.text(v + limite_x  * 0.02, i, str(v), ha='left', va='center', fontsize=10, color='black')
+
+    # Mejoras en la presentación
+    ax.set_position([0.2, 0.1, 0.6, 0.8])
+
+    ax.set_title(title.upper(), fontsize=14,loc='center')
+
+    # Quitar bordes innecesarios para un diseño más limpio
+
+    # Cargar la imagen que se usará como marca de agua
+    img = mpimg.imread('C:/xampp/htdocs/nova/scripts/nova.python/watermark2.png')
+    ax_img = fig.add_axes([0.87, .02, 0.12, 0.12], zorder=0)  # Z-order 0 coloca la imagen detrás
+    ax_img.imshow(img, extent=[0, 10, 0, 10 ], aspect='auto', alpha=0.8)
+    ax_img.axis('off')
+
+
+    # Añadir cuadrícula y configurar el gráfico
+
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['left'].set_visible(True)
+    ax.yaxis.set_visible(True)
+
+
+    ax.set_xlabel(nameAsamblea)
+    ax.tick_params(axis='both', which='major', labelsize=20)
+
+    wrapped_labels = [textwrap.fill(label[:28], width=28) for label in labels]  # Divide en líneas
+
+    # Aplicar etiquetas truncadas y ajustadas
+    ax.set_yticks(range(len(labels)))
+    ax.set_yticklabels(wrapped_labels, fontsize=10)
+
+    plt.savefig(output_path)
+    plt.close(fig)
+
+@app.route('/create-plot-elecciones',methods=['POST'])
+def createPlotElecciones():
+    data = request.get_json()
+    create_plot_elecciones(data['title'], data['labels'], data['values'], data['output'],data['nameAsamblea'],data['delegados'],data['blanco'])
+    return "200"

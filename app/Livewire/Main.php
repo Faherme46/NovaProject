@@ -36,7 +36,7 @@ class Main extends Component
         return view('views.main');
     }
 
-    
+
 
     public function setPanels(){
         $this->panels=[
@@ -69,8 +69,8 @@ class Main extends Component
                 'body'=> 'Representantes para asambleas',
                 'visible'=> !(cache('asamblea',false)),
 
-                // 'enabled'=>!(cache('asamblea',false)),
-                'enabled'=>false
+                'enabled'=>!(cache('asamblea',false)),
+                // 'enabled'=>false
             ],[
                 "directives"=> 'onclick=location.href="/gestion/informes";',
                 'icon'=> 'bi-file-earmark-richtext',

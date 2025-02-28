@@ -16,7 +16,8 @@ class NoEleccionesMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!(cache('asamblea'))?cache('asamblea')['eleccion']:true) {
+
+        if (!((cache('asamblea'))?cache('asamblea')['eleccion']:true)) {
             Auth::logout();
             return redirect()->route('login')->with('warning','Esta asamblea no es Electoral');
         }

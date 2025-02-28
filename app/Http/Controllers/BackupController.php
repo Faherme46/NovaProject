@@ -25,8 +25,8 @@ class BackupController extends Controller
         $codigoSalida = 0;
 
         Cache::forget('asamblea');
-        // $tables = ['cache', 'controls', 'personas', 'predios','eleccions', 'predios_personas', 'questions', 'results', 'session', 'signatures',  'torres', 'torres_candidatos','terminals'];
-        $tables = ['cache', 'controls', 'personas', 'predios', 'predios_personas', 'questions', 'results', 'session', 'signatures'];
+        $tables = ['cache', 'controls', 'personas', 'predios','eleccions', 'predios_personas', 'questions', 'results', 'session', 'signatures',  'torres', 'torres_candidatos','terminals'];
+        // $tables = ['cache', 'controls', 'personas', 'predios', 'predios_personas', 'questions', 'results', 'session', 'signatures'];
         $comando = sprintf("%s --user=\"%s\" --password=\"%s\" --skip-lock-tables --no-create-info %s %s > %s", env("UBICACION_MYSQLDUMP"), env("DB_USERNAME"), env("DB_PASSWORD"), env('DB_DATABASE'), implode(' ', $tables), $ubicacionArchivoTemporal);
         try {
             // Storage::disk('public')->makeDirectory('backups');

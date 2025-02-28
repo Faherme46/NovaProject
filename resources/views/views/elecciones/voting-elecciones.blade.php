@@ -4,7 +4,7 @@
     @if ($torre)
         <div class="card">
             <div class="card-header justify-content-center d-flex">
-                <h1 class="card-title mb-0" style="font-size: 3.5rem">TORRE {{ strtoupper($torre->name) }}</h1>
+                <h1 class="card-title mb-0" style="font-size: 3.5rem"> {{ strtoupper($torre->name) }}</h1>
 
             </div>
 
@@ -17,14 +17,14 @@
                         <label class="btn btn-outline-success w-45 me-3 fs-3"
                             for="radio-{{ $id }}">{{ $candidato }}</label>
                     @endforeach
-                    <input type="radio" class="btn-check" name="candidato" id="radio-w" value="0"
+                    <input type="radio" class="btn-check" name="candidato" id="radio-w" value="-1"
                         wire:model.live='candidatoId'>
                     <label class="btn btn-outline-info w-45 me-3 fs-3" for="radio-w" >VOTO EN BLANCO</label>
                 </div>
             </div>
             <div class="card-footer text-center">
                 <button class="btn btn-primary fs-4" data-bs-toggle="modal"
-                data-bs-target="#confirmModal" @disabled(!$candidatoId)>ACEPTAR</button>
+                data-bs-target="#confirmModal" @disabled(!$candidatoId)>VOTAR</button>
             </div>
         </div>
 
@@ -40,9 +40,9 @@
                 </div>
                 <div class="modal-body text-center">
                     @if ($candidatoId)
-                        <h3 class="mb-0">SU VOTO PARA TORRE
+                        <h3 class="mb-0">SU VOTO PARA
                             <span class="badge fs-3 text-bg-info">{{ strtoupper($torre->name) }} </span>
-                            ES POR <span class="badge mt-1 fs-3 text-bg-primary">{{ $candidatos[$candidatoId]}}</span>
+                            ES POR <span class="badge mt-1 fs-3 text-bg-primary">{{($candidatoId!=-1)? $candidatos[$candidatoId]:"VOTO EN BLANCO"}}</span>
                         </h3>
                     @endif
 

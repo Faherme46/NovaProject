@@ -140,14 +140,13 @@
             <div class="card ">
                 <div class="card-header d-flex align-items-center justify-content-between">
                     <div class="d-flex align-items-center">
-                        <button type="button" class="btn btn-primary fs-5">Registrar</button>
+                        <button type="button" class="btn btn-primary fs-5" wire:click='registrar'>Registrar</button>
 
 
                     </div>
                     <div class="d-flex text-right align-items-center w-30">
                         <span class="me-2">Predios: </span>
-                        <input class="form-control" name="sum_coef" value="{{ count($predioSelected) }}"
-                            id="sumCoef" readonly></input>
+                        <input class="form-control" value="{{count($prediosAvailable)}}" readonly></input>
                     </div>
 
                 </div>
@@ -157,17 +156,25 @@
                             <tr>
                                 <th>Predio</th>
                                 <th>
-                                    <input class="form-check-input" type="checkbox" wire:model.live='selectAll' />
+                                    <button class="btn p-0" data-bs-toggle="tooltip" data-bs-placement="top"
+                                        data-bs-custom-class="custom-tooltip" data-bs-title="Quitar todos los predios"
+                                        wire:click="unsetAllPredios" wire:confirm='Desea eliminar todos los predios'>
+                                        <i class='bi bi-x-square-fill'></i>
+                                    </button>
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse ($prediosAvailable as $predio)
                                 <tr>
-                                    <td>{{ $predio['numeral1'].' '.$predio['descriptor1'].' '.$predio['numeral2'] }} </td>
+                                    <td>{{ $predio['numeral1'] . ' ' . $predio['descriptor1'] . ' ' . $predio['numeral2'] }}
+                                    </td>
                                     <td>
-                                        <input class="form-check-input" type="checkbox"
-                                            wire:model.live="predioSelected" value="{{ $predio['id'] }}">
+                                        <button class="btn p-0" data-bs-toggle="tooltip" data-bs-placement="top"
+                                            data-bs-custom-class="custom-tooltip" data-bs-title="Quitar predio"
+                                            wire:click="unsetPredio({{ $predio['id'] }})">
+                                            <i class='bi bi-x-square'></i>
+                                        </button>
                                     </td>
                                 </tr>
                             @empty

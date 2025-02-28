@@ -8,7 +8,8 @@
                 <button type="button" class="btn-close " wire:click='$refresh'></button>
             </div>
             <div class="card-body">
-                <p class="mb-0 fs-5">El asistente puede votar en <span class="badge fs-5 text-bg-success">{{ session('terminal') }}</span></p>
+                <p class="mb-0 fs-5">El asistente puede votar en <span
+                        class="badge fs-5 text-bg-success">{{ session('terminal') }}</span></p>
             </div>
             <div class="card-footer d-flex justify-content-end">
                 <button class="btn btn-primary" wire:click='$refresh'>Aceptar</button>
@@ -18,8 +19,13 @@
     <div class="row g-2">
         <div class="col-3">
             <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title mb-0">{{ $asamblea['folder'] }}</h2>
+                <div class="card-header text-center">
+                    <select class="form-select form-select-lg" wire:model.live='torreSelectedName'>
+                        <option value="null" selected>General</option>
+                        @foreach ($torres as $t)
+                            <option value="{{ $t }}" >{{ $t }}</option>
+                        @endforeach
+                    </select>
                 </div>
                 <div class="card-body p-0">
                     <table class="table table-bordered table-striped table-no-outer-borders mb-0">
@@ -32,6 +38,23 @@
                                 <td class="text-end">Hora:</td>
                                 <td class="text-start"> {{ $asamblea['hora'] }}</td>
                             </tr>
+                            <tr>
+                                <td class="text-end ">Predios totales:</td>
+                                <td class="text-start text-info">{{ $values['prediosTotal'] }}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-end">Votantes:</td>
+                                <td class="text-start text-info">{{ cache('votantes',0) }}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-end">Predios registrados:</td>
+                                <td class="text-start">{{ $values['prediosRegistrados'] }}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-end">Quorum Registrado:</td>
+                                <td class="text-start">{{ round($values['quorumRegistrado'],6) }}</td>
+                            </tr>
+
                         </tbody>
                     </table>
                 </div>
@@ -88,7 +111,6 @@
                                             </p>
                                         @endforeach
                                     </td>
-
                                     @if ($control)
                                         <td class="text-center align-middle">
                                             @if ($control->terminal)
@@ -111,7 +133,7 @@
                                                     wire:click='releaseTerminal({{ $control->id }})'>
                                                     Quitar
                                                 </button>
-                                            @elseif ($control->state ==4)
+                                            @elseif ($control->state == 4)
                                                 <button class="btn btn-primary"
                                                     wire:click='updateTerminal({{ $control->id }})'>
                                                     Actualizar

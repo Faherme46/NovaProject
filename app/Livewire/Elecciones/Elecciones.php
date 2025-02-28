@@ -67,14 +67,6 @@ class Elecciones extends Component
                 'enabled' => true,
             ],
             [
-                "directives" => 'onclick=location.href="/asambleas/load";',
-                'icon' => 'bi-upload',
-                'title' => 'Cargar Elecciones',
-                'body' => 'Cargar y eliminar las elecciones guardadas en el dispositivo',
-                'visible' => false,
-                'enabled' => !false,
-            ],
-            [
                 "directives" => 'onclick=location.href="/gestion/informes";',
                 'icon' => 'bi-file-earmark-richtext',
                 'title' => 'Informe de elección',
@@ -88,16 +80,8 @@ class Elecciones extends Component
                 'title' => 'Registrar',
                 'body' => 'Asignar termianes de votación a los sufragantes.',
                 'visible' => true,
-                'enabled' => (cache('asamblea', false)),
-
-            ],
-            [
-                "directives" =>  'onclick=location.href="/elecciones/quorum";',
-                'icon' => 'bi-percent',
-                'title' => 'Ver Quorum',
-                'body' => 'Consultar el estado del Quorum, separado por cada torre',
-                'visible' => true,
                 'enabled' => (cache('asamblea', false) && cache('asamblea')['h_inicio']),
+
             ],
             [
                 "directives" => 'onclick=location.href="/elecciones/gestion";',
@@ -106,6 +90,14 @@ class Elecciones extends Component
                 'body' => 'Gestión, control y estadisticas de las elecciones actuales',
                 'visible' => true,
                 'enabled' => ($this->role != 'Operario' && (cache('asamblea', false))),
+            ],
+            [
+                "directives" => 'onclick=location.href="/elecciones/resultados";',
+                'icon' => 'bi-bar-chart-line',
+                'title' => 'Resultados',
+                'body' => 'Calcular y presentar los resultados de las elecciones',
+                'visible' => true,
+                'enabled' => cache('asamblea', false) && cache('asamblea')['h_cierre'],
             ],
             [
                 "directives" => 'onclick=location.href="/users";',

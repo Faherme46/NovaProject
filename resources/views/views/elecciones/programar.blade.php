@@ -27,7 +27,7 @@
                                 <tbody style="max-height: 60vh; overflow-y: auto;">
                                     @foreach ($torres as $torre)
                                         <tr class="list-group-item list-group-item-action">
-                                            <td class="text-end fs-6">Delegados por {{$torre['numeral1']}}
+                                            <td class="text-end fs-6">Delegados por 
                                                 <span class="badge text-bg-primary fs-6 p-1 ">
                                                     {{ $torre['numeral1'] }}
                                                 </span> :

@@ -14,7 +14,7 @@
         </div>
     @endif
     @if ($distincts['numeral1'][0] !== '')
-        <div class="card-header table-20 table-responsive py-1">
+        <div class="card-header table-23 table-responsive py-1">
             <div class="row g-1">
                 @foreach ($distincts['numeral1'] as $numeral1)
                     <div class="col-auto">
@@ -44,28 +44,24 @@
             @forelse ($prediosAll as $predio)
                 <div class="col-auto">
                     @if ($consulta)
-                        <input type="radio" class="btn-check" id="btn-check-{{ $predio['numeral2'] }}"
+                        <input type="radio" class="btn-check" id="check-{{$predio['id']}}"
                             name='predio-check' >
-                        <label class="btn btn-outline-info  fs-5" for="btn-check-{{ $predio['numeral2'] }}"
+                        <label class="btn btn-outline-info  fs-5" for="check-{{$predio['id']}}"
                             data-bs-toggle="tooltip" data-bs-title='Consultar Predio'
                             wire:click='dispatchPredio(@json($predio))'>
                             {{ $predio['numeral2'] }}
                         </label>
-
-
                     @else
-                        <input type="checkbox" class="btn-check" id="btn-check-{{ $predio['numeral2'] }}"
+                        <input type="checkbox" class="btn-check" id="check-{{$predio['id']}}"
                             onchange="this.checked = true;" @disabled($predio['control_id'])>
                         <label
                             class="btn @if ($predio['control_id']) btn-warning @else btn-outline-info @endif fs-5"
-                            for="btn-check-{{ $predio['numeral2'] }}" data-bs-toggle="tooltip"
+                            for="check-{{$predio['id']}}" data-bs-toggle="tooltip"
                             data-bs-title='Agregar Predio' wire:click='dispatchPredio(@json($predio))'>
                             {{ $predio['numeral2'] }}
                         </label>
                     @endif
-
                 </div>
-
             @empty
                 <div class="col">
                     <p>No se hallaron Predios</p>
@@ -192,7 +188,7 @@
         </div>
     </div>
     <!-- Modal Predio -->
-     <div class="modal fade" id="modalPredio" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="modalPredio" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 @isset($Predio)

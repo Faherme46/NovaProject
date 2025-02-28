@@ -9,7 +9,12 @@ class QuorumFull extends Component
 {
     public $quorum;
     public function mount(){
-        $this->quorum = Control::where('state', 1)->sum('sum_coef');
+        if(cache('asamblea',false)&&cache('asamblea')['eleccion']){
+            $this->quorum = Control::sum('sum_coef');
+        }else{
+            $this->quorum = Control::where('state', 1)->sum('sum_coef');
+        }
+
     }
     #[Layout('layout.presentation')]
     public function render()

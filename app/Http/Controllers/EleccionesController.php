@@ -8,17 +8,20 @@ use App\Imports\PersonasImport;
 use App\Imports\PrediosEleccionesImport;
 use App\Imports\UsersImport;
 use App\Models\Asamblea;
-use App\Models\Control;
+
 use App\Models\Predio;
 use App\Models\Torre;
+use App\Models\TorresCandidato;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Validators\ValidationException;
+use Throwable;
 
 class EleccionesController extends Controller
 {
@@ -171,8 +174,88 @@ class EleccionesController extends Controller
             } else {
                 return redirect()->route('elecciones.candidatos')->with('warning', 'No se importaron candidatos, el archivo personas.xlsx no fue encontrado');
             }
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             return redirect()->route('elecciones.candidatos')->with('warning', 'No se importaron candidatos ' . $th->getMessage());
+        }
+    }
+
+
+    public function generarGraficas()
+    {
+        $torres = Torre::all();
+        foreach ($torres as $torre) {
+            $nombres = [];
+            $valuesCoef = [];
+            $valuesNom = [];
+            try {
+                $candidatos = $torre->candidatosCoef->toArray();
+                foreach ($candidatos as $persona) {
+                    $nombres[] = $persona['nombre'] . ' ' . $persona['apellido'];
+                    $valuesCoef[] =( $persona['pivot']['coeficiente'])? $persona['pivot']['coeficiente']:0;
+                }
+                $this->createChart($torre->id, $torre->name, $nombres, $valuesCoef, 'coefChart', $torre->delegados, $torre->coeficienteBlanco);
+                $nombres = [];
+                $candidatos = $torre->candidatosNom->toArray();
+                foreach ($candidatos as $persona) {
+                    $nombres[] = $persona['nombre'] . ' ' . $persona['apellido'];
+                    $valuesNom[] = ($persona['pivot']['votos'])?$persona['pivot']['votos']:0;
+                }
+
+                $this->createChart($torre->id, $torre->name, $nombres, $valuesNom, 'nominalChart', $torre->delegados, $torre->votosBlanco);
+                
+            } catch (Throwable $th) {
+                return redirect()->route('elecciones.resultados')->with('error', $th->getMessage());
+            }
+        }
+        return redirect()->route('elecciones.resultados')->with('success', 'Gráficas generadas con exito');
+    }
+
+
+    public function createChart($torreId, $torreName, $labels, $values, $name, $delegados, $blanco)
+    {
+        // Datos para el gráfico
+
+        $asambleaName = cache('asamblea')['name'];
+        $path = $asambleaName . '/Preguntas/' . ($torreId);
+        // Ruta donde se guardará la imagen
+        $output_path = Storage::disk('externalAsambleas')->path($path);
+
+        if (!file_exists($output_path)) {
+            mkdir($output_path, 0755, true);
+        }
+
+        //todo numero de preguntas en defecto
+        $localPath = $asambleaName . '/' .  ($torreId) . '/' . $name . '.png';
+        // Crear un array con los datos
+        $data = [
+            'title' => $torreName,
+            'output' => $output_path . '/' . $name . '.png',
+            'labels' => $labels,
+            'values' => $values,
+            'nameAsamblea' => $asambleaName,
+            'delegados' => $delegados,
+            'blanco' => $blanco
+        ];
+        try {
+            $response = Http::post('http://localhost:5000/create-plot-elecciones', $data);
+            return $this->loadImage($output_path . '/' . $name . '.png', $localPath);
+        } catch (Throwable $th) {
+
+            throw new Exception('Error al conectar con el servidor python');
+        }
+    }
+
+    public function loadImage($sourcePath, $destinationPath)
+    {
+        // Verifica si el archivo existe
+        if (file_exists($sourcePath)) {
+            // Mueve el archivo al directorio de almacenamiento
+
+            Storage::disk('results')->put($destinationPath, file_get_contents($sourcePath));
+            return $destinationPath;
+        } else {
+
+            throw new Exception('File does not exist');
         }
     }
 }
