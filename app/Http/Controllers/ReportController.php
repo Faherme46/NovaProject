@@ -34,8 +34,17 @@ class ReportController extends Controller
         $date = explode('-', $this->asamblea->fecha);
         $meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
         $dateString = $date[2] . ' de ' . $meses[(int)$date[1] - 1] . ' de ' . $date[0];
-        // $this->predios = Predio::where('id', '<', 200)->get();
-        $this->predios = Predio::all();
+        $this->predios = Predio::where('id', '<', 200)->get();
+        // $this->predios = Predio::with(['personas','apoderado'])->map(function ($predio) {
+        //     return [
+        //         'id' => $predio->id,
+        //         'nombre' => $predio->nombre,
+        //         'personas' => $predio->personas->toArray(),
+        //         'apoderado' => $predio->apoderado ? $predio->apoderado->toArray() : null,
+        //     ];
+        // });
+        // dd($this->predios->first());
+
         $this->questions = Question::where('isValid', true)->whereHas('resultCoef')->with('results')->get();
 
         $this->variables += [
