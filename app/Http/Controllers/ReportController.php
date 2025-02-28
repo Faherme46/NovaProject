@@ -34,16 +34,19 @@ class ReportController extends Controller
         $date = explode('-', $this->asamblea->fecha);
         $meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
         $dateString = $date[2] . ' de ' . $meses[(int)$date[1] - 1] . ' de ' . $date[0];
-        $this->predios = Predio::where('id', '<', 200)->get();
-        // $this->predios = Predio::with(['personas','apoderado'])->map(function ($predio) {
+        $this->predios = Predio::where('id', '<', 177)->get();
+        // $this->predios = Predio::with(['personas','apoderado'])->get()->map(function ($predio) {
         //     return [
         //         'id' => $predio->id,
-        //         'nombre' => $predio->nombre,
-        //         'personas' => $predio->personas->toArray(),
+        //         'nombre' => $predio->getFullName(),
+        //         'personas' => $predio->personas->map(function($persona){
+        //             return ['id'=>$persona->id,'nombre'=>];
+        //         })->toArray(),
         //         'apoderado' => $predio->apoderado ? $predio->apoderado->toArray() : null,
+        //         'quorum_start'=>$predio->quorum_start
         //     ];
-        // });
-        // dd($this->predios->first());
+        // })->toArray();
+        // dd($this->predios[0]);
 
         $this->questions = Question::where('isValid', true)->whereHas('resultCoef')->with('results')->get();
 
