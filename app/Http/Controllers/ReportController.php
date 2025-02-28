@@ -137,7 +137,7 @@ class ReportController extends Controller
             $output = $this->mergePdf();
             $fileController->exportPdf($this->asamblea->name . '/Informe/Informe.pdf', $output);
 
-            ini_set('memory_limit', '512M');
+            
             return response($output, 200)
                 ->header('Content-Type', 'application/pdf')
                 ->header('Content-Disposition', 'inline; filename="Informe.pdf"');
