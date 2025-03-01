@@ -204,10 +204,10 @@ class QuestionController extends Controller
 
         // Agregar abstained, absent y nule con sus etiquetas en español
 
-
         foreach ($additionalOptions as $key => $label) {
             $labels[] = $label;
-            $values[] =  round($result->$key);
+            $values[] =  round($result->$key,5);
+            
         }
 
         $fileController = new FileController;
