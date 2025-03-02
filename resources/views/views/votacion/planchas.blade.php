@@ -64,7 +64,7 @@
                             </td>
                         </tr>
                         @foreach ($options as $op)
-                            @if ($question['option' . $op] && $question['option' . $op]!=='BLANCO')
+                            @if ($question['option' . $op] && $question['option' . $op]!=='EN BLANCO')
                                 <tr class=" p-0">
                                     <td class="bg-primary text-light text-center">
                                         <h1 class="mb-0  ">

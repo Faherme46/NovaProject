@@ -33,6 +33,16 @@ class QuestionSeeder extends Seeder
             'type' => 3
         ]);
         QuestionsPrefab::create([
+            'title' => 'Aprobacion del reglamento de la asamblea',
+            'optionA' => '',
+            'optionB' => '',
+            'optionC' => '',
+            'optionD' => 'Aprobado',
+            'optionE' => 'No Aprobado',
+            'optionF' => '',
+            'type' => 3
+        ]);
+        QuestionsPrefab::create([
             'title' => 'Aprobacion de orden del dia',
             'optionA' => '',
             'optionB' => '',
