@@ -234,6 +234,7 @@ class QuestionController extends Controller
         $questions = Question::all();
         foreach( $questions as $question ){
             if($question->resultCoef){
+                $this->question=$question;
                 $this->setImageUrl($question->resultCoef, false);
                 $this->setImageUrl($question->resultNom, false);
             }
