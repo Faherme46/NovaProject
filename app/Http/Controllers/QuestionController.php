@@ -239,7 +239,7 @@ class QuestionController extends Controller
             }
         }
 
-        return redirect()->route('graficas.all')->with('success','Graficas Generadas correctamente');
+        return redirect()->route('home')->with('success','Graficas Generadas correctamente');
     }
 
 
