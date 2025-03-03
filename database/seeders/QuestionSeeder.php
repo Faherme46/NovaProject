@@ -82,6 +82,17 @@ class QuestionSeeder extends Seeder
             'optionF' => '',
             'type' => 2
         ]);
+        
+        QuestionsPrefab::create([
+            'title' => 'Comite de Verificación del Acta',
+            'optionA' => '',
+            'optionB' => '',
+            'optionC' => '',
+            'optionD' => '',
+            'optionE' => '',
+            'optionF' => '',
+            'type' => 2
+        ]);
         QuestionsPrefab::create([
             'title' => 'Consejo de Administracion',
             'optionA' => '',
