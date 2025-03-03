@@ -237,8 +237,9 @@ class QuestionController extends Controller
                 $this->setImageUrl($question->resultCoef, false);
                 $this->setImageUrl($question->resultNom, false);
             }
-            
         }
+
+        return redirect()->route('graficas.all')->with('success','Graficas Generadas correctamente');
     }
 
 
