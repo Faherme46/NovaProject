@@ -62,8 +62,19 @@ class QuestionSeeder extends Seeder
             'optionF' => '',
             'type' => 3
         ]);
+        
         QuestionsPrefab::create([
             'title' => 'Aprobacion del Acta',
+           'optionA' => '',
+            'optionB' => '',
+            'optionC' => '',
+            'optionD' => 'Aprobado',
+            'optionE' => 'No Aprobado',
+            'optionF' => '',
+            'type' => 3
+        ]);
+        QuestionsPrefab::create([
+            'title' => 'Aprobacion del Reglamento de la asamblea',
            'optionA' => '',
             'optionB' => '',
             'optionC' => '',
@@ -166,12 +177,12 @@ class QuestionSeeder extends Seeder
 
         QuestionsPrefab::create([
             'title' => 'Prueba',
-            'optionA' => '',
-            'optionB' => '',
-            'optionC' => '',
-            'optionD' => '',
-            'optionE' => '',
-            'optionF' => '',
+            'optionA' => 'A de Albaricoque',
+            'optionB' => 'B de Barquisimeto',
+            'optionC' => 'C de Cosita Rica',
+            'optionD' => 'D de Demencia post-asamblea',
+            'optionE' => 'E de robinson, El favorito de Tecnovis',
+            'optionF' => 'F de Facilota, como ya saben quien',
             'type' => 2
         ]);
 
