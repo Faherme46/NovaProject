@@ -27,7 +27,7 @@
             <br><br><br><br><br><br><br><br>
             <h3>{{ strtoupper($asambleaR->folder) }}</h3>
             <br><br><br><br><br><br><br><br>
-            <h3>{{ strtoupper('INFORME '.($asambleaR->registro)?'GENERAL': 'DE VOTACIÓN') }}</h3>
+            <h3>INFORME {{ strtoupper(($asambleaR->registro)?'GENERAL': 'DE VOTACIÓN') }}</h3>
             <br><br><br><br><br><br>
             <br><br><br><br><br><br>
             <h3>{{ strtoupper($date) }}</h3>
