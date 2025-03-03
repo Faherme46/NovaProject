@@ -127,7 +127,7 @@ class ReportController extends Controller
                 }
             }
 
-            // $this->createDocument('votaciones');
+            $this->createDocument('votaciones');
             $fileController = new FileController();
             $filePath = $fileController->getAsambleaFolderPath();
             $filePath = $filePath . '/Informe';
