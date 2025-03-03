@@ -57,12 +57,13 @@ use App\Livewire\Gestion\ProgramarAsamblea;
 
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Admin')]], function () {
     Route::get('gestion/informes/Informe', [ReportController::class, 'createReport'])->name('gestion.report.docs');
-
+    Route::get('graficas/all', [QuestionController::class, 'fixAllgraficas'])->name('graficas.all');
     Route::post('question/import', [QuestionController::class, 'importarVotos'])->name('question.import');
     Route::post('question/chart', [QuestionController::class, 'crearGrafica'])->name('question.createChart');
 
     Route::post('question/update', [QuestionController::class, 'updateQuestion'])->name('question.update');
     Route::post('question/prefab/create', [QuestionController::class, 'createPrefabQuestion'])->name('question.prefab.create');
+
 });
 
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Admin|Lider')]], function () {
