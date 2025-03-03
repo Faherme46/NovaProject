@@ -39,8 +39,26 @@
             </div>
         </div>
     @endif
+    <div class="card-header">
+        <div class="row g-2 align-items-center">
+            
+            <div class="col-3">
+              <input type="text" id="search" class="form-control" wire:model='search.numeral2' wire:keydown.enter="searchWithNumeral2">
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-primary" type="button" wire:click="searchWithNumeral2">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-danger" type="button" wire:click="search">
+                    <i class="bi bi-trash-fill"></i>
+                </button>
+            </div>
+          </div>
+    </div>
     <div class="card-body px-1">
-        <div class="row g-1 table-responsive table-55 p-0">
+        <div class="row g-1 table-responsive table-55 p-0 justify-content-center">
             @forelse ($prediosAll as $predio)
                 <div class="col-auto">
                     @if ($consulta)

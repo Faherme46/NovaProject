@@ -210,7 +210,7 @@
                                         <tbody>
                                             @forelse ($prediosR as $predio)
                                                 <tr scope="row"
-                                                    class="@if ($predio['control_id']== $controlIdR) table-active @endif">
+                                                    class="@if ($predio['control_id'] == $controlIdR) table-active @endif">
                                                     <td>{{ $predio['descriptor1'] }} {{ $predio['numeral1'] }}
                                                         {{ $predio['descriptor2'] }} {{ $predio['numeral2'] }}
                                                     </td>
@@ -615,8 +615,10 @@
                 </div>
                 <form action="{{ route('predios.create') }}" method="POST">
                     @csrf
-                    <div class="modal-body">
-                        <div class=" row g-3 d-flex">
+                    <div class="modal-body px-1">
+                        <div class=" row g-2 d-flex">
+                            
+
                             <div class="col-3">
                                 <select class="form-control" name="descriptor1" required>
                                     @foreach ($distincts['descriptor1'] as $d1)
@@ -642,29 +644,36 @@
                                 <input type="text" name="numeral2" id="numeral2" class="form-control"
                                     onclick="this.select()" placeholder="Numeral 2">
                             </div>
+                            @if ($asamblea->registro)
+                                <div class="col-3">
+                                    <input type="number" name="propietario" class="form-control"
+                                        onclick="this.select()" placeholder="CC" required />
+                                    <small id="helpId" class="text-muted">Propietario</small>
+                                </div>
+                            @endif
                             <div class="col-3">
                                 <input type="text" name="coef" class="form-control" onclick="this.select()"
-                                placeholder="Coeficiente" required />
+                                    placeholder="Coeficiente" required />
                                 <small id="helpId" class="text-muted">Coeficiente</small>
                             </div>
                             <div class="col-3">
                                 <input type="number" name="votos" class="form-control" onclick="this.select()"
-                                placeholder="Votos" required />
+                                    placeholder="Votos" required />
                                 <small id="helpId" class="text-muted">Votos</small>
                             </div>
-                            <div class="col-3 ms-2">
-                                    <input class="form-check-input fs-3" type="checkbox" value="1" id="flexCheckDefault"
-                                    name="vota">
-                                    <label class="form-check-label fs-3" for="flexCheckDefault">
-                                        Vota
-                                    </label>
+                            <div class="col-3 ">
+                                <input class="form-check-input fs-4" type="checkbox" value="1"
+                                    id="flexCheckDefault" name="vota" checked>
+                                <label class="form-check-label fs-4" for="flexCheckDefault">
+                                    Vota
+                                </label>
                             </div>
 
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-primary" >Crear</button>
+                        <button type="submit" class="btn btn-primary">Crear</button>
                     </div>
                 </form>
             </div>

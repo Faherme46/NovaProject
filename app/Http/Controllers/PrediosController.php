@@ -11,6 +11,7 @@ use App\Models\Predio;
 use Illuminate\Http\Request;
 
 use App\Models\Control;
+use App\Models\Persona;
 use Maatwebsite\Excel\Facades\Excel;
 
 class PrediosController extends Controller
@@ -41,6 +42,10 @@ class PrediosController extends Controller
 
         if (cache('asamblea')['registro']) {
             $request->validate(['propietario' => ['required']], ['propietario.required' => 'El id del propietario es requerido']);
+            $propietario=Persona::find($request->input('propietario'));
+            if(!$propietario){
+                return back()->with('error','El propietario no esta registrado en la base de datos');
+            }
         }
 
         $coef = floatval(str_replace(',', '.', $request->coef));
@@ -147,7 +152,7 @@ class PrediosController extends Controller
             };
         }
 
-
+        
         $predios = Predio::whereNotNull('control_id')->get();
         try {
             foreach ($predios as $predio) {

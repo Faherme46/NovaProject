@@ -374,7 +374,7 @@ class PresentQuestion extends Component
 
     public function updateQuestion()
     {
-        $this->question->title = $this->newTitle;
+        $this->question->title = strtoupper($this->newTitle);
         $this->question->update($this->newOptions);
         $this->question->save();
         $this->setSizePresentation();
