@@ -64,7 +64,7 @@ class Elecciones extends Component
                 'title' => 'Crear Candidatos',
                 'body' => 'Seleccionar los candidatos que participarán en cada torre',
                 'visible' => true,
-                'enabled' => true,
+                'enabled' => (cache('asamblea', false) && !cache('asamblea')['h_inicio']),
             ],
             [
                 "directives" => 'onclick=location.href="/gestion/informes";',

@@ -41,7 +41,8 @@ class Registro extends Component
 
     public function mount()
     {
-        if(cache('asamblea')&& (!cache('asamblea')['h_inicio'] || cache('asamblea')['h_cierre'])){
+
+        if(cache('asamblea') && (!cache('asamblea')['h_inicio'] || cache('asamblea')['h_cierre'])){
             return redirect()->route('home.elecciones')->with('warning', 'Las elecciones estan cerradas');
         }
         $this->tipoId = 'CC';
@@ -231,7 +232,7 @@ class Registro extends Component
 
 
         $terminalFree=Terminal::where('available',true)->exists();
-        
+
         if(!$terminalFree){
             return session()->flash('warning', 'No hay terminales libres, espere a que se libere');
         }

@@ -7,10 +7,10 @@
                 <div class="card-body justify-content-center d-flex">
                     <form action="{{ route('elecciones.resultados.grafica') }}" method="get" class="text-center">
                         @csrf
-                        <button type="submit" class="btn btn-warning w-80"
-                        data-bs-toggle="modal" data-bs-target="#spinnerModal">
-                        Generar Gráficas
-                    </button>
+                        <button type="submit" class="btn btn-warning w-80" data-bs-toggle="modal"
+                            data-bs-target="#spinnerModal">
+                            Generar Gráficas
+                        </button>
 
                     </form>
                 </div>
@@ -20,7 +20,7 @@
                     @foreach ($torres as $t)
                         <tr class="list-group-item list-group-item-action fs-6 @if ($t->id == $torre->id) active @endif"
                             wire:click='setTorre({{ $t->id }})'>
-                            <td class="text-end me-2 border-right">{{$t->id}}. </td>
+                            <td class="text-end me-2 border-right">{{ $t->id }}. </td>
                             <td> {{ $t->name }}</td>
                         </tr>
                     @endforeach
@@ -84,14 +84,14 @@
 
                             </tbody>
                             <tfoot class="table-active border-top border-2 ">
-                                    <th></th>
-                                    <th class="text-end fs-5">TOTAL</th>
-                                    <th class="text-end fs-5">
-                                        <strong>{{ $torre->coeficienteBlanco + $torre->candidatos->sum('pivot.coeficiente') }}</strong>
-                                    </th>
-                                    <th class="text-end fs-5">
-                                        <strong>{{ $torre->votosBlanco + $torre->candidatos->sum('pivot.votos') }}</strong>
-                                    </th>
+                                <th></th>
+                                <th class="text-end fs-5">TOTAL</th>
+                                <th class="text-end fs-5">
+                                    <strong>{{ $torre->coeficienteBlanco + $torre->candidatos->sum('pivot.coeficiente') }}</strong>
+                                </th>
+                                <th class="text-end fs-5">
+                                    <strong>{{ $torre->votosBlanco + $torre->candidatos->sum('pivot.votos') }}</strong>
+                                </th>
 
 
                             </tfoot>
@@ -103,7 +103,26 @@
             </div>
         </div>
         <div class="col-4">
-
+            @if (cache('graficas', false) && $torre)
+                <div class="card">
+                    <div class="row mt-2 text-center">
+                        <h6>COEFICIENTE</h6>
+                        <a target="_blank"
+                            href="/storage/images/results/{{ cache('asamblea', [])['name'] . '/' . $torre->id . '/coefChart.png' }}">
+                            <img src="/storage/images/results/{{ cache('asamblea', [])['name'] . '/' . $torre->id . '/coefChart.png' }}"
+                                alt="No se encontro imagen" style="max-width: 100%">
+                        </a>
+                    </div>
+                    <div class="row mt-2 text-center">
+                        <h6>NOMINAL</h6>
+                        <a target="_blank"
+                            href="/storage/images/results/{{ cache('asamblea', [])['name'] . '/' . $torre->id . '/nominalChart.png' }}">
+                        <img src="/storage/images/results/{{ cache('asamblea', [])['name'] . '/' . $torre->id . '/nominalChart.png' }}"
+                            alt="No se encontro imagen" style="max-width: 100%">
+                        </a>
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
     <div class="modal fade" id="spinnerModal" tabindex="-1">
