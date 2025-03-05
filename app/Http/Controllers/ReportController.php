@@ -206,4 +206,11 @@ class ReportController extends Controller
             return response()->json('Falla en la exportacion de excel: '.$th->getMessage(), 500);
         }
     }
+
+    public function createReportElecciones(){
+        dd('elfos');
+    }
+
+
+    
 }

@@ -14,7 +14,7 @@
         </div>
     @endif
     @if ($distincts['numeral1'][0] !== '')
-        <div class="card-header table-23 table-responsive py-1">
+        <div class="card-header table-25 table-responsive py-1">
             <div class="row g-1">
                 @foreach ($distincts['numeral1'] as $numeral1)
                     <div class="col-auto">

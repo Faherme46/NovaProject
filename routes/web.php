@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Middleware\isAsambleaEnd;
-use App\Livewire\Elecciones\Resultados;
+
 use Illuminate\Support\Facades\Route;
 
 
@@ -22,7 +22,7 @@ use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ReportController;
 use App\Http\Middleware\EleccionesMiddleware;
 use App\Http\Middleware\EnsureAsambleaOff;
-use App\Http\Middleware\isAsambleaInit;
+
 use App\Http\Middleware\isLogged;
 use App\Http\Middleware\NoEleccionesMiddleware;
 use App\Livewire\Main;
@@ -34,7 +34,7 @@ use App\Livewire\Gestion\Entregar;
 use App\Livewire\Gestion\ListUsers;
 use App\Livewire\Gestion\LoadAsamblea;
 use App\Livewire\Gestion\Setup;
-
+use App\Livewire\Gestion\ProgramarAsamblea;
 
 use App\Livewire\Registro\QuorumFull;
 use App\Livewire\Registro\Registrar;
@@ -53,23 +53,23 @@ use App\Livewire\Elecciones\Candidatos;
 use App\Livewire\Elecciones\Elecciones;
 use App\Livewire\Elecciones\Manager;
 use App\Livewire\Elecciones\Programar;
-use App\Livewire\Elecciones\Quorum;
+use App\Livewire\Elecciones\Resultados;
 use App\Livewire\Elecciones\Terminale;
-use App\Livewire\Gestion\ProgramarAsamblea;
+use App\Livewire\Elecciones\Terminales;
 
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Admin')]], function () {
     Route::get('gestion/informes/Informe', [ReportController::class, 'createReport'])->name('gestion.report.docs');
+    Route::get('elecciones/report/create', [ReportController::class, 'createReportElecciones'])->name('elecciones.report.create');
 
     Route::post('question/import', [QuestionController::class, 'importarVotos'])->name('question.import');
     Route::post('question/chart', [QuestionController::class, 'crearGrafica'])->name('question.createChart');
-
     Route::post('question/update', [QuestionController::class, 'updateQuestion'])->name('question.update');
     Route::post('question/prefab/create', [QuestionController::class, 'createPrefabQuestion'])->name('question.prefab.create');
 });
 
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Admin|Lider')]], function () {
 
-    Route::get('asambleas', LoadAsamblea::class)->name('asambleas')->middleware(EnsureAsambleaOff::class)->withoutMiddleware(EnsureAsambleaOn::class);
+    Route::get('asambleas', LoadAsamblea::class)->name('asambleas')->middleware(    EnsureAsambleaOff::class)->withoutMiddleware(EnsureAsambleaOn::class);
     Route::get('asambleas/programar', ProgramarAsamblea::class)->name('asambleas.programar')->withoutMiddleware(EnsureAsambleaOn::class);
     Route::get('asambleas/load', [AsambleaController::class, 'loadAsambleas'])->name('asambleas.load')->withoutMiddleware(EnsureAsambleaOn::class)->middleware(EnsureAsambleaOff::class);
     Route::get('gestion/informes', Reports::class)->name('gestion.report');
@@ -89,10 +89,6 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::get('elecciones/desiniciar', [Manager::class,'desiniciar'])->name('elecciones.desiniciar');
     Route::get('elecciones/desterminar', [Manager::class,'desterminar'])->name('elecciones.desterminar');
     Route::get('elecciones/resultados/grafica', [EleccionesController::class,'generarGraficas'])->name('elecciones.resultados.grafica');
-
-
-
-
 
     Route::post('asambleas/store', [AsambleaController::class, 'store'])->name('asambleas.store')->withoutMiddleware(EnsureAsambleaOn::class);
     Route::post('predios/import', [PrediosController::class, 'import'])->name('predios.import');
@@ -126,6 +122,7 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::get('consulta', Consulta::class)->name('consulta');
     Route::get('entregar', Entregar::class)->name('entregar');
     Route::get('quorum', QuorumFull::class)->name('quorum.show');
+    Route::get('elecciones/terminales', Terminales::class)->name('elecciones.terminales');
     Route::post('gestion/saveSign', [FileController::class, 'saveSignImg'])->name('gestion.sign.save')->middleware(isAsambleaEnd::class);
 });
 //rutas para terminales

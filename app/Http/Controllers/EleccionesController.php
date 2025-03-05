@@ -175,7 +175,7 @@ class EleccionesController extends Controller
                 return redirect()->route('elecciones.candidatos')->with('warning', 'No se importaron candidatos, el archivo personas.xlsx no fue encontrado');
             }
         } catch (Throwable $th) {
-            return redirect()->route('elecciones.candidatos')->with('warning', 'No se importaron candidatos ' . $th->getMessage());
+            return redirect()->route('elecciones.candidatos')->with('error', 'Error importando candidatos: ' . $th->getMessage());
         }
     }
 

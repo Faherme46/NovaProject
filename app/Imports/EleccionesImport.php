@@ -4,6 +4,7 @@ namespace App\Imports;
 
 use App\Models\Persona;
 use App\Models\Torre;
+use Exception;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
@@ -16,6 +17,9 @@ class EleccionesImport implements ToModel, WithHeadingRow
      */
     public function model(array $row)
     {
+        if (!array_key_exists('candidato', $row)) {
+            throw new Exception("Se requiere la casilla 'candidato'");
+        }
         if ($row['candidato']) {
 
             if ($row['cc_propietario']) {

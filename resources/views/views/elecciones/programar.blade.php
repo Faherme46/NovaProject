@@ -51,7 +51,11 @@
                                     Aplicar a Todos
                                 </button>
                             </div>
-                            <button type="submit" class="btn btn-success">Guardar</button>
+                            <button type="submit" class="btn btn-success" 
+                            data-bs-toggle="modal" data-bs-target="#spinnerModal">
+                                Guardar
+
+                            </button>
                         </div>
                     </form>
                 @else

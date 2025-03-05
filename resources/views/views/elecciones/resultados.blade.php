@@ -1,5 +1,5 @@
 <div class="">
-    <x-alerts></x-alerts>
+    <x-alerts class="pt-3"></x-alerts>
 
     <div class="row mt-4">
         <div class="col-2">

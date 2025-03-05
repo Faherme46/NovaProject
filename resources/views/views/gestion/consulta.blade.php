@@ -7,10 +7,10 @@
 
                     <div class="btn-group w-auto" role="group">
                         <input type="radio" class="btn-check" name="btnradio" id="btnradio1" wire:model.live='tab'
-                            value='1'>
+                            value='1' @disabled($asamblea->eleccion)>
                         <label class="btn btn-outline-primary d-flex" for="btnradio1">Cambiar Control</label>
                         <input type="radio" class="btn-check" name="btnradio" id="btnradio2" wire:model.live='tab'
-                            value='2'>
+                            value='2' @disabled($asamblea->eleccion)>
                         <label class="btn btn-outline-primary" for="btnradio2">Retirar Predios</label>
                         <input type="radio" class="btn-check" name="btnradio" id="btnradio3" wire:model.live='tab'
                             value='3'>
@@ -21,7 +21,7 @@
                             <label class="btn btn-outline-primary" for="btnradio4">Consultar Personas</label>
                         @endif
                         <input type="radio" class="btn-check" name="btnradio" id="btnradio5" wire:model.live='tab'
-                            value='5'>
+                            value='5' >
                         <label class="btn btn-outline-primary" for="btnradio5">Consultar Control</label>
                     </div>
                 </div>

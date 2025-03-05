@@ -1,4 +1,4 @@
-<div class="z-3 position-fixed " style="max-width: 95%">
+<div class="z-3 position-fixed mt-2" style="max-width: 95%">
 
     @session('success')
         <div class="alert alert-success alert-dismissible" role="alert">

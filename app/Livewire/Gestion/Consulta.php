@@ -26,13 +26,13 @@ class Consulta extends Component
     public $sumCoefL;
 
     public $maxControls;
-    public $tab = 1;
+    public $tab = 3;
     public $tabNames = [
 
         1 => 'Cambiar Control',
         2 => 'Retirar Control',
         3 => 'Consultar Predio',
-        4 => 'ConsultarPersonas',
+        4 => 'Consultar Personas',
         5 => 'Consultar Control',
     ];
 
@@ -109,7 +109,7 @@ class Consulta extends Component
         $this->mount($tab);
         $this->dispatch('$refresh');
     }
-    public function mount($tab = 5)
+    public function mount($tab = 3)
     {
         $this->tab = $tab;
         $this->tiposId = Persona::distinct()->pluck('tipo_id');

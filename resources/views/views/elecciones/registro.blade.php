@@ -1,5 +1,5 @@
 <div>
-    <x-alerts />
+    <x-alerts/>
     <div class="row g-3">
         @session('terminal')
             <div class="position-fixed card top-50 start-50 translate-middle p-0  shadow-lg rounded-3 text-center"
@@ -77,7 +77,7 @@
             <div class="row px-2">
                 {{-- poderdantes --}}
                 @if (session('errorPropietarios'))
-                    <div class="alert alert-danger position-absolute alert-dismissible z-3 " role="alert">
+                    <div class="alert alert-danger position-absolute alert-dismissible z-3 w-25" role="alert">
                         {{ session('errorPropietarios') }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
@@ -167,7 +167,7 @@
                         <tbody>
                             @forelse ($prediosAvailable as $predio)
                                 <tr>
-                                    <td>{{ $predio['numeral1'] . ' ' . $predio['descriptor1'] . ' ' . $predio['numeral2'] }}
+                                    <td>{{ $predio['numeral1'] . ' ' . $predio['descriptor2'] . ' ' . $predio['numeral2'] }}
                                     </td>
                                     <td>
                                         <button class="btn p-0" data-bs-toggle="tooltip" data-bs-placement="top"
@@ -267,6 +267,7 @@
 <script>
     document.addEventListener('livewire:init', () => {
         Livewire.on('showModal', (event) => {
+            $('#myModal').modal('hide');
             $('#myModal').modal('show');
         });
         Livewire.on('hideModal', (event) => {
