@@ -179,7 +179,7 @@
                     </h5>
                 </div>
                 <div class="card-body table-responsive table-fixed-header p-0 table-h100">
-                    <table class="table">
+                    <table class="table mb-0">
                         <thead class="table-active">
                             <th>Nombre</th>
                             <th>Identificación</th>

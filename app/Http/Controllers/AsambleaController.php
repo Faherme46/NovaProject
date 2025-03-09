@@ -144,7 +144,7 @@ class AsambleaController extends Controller
                 $asamblea->signature = false;
                 $asamblea->save();
             }
-            cache(['asamblea' => $asamblea->toArray()]);
+            cache(['asamblea' => $asamblea]);
             return back()->with('success', 'Asamblea actualizada con éxito.');
         } else {
             return back()->withErrors('No se encontro la asamblea')->withInput();

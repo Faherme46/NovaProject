@@ -84,7 +84,7 @@
                 @endif
                 <div class="card p-0">
                     <div class="card-header mb-0 d-flex align-items-center justify-content-between">
-                        <h5 class="card-title  mb-0 me-5">Poderdantes</h5>
+                        <h6 class="card-title  mb-0 me-2">Poderdantes</h5>
                         <div class="d-flex align-items-baseline ">
 
                             <input placeholder="Cédula" onkeypress="return onlyNumbers(event)" type="text"

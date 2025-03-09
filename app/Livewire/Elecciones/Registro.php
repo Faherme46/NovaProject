@@ -108,7 +108,7 @@ class Registro extends Component
         }
     }
 
-    public function unsetAllPredios($value)
+    public function unsetAllPredios()
     {
         $this->reset(['prediosAvailable','torres']);
 

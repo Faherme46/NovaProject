@@ -67,7 +67,7 @@ class Elecciones extends Component
                 'enabled' => (cache('asamblea', false) && !cache('asamblea')['h_inicio']),
             ],
             [
-                "directives" => 'onclick=location.href="/gestion/informes";',
+                "directives" => 'onclick=location.href="/elecciones/informe";',
                 'icon' => 'bi-file-earmark-richtext',
                 'title' => 'Informe de elección',
                 'body' => 'Gestión y generación del informe',

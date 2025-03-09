@@ -31,6 +31,10 @@ class Terminale extends Component
         $user = Auth::user();
 
         $this->terminal = Terminal::where('user_id', $user->id)->first();
+        
+        if(!$this->terminal){
+            Auth::logout();
+        }
         $this->verifyAsistente();
     }
     #[Layout('layout.presentation')]
@@ -47,6 +51,10 @@ class Terminale extends Component
 
     public function verifyAsistente()
     {
+        if(!$this->terminal){
+            Auth::logout();
+            return redirect(route('home'));
+        }
         // session()->flash('voted','voted');
         $this->control = Control::where('terminal_id', $this->terminal->id)->where('state', 1)->orderBy('updated_at', 'desc')->first();
 
@@ -62,6 +70,7 @@ class Terminale extends Component
 
         $this->torre = Torre::where('name', $this->control->vote)->first();
         $this->reset('candidatoId', 'candidatos');
+        
         foreach ($this->torre->candidatos as $candidato) {
             $this->candidatos[$candidato->id] = $candidato->fullName();
         }

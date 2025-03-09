@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Exports\AsistenciaQuorum;
-use App\Exports\AsistentesTotales;
 use App\Exports\PersonasCitadas;
 use App\Exports\QuestionsExport;
 use App\Http\Controllers\Controller;
-use DateTime;
 use App\Models\Asamblea;
 use Carbon\Carbon;
 use App\Models\Question;
@@ -207,9 +205,6 @@ class ReportController extends Controller
         }
     }
 
-    public function createReportElecciones(){
-        dd('elfos');
-    }
 
 
     

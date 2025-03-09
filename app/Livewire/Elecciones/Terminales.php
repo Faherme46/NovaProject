@@ -19,7 +19,7 @@ class Terminales extends Component
         foreach ($this->terminales as $terminal) {
 
             $session=DB::table('sessions')->where('user_id', $terminal->user_id);
-            if($session){
+            if(!$session){
                 $terminal->delete();
             }
         }

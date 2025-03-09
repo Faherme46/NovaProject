@@ -49,7 +49,10 @@
     </div>
 
     @if ($torre)
-        <div class="card">
+    
+
+   
+        <div class="card ">
 
             @if ($inTratamiento)
                 <div class="card-header justify-content-center d-flex">
@@ -92,9 +95,9 @@
                     </div>
                     <div class="col-auto">
                         <input type="text" name="persona_id" value="{{ $asistente->id }}" hidden>
-                        <button type="button" class="btn btn-primary d-flex align-items-center"
+                        <button type="button" class="btn btn-success d-flex align-items-center"
                             wire:click='setTratamiento' @disabled(!$tratamientoDatos)>
-                            <i class="bi bi-feather me-2 fs-5"></i>
+                            
                             <h4 class="mb-0">SIGUIENTE</h4>
                         </button>
                         </form>
@@ -104,7 +107,7 @@
                 <div class="card-header text-center">
                     <h1 class="card-title mb-0" style="font-size: 3.5rem"> {{ strtoupper($torre->name) }}</h1>
                     
-                    <h3 class="text-muted mb-0">PREDIOS: {{$this->control->predios->count()}}</h1>
+                    <h3 class="text-muted mb-0">Coeficiente: {{$this->control->sum_coef_can}}</h1>
                 </div>
                 
                 <div class="card-body text-center">
@@ -113,7 +116,7 @@
                         @foreach ($candidatos as $id => $candidato)
                             <input type="radio" class="btn-check" name="candidato" id="radio-{{ $id }}"
                                 value="{{ $id }}" wire:model.live='candidatoId'>
-                            <label class="btn btn-outline-success w-45 me-3 fs-3"
+                            <label class="btn btn-outline-primary w-45 me-3 fs-3"
                                 for="radio-{{ $id }}">{{ $candidato }}</label>
                         @endforeach
                         <input type="radio" class="btn-check" name="candidato" id="radio-w" value="-1"
@@ -122,7 +125,7 @@
                     </div>
                 </div>
                 <div class="card-footer text-center">
-                    <button class="btn btn-primary fs-4" data-bs-toggle="modal" data-bs-target="#confirmModal"
+                    <button class="btn btn-success fs-4" data-bs-toggle="modal" data-bs-target="#confirmModal"
                         @disabled(!$candidatoId)>VOTAR</button>
                 </div>
             @endif
@@ -149,7 +152,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal"
                         wire:click='storeVote'>VOTAR</button>
                 </div>
             </div>

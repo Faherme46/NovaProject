@@ -392,9 +392,9 @@
                                     <button type="button" class="btn btn-danger p-0 px-1" wire:click='dropControl'>
                                         <i class="bi bi-x-circle bx-w fs-5 "></i>
                                     </button>
-                                    <span class="badge mx-2 border-1 border border-black text-black fs-6">Coef.
+                                    <span class="badge mx-2 border-1 text-primary border border-black fs-6">Coef.
                                         Votacion: {{ $Control ? $Control->sum_coef_can : 0 }}</span>
-                                    <span class="badge mx-2 border-1 border border-black text-black fs-6"> Votos:
+                                    <span class="badge mx-2 border-1 text-primary border border-black fs-6"> Votos:
                                         {{ $Control ? $Control->predios_vote : 0 }}</span>
                                 @endif
                             </form>

@@ -124,30 +124,5 @@ class PrediosController extends Controller
         return Excel::store($export, $asambleaName . '/Tablas/controles.xlsx', 'externalAsambleas');
     }
 
-    public function preparePrediosElecciones()
-    {
-        
-        $asamblea =  cache('asamblea');
-
-        if (!$asamblea) {
-            return redirect()->route('home')->with('error', 'No existe una asamblea');
-        }
-
-        $predios = Predio::whereNotNull('control_id')->get();
-        try {
-            foreach ($predios as $predio) {
-                $ids = $predio->personas->pluck('id')->toArray();
-
-                if (!in_array($predio->control->cc_asistente, $ids)) {
-                    $predio->update(['cc_apoderado' => $predio->control->cc_asistente]);
-                } else {
-                    $predio->update(['cc_apoderado' => null]);
-                }
-            }
-        } catch (\Throwable $th) {
-            return redirect()->route('gestion.report')->with('error', $th->getMessage());
-        }
-        cache(['prepared' => true]);
-        return redirect()->route('gestion.report')->with('success', 'Se han preparado los predios');
-    }
+    
 }

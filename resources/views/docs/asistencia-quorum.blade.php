@@ -69,7 +69,7 @@
                             <p class="p-0 ps-2 my-0 no-line-spacing text-left ">
                                 {{ $asambleaR->folder }} <br>
                                 {{ $asambleaR->fecha }} <br>
-                                {{ $predios->count() }}<br>
+                                {{ count($predios) }}<br>
                                 {{ cache('predios_init') }} <br>
                                 {{ cache('quorum_init') }}
                             </p>

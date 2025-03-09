@@ -259,4 +259,32 @@ class EleccionesController extends Controller
             throw new Exception('File does not exist');
         }
     }
+
+    public function updateElecciones(Request $request)
+    {
+        $messages = [
+            
+            'fecha.date' => 'El campo :attribute debe ser una fecha válida.',
+            '*.date_format' => 'El campo :attribute no corresponde con el formato :format.',
+        ];
+        $request->validate([
+            'lugar' => 'required',
+            'fecha' => 'required|date',
+            'hora' => 'required',
+        ], $messages);
+
+        $asamblea = Asamblea::find($request->id_asamblea);
+        
+        if ($asamblea) {
+            $asamblea->update($request->all());
+            if (!$request->signature) {
+                $asamblea->signature = false;
+                $asamblea->save();
+            }
+            cache(['asamblea' => $asamblea]);
+            return back()->with('success', 'Asamblea actualizada con éxito.');
+        } else {
+            return back()->withErrors('No se encontro la asamblea')->withInput();
+        }
+    }
 }

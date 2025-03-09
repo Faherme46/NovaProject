@@ -46,7 +46,7 @@
                             <th></th>
                             <th></th>
                             <th class="fs-4">Coeficiente</th>
-                            <th class="fs-4">Votos</th>
+                            {{-- <th class="fs-4">Votos</th> --}}
                             <th class="text-start fs-4">Vota por:</th>
                         </thead>
                         @foreach ($resumen as $key => $value)
@@ -55,7 +55,7 @@
                                 <td>{{$key}}</td>
                                 <td>{{$value['torre']}}</td>
                                 <td>{{$value['coeficiente']}}</td>
-                                <td>{{$value['votos']}}</td>
+                                {{-- <td>{{$value['votos']}}</td> --}}
                                 <td class="text-start">{{$value['candidato']}}</td>
                             </tr>
                             @endif
@@ -70,7 +70,7 @@
     @if ($asistente && $control && !$asamblea['h_cierre'])
 
         <div class="d-flex justify-content-center vh-100 align-items-center ">
-            <div class="card">
+            <div class="card col-10">
                 <div class="card-body">
                     <h1 class="mb-0 card-title " style="font-size: 4rem">{{ $asistente->fullName() }}</h1>
                     <h1 class="mb-0 text-muted"> {{ strtoupper($control->vote) }} </h1>

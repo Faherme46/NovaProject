@@ -32,10 +32,8 @@
             height: 217mm;
         }
 
-        td {
-
-            white-space: nowrap; /* Evita que el contenido se divida en varias líneas */
-            padding: 0; /* Opcional: Elimina el padding si no lo necesitas */
+        th {
+            border: 1px wheat solid;
         }
 
         {!! file_get_contents(public_path('\assets\scss\blue.css')) !!} {!! file_get_contents(public_path('\assets\scss\_variables.scss')) !!} {!! file_get_contents(public_path('\assets\scss\docs.scss')) !!}
@@ -51,7 +49,7 @@
             <img src="{{ asset('assets/img/logo.png') }}" width="100mm" height="auto">
         </div>
         <div class="title">
-            <p class="fs-10"><u>ANEXO {{$index+1}} - {{ strtoupper($anexos[$index]) }}</u><sup>1</sup></p>
+            <p class="fs-10"><u>ANEXO {{ $index + 1 }} - {{ strtoupper($anexos[$index]) }}</u><sup>1</sup></p>
         </div>
         <hr class="blue">
         <div class="mt-1">
@@ -63,7 +61,7 @@
                                 Unidad residencial: <br>
                                 Fecha de asamblea: <br>
                                 Cantidad total de predios: <br>
-                                Predios que asistieron: <br>
+                                Asistentes Contabilizados: <br>
                                 Coeficiente de asistencia: <br>
                             </p>
                         </td>
@@ -71,9 +69,8 @@
                             <p class="p-0 ps-2 my-0 no-line-spacing text-left ">
                                 {{ $asambleaR->folder }} <br>
                                 {{ $asambleaR->fecha }} <br>
-                                {{ count($predios)}}<br>
-                                {{ $prediosCount }} <span class="ms-5">(Asistió el
-                                    {{ round(($prediosCount / count($predios)) * 100, 3) }}% de los predios)</span><br>
+                                {{ count($predios) }}<br>
+                                {{ $prediosCount }} <br>
                                 {{ $quorum }}
                             </p>
                         </td>
@@ -91,7 +88,7 @@
                 tiene como base los datos suministrados por la Administración de {{ $asambleaR->folder }}.</small>
         </div>
         <div class="text-end txt-small">
-            Informe de Asistencia {{$asambleaR->name}}
+            Informe de Asistencia {{ $asambleaR->name }}
         </div>
 
     </footer>
@@ -104,7 +101,7 @@
                     <th class="p-0 pb-1">Asistente de</th>
                     <th class="p-0 pb-2" rowspan="2">Nombre</th>
                     <th class="pb-1 fs-10x">Hora</th>
-                    <th class="pb-1 fs-10x">Hora</th>
+                    <th class="pb-1 fs-10x">Vota</th>
                 </tr>
                 <tr>
                     <th class="p-0 pb-1 px-1"><small> Tipo</small></th>
@@ -112,33 +109,32 @@
                     <th class="p-0">Propiedad </th>
                     <th class="p-0 pb-1">la Reunion</th>
                     <th class="pb-1 fs-10x">Llegada</th>
-                    <th class="pb-1 fs-10x">Salida</th>
+                    <th class="pb-1 fs-10x"></th>
                 </tr>
             </thead>
-            <tbody class="fs-10px">
+            <tbody class="fs-12px">
                 @foreach ($predios as $predio)
                     <tr>
-                        <td class="p-0">{{ $predio->numeral1 }}</td>
-                        <td class="p-0">{{ $predio->numeral2 }}</td>
-                        <td class="p-0">{{ $predio->coeficiente }}</td>
-                        @if ($predio->control)
-                            @if ($predio->personas->contains($predio->control->persona))
+                        <td class="p-0 px-1 ">{{ $predio['numeral1'] }}</td>
+                        <td class="p-0 px-1 ">{{ $predio['numeral2'] }}</td>
+                        <td class="px-0">{{ $predio['coeficiente'] }}</td>
+                        @if ($predio['control_id'] )
+                            @if (!$predio['apoderado'])
                                 <td class="p-0">Propietario</td>
+                                <td class="text-start ps-1">{{ $predio['personas'][0]['nombre'] }}</td>
                             @else
                                 <td class="p-0">Apoderado</td>
+                                <td class="text-start ps-1">{{ $predio['apoderado']['nombre'].' '. $predio['apoderado']['apellido']}}</td>
                             @endif
-                            <td class="text-start ps-1">
-                                {{ $predio->control->persona->nombre }} {{ $predio->control->persona->apellido }}
-                            </td>
                             <td>
-                                {{$predio->control->h_entrega}}
+                                {{ $predio['h_entrega'] }}
                             </td>
-                            <td>{{$predio->control->h_recibe}}</td>
+                            <td>{{ $predio['h_recibe'] }}</td>  
                         @else
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
                         @endif
 
 
@@ -149,6 +145,9 @@
         </table>
 
     </div>
+
+
+
 
 </body>
 

@@ -40,7 +40,7 @@
         </div>
     @endif
     <div class="card-body  ">
-        <div class="row g-1 ">
+        <div class="row g-1 table-responsive table-70">
             @forelse ($prediosAll as $predio)
                 <div class="col-auto">
                     @if ($consulta)

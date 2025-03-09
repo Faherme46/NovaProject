@@ -1,4 +1,5 @@
 <div>
+    <x-alerts/>
     <div class="row">
         <div class="col-7">
             <div class="card">

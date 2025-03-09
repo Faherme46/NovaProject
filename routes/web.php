@@ -14,6 +14,7 @@ use App\Http\Controllers\AsambleaController;
 use App\Http\Controllers\BackupController;
 use App\Http\Controllers\EleccionesController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\InformeController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\PrediosController;
 use App\Http\Controllers\LoginController;
@@ -51,6 +52,7 @@ use App\Livewire\Votacion\Votacion;
 use App\Livewire\Elecciones\Registro;
 use App\Livewire\Elecciones\Candidatos;
 use App\Livewire\Elecciones\Elecciones;
+use App\Livewire\Elecciones\Informe;
 use App\Livewire\Elecciones\Manager;
 use App\Livewire\Elecciones\Programar;
 use App\Livewire\Elecciones\Resultados;
@@ -59,7 +61,7 @@ use App\Livewire\Elecciones\Terminales;
 
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Admin')]], function () {
     Route::get('gestion/informes/Informe', [ReportController::class, 'createReport'])->name('gestion.report.docs');
-    Route::get('elecciones/report/create', [ReportController::class, 'createReportElecciones'])->name('elecciones.report.create');
+    Route::get('elecciones/report/create', [InformeController::class, 'createReport'])->name('elecciones.report.create');
 
     Route::post('question/import', [QuestionController::class, 'importarVotos'])->name('question.import');
     Route::post('question/chart', [QuestionController::class, 'crearGrafica'])->name('question.createChart');
@@ -89,6 +91,7 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::get('elecciones/desiniciar', [Manager::class,'desiniciar'])->name('elecciones.desiniciar');
     Route::get('elecciones/desterminar', [Manager::class,'desterminar'])->name('elecciones.desterminar');
     Route::get('elecciones/resultados/grafica', [EleccionesController::class,'generarGraficas'])->name('elecciones.resultados.grafica');
+    Route::get('elecciones/informe', Informe::class)->name('elecciones.informe');
 
     Route::post('asambleas/store', [AsambleaController::class, 'store'])->name('asambleas.store')->withoutMiddleware(EnsureAsambleaOn::class);
     Route::post('predios/import', [PrediosController::class, 'import'])->name('predios.import');
@@ -102,6 +105,7 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::post('personas/export', [PersonasController::class, 'signsExports'])->name('personas.export');
     Route::post('elecciones/torres/create', [EleccionesController::class, 'createTorres'])->name('elecciones.torres.create');
     Route::post('elecciones/store', [EleccionesController::class, 'store'])->name('elecciones.store')->withoutMiddleware([EnsureAsambleaOn::class]);
+    Route::post('elecciones/update', [EleccionesController::class, 'updateElecciones'])->name('elecciones.update')->withoutMiddleware([EnsureAsambleaOn::class]);
 
 
     Route::delete('session/destroy', [SessionController::class, 'destroyAll'])->name('session.destroy');
@@ -114,6 +118,9 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::get('elecciones',  Elecciones::class)->name('home.elecciones')->withoutMiddleware(EnsureAsambleaOn::class);
     Route::get('elecciones/registrar', Registro::class)->name('elecciones.registrar');
     Route::get('elecciones/resultados', Resultados::class)->name('elecciones.resultados');
+    Route::get('elecciones/terminales', Terminales::class)->name('elecciones.terminales');
+    
+    
     Route::get('asistencia/asignacion', Asignacion::class)->name('asistencia.asignacion')->middleware(isAsambleaEnd::class);
     Route::get('asistencia/firmas', Signs::class)->name('asistencia.signs')->middleware(isAsambleaEnd::class);
     Route::get('asistencia/firmando', Signing::class)->name('asistencia.signing')->middleware(isAsambleaEnd::class);
@@ -122,7 +129,7 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::get('consulta', Consulta::class)->name('consulta');
     Route::get('entregar', Entregar::class)->name('entregar');
     Route::get('quorum', QuorumFull::class)->name('quorum.show');
-    Route::get('elecciones/terminales', Terminales::class)->name('elecciones.terminales');
+    
     Route::post('gestion/saveSign', [FileController::class, 'saveSignImg'])->name('gestion.sign.save')->middleware(isAsambleaEnd::class);
 });
 //rutas para terminales

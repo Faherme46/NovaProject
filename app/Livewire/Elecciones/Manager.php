@@ -82,7 +82,7 @@ class Manager extends Component
             return;
         }
         try {
-            $time = Carbon::now(new DateTimeZone('America/Bogota'))->format('H:i:s');
+            $time = Carbon::now(new DateTimeZone('America/Bogota'))->format('H:i');
             if (!$this->asamblea->h_inicio) {
                 $this->started = true;
                 $this->asamblea->h_inicio = $time;

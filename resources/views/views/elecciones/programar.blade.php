@@ -97,7 +97,8 @@
                                     </select>
                                 </div>
                                 <div class="form-group col-6 pt-4 justify-content-end d-flex">
-                                    <button type="submit" class="btn btn-success " id="submit-button">Importar
+                                    <button type="submit" class="btn btn-success " id="submit-button"
+                                    data-bs-toggle="modal" data-bs-target="#spinnerModal">Importar
                                         archivos</button>
                                 </div>
                                 <script>

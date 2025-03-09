@@ -5,12 +5,7 @@ namespace App\Livewire\Gestion;
 use App\Models\Asamblea;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
-use Carbon\Carbon;
-use App\Jobs\GeneratePdf;
-
-use App\Models\Control;
 use App\Models\Question;
-use Illuminate\Support\Facades\Http;
 
 class Reports extends Component
 {
