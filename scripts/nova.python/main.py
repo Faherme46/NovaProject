@@ -228,16 +228,19 @@ def create_plot_elecciones(title,labels,values,output_path,nameAsamblea,delegado
 
     max_valor = max(values)
     limite_x = max_valor / 0.95
-    colores = [ '#318CE7' if i < delegados else '#00C040' for i in range(len(labels))]
+    colores = [  '#00C040'if i <= delegados else '#318CE7' for i in range(len(labels))]
+    colores.reverse()
     # colores.append("#AFCDEA")
     colores.insert(0,'#bceeff')
     # Ajustar tamaño de la figura dinámicamente según la cantidad de datos
     fig, ax = plt.subplots(figsize=(14, 0.5 * len(labels) + 2))
     ax.set_xlim(0, limite_x)
+    
+
     # Crear gráfico de barras horizontales
     ax.barh(labels, values, color=colores, edgecolor='black', height=0.6)
 
-
+    
     # Agregar values al final de cada barra
     for i, v in enumerate(values):
         ax.text(v + limite_x  * 0.02, i, str(v), ha='left', va='center', fontsize=10, color='black')
@@ -279,5 +282,6 @@ def create_plot_elecciones(title,labels,values,output_path,nameAsamblea,delegado
 @app.route('/create-plot-elecciones',methods=['POST'])
 def createPlotElecciones():
     data = request.get_json()
+    
     create_plot_elecciones(data['title'], data['labels'], data['values'], data['output'],data['nameAsamblea'],data['delegados'],data['blanco'])
     return "200"

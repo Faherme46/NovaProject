@@ -193,7 +193,7 @@ class EleccionesController extends Controller
                 foreach ($candidatos as $persona) {
                     $nombres[] = $persona['nombre'] . ' ' . $persona['apellido'];
                     $valuesCoef[] =( $persona['pivot']['coeficiente'])? $persona['pivot']['coeficiente']:0;
-                    $valuesCoef[] = ($persona['pivot']['coeficiente']) ? $persona['pivot']['coeficiente'] : 0;
+                    
                 }
                 $this->createChart($torre->id, $torre->name, $nombres, $valuesCoef, 'coefChart', $torre->delegados, $torre->coeficienteBlanco);
                 $nombres = [];
@@ -202,7 +202,6 @@ class EleccionesController extends Controller
                     $nombres[] = $persona['nombre'] . ' ' . $persona['apellido'];
                     $valuesNom[] = ($persona['pivot']['votos']) ? $persona['pivot']['votos'] : 0;
                 }
-
                 $this->createChart($torre->id, $torre->name, $nombres, $valuesNom, 'nominalChart', $torre->delegados, $torre->votosBlanco);
             } catch (Throwable $th) {
                 return redirect()->route('elecciones.resultados')->with('error', $th->getMessage());
@@ -237,6 +236,7 @@ class EleccionesController extends Controller
             'delegados' => $delegados,
             'blanco' => $blanco
         ];
+        
         try {
             $response = Http::post('http://localhost:5000/create-plot-elecciones', $data);
             return $this->loadImage($output_path . '/' . $name . '.png', $localPath);
@@ -299,7 +299,9 @@ class EleccionesController extends Controller
             }
 
         }
-        $controls = Control::groupBy('h_recibe')->sum('sum_coef_can');
-        dd($controls);
+        $controls = Control::groupBy('h_recibe')
+        ->select('h_recibe')
+        ->selectRaw('SUM(sum_coef_can) as total')
+        ->get()->toArray();
     }
 }

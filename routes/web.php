@@ -61,7 +61,7 @@ use App\Livewire\Elecciones\Terminales;
 
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Admin')]], function () {
     Route::get('gestion/informes/Informe', [ReportController::class, 'createReport'])->name('gestion.report.docs');
-
+    Route::get('predios/repare', [PrediosController::class, 'repairPredios'])->name('predios.repair');
     Route::get('graficas/all', [QuestionController::class, 'fixAllgraficas'])->name('graficas.all');
 
     Route::get('elecciones/report/create', [InformeController::class, 'createReport'])->name('elecciones.report.create');
@@ -151,6 +151,6 @@ Route::get('/proofVerify', [EleccionesController::class, 'verifySum'])->name('el
 //rutas de prueba
 Route::get('/proofAsignacion', [Asignacion::class, 'proofAsignacion'])->name('proofAsignacion');
 // Route::get('proofQuestion', [FileController::class, 'exportAllQuestions
-Route::get('predios/repare', [PrediosController::class, 'repairPredios'])->name('predios.repair');
+
 
 //Route::get('proofExport',[PrediosController::class,'export']);

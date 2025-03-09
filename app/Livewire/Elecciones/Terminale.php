@@ -118,7 +118,7 @@ class Terminale extends Component
         $this->control->update(['state' => 5]);
         $next = $this->asistente->controls()->whereIn('state', [2, 4])->first();
 
-        // session()->flash('success', 'Voto almacenado con éxito para '.$this->control->vote);
+        // 
         if ($next) {
 
             $next->update(['state' => 1, 'terminal_id' => $this->terminal->id]);
@@ -141,7 +141,7 @@ class Terminale extends Component
                     # code...
                 }
             } catch (Exception $e) {
-                $x=$e->getMessage();
+                session()->flash('success', 'Voto almacenado con éxito');
             }
             session()->flash('voted', 'Ha votado');
             $this->reset('candidatos', 'torres', 'torre', 'asistente', 'control', 'candidatoId', 'tratamientoDatos', 'inTratamiento');

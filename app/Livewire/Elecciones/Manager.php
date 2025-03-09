@@ -47,9 +47,9 @@ class Manager extends Component
     public function setValues($torre = null)
     {
         if ($torre) {
-            $this->controles = Control::where('vote', $torre)->orderBy('updated_at','asc')->get();
+            $this->controles = Control::where('vote', $torre)->orderBy('created_at','asc')->get();
         } else {
-            $this->controles = Control::orderBy('updated_at','desc')->get();
+            $this->controles = Control::orderBy('created_at','desc')->get();
         }
 
         $this->values['prediosTotal'] = Predio::count();
