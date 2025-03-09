@@ -146,10 +146,18 @@
                                 <i class='bi bi-person-video2 ms-1 fs-3'></i>
                             </a>
 
-                            <a href="{{ route('gestion.asamblea') }}" class="nav_link" data-bs-toggle="tooltip"
+                            <a href="{{ route('elecciones.gestion') }}" class="nav_link" data-bs-toggle="tooltip"
                                 data-bs-placement="bottom" data-bs-title="Control">
                                 <i class='bi bi-ui-checks-grid nav_icon'></i>
                             </a>
+                            <a href="{{ route('consulta') }}" class="nav_link" data-bs-toggle="tooltip"
+                            data-bs-placement="bottom" data-bs-title="Consulta">
+                            <i class='bi bi-info-circle-fill nav_icon'></i>
+                            <a href="{{ route('elecciones.terminales') }}" class="nav_link" data-bs-toggle="tooltip"
+                            data-bs-placement="bottom" data-bs-title="Terminales">
+                            <i class='bi bi-pc-display-horizontal nav_icon'></i>
+                        </a>
+                        </a>
                         @else
                             @if ($asamblea['registro'])
                                 <a href="{{ route('asistencia.registrar') }}" class="nav_link" data-bs-toggle="tooltip"

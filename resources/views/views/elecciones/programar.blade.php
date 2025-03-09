@@ -27,7 +27,7 @@
                                 <tbody style="max-height: 60vh; overflow-y: auto;">
                                     @foreach ($torres as $torre)
                                         <tr class="list-group-item list-group-item-action">
-                                            <td class="text-end fs-6">Delegados por {{$torre['numeral1']}}
+                                            <td class="text-end fs-6">Delegados por 
                                                 <span class="badge text-bg-primary fs-6 p-1 ">
                                                     {{ $torre['numeral1'] }}
                                                 </span> :
@@ -51,7 +51,11 @@
                                     Aplicar a Todos
                                 </button>
                             </div>
-                            <button type="submit" class="btn btn-success">Guardar</button>
+                            <button type="submit" class="btn btn-success" 
+                            data-bs-toggle="modal" data-bs-target="#spinnerModal">
+                                Guardar
+
+                            </button>
                         </div>
                     </form>
                 @else
@@ -93,7 +97,8 @@
                                     </select>
                                 </div>
                                 <div class="form-group col-6 pt-4 justify-content-end d-flex">
-                                    <button type="submit" class="btn btn-success " id="submit-button">Importar
+                                    <button type="submit" class="btn btn-success " id="submit-button"
+                                    data-bs-toggle="modal" data-bs-target="#spinnerModal">Importar
                                         archivos</button>
                                 </div>
                                 <script>

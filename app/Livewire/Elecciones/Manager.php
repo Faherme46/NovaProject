@@ -6,6 +6,7 @@ use App\Http\Controllers\FileController;
 use App\Models\Asamblea;
 use App\Models\Control;
 use App\Models\Eleccion;
+use App\Models\Predio;
 use App\Models\Torre;
 use Carbon\Carbon;
 use DateTimeZone;
@@ -22,12 +23,38 @@ class Manager extends Component
     public $asamblea;
     public $finished = false;
     public $controles;
+    public $torres;
+    public $torreSelectedName;
+    public $values = [
+        'prediosTotal' => 0,
+        'prediosRegistered' => 0,
+        'prediosAbsent' => 0,
+        'prediosPresente' => 0,
+        'quorumPresente' => 0,
+        'quorumAbsent' => 0,
+        'quorumTotal' => 0,
+
+    ];
     public function mount()
     {
         $this->asamblea = Asamblea::find(cache('asamblea')['id_asamblea']);
         $this->started = (bool) ($this->asamblea->h_inicio);
         $this->finished =   (bool) $this->asamblea->h_cierre;
-        $this->controles = Control::all();
+        $this->torres = Torre::pluck('name')->toArray();
+        $this->setValues();
+    }
+
+    public function setValues($torre = null)
+    {
+        if ($torre) {
+            $this->controles = Control::where('vote', $torre)->get();
+        } else {
+            $this->controles = Control::all();
+        }
+
+        $this->values['prediosTotal'] = Predio::count();
+        $this->values['prediosRegistrados'] = $this->controles->sum('predios_vote');
+        $this->values['quorumRegistrado'] = $this->controles->sum('sum_coef');
     }
 
     #[Layout('layout.full-page')]
@@ -42,12 +69,12 @@ class Manager extends Component
 
         $torres = Torre::all();
         $error = null;
-        if($torres->isEmpty()){
-            return $this->addError('error','No se han creado las torres y sus delegados');
+        if ($torres->isEmpty()) {
+            return $this->addError('error', 'No se han creado las torres y sus delegados');
         }
         foreach ($torres as $torre) {
-            if ($torre->candidatos->count() <=0) {
-                $this->addError('error', 'El número de candidatos no puede ser 0 para ' . $torre->name );
+            if ($torre->candidatos->count() <= 0) {
+                $this->addError('error', 'El número de candidatos no puede ser 0 para ' . $torre->name);
                 $error = true;
             }
         }
@@ -55,7 +82,7 @@ class Manager extends Component
             return;
         }
         try {
-            $time = Carbon::now(new DateTimeZone('America/Bogota'))->format('H:i:s');
+            $time = Carbon::now(new DateTimeZone('America/Bogota'))->format('H:i');
             if (!$this->asamblea->h_inicio) {
                 $this->started = true;
                 $this->asamblea->h_inicio = $time;
@@ -144,12 +171,9 @@ class Manager extends Component
     {
         $control = Control::find($id);
         if ((bool)$control->getATerminal()) {
-
-
             return redirect()->route('elecciones.gestion')->with('terminal', $control->terminal->user_name);
-
         } else {
-            session()->flash('warning', 'Registro exitoso, espere a que se libere un terminal');
+            session()->flash('warning', 'No hay terminales libres, espere a que se libere un terminal');
         }
     }
 
@@ -157,7 +181,20 @@ class Manager extends Component
     {
         $control = Control::find($id);
         $control->releaseTerminal();
-        return redirect()->route('elecciones.gestion')->with('success','Terminal liberado');
+        return redirect()->route('elecciones.gestion')->with('success', 'Terminal liberado');
+    }
 
+
+    public function updatedTorreSelectedName($value)
+    {
+
+
+        if ($value == 'null') {
+            $this->reset('torreSelected');
+            $this->setValues();
+        } else {
+            $this->setValues($value);
+
+        }
     }
 }

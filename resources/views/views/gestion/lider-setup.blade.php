@@ -63,10 +63,6 @@
                                 <td class="text-end">Quorum Presente:</td>
                                 <td class="text-start">{{ round($values['quorumPresente'],6) }}</td>
                             </tr>
-                            <tr>
-                                <td class="text-end">Quorum Ausente:</td>
-                                <td class="text-start">{{ round($values['quorumAbsent'],6) }}</td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>

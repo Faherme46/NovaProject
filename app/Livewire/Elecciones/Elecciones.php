@@ -64,18 +64,10 @@ class Elecciones extends Component
                 'title' => 'Crear Candidatos',
                 'body' => 'Seleccionar los candidatos que participarán en cada torre',
                 'visible' => true,
-                'enabled' => true,
+                'enabled' => (cache('asamblea', false) && !cache('asamblea')['h_inicio']),
             ],
             [
-                "directives" => 'onclick=location.href="/asambleas/load";',
-                'icon' => 'bi-upload',
-                'title' => 'Cargar Elecciones',
-                'body' => 'Cargar y eliminar las elecciones guardadas en el dispositivo',
-                'visible' => false,
-                'enabled' => !false,
-            ],
-            [
-                "directives" => 'onclick=location.href="/gestion/informes";',
+                "directives" => 'onclick=location.href="/elecciones/informe";',
                 'icon' => 'bi-file-earmark-richtext',
                 'title' => 'Informe de elección',
                 'body' => 'Gestión y generación del informe',
@@ -88,16 +80,8 @@ class Elecciones extends Component
                 'title' => 'Registrar',
                 'body' => 'Asignar termianes de votación a los sufragantes.',
                 'visible' => true,
-                'enabled' => (cache('asamblea', false)),
-
-            ],
-            [
-                "directives" =>  'onclick=location.href="/elecciones/quorum";',
-                'icon' => 'bi-percent',
-                'title' => 'Ver Quorum',
-                'body' => 'Consultar el estado del Quorum, separado por cada torre',
-                'visible' => true,
                 'enabled' => (cache('asamblea', false) && cache('asamblea')['h_inicio']),
+
             ],
             [
                 "directives" => 'onclick=location.href="/elecciones/gestion";',
@@ -106,6 +90,36 @@ class Elecciones extends Component
                 'body' => 'Gestión, control y estadisticas de las elecciones actuales',
                 'visible' => true,
                 'enabled' => ($this->role != 'Operario' && (cache('asamblea', false))),
+            ],
+            [
+                "directives" => 'onclick=location.href="/elecciones/resultados";',
+                'icon' => 'bi-bar-chart-line',
+                'title' => 'Resultados',
+                'body' => 'Calcular y presentar los resultados de las elecciones',
+                'visible' => true,
+                'enabled' => cache('asamblea', false) && cache('asamblea')['h_cierre'] &&$this->role != 'Operario',
+            ],[
+                "directives" => 'onclick=location.href="/elecciones/terminales";',
+                'icon' => 'bi-pc-display-horizontal',
+                'title' => 'Terminales',
+                'body' => 'Verificar los terminales conectados actualmente a la sesión',
+                'visible' => true,
+                'enabled' => cache('asamblea', false)
+            ],[
+                "directives"=> 'onclick=location.href="/setup";',
+                'icon'=> 'bi-palette',
+                'title'=> 'Configurar Diseño',
+                'body'=> 'Cambiar colores, crear preguntas predeterminadas',
+                'visible'=> ($this->role=='Admin' || $this->role=='Lider'),
+                'enabled'=>true,
+            ],
+            [
+                "directives"=> 'onclick=location.href="/consulta";',
+                'icon'=> 'bi-info-circle',
+                'title'=> 'Consulta',
+                'body'=> 'Obtener informacion de los predios y sus propietarios',
+                'visible'=> true,
+                'enabled'=>(cache('asamblea',false)),
             ],
             [
                 "directives" => 'onclick=location.href="/users";',

@@ -11,6 +11,9 @@ use App\Models\PrediosPersona;
 use App\Models\Question;
 use App\Models\Result;
 use App\Models\Signature;
+use App\Models\Terminal;
+use App\Models\Torre;
+use App\Models\TorresCandidato;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
@@ -74,9 +77,9 @@ class SessionController extends Controller
         PrediosPersona::truncate();
         Question::truncate();
         Signature::truncate();
-        // Torre::truncate
-        // TorresCandidato::truncate();
-        // Terminal::truncate();
+        Torre::truncate();
+        TorresCandidato::truncate();
+        Terminal::truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
     public function deleteAsambleaFiles()

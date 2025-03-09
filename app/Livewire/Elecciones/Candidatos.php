@@ -38,7 +38,9 @@ class Candidatos extends Component
 
     public function mount()
     {
-
+        if(cache('asamblea')&& ((cache('asamblea')['h_inicio'] || cache('asamblea')['h_cierre']))){
+            return redirect()->route('home.elecciones')->with('warning', 'Las elecciones ya se han abierto');
+        }
 
         $this->torres = Torre::all();
         if ($this->torres->isEmpty()) {

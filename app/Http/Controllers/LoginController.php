@@ -40,7 +40,11 @@ class LoginController extends Controller
                 $hostname = gethostbyaddr($ip);
                 Terminal::updateOrCreate(
                     ['ip_address' => $ip],
-                    ['host' => $hostname, 'available' => true, 'user_id' => $user->id, 'user_name' => $user->name.' '.$user->lastName]
+                    ['host' => $hostname, 
+                    'available' => true, 
+                    'user_id' => $user->id, 
+                    'user_name' => $user->name.' 
+                    '.$user->lastName]
                 );
 
                 Log::channel('custom')->info('El Terminal {username} ha ingresado al sistema.', ['username' => Auth::getUser()->username]);

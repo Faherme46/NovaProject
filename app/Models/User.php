@@ -48,7 +48,7 @@ class User extends Authenticatable
     }
 
     public function terminal(){
-        return $this->hasOne(Terminal::class);
+        return $this->hasOne(Terminal::class,'user_id','id');
     }
 
 

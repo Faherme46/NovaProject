@@ -170,4 +170,5 @@ class PrediosController extends Controller
         cache(['prepared' => true]);
         return redirect()->route('gestion.report')->with('success', 'Se han preparado los predios');
     }
+
 }

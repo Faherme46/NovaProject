@@ -34,8 +34,6 @@ class Registro extends Component
     public $prediosAvailable = [];
     public $prediosUnavailable = [];
 
-    public $predioSelected = [];
-    public $selectAll = false;
     public $torres=[];
 
 
@@ -43,6 +41,10 @@ class Registro extends Component
 
     public function mount()
     {
+
+        if(cache('asamblea') && (!cache('asamblea')['h_inicio'] || cache('asamblea')['h_cierre'])){
+            return redirect()->route('home.elecciones')->with('warning', 'Las elecciones estan cerradas');
+        }
         $this->tipoId = 'CC';
     }
 
@@ -63,9 +65,7 @@ class Registro extends Component
             'poderdantes',
             'poderdantesIDs',
             'prediosAvailable',
-            'predioSelected',
             'prediosAvailable',
-            'selectAll'
         ]);
         if ($cedula) {
             $this->reset(['cedula']);
@@ -87,7 +87,6 @@ class Registro extends Component
             $this->addPredios($this->asistente->predios);
             $this->addPredios($this->asistente->prediosEnPoder);
 
-            $this->selectAll = true;
         } else {
             $this->dispatch('showModal');
         }
@@ -109,19 +108,26 @@ class Registro extends Component
         }
     }
 
-    public function updatedSelectAll($value)
+    public function unsetAllPredios()
     {
-        if (!$value) {
-            $this->predioSelected = [];
-        } else {
-            $this->predioSelected = array_keys($this->prediosAvailable);
-        }
+        $this->reset(['prediosAvailable','torres']);
+
     }
 
-    public function updatedPredioSelected()
+    public function unsetPredio($id)
     {
 
-        $this->selectAll = count($this->predioSelected) === count($this->prediosAvailable);
+        unset($this->prediosAvailable[$id]);
+        $this->setTorres();
+    }
+
+    public function setTorres(){
+        $this->reset('torres');
+        foreach ($this->prediosAvailable as $predio) {
+            $this->torres[] = $predio['numeral1'];
+
+        }
+        $this->torres = array_unique($this->torres);
     }
 
 
@@ -154,7 +160,6 @@ class Registro extends Component
     {
         $this->reset(['ccPoderdante', 'poderdantes', 'poderdantesIDs', 'prediosAvailable']);
         $this->mount();
-        $this->reset(['predioSelected']);
         if ($this->asistente) {
             $this->addPredios($this->asistente->predios);
         }
@@ -166,7 +171,6 @@ class Registro extends Component
         $predios = Predio::whereHas('personas', function ($query) use ($poderdanteId) {
             $query->where('persona_id', $poderdanteId);
         })->pluck('id')->toArray();
-        $this->predioSelected = array_diff($this->predioSelected, $predios);
         unset($this->prediosAvailable, $predios);
         $this->poderdantesIDs = array_diff($this->poderdantesIDs, [$poderdanteId]);
         $this->poderdantes = Persona::find(($this->poderdantesIDs));
@@ -176,10 +180,8 @@ class Registro extends Component
         foreach ($predios as $predio) {
             if (!array_key_exists($predio->id, $this->prediosAvailable) && !$predio->control) {
                 $this->prediosAvailable[$predio->id] = $predio->toArray();
-                $this->predioSelected[] = $predio->id;
-                if(!in_array($predio->numeral1,$this->torres)){
-                    $this->torres[]=$predio->numeral1;
-                }
+                $this->torres[]=$predio->numeral1;
+                $this->torres = array_unique($this->torres);
             }
         }
     }
@@ -195,11 +197,9 @@ class Registro extends Component
         if ($predio['control_id']) {
             $this->addError('error', 'Este predio ya se ha registrado');
         } else {
-            if(!in_array($predio['numeral1'],$this->torres)){
-                $this->torres[]=$predio['numeral1'];
-            }
+            $this->torres[]=$predio['numeral1'];
+                $this->torres = array_unique($this->torres);
             $this->prediosAvailable[$predio['id']] = $predio;
-            $this->predioSelected[] = $predio['id'];
         }
     }
 
@@ -225,35 +225,35 @@ class Registro extends Component
     public function registrar()
     {
 
-        if (!$this->prediosAvailable || !$this->predioSelected) {
+        if (!$this->prediosAvailable) {
             return session()->flash('warning', 'No hay predios para asignar');
         }
-        $prediosToAsign = array_intersect($this->predioSelected, array_keys($this->prediosAvailable));
+        $prediosToAsign = array_keys($this->prediosAvailable);
 
 
         $terminalFree=Terminal::where('available',true)->exists();
+
         if(!$terminalFree){
             return session()->flash('warning', 'No hay terminales libres, espere a que se libere');
         }
+
         foreach ($this->torres as $torre) {
 
             $control = Control::create(['cc_asistente' => $this->asistente->id,  'state' => 2]);
-
             try {
-
                 Predio::where('numeral1',$torre)->whereIn('id',$prediosToAsign)->update(['control_id'=>$control->id]);
-
                 $control->vote = $torre;
                 $control->h_entrega = Carbon::now(new DateTimeZone('America/Bogota'))->format('H:i:s');
                 $control->setCoef();
                 $control->save();
-                \Illuminate\Support\Facades\Log::channel('custom')->info('Registra el control {control}', ['control' => $control->id, 'predios' => $prediosToAsign, 'persona' => $this->cedula]);
+                \Illuminate\Support\Facades\Log::channel('custom')->info('Registra el control {control}', ['control' => $control->id, 'predios' => array_keys($prediosToAsign), 'persona' => $this->cedula]);
             } catch (\Exception $e) {
                 $control->predios()->update(['control_id' => null]);
                 $control->delete();
                 return  session()->flash('warning', $e->getMessage());
             }
         }
+        cache(['votantes'=>cache('votantes',0)+1]);
         $terminal = $control->getATerminal();
         if ($terminal) {
             return redirect()->route('elecciones.registrar')->with('terminal', $terminal);
