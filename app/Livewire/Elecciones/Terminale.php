@@ -81,8 +81,8 @@ class Terminale extends Component
     public function storeVote()
     {
 
-        $votosBlanco = $this->control->predios_abs;
-        $coeficienteBlanco = $this->control->sum_coef_abs;
+        $votosBlanco = 0;
+        $coeficienteBlanco =  0;
         if ($this->candidatoId == -1) {
             $votosBlanco += $this->control->predios_vote;
             $coeficienteBlanco += $this->control->sum_coef_can;
