@@ -147,7 +147,7 @@ Route::post('/session/disconnect',[SessionController::class,'sessionDisconnect']
 Route::get('/login', [LoginController::class, 'logView'])->name('login')->middleware(isLogged::class)->withoutMiddleware(ValidateLogin::class)->withoutMiddleware(EnsureAsambleaOn::class);
 Route::post('/login', [LoginController::class, 'authenticate'])->name('users.authenticate')->withoutMiddleware(ValidateLogin::class)->withoutMiddleware(EnsureAsambleaOn::class);
 Route::get('/logout', [LoginController::class, 'logout'])->name('users.logout')->withoutMiddleware(EnsureAsambleaOn::class);
-
+Route::get('/proofVerify', [EleccionesController::class, 'verifySum'])->name('elecciones.verifySum')->withoutMiddleware(EnsureAsambleaOn::class);
 //rutas de prueba
 Route::get('/proofAsignacion', [Asignacion::class, 'proofAsignacion'])->name('proofAsignacion');
 // Route::get('proofQuestion', [FileController::class, 'exportAllQuestions
