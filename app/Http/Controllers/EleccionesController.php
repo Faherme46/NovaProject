@@ -303,5 +303,6 @@ class EleccionesController extends Controller
         ->select('h_recibe')
         ->selectRaw('SUM(sum_coef_can) as total')
         ->get()->toArray();
+        dd($valuesCoef,$controls);
     }
 }
