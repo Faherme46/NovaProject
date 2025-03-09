@@ -145,10 +145,11 @@ class Votacion extends Component
 
     public function updatedQuestionType($value)
     {
+        
         $this->resetErrorBag();
         $this->reset(['questionOptions', 'questionWhite']);
         $this->questionWhite = false;
-        if ($this->questionId == 12) {
+        if ($this->questionId == 15) {
             $this->plancha = false;
             switch ($value) {
                 case 1:
