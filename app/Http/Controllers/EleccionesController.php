@@ -8,7 +8,7 @@ use App\Imports\PersonasImport;
 use App\Imports\PrediosEleccionesImport;
 use App\Imports\UsersImport;
 use App\Models\Asamblea;
-
+use App\Models\Control;
 use App\Models\Predio;
 use App\Models\Torre;
 use App\Models\TorresCandidato;
@@ -182,7 +182,7 @@ class EleccionesController extends Controller
 
     public function generarGraficas()
     {
-        cache(['graficas'=>true]);
+        cache(['graficas' => true]);
         $torres = Torre::all();
         foreach ($torres as $torre) {
             $nombres = [];
@@ -193,17 +193,17 @@ class EleccionesController extends Controller
                 foreach ($candidatos as $persona) {
                     $nombres[] = $persona['nombre'] . ' ' . $persona['apellido'];
                     $valuesCoef[] =( $persona['pivot']['coeficiente'])? $persona['pivot']['coeficiente']:0;
+                    $valuesCoef[] = ($persona['pivot']['coeficiente']) ? $persona['pivot']['coeficiente'] : 0;
                 }
                 $this->createChart($torre->id, $torre->name, $nombres, $valuesCoef, 'coefChart', $torre->delegados, $torre->coeficienteBlanco);
                 $nombres = [];
                 $candidatos = $torre->candidatosNom->toArray();
                 foreach ($candidatos as $persona) {
                     $nombres[] = $persona['nombre'] . ' ' . $persona['apellido'];
-                    $valuesNom[] = ($persona['pivot']['votos'])?$persona['pivot']['votos']:0;
+                    $valuesNom[] = ($persona['pivot']['votos']) ? $persona['pivot']['votos'] : 0;
                 }
 
                 $this->createChart($torre->id, $torre->name, $nombres, $valuesNom, 'nominalChart', $torre->delegados, $torre->votosBlanco);
-
             } catch (Throwable $th) {
                 return redirect()->route('elecciones.resultados')->with('error', $th->getMessage());
             }
@@ -263,7 +263,7 @@ class EleccionesController extends Controller
     public function updateElecciones(Request $request)
     {
         $messages = [
-            
+
             'fecha.date' => 'El campo :attribute debe ser una fecha válida.',
             '*.date_format' => 'El campo :attribute no corresponde con el formato :format.',
         ];
@@ -274,7 +274,7 @@ class EleccionesController extends Controller
         ], $messages);
 
         $asamblea = Asamblea::find($request->id_asamblea);
-        
+
         if ($asamblea) {
             $asamblea->update($request->all());
             if (!$request->signature) {
@@ -286,5 +286,20 @@ class EleccionesController extends Controller
         } else {
             return back()->withErrors('No se encontro la asamblea')->withInput();
         }
+    }
+
+    public function verifySum()
+    {
+        $torres = Torre::all();
+        foreach ($torres as $torre) {
+            $candidatos = $torre->candidatosCoef->toArray();
+            foreach ($candidatos as $persona) {
+                
+                $valuesCoef[$persona['id']] = ($persona['pivot']['coeficiente']) ? $persona['pivot']['coeficiente'] : 0;
+            }
+
+        }
+        $controls = Control::groupBy('h_recibe')->sum('sum_coef_can');
+        dd($controls);
     }
 }

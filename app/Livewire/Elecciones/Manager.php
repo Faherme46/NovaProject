@@ -47,9 +47,9 @@ class Manager extends Component
     public function setValues($torre = null)
     {
         if ($torre) {
-            $this->controles = Control::where('vote', $torre)->get();
+            $this->controles = Control::where('vote', $torre)->orderBy('updated_at','asc')->get();
         } else {
-            $this->controles = Control::all();
+            $this->controles = Control::orderBy('updated_at','desc')->get();
         }
 
         $this->values['prediosTotal'] = Predio::count();
@@ -107,7 +107,7 @@ class Manager extends Component
             if (File::exists($logpath)) {
                 Storage::disk('externalAsambleas')->put($this->asamblea->name . '/logs.log', file_get_contents($logpath));
             }
-            $time = Carbon::now(new DateTimeZone('America/Bogota'))->format('H:i:s');
+            $time = Carbon::now(new DateTimeZone('America/Bogota'))->format('H:i');
             if (!$this->asamblea->h_cierre) {
 
                 // $fileController = new FileController;

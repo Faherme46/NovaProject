@@ -7,6 +7,7 @@ use App\Models\Eleccion;
 use App\Models\Persona;
 use App\Models\Terminal;
 use App\Models\Torre;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -31,8 +32,8 @@ class Terminale extends Component
         $user = Auth::user();
 
         $this->terminal = Terminal::where('user_id', $user->id)->first();
-        
-        if(!$this->terminal){
+
+        if (!$this->terminal) {
             Auth::logout();
         }
         $this->verifyAsistente();
@@ -51,7 +52,7 @@ class Terminale extends Component
 
     public function verifyAsistente()
     {
-        if(!$this->terminal){
+        if (!$this->terminal) {
             Auth::logout();
             return redirect(route('home'));
         }
@@ -70,7 +71,7 @@ class Terminale extends Component
 
         $this->torre = Torre::where('name', $this->control->vote)->first();
         $this->reset('candidatoId', 'candidatos');
-        
+
         foreach ($this->torre->candidatos as $candidato) {
             $this->candidatos[$candidato->id] = $candidato->fullName();
         }
@@ -110,8 +111,8 @@ class Terminale extends Component
             'Vota:',
             [
                 'control' => $this->control->id,
+                'asistente' => $this->control->persona->id,
                 'candidato' => $this->candidatoId,
-                'asistente' => $this->control->persona->id
             ]
         );
         $this->control->update(['state' => 5]);
@@ -128,18 +129,20 @@ class Terminale extends Component
             $this->terminal->update(['available' => true]);
             $this->resumen['asistente'] = $this->asistente->fullName();
             $this->voting = false;
-
-            foreach ($this->asistente->controls as $control) {
-                $this->resumen[$control->id] = [
-                    'torre' => $control->vote,
-                    'coeficiente' => $control->sum_coef_can,
-                    'votos' => $control->predios_vote,
-                    'predios' => $control->predios->count(),
-                    'candidato' => ($control->h_recibe && $control->h_recibe == '-1') ? 'EN BLANCO' : Persona::find($control->h_recibe)->fullName(),
-                ];
-                # code...
+            try {
+                foreach ($this->asistente->controls as $control) {
+                    $this->resumen[$control->id] = [
+                        'torre' => $control->vote,
+                        'coeficiente' => $control->sum_coef_can,
+                        'votos' => $control->predios_vote,
+                        'predios' => $control->predios->count(),
+                        'candidato' => ($control->h_recibe && $control->h_recibe == '-1') ? 'EN BLANCO' : Persona::find($control->h_recibe)->fullName(),
+                    ];
+                    # code...
+                }
+            } catch (Exception $e) {
+                $x=$e->getMessage();
             }
-
             session()->flash('voted', 'Ha votado');
             $this->reset('candidatos', 'torres', 'torre', 'asistente', 'control', 'candidatoId', 'tratamientoDatos', 'inTratamiento');
             return;
