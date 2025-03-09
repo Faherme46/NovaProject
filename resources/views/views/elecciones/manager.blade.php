@@ -52,7 +52,11 @@
                             </tr>
                             <tr>
                                 <td class="text-end">Quorum Registrado:</td>
-                                <td class="text-start">{{ round($values['quorumRegistrado'],6) }}</td>
+                                <td class="text-start">{{ round($values['quorumTotal'],6) }}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-end">Quorum Habilitado:</td>
+                                <td class="text-start">{{ round($values['quorumPresente'],6) }}</td>
                             </tr>
 
                         </tbody>

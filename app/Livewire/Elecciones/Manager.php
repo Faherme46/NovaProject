@@ -54,7 +54,9 @@ class Manager extends Component
 
         $this->values['prediosTotal'] = Predio::count();
         $this->values['prediosRegistrados'] = $this->controles->sum('predios_vote');
-        $this->values['quorumRegistrado'] = $this->controles->sum('sum_coef');
+        $this->values['quorumTotal'] = $this->controles->sum('sum_coef');
+        $this->values['quorumPresente'] = $this->controles->sum('sum_coef_can');
+
     }
 
     #[Layout('layout.full-page')]
@@ -190,7 +192,7 @@ class Manager extends Component
 
 
         if ($value == 'null') {
-            $this->reset('torreSelected');
+            
             $this->setValues();
         } else {
             $this->setValues($value);
