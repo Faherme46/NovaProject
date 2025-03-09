@@ -177,12 +177,12 @@ class QuestionSeeder extends Seeder
 
         QuestionsPrefab::create([
             'title' => 'Prueba',
-            'optionA' => 'A de Albaricoque',
-            'optionB' => 'B de Barquisimeto',
-            'optionC' => 'C de Cosita Rica',
-            'optionD' => 'D de Demencia post-asamblea',
-            'optionE' => 'E de robinson, El favorito de Tecnovis',
-            'optionF' => 'F de Facilota, como ya saben quien',
+            'optionA' => '',
+            'optionB' => '',
+            'optionC' => '',
+            'optionD' => '',
+            'optionE' => '',
+            'optionF' => '',
             'type' => 2
         ]);
 
