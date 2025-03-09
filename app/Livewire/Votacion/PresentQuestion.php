@@ -329,9 +329,10 @@ class PresentQuestion extends Component
         if ($total <= 0) {
             foreach ($this->options as $option) {
                 if ($this->question[$option] !== 'EN BLANCO') {
-                    $this->valuesPlanchas[$option] = 1;
+                    $this->valuesPlanchas[$option] = 0;
                 }
             }
+            
         } else {
 
             foreach ($this->options as $option) {
@@ -349,7 +350,7 @@ class PresentQuestion extends Component
             $plazasRestantes = $this->plazas - array_sum($this->valuesPlanchas);
 
             foreach ($this->options as $option) {
-                if ($this->question[$option] !== 'En blanco') {
+                if ($this->question[$option] !== 'EN BLANCO') {
                     $residuos[$option] = $this->resultToUse[$option] - $umbral * $this->valuesPlanchas[$option];
                 }
             }
@@ -374,7 +375,7 @@ class PresentQuestion extends Component
 
     public function updateQuestion()
     {
-        $this->question->title = $this->newTitle;
+        $this->question->title = strtoupper($this->newTitle);
         $this->question->update($this->newOptions);
         $this->question->save();
         $this->setSizePresentation();

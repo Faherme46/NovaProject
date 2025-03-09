@@ -18,6 +18,7 @@ use App\Imports\PrediosImport;
 
 use App\Imports\PredioWithRegistro;
 use App\Imports\UsersImport;
+use App\Models\Predio;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
@@ -138,6 +139,8 @@ class AsambleaController extends Controller
         }else{
             return back()->withErrors('No se puede reducir el numero de controles')->withInput();
         }
+
+        cache(['prepared'=>false]);
         if ($asamblea) {
             $asamblea->update($request->all());
             if (!$request->signature) {

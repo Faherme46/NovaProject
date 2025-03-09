@@ -53,18 +53,18 @@
                                 <label class="btn btn-outline-primary  fw-bolder  px-2" for="radioType1">Quorum</label>
 
                                 <input type="radio" class="btn-check" name="radioType" id="radioType4"
-                                    wire:model.number.live='questionType' value="2" @disabled(!$isQuestion || ($questionType != 2 && $questionId != 12))>
+                                    wire:model.number.live='questionType' value="2" @disabled(!$isQuestion || ($questionType != 2 && $questionId != 15))>
 
                                 <label class="btn btn-outline-primary fw-bolder  px-2"
                                     for="radioType4">Seleccion</label>
 
                                 <input type="radio" class="btn-check" name="radioType" id="radioType2"
-                                    wire:model.number.live='questionType' value="3" @disabled(!$isQuestion || ($questionType != 3 && $questionId != 12))>
+                                    wire:model.number.live='questionType' value="3" @disabled(!$isQuestion || ($questionType != 3 && $questionId != 15))>
                                 <label class="btn btn-outline-primary fw-bolder  px-2"
                                     for="radioType2">Aprobacion</label>
 
                                 <input type="radio" class="btn-check" name="radioType" id="radioType3"
-                                    wire:model.number.live='questionType' value="4" @disabled(!$isQuestion || ($questionType != 4 && $questionId != 12))>
+                                    wire:model.number.live='questionType' value="4" @disabled(!$isQuestion || ($questionType != 4 && $questionId != 15))>
                                 <label class="btn btn-outline-primary fw-bolder  px-2" for="radioType3">Si/No</label>
                             @endif
 

@@ -24,8 +24,8 @@ class PrediosImport implements ToModel, WithHeadingRow
             }
         }
         $attributes=[
-            'descriptor1' => ($row['descriptor1'])?$row['descriptor1']:'',
-            'numeral1' => ($row['numeral1'])?$row['numeral1']:'',
+            'descriptor1' => ($row['descriptor1']&&$row['numeral1']!='-')?$row['descriptor1']:'',
+            'numeral1' => ($row['numeral1']&&$row['numeral1']!='-')?$row['numeral1']:'',
             'descriptor2' => $row['descriptor2'],
             'numeral2' => $row['numeral2'],
             'coeficiente' => round($row['coeficiente'],5),

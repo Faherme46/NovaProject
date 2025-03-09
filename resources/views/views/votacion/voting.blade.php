@@ -91,7 +91,7 @@
                     <div class="spinner-grow text-primary" style="width: 4rem; height: 4rem;" role="status">
 
                     </div>
-                    <span class="ms-3 " style="font-size: 5rem">Cargando Resultados...</span>
+                    <span class="ms-3 " style="font-size: 5rem">Cargando...</span>
                 </div>
 
             </div>

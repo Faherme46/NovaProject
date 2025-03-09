@@ -5,6 +5,9 @@ namespace App\Livewire\Gestion;
 use App\Models\Asamblea;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
+
+use App\Models\Control;
+
 use App\Models\Question;
 
 class Reports extends Component
@@ -34,6 +37,9 @@ class Reports extends Component
         $this->report = cache('report', null);
 
         $this->asambleaa = Asamblea::where('name',cache('asamblea')['name'])->first();
+        if(!$this->asambleaa->registro){
+            cache(['prepared'=>true]);
+        }
         $this->defVariables();
         $this->setQuestionsVerified();
         $this->ordenDia=($this->asambleaa->ordenDia)?htmlspecialchars(implode("\n",json_decode($this->asambleaa->ordenDia))):'';

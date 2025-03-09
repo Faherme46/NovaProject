@@ -33,6 +33,16 @@ class QuestionSeeder extends Seeder
             'type' => 3
         ]);
         QuestionsPrefab::create([
+            'title' => 'Aprobacion del reglamento de la asamblea',
+            'optionA' => '',
+            'optionB' => '',
+            'optionC' => '',
+            'optionD' => 'Aprobado',
+            'optionE' => 'No Aprobado',
+            'optionF' => '',
+            'type' => 3
+        ]);
+        QuestionsPrefab::create([
             'title' => 'Aprobacion de orden del dia',
             'optionA' => '',
             'optionB' => '',
@@ -52,6 +62,7 @@ class QuestionSeeder extends Seeder
             'optionF' => '',
             'type' => 3
         ]);
+        
         QuestionsPrefab::create([
             'title' => 'Aprobacion del Acta',
            'optionA' => '',
@@ -63,7 +74,28 @@ class QuestionSeeder extends Seeder
             'type' => 3
         ]);
         QuestionsPrefab::create([
+            'title' => 'Aprobacion del Reglamento de la asamblea',
+           'optionA' => '',
+            'optionB' => '',
+            'optionC' => '',
+            'optionD' => 'Aprobado',
+            'optionE' => 'No Aprobado',
+            'optionF' => '',
+            'type' => 3
+        ]);
+        QuestionsPrefab::create([
             'title' => 'Comite de Convivencia',
+            'optionA' => '',
+            'optionB' => '',
+            'optionC' => '',
+            'optionD' => '',
+            'optionE' => '',
+            'optionF' => '',
+            'type' => 2
+        ]);
+        
+        QuestionsPrefab::create([
+            'title' => 'Comite de Verificación del Acta',
             'optionA' => '',
             'optionB' => '',
             'optionC' => '',

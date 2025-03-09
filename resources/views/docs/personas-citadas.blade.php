@@ -62,7 +62,7 @@
                             <p class="p-0 ps-2 my-0 no-line-spacing text-left ">
                                 {{ $asambleaR->folder }} <br>
                                 <span class="border-1 border px-3 border-black">
-                                    {{ $predios->count() }}
+                                    {{ count($predios) }}
                                 </span>
                             </p>
                         </td>
@@ -107,37 +107,31 @@
             <tbody>
                 @foreach ($predios as $predio)
                     <tr>
-                        <td>{{ $predio->numeral1 }}</td>
-                        <td>{{ $predio->numeral2 }}</td>
-                        <td>{{ $predio->coeficiente }}</td>
+                        <td>{{ $predio['numeral1'] }}</td>
+                        <td>{{ $predio['numeral2'] }}</td>
+                        <td>{{ $predio['coeficiente'] }}</td>
 
-                        @if (($predio->control&&$predio->control->persona&&!in_array($predio->control->persona->id,$predio->personas->pluck('id')->toArray())))
+                        @if (($predio['control_id']&&$predio['apoderado']))
                             <td></td>
                             <td>X</td>
                         @else
                             <td>X</td>
                             <td></td>
                         @endif
-
-
                         <td class="text-start ps-1">
-                            @foreach ($predio->personas as $persona)
-                                {{ $persona->nombre }} {{ $persona->apellido }}
+                            @foreach ($predio['personas'] as $persona)
+                                {{ $persona['nombre'] }}<br>
                             @endforeach
                         </td>
                         <td class="text-start ps-1 text-uppercase">
-                            @if ($predio->control && $predio->control->persona)
-                                @if (!in_array($predio->control->persona->id,$predio->personas->pluck('id')->toArray()))
-                                {{ $predio->control->persona->nombre }} {{ $predio->control->persona->apellido }}
-                                @endif
+                            @if ($predio['control_id']&&$predio['apoderado'])
+                                {{$predio['apoderado']['nombre'].' '.$predio['apoderado']['apellido']}}
                             @endif
-
                         </td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
-
     </div>
 
 

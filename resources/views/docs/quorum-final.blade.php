@@ -69,7 +69,7 @@
                             <p class="p-0 ps-2 my-0 no-line-spacing text-left ">
                                 {{ $asambleaR->folder }} <br>
                                 {{ $asambleaR->fecha }} <br>
-                                {{ $predios->count() }}<br>
+                                {{ count($predios) }}<br>
                                 {{ cache('predios_init') }} <br>
                                 {{ cache('quorum_init') }}
                             </p>
@@ -115,31 +115,27 @@
             <tbody class="fs-12px">
                 @foreach ($predios as $predio)
                     <tr>
-                        <td class="p-0 px-1 ">{{ $predio->numeral1 }}</td>
-                        <td class="p-0 px-1 ">{{ $predio->numeral2 }}</td>
-                        <td class="px-0">{{ $predio->coeficiente }}</td>
-                        @if ($predio->control&&$predio->quorum_end)
-                            @if ($predio->personas->contains($predio->control->persona))
+                        <td class="p-0 px-1 ">{{ $predio['numeral1'] }}</td>
+                        <td class="p-0 px-1 ">{{ $predio['numeral2'] }}</td>
+                        <td class="px-0">{{ $predio['coeficiente'] }}</td>
+                        @if ($predio['control_id']&&$predio['quorum_end'])
+                            @if (!$predio['apoderado'])
                                 <td class="p-0">Propietario</td>
+                                <td class="text-start ps-1">{{$predio['personas'][0]['nombre']}}</td>
                             @else
                                 <td class="p-0">Apoderado</td>
+                                <td class="text-start ps-1">{{$predio['apoderado']['nombre'].' '.$predio['apoderado']['apellido']}}</td>
                             @endif
-                            <td class="text-start ps-1">
-                                {{ $predio->control->persona->nombre }} {{ $predio->control->persona->apellido }}
-                            </td>
                             <td>
-                                {{ $predio->control->h_entrega}}
+                                {{ $predio['h_entrega']}}
                             </td>
-                            <td>{{ $predio->control->h_recibe}}</td>
+                            <td>{{ $predio['h_recibe']}}</td>
                         @else
                             <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
                         @endif
-
-
-
                     </tr>
                 @endforeach
             </tbody>

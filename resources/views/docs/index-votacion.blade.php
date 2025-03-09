@@ -65,7 +65,7 @@
                 <ul>
                     @for ($i = 0; $i < count($anexos); $i++)
                         <li>
-                            ITEM {{$i+1}} - {{ ucfirst(strtr(strtolower($anexos[$i]), ['Á' => 'á', 'É' => 'é', 'Í' => 'í', 'Ó' => 'ó', 'Ú' => 'ú','Ñ'=>'ñ']))}}
+                            Ítem {{$i+1}} - {{ ucfirst(strtr(strtolower($anexos[$i]), ['Á' => 'á', 'É' => 'é', 'Í' => 'í', 'Ó' => 'ó', 'Ú' => 'ú','Ñ'=>'ñ']))}}
                         </li>
                     @endfor
                 </ul>
@@ -77,11 +77,11 @@
             <table class="table table-general">
                 <tr>
                     <th class="bb-white text-light bold bg-darkblue text-end" >Cliente:</th>
-                    <td class="ps-2" colspan="3">{{strtoupper($asambleaR->folder)}}</td>
+                    <td class="ps-2" colspan="3">{{ucwords($asambleaR->folder)}}</td>
                 </tr>
                 <tr>
                     <th class="bb-white text-light bold bg-darkblue text-end" >Referencia:</th>
-                    <td class="ps-2" colspan="3">{{strtoupper($asambleaR->referencia)}}</td>
+                    <td class="ps-2" colspan="3">{{ucwords($asambleaR->referencia)}}</td>
                 </tr>
                 <tr>
                     <th class="bb-white text-light bold bg-darkblue text-end" >Tipo de Asamblea:</th>

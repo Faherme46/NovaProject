@@ -204,10 +204,10 @@ class QuestionController extends Controller
 
         // Agregar abstained, absent y nule con sus etiquetas en español
 
-
         foreach ($additionalOptions as $key => $label) {
             $labels[] = $label;
-            $values[] =  round($result->$key);
+            $values[] =  round($result->$key,5);
+            
         }
 
         $fileController = new FileController;
@@ -227,6 +227,20 @@ class QuestionController extends Controller
         $this->setImageUrl($this->question->resultCoef, false);
         $this->setImageUrl($this->question->resultNom, false);
         return back()->with('success', 'Gráficas generadas correctamente correctamente');
+    }
+
+
+    public function fixAllgraficas(){
+        $questions = Question::all();
+        foreach( $questions as $question ){
+            if($question->resultCoef){
+                $this->question=$question;
+                $this->setImageUrl($question->resultCoef, false);
+                $this->setImageUrl($question->resultNom, false);
+            }
+        }
+
+        return redirect()->route('home')->with('success','Graficas Generadas correctamente');
     }
 
 

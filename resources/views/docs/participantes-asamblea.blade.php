@@ -34,8 +34,10 @@
 
         td {
 
-            white-space: nowrap; /* Evita que el contenido se divida en varias líneas */
-            padding: 0; /* Opcional: Elimina el padding si no lo necesitas */
+            white-space: nowrap;
+            /* Evita que el contenido se divida en varias líneas */
+            padding: 0;
+            /* Opcional: Elimina el padding si no lo necesitas */
         }
 
         {!! file_get_contents(public_path('\assets\scss\blue.css')) !!} {!! file_get_contents(public_path('\assets\scss\_variables.scss')) !!} {!! file_get_contents(public_path('\assets\scss\docs.scss')) !!}
@@ -51,7 +53,7 @@
             <img src="{{ asset('assets/img/logo.png') }}" width="100mm" height="auto">
         </div>
         <div class="title">
-            <p class="fs-10"><u>ANEXO {{$index+1}} - {{ strtoupper($anexos[$index]) }}</u><sup>1</sup></p>
+            <p class="fs-10"><u>ANEXO {{ $index + 1 }} - {{ strtoupper($anexos[$index]) }}</u><sup>1</sup></p>
         </div>
         <hr class="blue">
         <div class="mt-1">
@@ -71,7 +73,8 @@
                             <p class="p-0 ps-2 my-0 no-line-spacing text-left ">
                                 {{ $asambleaR->folder }} <br>
                                 {{ $asambleaR->fecha }} <br>
-                                {{ count($predios)}}<br>
+                                {{ count($predios) }}<br>
+
                                 {{ $prediosCount }} <span class="ms-5">(Asistió el
                                     {{ round(($prediosCount / count($predios)) * 100, 3) }}% de los predios)</span><br>
                                 {{ $quorum }}
@@ -91,7 +94,7 @@
                 tiene como base los datos suministrados por la Administración de {{ $asambleaR->folder }}.</small>
         </div>
         <div class="text-end txt-small">
-            Informe de Asistencia {{$asambleaR->name}}
+            Informe de Asistencia {{ $asambleaR->name }}
         </div>
 
     </footer>
@@ -118,27 +121,26 @@
             <tbody class="fs-10px">
                 @foreach ($predios as $predio)
                     <tr>
-                        <td class="p-0">{{ $predio->numeral1 }}</td>
-                        <td class="p-0">{{ $predio->numeral2 }}</td>
-                        <td class="p-0">{{ $predio->coeficiente }}</td>
-                        @if ($predio->control)
-                            @if ($predio->personas->contains($predio->control->persona))
+                        <td class="p-0">{{ $predio['numeral1'] }}</td>
+                        <td class="p-0">{{ $predio['numeral2'] }}</td>
+                        <td class="p-0">{{ $predio['coeficiente'] }}</td>
+                        @if ($predio['control_id'])
+                            @if (!$predio['apoderado'])
                                 <td class="p-0">Propietario</td>
+                                <td class="text-start ps-1">{{ $predio['personas'][0]['nombre'] }}</td>
                             @else
                                 <td class="p-0">Apoderado</td>
+                                <td class="text-start ps-1">{{ $predio['apoderado']['nombre'].' '.$predio['apoderado']['apellido'] }}</td>
                             @endif
-                            <td class="text-start ps-1">
-                                {{ $predio->control->persona->nombre }} {{ $predio->control->persona->apellido }}
-                            </td>
                             <td>
-                                {{$predio->control->h_entrega}}
+                                {{ $predio['h_entrega'] }}
                             </td>
-                            <td>{{$predio->control->h_recibe}}</td>
+                            <td>{{ $predio['h_recibe'] }}</td>
                         @else
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
                         @endif
 
 

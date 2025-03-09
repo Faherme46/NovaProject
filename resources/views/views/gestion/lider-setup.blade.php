@@ -26,17 +26,13 @@
                                 <td>{{ $asamblea['fecha'] }} </td>
                             </tr>
                             <tr>
-                                <td class="text-end">Hora:</td>
-                                <td class="text-start"> {{ $asamblea['hora'] }}</td>
-                            </tr>
-                            <tr>
-                                <td class="text-end  ">Controles:</td>
-                                <td class="text-start text-info">{{ $asamblea['controles'] }}</td>
-                            </tr>
-
-                            <tr>
                                 <td class="text-end ">Predios totales:</td>
                                 <td class="text-start text-info">{{ $values['prediosTotal'] }}</td>
+                            </tr>
+                            
+                            <tr>
+                                <td class="text-end">Quorum Inicial:</td>
+                                <td>{{ cache('quorum_init') }} </td>
                             </tr>
                             <tr>
                                 <td class="text-end">Controles registrados:</td>
@@ -55,7 +51,10 @@
                                 <td class="text-end">Predios Ausentes:</td>
                                 <td class="text-start">{{ $values['prediosAbsent']}}</td>
                             </tr>
-
+                            <tr>
+                                <td class="text-end">Quorum Inicial:</td>
+                                <td>{{ cache('quorum_init') }} </td>
+                            </tr>
                             <tr>
                                 <td class="text-end">Quorum Registrado:</td>
                                 <td class="text-start">{{ round($values['quorumTotal'],6) }}</td>

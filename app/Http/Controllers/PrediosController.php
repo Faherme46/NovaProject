@@ -11,6 +11,7 @@ use App\Models\Predio;
 use Illuminate\Http\Request;
 
 use App\Models\Control;
+use App\Models\Persona;
 use Maatwebsite\Excel\Facades\Excel;
 
 class PrediosController extends Controller
@@ -41,9 +42,13 @@ class PrediosController extends Controller
 
         if (cache('asamblea')['registro']) {
             $request->validate(['propietario' => ['required']], ['propietario.required' => 'El id del propietario es requerido']);
+            $propietario=Persona::find($request->input('propietario'));
+            if(!$propietario){
+                return back()->with('error','El propietario no esta registrado en la base de datos');
+            }
         }
 
-        $coef=floatval(str_replace(',', '.', $request->coef));
+        $coef = floatval(str_replace(',', '.', $request->coef));
 
         try {
             $predio = Predio::create([
@@ -53,7 +58,7 @@ class PrediosController extends Controller
                 'descriptor2' => $request->descriptor2,
                 'numeral1' => $request->numeral1,
                 'numeral2' => $request->numeral2,
-                'vota'=>(bool) $request->vota
+                'vota' => (bool) $request->vota
             ]);
             if ($predio->control) {
                 $predio->control->setCoef();
@@ -124,5 +129,46 @@ class PrediosController extends Controller
         return Excel::store($export, $asambleaName . '/Tablas/controles.xlsx', 'externalAsambleas');
     }
 
-    
+    public function repairPredios()
+    {
+        
+        $asamblea =  cache('asamblea');
+
+        if (!$asamblea) {
+            return redirect()->route('home')->with('error', 'No existe una asamblea');
+        }
+        $controles = Control::all();
+        foreach ($controles as $control) {
+
+            if (strtotime($asamblea->h_inicio) < strtotime($control->h_entrega)) {
+                $control->predios()->update(['quorum_start' => false]);
+            } else {
+                $control->predios()->update(['quorum_start' => true]);
+            };
+            if (strtotime($asamblea->h_fin) < strtotime($control->h_recibe)) {
+                $control->predios()->update(['quorum_end' => true]);
+            } else {
+                $control->predios()->update(['quorum_end' => false]);
+            };
+        }
+
+        
+        $predios = Predio::whereNotNull('control_id')->get();
+        try {
+            foreach ($predios as $predio) {
+                $ids = $predio->personas->pluck('id')->toArray();
+
+                if (!in_array($predio->control->cc_asistente, $ids)) {
+                    $predio->update(['cc_apoderado' => $predio->control->cc_asistente]);
+                } else {
+                    $predio->update(['cc_apoderado' => null]);
+                }
+            }
+        } catch (\Throwable $th) {
+            return redirect()->route('gestion.report')->with('error', $th->getMessage());
+        }
+        cache(['prepared' => true]);
+        return redirect()->route('gestion.report')->with('success', 'Se han preparado los predios');
+    }
+
 }

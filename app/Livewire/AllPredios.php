@@ -39,7 +39,7 @@ class AllPredios extends Component
             'numeral1' => $this->distincts['numeral1'][0],
             'descriptor2' => $this->distincts['descriptor2'][0],
         ];
-        $this->search();
+        $this->searchPredios();
     }
 
     public function clean()
@@ -62,22 +62,39 @@ class AllPredios extends Component
     }
 
 
-    public function search()
-    {
-
+    public function searchPredios()
+    {   
+        
         // Ejecuta la consulta y obtiene los resultados
         $this->prediosAll = Predio::where('descriptor1',$this->search['descriptor1'])
                             ->where('numeral1',$this->search['numeral1'])
                             ->where('descriptor2',$this->search['descriptor2'])->get()->toArray();
+        //      dd('1');
     }
 
+    public function searchWithNumeral2(){
+        if(!array_key_exists('numeral2',$this->search)){
+            return;
+        }
+        foreach ($this->prediosAll as $predio) {
+            if(strstr($predio['numeral2'],$this->search['numeral2'])){
+                $prediosAux[]=$predio;
+            }
+        }
+        if(!$this->prediosAll){
+            return;
+        }
+        $this->prediosAll = $prediosAux;
+        unset($this->search['numeral2']);
+    }
     public function updatedSearch($value){
-        $this->search();
+        $this->searchPredios();
     }
     public function dispatchPredio($predio)
     {
 
         $this->dispatch('add-predio', predio: $predio);
+        
     }
     public function dispatchPersona($id)
     {

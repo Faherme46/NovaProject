@@ -2,6 +2,7 @@
 
     <div class="z-3 position-fixed top-50 start-50 translate-middle  w-60 ">
 
+
         @session('success')
             <div class="alert alert-success alert-dismissible align-items-center d-flex" role="alert">
                 <h1 class="mb-0">{{ session('success') }}</h1>
@@ -71,6 +72,7 @@
 
         <div class="d-flex justify-content-center vh-100 align-items-center ">
             <div class="card col-10">
+
                 <div class="card-body">
                     <h1 class="mb-0 card-title " style="font-size: 4rem">{{ $asistente->fullName() }}</h1>
                     <h1 class="mb-0 text-muted"> {{ strtoupper($control->vote) }} </h1>
@@ -90,9 +92,11 @@
                     @if ($asamblea['h_cierre'])
                         VOTACIONES CERRADAS
                     @else
+
                         {{ strtoupper($terminal->user_name) }}
                         <br>
                         <button class="btn btn-primary fs-1" wire:click='verifyAsistente'>INGRESAR</button>
+
                     @endif
                 </h1>
             </div>

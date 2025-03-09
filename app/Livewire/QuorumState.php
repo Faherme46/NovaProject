@@ -11,16 +11,17 @@ class QuorumState extends Component
 
 
     public function mount() {
-        
+        $this->quorum = Control::where('state', 1)->sum('sum_coef');
     }
     public function render()
     {
-        $this->quorum = Control::where('state', 1)->sum('sum_coef');
+
         return view('components.quorum-state');
     }
 
     public function ver()
     {
+        $this->quorum = Control::where('state', 1)->sum('sum_coef');
         $this->dispatch('$refresh');
     }
 
