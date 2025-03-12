@@ -190,19 +190,23 @@ class EleccionesController extends Controller
             $valuesNom = [];
             try {
                 $candidatos = $torre->candidatosCoef->toArray();
+                $totalCoef=0;
                 foreach ($candidatos as $persona) {
                     $nombres[] = $persona['nombre'] . ' ' . $persona['apellido'];
                     $valuesCoef[] =( $persona['pivot']['coeficiente'])? $persona['pivot']['coeficiente']:0;
-                    
+                    $totalCoef+=($persona['pivot']['coeficiente'])? $persona['pivot']['coeficiente']:0;
                 }
                 $this->createChart($torre->id, $torre->name, $nombres, $valuesCoef, 'coefChart', $torre->delegados, $torre->coeficienteBlanco);
                 $nombres = [];
                 $candidatos = $torre->candidatosNom->toArray();
+                $totalNom=0;
                 foreach ($candidatos as $persona) {
                     $nombres[] = $persona['nombre'] . ' ' . $persona['apellido'];
                     $valuesNom[] = ($persona['pivot']['votos']) ? $persona['pivot']['votos'] : 0;
                 }
+                $totalNom=Predio::where('numeral1',$torre->name)->whereNotNull('control_id')->count();
                 $this->createChart($torre->id, $torre->name, $nombres, $valuesNom, 'nominalChart', $torre->delegados, $torre->votosBlanco);
+                $torre->update(['coeficiente'=>$totalCoef,'votos'=>$totalNom]);
             } catch (Throwable $th) {
                 return redirect()->route('elecciones.resultados')->with('error', $th->getMessage());
             }

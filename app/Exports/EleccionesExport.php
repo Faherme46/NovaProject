@@ -14,6 +14,10 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 class EleccionesExport implements FromArray,WithEvents, WithHeadings,WithStyles
 {
 
+    public $onlyPublic;
+    public function __construct($onlyPublic){
+        $this->onlyPublic = $onlyPublic;
+    }
     /**
      * @return array
      */
@@ -26,10 +30,13 @@ class EleccionesExport implements FromArray,WithEvents, WithHeadings,WithStyles
     public function buildArray()
     {
         $array = Control::with('predios')->get()->map(function ($control) {
-            // Convierte el predio a array
-        
-            // Agrega el string de IDs al array del predio
-            $predioArray=[
+            
+            //Si solo son los publicos no manda los privados
+            if($this->onlyPublic&& !$control->t_publico){
+                return [];
+            }
+            
+            $controlArray=[
                 'id' => $control->id,
                 'cc_asistente'=> $control->cc_asistente,
                 'nombre' => $control->persona->fullName(),
@@ -43,8 +50,8 @@ class EleccionesExport implements FromArray,WithEvents, WithHeadings,WithStyles
                 }
                 
             }
-            $predioArray['names']= rtrim( $names, "\n"); ;
-            $predioArray+=[
+            $controlArray['names']= rtrim( $names, "\n"); ;
+            $controlArray+=[
                 'coeficiente'=>$control->sum_coef,
                 'votos'=>$control->predios_total,
                 'td'=> ($control->t_publico)?'Publico':'Privado',
@@ -52,7 +59,7 @@ class EleccionesExport implements FromArray,WithEvents, WithHeadings,WithStyles
                 'torre'=>$control->vote,
                 'cc_voto'=> ($control->h_recibe!='-1')?$control->h_recibe:'EN BLANCO'];
             
-            return $predioArray;
+            return $controlArray;
         })->toArray();
 
 

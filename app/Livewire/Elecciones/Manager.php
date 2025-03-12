@@ -48,12 +48,14 @@ class Manager extends Component
     {
         if ($torre) {
             $this->controles = Control::where('vote', $torre)->orderBy('created_at','asc')->get();
+            $this->values['prediosRegistrados'] = Predio::where('numeral1',$torre)->whereNotNull('control_id')->count();
         } else {
             $this->controles = Control::orderBy('created_at','desc')->get();
+            $this->values['prediosRegistrados'] = Predio::whereNotNull('control_id')->count();
         }
 
         $this->values['prediosTotal'] = Predio::count();
-        $this->values['prediosRegistrados'] = $this->controles->sum('predios_vote');
+        
         $this->values['quorumTotal'] = $this->controles->sum('sum_coef');
         $this->values['quorumPresente'] = $this->controles->sum('sum_coef_can');
 

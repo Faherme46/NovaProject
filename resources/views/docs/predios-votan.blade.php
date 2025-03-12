@@ -49,7 +49,7 @@
             <img src="{{ asset('assets/img/logo.png') }}" width="100mm" height="auto">
         </div>
         <div class="title">
-            <p class="fs-10"><u>ANEXO {{ $index + 1 }} - {{ strtoupper($anexos[$index]) }}</u><sup>1</sup></p>
+            <p class="fs-10"><u>ANEXO {{ $index + 1 }} - {{ strtoupper($anexos[(string)$index]) }}</u><sup>1</sup></p>
         </div>
         <hr class="blue">
         <div class="mt-1">
@@ -101,7 +101,8 @@
                     <th class="p-0 pb-1">Asistente de</th>
                     <th class="p-0 pb-2" rowspan="2">Nombre</th>
                     <th class="pb-1 fs-10x">Hora</th>
-                    <th class="pb-1 fs-10x">Vota</th>
+                    <th class="pb-1 fs-10x" rowspan="2">Tratamiento</th>
+                    
                 </tr>
                 <tr>
                     <th class="p-0 pb-1 px-1"><small> Tipo</small></th>
@@ -109,7 +110,7 @@
                     <th class="p-0">Propiedad </th>
                     <th class="p-0 pb-1">la Reunion</th>
                     <th class="pb-1 fs-10x">Llegada</th>
-                    <th class="pb-1 fs-10x"></th>
+                    
                 </tr>
             </thead>
             <tbody class="fs-12px">
@@ -129,12 +130,14 @@
                             <td>
                                 {{ $predio['h_entrega'] }}
                             </td>
-                            <td>{{ $predio['h_recibe'] }}</td>  
+                            <td>{{$predio['td']}}</td>
+                            
                         @else
                             <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
+                            
                         @endif
 
 

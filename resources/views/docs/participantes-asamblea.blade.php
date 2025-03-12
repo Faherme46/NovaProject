@@ -53,7 +53,7 @@
             <img src="{{ asset('assets/img/logo.png') }}" width="100mm" height="auto">
         </div>
         <div class="title">
-            <p class="fs-10"><u>ANEXO {{ $index + 1 }} - {{ strtoupper($anexos[$index]) }}</u><sup>1</sup></p>
+            <p class="fs-10"><u>ANEXO {{ $index + 1 }} - {{ strtoupper($anexos[(string)$index]) }}</u><sup>1</sup></p>
         </div>
         <hr class="blue">
         <div class="mt-1">

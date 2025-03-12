@@ -70,7 +70,7 @@ $this->values['prediosPresente'] = $this->allControls->where('state', 1)->sum('p
             return $this->addError('error', 'No se han registrado controles');
         }
         try {
-            $time = Carbon::now(new DateTimeZone('America/Bogota'))->format('H:i:s');
+            $time = Carbon::now(new DateTimeZone('America/Bogota'))->format('H:i');
             if (!$this->asamblea->h_inicio) {
                 $this->started = true;
                 cache(['predios_init' =>  Predio::whereHas('control')->count()]);
@@ -98,7 +98,7 @@ $this->values['prediosPresente'] = $this->allControls->where('state', 1)->sum('p
             if (File::exists($logpath)) {
                 Storage::disk('externalAsambleas')->put($this->asamblea->name . '/logs.log', file_get_contents($logpath));
             }
-            $time = Carbon::now(new DateTimeZone('America/Bogota'))->format('H:i:s');
+            $time = Carbon::now(new DateTimeZone('America/Bogota'))->format('H:i');
             if (!$this->asamblea->h_cierre) {
 
                 Predio::whereHas('control', function ($query) use ($time) {

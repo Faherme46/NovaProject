@@ -165,10 +165,10 @@ class PrediosController extends Controller
                 }
             }
         } catch (\Throwable $th) {
-            return redirect()->route('gestion.report')->with('error', $th->getMessage());
+            return back()->with('error', $th->getMessage());
         }
         cache(['prepared' => true]);
-        return redirect()->route('gestion.report')->with('success', 'Se han preparado los predios');
+        return back()->with('success', 'Se han preparado los predios');
     }
 
 }

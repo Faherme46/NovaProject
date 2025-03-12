@@ -76,7 +76,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <div class="d-flex justify-content-center">
-                                    <input type="text"
+                                    <input type="number"
                                         class="form-control bg-success-subtle w-50 @error('controlId') is-invalid @enderror"
                                         wire:model.live='controlId' placeholder="Control" onclick="this.select()"
                                         onkeypress="return onlyNumbers(event)" maxlength="3" wire:keydown.enter='asignar'>

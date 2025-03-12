@@ -67,7 +67,7 @@
                 <br><br>
 
                 <h5 class="text-center title">
-                    <h6>ANEXO {{ $index + 1 }} - {{ strtoupper($anexos[$index]) }}</h6>
+                    <h6>ANEXO {{ $index + 1 }} - {{ strtoupper($anexos[(string)$index]) }}</h6>
                 </h5>
                 <br><br>
                 <div class="anexos">
