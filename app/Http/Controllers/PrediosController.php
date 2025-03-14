@@ -63,6 +63,7 @@ class PrediosController extends Controller
             if ($predio->control) {
                 $predio->control->setCoef();
             }
+            \Illuminate\Support\Facades\Log::channel('custom')->info('Se ha creado el predio', ['predio' => $predio]);
             return redirect()->route('consulta')->with('success', 'Se ha Creado el predio');
         } catch (\Throwable $th) {
             return redirect()->route('consulta')->withErrors($th->getMessage());
@@ -98,6 +99,7 @@ class PrediosController extends Controller
                 if ($predio->control) {
                     $predio->control->setCoef();
                 }
+                \Illuminate\Support\Facades\Log::channel('custom')->info('Se ha actualizado el predio', ['predio' => $predio]);
                 return redirect()->route('consulta')->with('success', 'Se ha actualizado el predio');
             } catch (\Throwable $th) {
                 return redirect()->route('consulta')->withErrors($th->getMessage());
@@ -108,7 +110,7 @@ class PrediosController extends Controller
         }
     }
 
-    //todo cambiar asambleaName por route
+    
     public function export($route = null)
     {
         $asambleaName = cache('asamblea')['name'];
