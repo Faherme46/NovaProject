@@ -41,7 +41,7 @@ class InformeController extends Controller
             'registro' => cache('inRegistro'),
             'asambleaR' => $this->asamblea,
             'dateString' => $dateString,
-            
+            'allPredios'=>true,
             'prediosCount' => Predio::whereNotNull('control_id')->count(),
             'quorum' => Control::sum('sum_coef'),
         ];
@@ -76,6 +76,7 @@ class InformeController extends Controller
             $anexos = [
                 'Listado de Personas Citadas a las Elecciones ',
                 'Listado de Predios que Acudieron a las Elecciones',
+                'Listado de Predios que Participaron en las Elecciones',
                 'Informe de Resultados de Elecciones'
             ];
             $this->variables += [
@@ -104,14 +105,18 @@ class InformeController extends Controller
                     'quorum_end' => $predio->quorum_end,
                     'h_entrega' => ($predio->control) ? $predio->control->h_entrega : false,
                     'h_recibe' => ($predio->control) ? $predio->control->h_recibe : false,
-                    'td'=> ($predio->control && $predio->control->t_publico) ? 'Publico':'Privado'
+                    'vota'=>$predio->vota,
+                    'td'=> ($predio->vota)?(($predio->control && $predio->control->t_publico) ? 'Publico':'Privado'):''
                 ];
             })->toArray();
 
             $this->variables['predios']= $this->predios;
             $this->createDocument('personas-citadas');
             $this->variables['index'] = 1;
-            $this->createDocument('predios-votan');
+            $this->createDocument('predios-votan',1);
+            $this->variables['index'] = 2;
+            $this->variables['allPredios']=false;
+            $this->createDocument('predios-votan',2);
             $this->variables['index'] = 2;
             unset($this->variables['predios']);
             $this->createDocument('resultado-elecciones');
@@ -131,7 +136,7 @@ class InformeController extends Controller
             return redirect()->route('elecciones.informe')->with('error', $th->getMessage());
         }
     }
-    public function createDocument($name)
+    public function createDocument($name,$id='')
     {
         $pdf = Pdf::loadView('docs/' . $name, $this->variables);
         // Aplicar el CSS personalizado
@@ -142,7 +147,7 @@ class InformeController extends Controller
             'isPhpEnabled' => true,
         ]);
         $pdf->setPaper('A4', 'portrait');
-        $this->docs[$name] = $pdf->output();
+        $this->docs[$name.$id] = $pdf->output();
     }
     function mergePdf()
     {

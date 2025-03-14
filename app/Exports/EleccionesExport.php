@@ -52,13 +52,12 @@ class EleccionesExport implements FromArray,WithEvents, WithHeadings,WithStyles
             }
             $controlArray['names']= rtrim( $names, "\n"); ;
             $controlArray+=[
-                'coeficiente'=>$control->sum_coef,
-                'votos'=>$control->predios_total,
+                'coeficiente'=>$control->sum_coef_can,
+                'votos'=>$control->predios_vote,
                 'td'=> ($control->t_publico)?'Publico':'Privado',
                 'h_entrega'=>$control->h_entrega,
                 'torre'=>$control->vote,
                 'cc_voto'=> ($control->h_recibe!='-1')?$control->h_recibe:'EN BLANCO'];
-            
             return $controlArray;
         })->toArray();
 

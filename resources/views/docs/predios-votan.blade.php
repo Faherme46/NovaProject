@@ -100,7 +100,6 @@
                     <th class="p-0">Coeficiente </th>
                     <th class="p-0 pb-1">Asistente de</th>
                     <th class="p-0 pb-2" rowspan="2">Nombre</th>
-                    <th class="pb-1 fs-10x">Hora</th>
                     <th class="pb-1 fs-10x" rowspan="2">Tratamiento</th>
                     
                 </tr>
@@ -109,17 +108,20 @@
                     <th class="p-0 pb-1 px-1"><small> # </small></th>
                     <th class="p-0">Propiedad </th>
                     <th class="p-0 pb-1">la Reunion</th>
-                    <th class="pb-1 fs-10x">Llegada</th>
                     
                 </tr>
             </thead>
             <tbody class="fs-12px">
                 @foreach ($predios as $predio)
+
                     <tr>
+                        
+                            
+                             
                         <td class="p-0 px-1 ">{{ $predio['numeral1'] }}</td>
                         <td class="p-0 px-1 ">{{ $predio['numeral2'] }}</td>
                         <td class="px-0">{{ $predio['coeficiente'] }}</td>
-                        @if ($predio['control_id'] )
+                        @if ($predio['control_id'] && ($allPredios || $predio['vota'])  )
                             @if (!$predio['apoderado'])
                                 <td class="p-0">Propietario</td>
                                 <td class="text-start ps-1">{{ $predio['personas'][0]['nombre'] }}</td>
@@ -127,20 +129,15 @@
                                 <td class="p-0">Apoderado</td>
                                 <td class="text-start ps-1">{{ $predio['apoderado']['nombre'].' '. $predio['apoderado']['apellido']}}</td>
                             @endif
-                            <td>
-                                {{ $predio['h_entrega'] }}
-                            </td>
                             <td>{{$predio['td']}}</td>
                             
                         @else
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td></td>
+                            
                             
                         @endif
-
-
 
                     </tr>
                 @endforeach

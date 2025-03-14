@@ -66,7 +66,7 @@ class QuestionController extends Controller
 
     public function createResults()
     {
-        $controlsAbsent = Control::whereNotIn('state', [1, 4])->get();
+        $controlsAbsent = Control::whereIn('state', [2, 5])->get();
         $controlsAssigned = Control::where('state', 1)->get();
         $valuesCoef = [
             'optionA'      => 0,
@@ -95,8 +95,8 @@ class QuestionController extends Controller
         $valuesNom['absent']  += $controlsAbsent->sum('predios_total');
         $valuesCoef['abstainted'] += $controlsAssigned->sum('sum_coef_abs');
         $valuesNom['abstainted']  +=  $controlsAssigned->sum('predios_abs');
-        $valuesCoef['abstainted'] += $controlsAssigned->whereNull('vote')->sum('sum_coef');
-        $valuesNom['abstainted']  +=  $controlsAssigned->whereNull('vote')->sum('predios_total');
+        $valuesCoef['abstainted'] += $controlsAssigned->whereNull('vote')->sum('sum_coef_can');
+        $valuesNom['abstainted']  +=  $controlsAssigned->whereNull('vote')->sum('predios_vote');
         if ($this->question->type == 5) {
             $valuesNom['optionA'] += $controlsAssigned->where('vote', 'A')->sum('predios_total');
             $valuesCoef['optionA'] += $controlsAssigned->where('vote', 'A')->sum('sum_coef');
