@@ -67,6 +67,7 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::get('elecciones/report/create', [InformeController::class, 'createReport'])->name('elecciones.report.create');
 
     Route::post('question/import', [QuestionController::class, 'importarVotos'])->name('question.import');
+    Route::get('question/importAll', [QuestionController::class, 'importVotesAll'])->name('question.import.all');
     Route::post('question/chart', [QuestionController::class, 'crearGrafica'])->name('question.createChart');
     Route::post('question/update', [QuestionController::class, 'updateQuestion'])->name('question.update');
     Route::post('question/prefab/create', [QuestionController::class, 'createPrefabQuestion'])->name('question.prefab.create');

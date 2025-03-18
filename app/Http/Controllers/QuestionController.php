@@ -243,11 +243,28 @@ class QuestionController extends Controller
         return redirect()->route('home')->with('success','Graficas Generadas correctamente');
     }
 
+    public function importVotesAll(){
+        $questions = Question::all();
+        foreach( $questions as $question ){
+            if($question->resultCoef){
+                $this->question=$question;
+                $request=new Request();
+                $this->importarVotos($request,$question->id);
+            }
+        }
 
-    public function importarVotos(Request $request)
+        return redirect()->route('home')->with('success','Graficas Generadas correctamente');
+    }
+
+
+    public function importarVotos(Request $request,$id=null)
     {
-
-        $this->question = Question::find($request->idQuestion);
+        if($id){
+            $question = Question::find($id);
+        }else{
+            $this->question = Question::find($request->idQuestion);
+        }
+        
 
         $nameAsamblea = cache('asamblea')['name'];
         $externalFilePathVotes = Storage::disk('externalAsambleas')->path($nameAsamblea . '/Preguntas/' . $this->question->id . '/votos.xlsx');

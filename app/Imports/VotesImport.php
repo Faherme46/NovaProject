@@ -22,12 +22,12 @@ class VotesImport implements ToModel, WithHeadingRow
             'predios_total' => ($row['predios_totales'])?$row['predios_totales']:0,
             'predios_vote' => ($row['predios_habilitados'])?$row['predios_habilitados']:0,
             'predios_abs' => ($row['predios_abstencion'])?$row['predios_abstencion']:0,
+            'state'=> ($row['estado'])?$row['estado']:0,
         ];
-        if ($row['voto']) {
-            $attributes['vote'] = $row['voto'];
-        } else {
-            $attributes['vote'] = '';
-        }
+        
+        $attributes['vote'] = ($row['voto'])?$row['voto']:null;
+        
+        
         Control::where('id', $row['control'])->update(
             $attributes
         );

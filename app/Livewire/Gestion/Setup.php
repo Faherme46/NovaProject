@@ -164,7 +164,7 @@ class Setup extends Component
             $this->addError('error','La pregunta debe tener un titulo');
         };
 
-        $this->selectedQuestion['isValid']=false;
+        
         $this->selectedQuestion['coefGraph']=1;
         try {
             if($this->selectedQuestion['id']!=0){
