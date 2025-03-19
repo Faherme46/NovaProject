@@ -82,12 +82,12 @@ class ReportController extends Controller
                 if ($response->getStatusCode()!=200) {
                     return redirect()->route('gestion.report')->with('error', $response->getContent());
                 }
-                
-            } else {
                 $this->variables += [
                     'anexos' => $this->questions->pluck('title')->toArray(),
                 ];
                 $this->createDocument('index-votacion');
+            } else {
+                
                 $response=$this->exportPersonas();
                 if ($response->getStatusCode()==500) {
                     return redirect()->route('gestion.report')->with('error', $response->getContent());
@@ -110,13 +110,13 @@ class ReportController extends Controller
                     'Informe Resultado de Votaciones'
                 ];
                 $this->variables['anexos'] = $anexos;
-                // $this->createDocument('index-registro');
+                $this->createDocument('index-registro');
                 $this->variables['index'] = 0;
-                // $this->createDocument('personas-citadas');
+                $this->createDocument('personas-citadas');
                 $this->variables['index'] = 1;
-                // $this->createDocument('asistencia-quorum');
+                $this->createDocument('asistencia-quorum');
                 $this->variables['index'] = 2;
-                // $this->createDocument('participantes-asamblea');
+                $this->createDocument('participantes-asamblea');
                 $this->variables['index'] = 3;
 
                 if($this->asamblea->ordenDia){
