@@ -63,7 +63,7 @@
     <footer>
 
         <div class="text-end txt-small">
-            Informe de Asistencia {{ $asambleaR->name }}
+            Informe de Votaciones {{ $asambleaR->name }}
         </div>
 
     </footer>
