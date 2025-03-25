@@ -38,7 +38,7 @@ class PredioWithRegistro implements ToModel, WithHeadingRow
             'cc_apoderado' => $row['cc_apoderado'],
             'coeficiente' => round($row['coeficiente'],5),
             'vota' => !$row['novota'],
-            'group'=> ($row['grupo'])?$row['grupo']:'',
+            'group'=> ($row['grupo'])?$row['grupo']:null,
         ]);
         if (array_key_exists('votos', $row)) {
             $predio->votos=$row['votos'];
