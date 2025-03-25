@@ -38,7 +38,8 @@ class PrediosEleccionesImport implements ToModel, WithHeadingRow
             'numeral2' => $row['numeral2'],
             'cc_apoderado' => $row['cc_apoderado'],
             'coeficiente' => round($row['coeficiente'],5),
-            'vota' => !$row['novota']
+            'vota' => !$row['novota'],
+            'group'=> ($row['grupo'])?$row['grupo']:'',
         ]);
         if (array_key_exists('votos', $row)) {
             $predio->votos=$row['votos'];
