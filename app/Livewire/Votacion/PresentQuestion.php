@@ -10,6 +10,7 @@ use App\Models\Result;
 
 
 use App\Http\Controllers\QuestionController;
+use App\Models\Plancha;
 use App\Models\Question;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -40,16 +41,15 @@ class PresentQuestion extends Component
     public $chartNom;
     public $votes = [];
     public $options = ['optionA', 'optionB', 'optionC', 'optionD', 'optionE', 'optionF'];
-    public $plancha = false;
-    public $plazas = false;
+    public $isPlancha = false;
     public $plazasCoef;
     public $resultToUse;
-    public $valuesPlanchas;
+    public $plancha;
 
     public $newTitle;
     public $newOptions = [];
     public $isEditting = false;
-    public function mount($questionId, $plancha = false, $plazas = 0)
+    public function mount($questionId, $plancha = false)
     {
 
         $response = $this->handleVoting(action: 'run-votes');
@@ -62,8 +62,8 @@ class PresentQuestion extends Component
         if (!$this->question) {
 
             $this->question = Question::find($questionId);
-            $this->plancha = $plancha;
-            $this->plazas = $plazas;
+            $this->isPlancha = $plancha;
+            
             $this->setSizePresentation();
             if (!$this->question) {
                 return redirect()->route('votacion')->with('error', 'La pregunta no fue encontrada');
@@ -195,7 +195,7 @@ class PresentQuestion extends Component
 
     public function goBack()
     {
-        $this->mount($this->question->id, $this->plancha, $this->plazas);
+        $this->mount($this->question->id, $this->isPlancha);
 
         $this->dispatch('$refresh');
     }
@@ -315,57 +315,61 @@ class PresentQuestion extends Component
         $this->calculatePlazas();
     }
 
-    public function calculatePlazas()
-    {
-        $total = 0;
-        $this->valuesPlanchas = [];
-        foreach ($this->options as $op) {
-            if ($this->question[$op] != 'EN BLANCO') {
-                $total += $this->resultToUse[$op];
-            }
-        }
-
-        $umbral = $total / $this->plazas;
-        if ($total <= 0) {
-            foreach ($this->options as $option) {
-                if ($this->question[$option] !== 'EN BLANCO') {
-                    $this->valuesPlanchas[$option] = 0;
+        public function calculatePlazas()
+        {
+            $total = 0;
+            
+            
+            foreach ($this->options as $op) {
+                if ($this->question[$op] != 'EN BLANCO') {
+                    $total += $this->resultToUse[$op];
                 }
             }
             
-        } else {
+            $umbral = $total / $this->question->plancha->plazas;
+            
+            if ($total <= 0) {
+                foreach ($this->options as $option) {
+                    if ($this->question[$option] !== 'EN BLANCO') {
+                        $this->question->plancha[$option] = 0;
+                    }
+                }
+                
+            } else {
+                $sumTotal=0;
+                foreach ($this->options as $option) {
+                    if ($this->question[$option] !== 'EN BLANCO') {
+                        $plazas=floor($this->resultToUse[$option] / $umbral);
+                        $this->question->plancha[$option] = $plazas;
+                        $sumTotal+=$plazas;
+                    } else {
+                        $this->question->plancha[$option] = 0;
+                    }
+                }
 
-            foreach ($this->options as $option) {
-                if ($this->question[$option] !== 'EN BLANCO') {
 
-                    $this->valuesPlanchas[$option] = floor($this->resultToUse[$option] / $umbral);
-                } else {
-                    $this->valuesPlanchas[$option] = 0;
+                // Calcular residuos y asignar curules adicionales
+                $residuos = [];
+                $plazasRestantes = $this->question->plancha->plazas - $sumTotal;
+
+                foreach ($this->options as $option) {
+                    if ($this->question[$option] !== 'EN BLANCO') {
+                        $residuos[$option] = $this->resultToUse[$option] - $umbral * $this->question->plancha[$option];
+                    }
+                }
+                // Ordenar opciones por residuos
+                arsort($residuos);
+                foreach (array_keys($residuos) as $option) {
+                    if ($plazasRestantes > 0) {
+                        $this->question->plancha[$option] += 1;
+                        $plazasRestantes--;
+                    }
                 }
             }
-
-
-            // Calcular residuos y asignar curules adicionales
-            $residuos = [];
-            $plazasRestantes = $this->plazas - array_sum($this->valuesPlanchas);
-
-            foreach ($this->options as $option) {
-                if ($this->question[$option] !== 'EN BLANCO') {
-                    $residuos[$option] = $this->resultToUse[$option] - $umbral * $this->valuesPlanchas[$option];
-                }
-            }
-            // Ordenar opciones por residuos
-            arsort($residuos);
-            foreach (array_keys($residuos) as $option) {
-                if ($plazasRestantes > 0) {
-                    $this->valuesPlanchas[$option] += 1;
-                    $plazasRestantes--;
-                }
-            }
+            // $this->valuesPlanchas['total'] = $total;
+            $this->question->plancha->umbral = round($umbral, 4);
+            $this->question->plancha->save();
         }
-        $this->valuesPlanchas['total'] = $total;
-        $this->valuesPlanchas['umbral'] = round($umbral, 4);
-    }
 
 
     public function editting()

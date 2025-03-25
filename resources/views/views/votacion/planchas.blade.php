@@ -49,7 +49,7 @@
 
                         <tr class="">
                             <td colspan="4" class="text-center">
-                                <h2 class="mb-0">COCIENTE ELECTORAL: {{$valuesPlanchas['umbral']}}</h2>
+                                <h2 class="mb-0">COCIENTE ELECTORAL: {{$question->plancha['umbral']}}</h2>
                             </td>
                         </tr>
                         <tr class="table-active">
@@ -80,7 +80,7 @@
                                         <h1 class="mb-0  ">{{ $resultToUse['option' . $op] }}</h1>
                                     </td>
                                     <td class="text-center">
-                                        <h1 class="mb-0  ">{{ $valuesPlanchas['option' . $op] }}</h1>
+                                        <h1 class="mb-0  ">{{ $question->plancha['option' . $op] }}</h1>
                                     </td>
                                 </tr>
                             @endif
@@ -94,12 +94,12 @@
                             </th>
                             <th class="text-center">
                                 <h1 class="mb-0">
-                                    {{$valuesPlanchas['total']}}
+                                     {{$resultToUse['total']-$resultToUse['absent']-$resultToUse['abstainted']-$resultToUse['nule']}} 
                                 </h1>
                             </th>
                             <th class="text-center">
                                 <h1 class="mb-0">
-                                    {{ $plazas }}
+                                    {{ $question->plancha->plazas }}
                                 </h1>
                             </th>
                         </tr>

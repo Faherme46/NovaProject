@@ -9,18 +9,18 @@
                 <table class="list-group pe-0 border " style="max-height: 70vh; overflow-y: auto;">
 
                     @foreach ($questions as $key => $q)
-                        <tr class="list-group-item px-2 list-group-item-action lines-text-2 @if ($q->id == $question->id) active @endif"
+                        <tr class="list-group-item px-2 list-group-item-action d-flex  @if ($q->id == $question->id) active @endif"
                             wire:click='selectQuestion({{ $q->id }})'>
                             <td class="text-end me-2">{{ $key + 1 }}</td>
-                            <td class="ps-2">{{ $q->title }}</td>
+                            <td class="ps-2 lines-text-4">{{ $q->title }}</td>
                         </tr>
                     @endforeach
                 </table>
             </div>
             <div class="col-8">
                 <div class="card">
-                    <div class="card-header d-flex">
-                        <div class="col-10">
+                    <div class="card-header d-flex ">
+                        <div class="col-9 align-items-center ">
                             <h6 class="card-title text-center mb-0 lines-text-4"
                                 style="font-size: {{ $sizeTitle }}rem;">
                                 {{ $question->title }}
@@ -33,12 +33,20 @@
                                     Importar <br>Votos
                                 </button>
                             </div>
-                            <div class="col-1 justify-content-end ms-2 align-items-center d-flex">
+                            <div class="col-1 justify-content-end ms-1 align-items-center d-flex">
                                 <button type="button" class="btn btn-info px-1" data-bs-toggle="modal"
                                     data-bs-target="#modalChart">
                                     Generar <br> Gráfica
                                 </button>
                             </div>
+                            @if ($question->plancha)
+                                <div class="col-1 justify-content-end ms-1 align-items-center d-flex">
+                                    <button type="button" class="btn btn-warning px-1" data-bs-toggle="modal"
+                                        data-bs-target="#modalPlancha">
+                                        Ver <br> Plancha
+                                    </button>
+                                </div>
+                            @endif
                         @endhasanyrole
                     </div>
                     <div class="card-body p-0 ">
@@ -118,7 +126,8 @@
                         <h5 class="modal-title fs-5 " id="modalTitleId">
                             Generar la gráfica con los valores de resultado para la pregunta {{ $question->id }}
                         </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
@@ -132,9 +141,98 @@
                     </div>
                 </div>
             </div>
+        </div>
+        @if ($question && $question->plancha && $resultToUse)
+                <div class="modal fade" id="modalPlancha" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+                role="dialog">
+                <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title fs-5 lines-text-4 " id="modalTitleId">
+                                {{ $question->title }}
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                    
+                        <div class="modal-body p-0">
+                            <table class="table table-bordered border-black mb-0">
+                                <tbody>
+            
+                                    <tr class="">
+                                        <td colspan="4" class="text-center">
+                                            <h2 class="mb-0">COCIENTE ELECTORAL: {{$question->plancha['umbral']}}</h2>
+                                        </td>
+                                    </tr>
+                                    <tr class="table-active">
+                                        <td class="text-center" colspan="2">
+                                            <h1 class="mb-0  "> LISTAS</h1>
+                                        </td>
+                                        <td class="col-1 px-2">
+                                            <h1 class="mb-0">VOTOS</h1>
+                                        </td>
+                                        <td class="col-1 px-2">
+                                            <h1 class="mb-0">PLAZAS</h1>
+                                        </td>
+                                    </tr>
+                                    @foreach (['A','B','C','D','E','F'] as $op)
+                                        @if ($question['option' . $op] && $question['option' . $op]!=='EN BLANCO')
+                                            <tr class=" p-0">
+                                                <td class="bg-primary text-light text-center">
+                                                    <h1 class="mb-0  ">
+                                                        {{ $op }}
+                                                    </h1>
+                                                </td>
+                                                <td class="text-center">
+                                                    <h1 class="text-uppercase lines-text-2 mb-0 ">
+                                                        {{ $question['option' . $op] }}
+                                                    </h1>
+                                                </td>
+                                                <td class="text-center">
+                                                    
+                                                    <h1 class="mb-0  ">{{ $resultToUse['option' . $op] }}</h1>
+                                                </td>
+                                                <td class="text-center">
+                                                    <h1 class="mb-0  ">{{ $question->plancha['option' . $op] }}</h1>
+                                                </td>
+                                            </tr>
+                                        @endif
+                                    @endforeach
+            
+                                </tbody>
+                                <tfoot>
+                                    <tr class="table-active">
+                                        <th colspan="2" class="text-end bold">
+                                            <h1 class="mb-0">TOTAL</h1>
+                                        </th>
+                                        <th class="text-center">
+                                            <h1 class="mb-0">
+                                                {{$resultToUse['total']-$resultToUse['absent']-$resultToUse['abstainted']-$resultToUse['nule']}} 
+                                            </h1>
+                                        </th>
+                                        <th class="text-center">
+                                            <h1 class="mb-0">
+                                                {{ $question->plancha->plazas }}
+                                            </h1>
+                                        </th>
+                                    </tr>
+                                </tfoot>
+            
+                            </table>
+                        </div>
+                        <div class="modal-footer justify-content-end">
+                            <button type="button" class="btn btn-primary fs-5"  wire:click='calculatePlazas'>
+                                Volver a Calcular
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
+        
     @endif
-</div>
 
+</div>
 <!-- Optional: Place to the bottom of scripts -->
 <script>
     const myModal = new bootstrap.Modal(
@@ -142,5 +240,3 @@
         options,
     );
 </script>
-
-</div>

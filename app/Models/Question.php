@@ -42,4 +42,8 @@ class Question extends Model
         }
         return $availableOption;
     }
+
+    public function plancha(){
+        return $this->hasOne(Plancha::class);
+    }
 }

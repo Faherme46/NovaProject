@@ -87,7 +87,7 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::get('gestion/asamblea', LiderSetup::class)->name('gestion.asamblea');
     Route::get('desterminar', [LiderSetup::class, 'desterminar'])->name('desterminar');
     Route::get('votacion', Votacion::class)->name('votacion')->middleware(isAsambleaEnd::class);
-    Route::get('questions/show/{questionId}/{plancha?}/{plazas?}', PresentQuestion::class)->name('questions.show');
+    Route::get('questions/show/{questionId}/{plancha?}', PresentQuestion::class)->name('questions.show');
     Route::get('questions/view/{questionId}', ViewQuestion::class)->name('questions.view');
     Route::get('elecciones/programar', Programar::class)->name('elecciones.programar')->withoutMiddleware(EnsureAsambleaOn::class);
     Route::get('elecciones/gestion', Manager::class)->name('elecciones.gestion');

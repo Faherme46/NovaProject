@@ -80,7 +80,7 @@
                         @endhasanyrole
                     @else
                         <form wire:submit="searchPersona('CC')" class="d-flex">
-                            <input class="me-2 form-control @error('noFound') is-invalid @enderror" type="text"
+                            <input class="me-2 form-control @error('noFound') is-invalid @enderror" type="number"
                                 onkeypress="return onlyNumbers(event)" maxlength="12"
                                 wire:keydown.enter="searchPersona('CC')" wire:model='cedulaSearch' placeholder="Cedula"
                                 wire:keypress='$refresh'>
@@ -192,7 +192,7 @@
                                         @endif
                                     </div>
                                     <div class=" col-4">
-                                        <input type="text"
+                                        <input type="number"
                                             class="form-control bg-success-subtle  @error('controlIdR') is-invalid @enderror  @error('controlId') is-invalid @enderror"
                                             wire:model.live.debounce.900ms='controlIdR' value="{{ $controlIdR }}"
                                             placeholder="Control" @if ($tab != 1) hidden @endif
@@ -294,7 +294,7 @@
                                             <h6 class="mb-0">
                                                 Id:
                                             </h6>
-                                            <input type="text" class="form-control w-70"
+                                            <input type="number" class="form-control w-70"
                                                 value="{{ $Predio->id }}" readonly name="id">
 
                                         </li>
@@ -361,7 +361,7 @@
                     @else
                         <div class="card-header d-flex align-items-center justify-content-between">
                             <div class="form-group d-flex align-items-center">
-                                <input type="text" class="form-control w-25 me-1" wire:model='predioIdSearch'
+                                <input type="number" class="form-control w-25 me-1" wire:model='predioIdSearch'
                                     placeholder="Id">
                                 <button type="button" class="btn btn-primary" wire:click='searchPredio'>
                                     <i class="bi bi-search"></i>
@@ -382,7 +382,7 @@
                             <form wire:submit="searchControl()" method="POST"
                                 class="d-flex w-100 justify-content-center align-items-center">
                                 <input class="me-2 w-15 form-control @error('noFound') is-invalid @enderror"
-                                    type="text" onkeypress="return onlyNumbers(event)" maxlength="3"
+                                    type="number" onkeypress="return onlyNumbers(event)" maxlength="3"
                                     wire:keydown.enter="searchControl()" wire:model='controlIdSearch'
                                     placeholder="Control" wire:keypress='$refresh'>
                                 <button type="submit" class="btn btn-primary me-2 p-0 px-1">
@@ -641,7 +641,7 @@
                                 </select>
                             </div>
                             <div class="col-3">
-                                <input type="text" name="numeral2" id="numeral2" class="form-control"
+                                <input type="number" name="numeral2" id="numeral2" class="form-control"
                                     onclick="this.select()" placeholder="Numeral 2">
                             </div>
                             @if ($asamblea->registro)

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('numeral2')->default('');
             $table->integer('votos')->default(1);
             $table->float('coeficiente');
+            $table->integer('group')->nullable();
             $table->boolean('vota');
             $table->unsignedBigInteger('control_id')->nullable();
             $table->boolean('quorum_start')->default(false);

@@ -83,7 +83,7 @@
                 <table class="w-100 mb-4 table">
                     <thead class="table-active">
                         <tr class="bg-darkblue  ">
-                            <td colspan="4">
+                            <td colspan="{{ $q->plancha ? 4 : 5 }}">
                                 <h4 class="w-100 text-center py-1 mb-0 text-light" style="font-size: 0.75rem">
                                     {{ $q->title }}
                                 </h4>
@@ -105,6 +105,11 @@
                             <td class="text-center col-6">
                                 <b>Descripción</b>
                             </td>
+                            @if ($q->plancha)
+                                <td class="text-center">
+                                    <b>Plazas</b>
+                                </td>
+                            @endif
                         </tr>
                         @if ($q->resultCoef)
                             @foreach ($options as $option)
@@ -116,6 +121,11 @@
                                             {{ sprintf('%.5f', $q->resultCoef['option' . $option]) }}
                                         </td>
                                         <td>{{ $q['option' . $option] }}</td>
+                                        @if ($q->plancha)
+                                            <td class="text-center">
+                                                {{ $q->plancha['option' . $option] }}
+                                            </td>
+                                        @endif
                                     </tr>
                                 @endif
                             @endforeach
@@ -128,6 +138,7 @@
                                 <td class="text-center">{{ $q->resultNom->abstainted }}</td>
                                 <td class="text-center">{{ sprintf('%.5f', $q->resultCoef->abstainted) }}</td>
                                 <td></td>
+                                @if ($q->plancha)<td > </td>@endif
                             </tr>
                             <tr>
                                 <td>
@@ -136,6 +147,7 @@
                                 <td class="text-center">{{ $q->resultNom->absent }}</td>
                                 <td class="text-center">{{ sprintf('%.5f', $q->resultCoef->absent) }}</td>
                                 <td></td>
+                                @if ($q->plancha)<td > </td>@endif
                             </tr>
                             <tr>
                                 <td>
@@ -148,15 +160,19 @@
                                 <td class="text-center">{{ $q->resultNom->nule }}</td>
                                 <td class="text-center">{{ sprintf('%.5f', $q->resultCoef->nule) }}</td>
                                 <td></td>
+                                @if ($q->plancha)<td > </td>@endif
                             </tr>
                             <tr class="bg-secondary-subtle">
                                 <td class="text-center"><b>TOTAL</b></td>
                                 <td class="text-center">{{ $q->resultNom->total }}</td>
                                 <td class="text-center">{{ sprintf('%.5f', $q->resultCoef->total) }}</td>
                                 <td></td>
+                                @if ($q->plancha)<td class="text-center" > {{$q->plancha->plazas}}</td>@endif
                             </tr>
                         @else
-                            <tr class="text-center " > <td colspan="4"><b>NO HUBO RESULTADOS</b></td></tr>
+                            <tr class="text-center ">
+                                <td colspan="4"><b>NO HUBO RESULTADOS</b></td>
+                            </tr>
                         @endif
 
 

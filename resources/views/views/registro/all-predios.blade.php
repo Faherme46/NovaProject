@@ -1,5 +1,5 @@
 <div class="card">
-    @if ($distincts['descriptor1'][0] !== '')
+    @if ($distincts['descriptor1'][0] !== '' && count($distincts['descriptor1']) > 1)
         <div class="card-header">
             <div class="row g-1">
                 @foreach ($distincts['descriptor1'] as $descriptor1)
@@ -15,7 +15,12 @@
     @endif
     @if ($distincts['numeral1'][0] !== '')
         <div class="card-header table-25 table-responsive py-1">
-            <div class="row g-1">
+            <div class="row  g-1">
+                @if (count($distincts['descriptor1']) == 1)
+                    <div class="col-auto d-flex me-2 align-items-center align-middle">
+                        <span>{{ $distincts['descriptor1'][0] }}</span>
+                    </div>
+                @endif
                 @foreach ($distincts['numeral1'] as $numeral1)
                     <div class="col-auto">
                         <input type="radio" class="btn-check" name="numeral1" value="{{ $numeral1 }}"
@@ -26,9 +31,10 @@
             </div>
         </div>
     @endif
-    @if ($distincts['descriptor2'][0] !== '')
+    @if ($distincts['descriptor2'][0] !== '' && count($distincts['descriptor2'])>1)
         <div class="card-header ">
             <div class="row g-1">
+
                 @foreach ($distincts['descriptor2'] as $descriptor2)
                     <div class="col-auto">
                         <input type="radio" class="btn-check" name="descriptor2" id="{{ $descriptor2 }}"
@@ -42,12 +48,18 @@
 
     <div class="card-header">
         <div class="row g-2 align-items-center table-responsive table-70">
-            
+            @if (count($distincts['descriptor2']) == 1)
+                <div class="col-auto d-flex me-2 align-items-center align-middle">
+                    <span>{{ $distincts['descriptor2'][0] }}</span>
+                </div>
+            @endif
             <div class="col-3">
-              <input type="text" id="search" class="form-control" wire:model='search.numeral2' wire:keydown.enter="searchWithNumeral2">
+                <input type="number" id="search" class="form-control" wire:model='search.numeral2'
+                    wire:keydown.enter="searchWithNumeral2">
             </div>
             <div class="col-auto">
-                <button class="btn btn-primary" type="button" wire:click="searchWithNumeral2">
+                <button class="btn btn-primary" type="button" wire:click="searchWithNumeral2"
+                data-bs-toggle="tooltip" data-bs-title="Buscar predio">
                     <i class="bi bi-search"></i>
                 </button>
             </div>
@@ -56,7 +68,7 @@
                     <i class="bi bi-trash-fill"></i>
                 </button>
             </div>
-          </div>
+        </div>
     </div>
     <div class="card-body px-1">
         <div class="row g-1 table-responsive table-55 p-0 justify-content-center">
@@ -64,20 +76,19 @@
             @forelse ($prediosAll as $predio)
                 <div class="col-auto">
                     @if ($consulta)
-                        <input type="radio" class="btn-check" id="check-{{$predio['id']}}"
-                            name='predio-check' >
-                        <label class="btn btn-outline-info  fs-5" for="check-{{$predio['id']}}"
+                        <input type="radio" class="btn-check" id="check-{{ $predio['id'] }}" name='predio-check'>
+                        <label class="btn btn-outline-info  fs-5" for="check-{{ $predio['id'] }}"
                             data-bs-toggle="tooltip" data-bs-title='Consultar Predio'
                             wire:click='dispatchPredio(@json($predio))'>
                             {{ $predio['numeral2'] }}
                         </label>
                     @else
-                        <input type="checkbox" class="btn-check" id="check-{{$predio['id']}}"
+                        <input type="checkbox" class="btn-check" id="check-{{ $predio['id'] }}"
                             onchange="this.checked = true;" @disabled($predio['control_id'])>
                         <label
                             class="btn @if ($predio['control_id']) btn-warning @else btn-outline-info @endif fs-5"
-                            for="check-{{$predio['id']}}" data-bs-toggle="tooltip"
-                            data-bs-title='Agregar Predio' wire:click='dispatchPredio(@json($predio))'>
+                            for="check-{{ $predio['id'] }}" data-bs-toggle="tooltip" data-bs-title='Agregar Predio'
+                            wire:click='dispatchPredio(@json($predio))'>
                             {{ $predio['numeral2'] }}
                         </label>
                     @endif

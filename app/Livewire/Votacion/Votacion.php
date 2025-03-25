@@ -7,6 +7,7 @@ use Livewire\Attributes\Layout;
 
 use App\Models\Control;
 use App\Models\General;
+use App\Models\Plancha;
 use App\Models\Question;
 use App\Models\QuestionsPrefab;
 use Illuminate\Support\Facades\Http;
@@ -298,7 +299,7 @@ class Votacion extends Component
             $this->addError('error', 'Se requiere el numero de plazas');
             $error = 1;
         } elseif ($this->plazas < 0 || !is_int($this->plazas)) {
-            $this->addError('error', 'El numero de plaznas no es valido');
+            $this->addError('error', 'El numero de plazas no es valido');
         }
         $controlesRegistrados=Control::whereNot('state', 4)->get();
         $quorum = $controlesRegistrados->sum('sum_coef');
@@ -323,7 +324,7 @@ class Votacion extends Component
 
         try {
             Control::query()->update(['vote' => null]);
-            $predios = Control::whereNot('state', 4)->sum('predios_vote');
+            $predios = Control::whereNot('state', 4)->sum('predios_total');
             $question = Question::create([
                 'title' =>$newTitle,
                 'optionA' => ($this->questionOptions['A']) ? strtoupper(rtrim($this->questionOptions['A'])) : null,
@@ -340,11 +341,14 @@ class Votacion extends Component
                 'seconds' => $seconds,
                 'type' => $this->questionType
             ]);
+            
+            if ($this->plancha) {
+                Plancha::create(['question_id'=>$question->id,'plazas'=>$this->plazas]);
+            }
 
             $parametros = ['questionId' => $question->id];
             if ($this->plancha) {
                 $parametros['plancha'] = $this->plancha;
-                $parametros['plazas'] = $this->plazas;
             }
             \Illuminate\Support\Facades\Log::channel('custom')->info('Se Inicia una votacion', ['id'=>$question->id,'quorum' => $quorum, 'predios'=> $predios]);
             return redirect()->route('questions.show', $parametros);
@@ -394,6 +398,11 @@ class Votacion extends Component
             'D' => '',
             'E' => '',
             'F' => '',
+        ];
+        $this->blockFields = [
+            'optionD',
+            'optionE',
+            'optionF',
         ];
     }
 

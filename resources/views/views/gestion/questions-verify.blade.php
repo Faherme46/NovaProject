@@ -21,10 +21,10 @@
 
                     @foreach ($questions as $q)
                         <tr
-                            class="list-group-item list-group-item-action lines-text-2 @if ($q->id == $question->id) active @endif"
+                            class="list-group-item list-group-item-action d-flex  @if ($q->id == $question->id) active @endif"
                             wire:click='selectQuestion({{ $q->id }})'>
-                            <td class="text-end me-2">{{ $q->id }}</td>
-                            <td class="ps-2">{{ $q->title }}</td>
+                            <td class="text-end align-middle me-1">{{ $q->id }}</td>
+                            <td class="ps-1 lines-text-2">{{ $q->title }}</td>
                         </tr>
                     @endforeach
                 </table>
@@ -42,8 +42,9 @@
                             <div class="row mb-2">
                                 <div class="col-12">
 
-                                    <input type="text" class="form-control " placeholder="Titulo"
+                                    <textarea type="text" class="form-control " placeholder="Titulo"
                                         wire:model='questionTitle' name="title" id="resultValue">
+                                    </textarea>
                                 </div>
                             </div>
                             <div class="row mb-2">
