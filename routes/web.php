@@ -79,6 +79,7 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::get('asambleas', LoadAsamblea::class)->name('asambleas')->middleware(    EnsureAsambleaOff::class)->withoutMiddleware(EnsureAsambleaOn::class);
     Route::get('asambleas/programar', ProgramarAsamblea::class)->name('asambleas.programar')->withoutMiddleware(EnsureAsambleaOn::class);
     Route::get('asambleas/load', [AsambleaController::class, 'loadAsambleas'])->name('asambleas.load')->withoutMiddleware(EnsureAsambleaOn::class)->middleware(EnsureAsambleaOff::class);
+    Route::get('predios/export/controles', [PrediosController::class,'exportPrediosControles'])->name('predio.export.controles');
     Route::get('gestion/informes', Reports::class)->name('gestion.report');
     Route::get('setup', Setup::class)->name('setup.main')->withoutMiddleware(EnsureAsambleaOn::class);
     Route::get('backup/download', [BackupController::class, 'downloadBackup']);

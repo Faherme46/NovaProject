@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\ControlesExport;
 use App\Exports\ControlesWithRegistro;
+use App\Exports\PrediosControlExport;
 use App\Exports\PrediosExport;
 use App\Http\Controllers\Controller;
 
@@ -172,5 +173,15 @@ class PrediosController extends Controller
         cache(['prepared' => true]);
         return back()->with('success', 'Se han preparado los predios');
     }
-
+    public function exportPrediosControles(){
+        try {
+            $asambleaName = cache('asamblea')['name'];
+            $prediosControlExport= new PrediosControlExport();
+            Excel::store($prediosControlExport, $asambleaName . '/Tablas/predios_controles.xlsx', 'externalAsambleas');
+            return back()->with('success', 'Archivo exportado correctamente');
+        } catch (\Throwable $th) {
+            return back()->with('error', $th->getMessage());
+        }
+        
+    }
 }
