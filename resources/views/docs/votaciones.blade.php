@@ -83,7 +83,7 @@
                 <table class="w-100 mb-4 table">
                     <thead class="table-active">
                         <tr class="bg-darkblue  ">
-                            <td colspan="{{ $q->plancha ? 4 : 5 }}">
+                            <td colspan="{{ $q->plancha ? 5 : 4 }}">
                                 <h4 class="w-100 text-center py-1 mb-0 text-light" style="font-size: 0.75rem">
                                     {{ $q->title }}
                                 </h4>
