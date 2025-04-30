@@ -65,9 +65,8 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::get('graficas/all', [QuestionController::class, 'fixAllgraficas'])->name('graficas.all');
 
     Route::get('elecciones/report/create', [InformeController::class, 'createReport'])->name('elecciones.report.create');
-
-    Route::post('question/import', [QuestionController::class, 'importarVotos'])->name('question.import');
     Route::get('question/importAll', [QuestionController::class, 'importVotesAll'])->name('question.import.all');
+    Route::post('question/import', [QuestionController::class, 'importarVotos'])->name('question.import');
     Route::post('question/chart', [QuestionController::class, 'crearGrafica'])->name('question.createChart');
     Route::post('question/update', [QuestionController::class, 'updateQuestion'])->name('question.update');
     Route::post('question/prefab/create', [QuestionController::class, 'createPrefabQuestion'])->name('question.prefab.create');
@@ -152,6 +151,7 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('users.logout')-
 Route::get('/proofVerify', [EleccionesController::class, 'verifySum'])->name('elecciones.verifySum')->withoutMiddleware(EnsureAsambleaOn::class);
 //rutas de prueba
 Route::get('/proofAsignacion', [Asignacion::class, 'proofAsignacion'])->name('proofAsignacion');
+Route::get('/setCoefAll', [QuestionController::class, 'setCoefAll'])->name('setCoefAll');
 // Route::get('proofQuestion', [FileController::class, 'exportAllQuestions
 
 

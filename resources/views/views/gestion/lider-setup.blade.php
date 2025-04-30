@@ -125,7 +125,7 @@
                                         @endforeach
                                     </td>
                                     <td>{{ round($control->sum_coef,6) }}</td>
-                                    <td>{{ round($control->predios_vote,6) }}</td>
+                                    <td>{{ round($control->sum_coef_can,6) }}</td>
                                     <td>
                                         <span
                                             class="badge p-1 fs-6 {{ $colors[$control->state] }}">{{ $control->getStateTxt() }}</span>

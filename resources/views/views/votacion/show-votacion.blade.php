@@ -19,28 +19,30 @@
             </div>
             <div class="col-8">
                 <div class="card">
-                    <div class="card-header d-flex ">
+                    <div class="card-header d-flex justify-content-end px-2">
                         <div class="col-9 align-items-center ">
                             <h6 class="card-title text-center mb-0 lines-text-4"
                                 style="font-size: {{ $sizeTitle }}rem;">
                                 {{ $question->title }}
                             </h6>
                         </div>
-                        @hasanyrole('Admin')
-                            <div class="col-1 justify-content-end align-items-center d-flex">
+                        <div class="col-3 d-flex justify-content-end ">
+
+                            @hasanyrole('Admin')
+                            <div class="justify-content-end align-items-center d-flex">
                                 <button type="button" class="btn btn-primary px-1" data-bs-toggle="modal"
                                     data-bs-target="#modalImport">
                                     Importar <br>Votos
                                 </button>
                             </div>
-                            <div class="col-1 justify-content-end ms-1 align-items-center d-flex">
+                            <div class="justify-content-end ms-1 align-items-center d-flex">
                                 <button type="button" class="btn btn-info px-1" data-bs-toggle="modal"
                                     data-bs-target="#modalChart">
                                     Generar <br> Gráfica
                                 </button>
                             </div>
                             @if ($question->plancha)
-                                <div class="col-1 justify-content-end ms-1 align-items-center d-flex">
+                                <div class="justify-content-end ms-1 align-items-center d-flex">
                                     <button type="button" class="btn btn-warning px-1" data-bs-toggle="modal"
                                         data-bs-target="#modalPlancha">
                                         Ver <br> Plancha
@@ -48,6 +50,7 @@
                                 </div>
                             @endif
                         @endhasanyrole
+                        </div>
                     </div>
                     <div class="card-body p-0 ">
                         <div class=" d-flex justify-content-center">

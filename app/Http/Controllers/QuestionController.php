@@ -289,4 +289,11 @@ class QuestionController extends Controller
         }
         return back()->with('success', 'Votos importados correctamente');
     }
+
+    public function setCoefAll(){
+        $controls=Control::all();
+        foreach ($controls as $c) {
+            $c->setCoef();
+        }
+    }
 }
