@@ -33,9 +33,7 @@ class PrediosController extends Controller
         $request->validate([
             'coef' => ['required'],
             'votos' => ['required'],
-            'descriptor1' => ['required'],
             'descriptor2' => ['required'],
-            'numeral1' => ['required'],
             'numeral2' => ['required'],
         ], $messages);
 
@@ -55,9 +53,9 @@ class PrediosController extends Controller
             $predio = Predio::create([
                 'coeficiente' => $coef,
                 'votos' => $request->votos,
-                'descriptor1' => $request->descriptor1,
-                'descriptor2' => $request->descriptor2,
-                'numeral1' => $request->numeral1,
+                'descriptor1' => ($request->descriptor1)?$request->descriptor1:'',
+                'descriptor2' => ($request->descriptor2)?$request->descriptor2:'',
+                'numeral1' => ($request->numeral1)?$request->numeral1:'',
                 'numeral2' => $request->numeral2,
                 'vota' => (bool) $request->vota
             ]);

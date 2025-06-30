@@ -101,7 +101,6 @@
                     <th class="p-0 pb-1">Asistente de</th>
                     <th class="p-0 pb-2" rowspan="2">Nombre</th>
                     <th class="pb-1 fs-10x">Hora</th>
-                    <th class="pb-1 fs-10x">Hora</th>
                 </tr>
                 <tr>
                     <th class="p-0 pb-1 px-1"><small> Tipo</small></th>
@@ -109,7 +108,6 @@
                     <th class="p-0">Propiedad </th>
                     <th class="p-0 pb-1">la Reunion</th>
                     <th class="pb-1 fs-10x">Llegada</th>
-                    <th class="pb-1 fs-10x">Salida</th>
                 </tr>
             </thead>
             <tbody class="fs-12px">
@@ -129,9 +127,7 @@
                             <td>
                                 {{ $predio['h_entrega'] }}
                             </td>
-                            <td>{{ $predio['h_recibe'] }}</td>
                         @else
-                            <td></td>
                             <td></td>
                             <td></td>
                             <td></td>

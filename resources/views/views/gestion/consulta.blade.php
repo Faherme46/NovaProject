@@ -620,14 +620,14 @@
                             
 
                             <div class="col-3">
-                                <select class="form-control" name="descriptor1" required>
+                                <select class="form-control" name="descriptor1" >
                                     @foreach ($distincts['descriptor1'] as $d1)
                                         <option value="{{ $d1 }}">{{ $d1 }}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="col-3">
-                                <select class="form-control" name="numeral1" required>
+                                <select class="form-control" name="numeral1" >
                                     @foreach ($distincts['numeral1'] as $n1)
                                         <option value="{{ $n1 }}">{{ $n1 }}</option>
                                     @endforeach

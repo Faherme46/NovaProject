@@ -7,6 +7,7 @@ use App\Models\Session;
 use App\Models\Predio;
 use App\Models\Persona;
 use App\Models\Control;
+use App\Models\Plancha;
 use App\Models\PrediosPersona;
 use App\Models\Question;
 use App\Models\Result;
@@ -77,6 +78,7 @@ class SessionController extends Controller
         PrediosPersona::truncate();
         Question::truncate();
         Signature::truncate();
+        Plancha::truncate();
         Torre::truncate();
         TorresCandidato::truncate();
         Terminal::truncate();

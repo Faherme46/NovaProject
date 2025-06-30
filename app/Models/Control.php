@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use DateTimeZone;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Log;
 
 class Control extends Model
 {
@@ -42,7 +43,8 @@ class Control extends Model
         $this->state = 4;
 
         $this->predios()->update(['control_id' => null]);
-
+        $this->h_recibe = Carbon::now(new DateTimeZone('America/Bogota'))->format('H:i');
+        Log::channel('custom')->info('Se retira un control', ['control' => $this->id]);
         $this->setCoef();
 
         $this->cc_asistente = null;
@@ -58,7 +60,7 @@ class Control extends Model
     {
         $this->state = $value;
         if ($value == 5) {
-            $this->h_recibe = Carbon::now(new DateTimeZone('America/Bogota'))->format('h:m');
+            $this->h_recibe = Carbon::now(new DateTimeZone('America/Bogota'))->format('H:i');
         }
 
         $this->save();

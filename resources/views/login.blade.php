@@ -1,6 +1,6 @@
 @extends('layout.app')
 @section('content')
-    <x-alerts/>
+    <x-alerts />
     <div class="mt-5">
 
         <div class="row d-flex justify-content-center align-items-center ">
@@ -41,23 +41,45 @@
                                     }
                                 </style>
                                 <div class="text-center mb-4">
-                                    <img src="/storage/images/logo.png"
-                                        style="width: 185px;" alt="logo">
+                                    <img src="/storage/images/logo.png" style="width: 185px;" alt="logo">
                                 </div>
                                 <form action="{{ route('users.authenticate') }}" method="POST">
                                     @csrf
 
                                     <div class="form-outline mb-4">
-                                        <input type="text" id="form2Example11" class="form-control"
-                                            name="username" />
+                                        <input type="text" id="form2Example11" class="form-control" name="username" />
                                         <small class="form-label text-muted" for="form2Example11">Usuario</small>
 
                                     </div>
 
                                     <div data-mdb-input-init class="form-outline mb-4">
-                                        <input type="password" id="form2Example22" class="form-control" name="password" />
-                                        <small class="form-label text-muted" for="form2Example22">Contraseña</small>
+                                        <div class="input-group">
+
+                                            <input type="password" id="password" placeholder="Contraseña"
+                                                class="form-control" name="password" />
+                                            <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                                <i class="bi bi-eye-fill"></i>
+                                            </button>
+                                        </div>
+
                                     </div>
+                                    <script>
+                                        document.getElementById('togglePassword').addEventListener('click', function() {
+                                            const password = document.getElementById('password');
+                                            const icon = this.querySelector('i');
+
+                                            if (password.type === 'password') {
+                                                password.type = 'text';
+                                                icon.classList.remove('bi-eye-fill');
+                                                icon.classList.add('bi-eye-slash-fill');
+                                            } else {
+                                                password.type = 'password';
+                                                icon.classList.remove('bi-eye-slash-fill');
+                                                icon.classList.add('bi-eye-fill');
+                                            }
+                                        });
+                                    </script>
+
 
                                     <div class="text-center pt-1 mb-5 pb-1">
                                         <button class="btn btn-primary mb-3" type="submit">

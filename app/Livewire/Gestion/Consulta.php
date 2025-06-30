@@ -390,6 +390,7 @@ class Consulta extends Component
             $controlL->setCoef();
             if (!$this->prediosL) {
                 $controlL->retirar();
+                
             }
 
             \Illuminate\Support\Facades\Log::channel('custom')->info('Se cambian los predios del control {controlA} al control {controlB}', ['controlA' => $controlL->id, 'controlB' => $controlR->id, 'predios' => array_values($prediosChange)]);
