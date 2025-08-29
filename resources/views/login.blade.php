@@ -2,7 +2,10 @@
 @section('content')
     <x-alerts />
     <div class="mt-5">
-
+        <div class="row ">
+            <p class="text-center mb-0 form-control form-control-plaintext p-0 small">NOVA 1.0
+            </p>
+        </div>
         <div class="row d-flex justify-content-center align-items-center ">
             <div class="col-10">
                 <div class="card rounded-3 text-black">
@@ -42,6 +45,7 @@
                                 </style>
                                 <div class="text-center mb-4">
                                     <img src="/storage/images/logo.png" style="width: 185px;" alt="logo">
+
                                 </div>
                                 <form action="{{ route('users.authenticate') }}" method="POST">
                                     @csrf
@@ -92,18 +96,23 @@
                             </div>
                         </div>
                         <div class="col-6 d-flex align-items-center gradient-custom-2">
-                            <div class="text-white px-3  mx-4">
+                            <div class="text-white px-3 mx-4">
                                 <h3 class="mb-4">Somos mas que una compañia</h3>
                                 <p class=" mb-0 ">En Tecnovis, no solo gestionamos logística; creamos experiencias que unen
                                     comunidades.
                                     Nuestra pasión por la innovación y el compromiso con la excelencia nos impulsa a
                                     transformar
                                     cada experiencia en una oportunidad para construir juntos la mejor alternativa.</p>
+
+
                             </div>
+
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 @endsection

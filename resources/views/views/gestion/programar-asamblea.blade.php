@@ -134,29 +134,33 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h2 class="card-title mb-0">Archivo de personas</h2>
-
+                        <h2 class="card-title mb-0">Archivo de @if (!$inPredios)Personas @else Predios @endif</h2>
+                        @if ($asamblea['registro'])
+                            
                         <button type="button" class="btn btn-primary fs-4 py-1" wire:click='setInPredios'>
-                            @if ($inPredios)
-                                Personas
+                            @if (!$inPredios)
+                            Personas
                             @else
-                                Predios
+                            Predios
                             @endif
                         </button>
+                        @endif
                     </div>
                     <div class="card-body table-responsive p-0 table-fixed-header table-70">
-                        @if ($inPredios)
+                        @if (!$inPredios)
                             <table class="table table-bordered table-striped mb-0">
                                 <thead>
                                     <tr>
                                         <th class="fs-5">ID</th>
                                         <th class="fs-5">Descriptor </th>
-                                        <th class="fs-5">Coef...</th>
+                                        <th class="fs-5">Coeficiente</th>
                                         <th class="fs-5">Vota</th>
+                                        <th class="fs-5">Grupo</th>
                                         @if ($asamblea['registro'])
                                             <th class="fs-5">Propietarios</th>
                                             <th class="fs-5">Cedula</th>
                                             <th class="fs-5">Apoderado</th>
+                                        
                                         @endif
 
                                     </tr>
@@ -169,6 +173,7 @@
                                             <td class="align-middle">{{ $p->getFullName() }}</td>
                                             <td>{{ $p->coeficiente }}</td>
                                             <td>{{ $p->vota ? 'Si' : 'No' }}</td>
+                                            <td>{{$p->group!='0'?$p->group:''}}</td>
                                             @if ($asamblea['registro'])
                                                 <td>
                                                     @foreach ($p->personas as $persona)

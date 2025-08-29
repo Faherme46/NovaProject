@@ -382,6 +382,7 @@ class Consulta extends Component
                 $controlR->state = 1;
                 if (cache('asamblea')['registro']) {
                     $controlR->cc_asistente = ($controlL->cc_asistente) ? $controlL->cc_asistente : null;
+                    $controlR->h_entrega = $controlL->h_entrega;
                 }
             }
 
