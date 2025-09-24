@@ -87,7 +87,7 @@ class ReportController extends Controller
                 ];
                 $this->createDocument('index-votacion');
             } else {
-                
+
                 $response=$this->exportPersonas();
                 if ($response->getStatusCode()==500) {
                     return redirect()->route('gestion.report')->with('error', $response->getContent());
@@ -135,7 +135,7 @@ class ReportController extends Controller
             $output = $this->mergePdf();
             $fileController->exportPdf($this->asamblea->name . '/Informe/Informe.pdf', $output);
 
-            
+
             return response($output, 200)
                 ->header('Content-Type', 'application/pdf')
                 ->header('Content-Disposition', 'inline; filename="Informe.pdf"');
@@ -214,7 +214,7 @@ class ReportController extends Controller
             $export3 = new AsistenciaQuorum($predios, 1);
             $responseExcel3 = Excel::store($export3, $asambleaName . '/Informe/Asistencia_Total.xlsx', 'externalAsambleas');
             if (!$responseExcel3) {
-                return response()->json('Asistencia_Quorum.xlsx', 423);
+                return response()->json('Asistencia_Total.xlsx', 423);
             }
 
 

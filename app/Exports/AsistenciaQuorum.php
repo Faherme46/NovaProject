@@ -28,7 +28,7 @@ class AsistenciaQuorum implements FromArray, WithEvents
     public function buildArray()
     {
         $array[]=[
-            ['Predio','','Coeficiente Propiedad','Asistente a la reunion','Nombre'],
+            ['Predio','','Coeficiente Propiedad','Asistente a la reunion','Nombre','H. Entrada','H. Salida'],
             ['Torre','Apto.']
         ];
         $array += $this->data->map(function ($predio) {
@@ -36,12 +36,14 @@ class AsistenciaQuorum implements FromArray, WithEvents
             $predioArray[]=$predio->numeral2;
             $predioArray[]=$predio->coeficiente;
             try {
-                if($this->quorum_start&&!$predio->quorum_start){
+                if($this->quorum_start && !$predio->quorum_start){
                     return $predioArray;
                 }else{
                     if($predio->control){
                         $predioArray[]=$predio->getRelationPersona($predio->asistente->id);
                         $predioArray[]=$predio->asistente->fullName();
+                        $predioArray[]=$predio->control->h_entrega;
+                        $predioArray[]=$predio->control->h_recibe;
                     }
                 }
 
@@ -70,7 +72,9 @@ class AsistenciaQuorum implements FromArray, WithEvents
                     'A1:B1',
                     'C1:C2',
                     'D1:D2',
-                    'E1:E2'
+                    'E1:E2',
+                    'F1:F2',
+                    'G1:G2',
                 ];
                 // Combinar celdas (por ejemplo, A1 hasta C1)
                 foreach ($cellsToMerge as $cells) {
@@ -80,13 +84,13 @@ class AsistenciaQuorum implements FromArray, WithEvents
 
 
 
-                $sheet->getStyle('A3:E1000')->applyFromArray([
+                $sheet->getStyle('A3:G1000')->applyFromArray([
                     'alignment' => [
                         'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
                         'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
                     ]
                 ]);
-                $sheet->getStyle('A3:E1000')->applyFromArray([
+                $sheet->getStyle('A3:G1000')->applyFromArray([
                     'borders' => [
                         'allBorders' => [ // Aplica bordes a todas las celdas del rango
                             'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN, // Tipo de borde
@@ -94,16 +98,17 @@ class AsistenciaQuorum implements FromArray, WithEvents
                         ],
                     ],
                 ]);
-                $sheet->getStyle('A1:E2')->getAlignment()->setWrapText(true);
+                $sheet->getStyle('A1:G2')->getAlignment()->setWrapText(true);
                 $sheet->getStyle('E3:E1000')->getAlignment()->setWrapText(true);
 
                 $sheet->getColumnDimension('C')->setAutoSize(true);
                 $sheet->getColumnDimension('D')->setAutoSize(true);
                 $sheet->getColumnDimension('E')->setAutoSize(true);
-
+                $sheet->getColumnDimension('F')->setAutoSize(true);
+                $sheet->getColumnDimension('G')->setAutoSize(true);
 
                 // Opcional: Aplicar estilos a la celda combinada
-                $sheet->getStyle('A1:E2')->applyFromArray([
+                $sheet->getStyle('A1:G2')->applyFromArray([
                     'alignment' => [
                         'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
                         'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
