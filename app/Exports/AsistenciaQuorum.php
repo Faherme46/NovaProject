@@ -28,7 +28,7 @@ class AsistenciaQuorum implements FromArray, WithEvents
     public function buildArray()
     {
         $array[]=[
-            ['Predio','','Coeficiente Propiedad','Asistente a la reunion','Nombre'],
+            ['Predio','','Coeficiente Propiedad','Asistente a la reunion','Nombre','H. Entrada','H. Salida'],
             ['Torre','Apto.']
         ];
         $array += $this->data->map(function ($predio) {
@@ -36,12 +36,14 @@ class AsistenciaQuorum implements FromArray, WithEvents
             $predioArray[]=$predio->numeral2;
             $predioArray[]=$predio->coeficiente;
             try {
-                if($this->quorum_start&&!$predio->quorum_start){
+                if($this->quorum_start && !$predio->quorum_start){
                     return $predioArray;
                 }else{
                     if($predio->control){
                         $predioArray[]=$predio->getRelationPersona($predio->asistente->id);
                         $predioArray[]=$predio->asistente->fullName();
+                        $predioArray[]=$predio->control->h_entrega;
+                        $predioArray[]=$predio->control->h_recibe;
                     }
                 }
 
