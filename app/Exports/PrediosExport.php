@@ -72,6 +72,7 @@ class PrediosExport implements FromArray, WithHeadings, WithStyles
             'votos',
             'coeficiente',
             'noVota',
+            'grupo',
             'cc_propietario',
             'cc_apoderado',
             'nombre_ap',
