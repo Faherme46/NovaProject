@@ -1,3 +1,4 @@
+from multiprocessing import process
 from flask import Flask,jsonify,render_template,request
 import hid
 import time
@@ -9,8 +10,9 @@ import matplotlib.image as mpimg
 import os
 import signal
 import textwrap
+import json
 
-process = None
+processList = [None]
 def connectHid(pid,vid):
     try:
         # Abrir conexión con el dispositivo
@@ -19,11 +21,11 @@ def connectHid(pid,vid):
         device.set_nonblocking(1)  # Configurar modo no bloqueante
         return device
 
-    except OSError as e:
-        print(f"Error al conectar con el dispositivo HID: {e}")
+    except OSError as e: 
+        print(f"Error al conectar con el dispositivo HID: {e} Reinicie el servicio")
         return False
 
-def sendComands(device):
+def sendComandsClose(device):
 
     commands = [
                 [0x03, 0x5b, 0x80, 0xdb],
@@ -36,41 +38,71 @@ app = Flask(__name__)
 
 @app.route("/")
 def hello_world():
+
     return "<p>Servidor On!</p>"
 
 @app.route('/run-votes', methods=['GET'])
 def run_script():
-    global process
-    if process is None or process.poll() is not None:
+    global processList
+    numControls = request.args.get('numControls', '400')  
+    serialHid1 = request.args.get('hid_1', '0')
+    serialHid0 = request.args.get('hid_0', '0')
+    if processList[0] is None or processList[0].poll() is not None:
+    
         try:
             # Inicia el script en segundo plano
-            process=subprocess.Popen(['python', 'votes.py'])
+            if numControls>'400':
+                if serialHid1 != '0' and serialHid0 != '0':
+                    process1=subprocess.Popen(['python', 'votes.py', numControls, serialHid0])
+                    process2=subprocess.Popen(['python', 'votes_400.py', numControls, serialHid1])
+                    processList=[process1,process2]
+                    
+                    return jsonify({"status": "Success","message":"Proceso ejecutado"}), 200
+                else:
+                    return jsonify({"status": "Error", "message": "Faltan los seriales de los dispositivos HID para ejecutar con mas de 400 controles"}), 400
+            else:
+                process1=subprocess.Popen(['python', 'votes.py', numControls])
+                processList=[process1]
             return jsonify({"status": "Success","message":"Proceso ejecutado"}), 200
         except Exception as e:
             return jsonify({"status": "Error", "message": str(e)}), 500
-    stop_script()
+
     try:
         # Inicia el script en segundo plano
-        process=subprocess.Popen(['python', 'votes.py'])
+        process1=subprocess.Popen(['python', 'votes.py'])
+        processList=[process1]
         return jsonify({"status": "Success","message":"Proceso ejecutado"}), 200
     except Exception as e:
         return jsonify({"status": "Error", "message": str(e)}), 500
 
 @app.route('/verify-device', methods=['GET'])
 def verify_device():
-    vid = 4292  # Reemplazar con tu vendor_id
-    pid = 6169  # Reemplazar con tu product_id
+    vid = 4292  
+    pid = 6169  
     try:
-        device = hid.device()
-        device.open(vid, pid)
-        device.set_nonblocking(1)  # Configurar modo no bloqueante
+        #obtener los seriales de los dispositivos HID desde los argumentos
+        hid_0 = request.args.get('hid_0', '0')
+        hid_1 = request.args.get('hid_1', '0')
+        if hid_0 != '0' and hid_1 != '0':
+            founded=[False,False]
+            device = hid.device()
+            for d in hid.enumerate(vid, pid):
+                if d['serial_number'] == hid_0:
+                    founded[0] = True
+                elif d['serial_number'] == hid_1:
+                    founded[1] = True
+            if not founded[0] or not founded[1]:
+                return jsonify({"status": "Error", "message": "No se encontraron los dispositivos HID con los seriales proporcionados"}), 400
+        else:
+            device = hid.device()
+            device.open(vid, pid)
+
         return jsonify({"status": "Success","message":"Dispositivo conectado"}), 200
     except Exception as e:
         return jsonify({"status": "Error", "message": "No existe el dispositivo"}), 500
 
 
-def stop_script():
-    global process
+def stop_script(process):
     if process is not None:
         try:
             # Lee el PID del archivo y envía una señal de terminación
@@ -86,25 +118,32 @@ def stop_script():
 
 @app.route('/stop-votes', methods=['GET'])
 def closeDevice():
-    stop_script()
+    global processList
+    for process in processList:
+        stop_script(process)
     vid = 4292  # Reemplazar con tu vendor_id
     pid = 6169  # Reemplazar con tu product_id
-    device=connectHid(pid,vid)
-    if device:
-        sendComands(device)
-        device.close()
-        return jsonify({"status":"Success","message": "Dispositivo desconectado"}), 200
-    else:
-        return jsonify({"status": "Error", "message": "Error al conectar con el dispositivo"}), 400
+    for d in hid.enumerate(vid, pid):
+        device = hid.device()
+        device.open_path(d['path'])
+        device.set_nonblocking(1)  # Configurar modo no bloqueante
+        print(f"Device disconnected:{d['serial_number']} ")
+        if device:
+            sendComandsClose(device)
+            device.close()
+        else:
+            return jsonify({"status": "Error", "message": "Error al conectar con el dispositivo"}), 400
+    return jsonify({"status":"Success","message": "Dispositivo desconectado"}), 200
 
 
 @app.route('/stop-if-voting', methods=['GET'])
 def stopIfVoting():
-    global process
-    if process is not None:
-        stop_script()
-        print('Cerrando dispositivo')
-        closeDevice()
+    global processList
+    for process in processList:
+        if process is not None:
+            stop_script(process)
+            print('Cerrando dispositivo')
+            closeDevice()
     return jsonify({"status": "Success", "message": "El script no esta corriendo"}), 200
 
 
@@ -285,3 +324,43 @@ def createPlotElecciones():
     
     create_plot_elecciones(data['title'], data['labels'], data['values'], data['output'],data['nameAsamblea'],data['delegados'],data['blanco'])
     return "200"
+
+processDetect = None
+@app.route('/stop-detect', methods=['GET'])
+def stop_script_detect():
+    global processDetect
+    if processDetect is not None:
+        try:
+            # Lee el PID del archivo y envía una señal de terminación
+            with open('script_pid_detect.txt', 'r') as f:
+                pid = int(f.read())
+                os.kill(pid, signal.SIGTERM)  # Envía la señal de terminación
+            processDetect.wait()  # Espera a que el proceso se detenga
+            os.remove("script_pid_detect.txt")
+            return jsonify({"status":"Success","message": "Script detenido"}), 200
+        except Exception as e:
+            return jsonify({"status": "Error", "message": str(e)}), 500
+    return jsonify({"status": "Error", "message": "El script no esta corriendo"}), 400
+
+
+
+
+
+vid = 4292  
+pid = 6169  
+@app.route('/start-detect', methods=['GET'])
+def startDetect():
+    global processDetect
+    try:
+        # Ejecutar el script detectDevice.py y esperar respuesta
+
+        listDevices=[]
+        for device in hid.enumerate(vid, pid):          
+            listDevices.append(
+                {'name':device['product_string'],'vendor_id':device['vendor_id'],'product_id':device['product_id'],'path':device['path'].decode('utf-8'), 'serial':device['serial_number']})
+        
+        
+        
+        return jsonify({"status": "Success", "message": "Detect iniciado", "devices": listDevices}), 200
+    except Exception as e:
+        return jsonify({"status": "Error", "message": str(e)}), 500

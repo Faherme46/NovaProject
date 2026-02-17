@@ -155,7 +155,7 @@ class SessionController extends Controller
     public function sessionConnect(Request $request)
     {
 
-        $ip=$request->ip;
+        $ip = $request->ip;
 
         $request->validate([
             'ip' => 'required|ip',
@@ -167,21 +167,32 @@ class SessionController extends Controller
         if ($connection) {
             fclose($connection);
             Storage::put('db_host.txt', $ip);
-            return back()->with('success','Se ha establecido conexión');
+            return back()->with('success', 'Se ha establecido conexión');
         } else {
 
-            return back()->with('warning','No se ha encontrado un servicio mysql para la ip destinada');
+            return back()->with('warning', 'No se ha encontrado un servicio mysql para la ip destinada');
         }
     }
 
-    public function sessionDisconnect(){
+    public function sessionDisconnect()
+    {
 
-        if(Storage::exists('db_host.txt')){
+        if (Storage::exists('db_host.txt')) {
             Storage::delete('db_host.txt');
-        return back()->with('success','Se ha realizado la desconexión');
-        }else{
-            return back()->with('warning','No hay conexiones activas');
+            return back()->with('success', 'Se ha realizado la desconexión');
+        } else {
+            return back()->with('warning', 'No hay conexiones activas');
         };
+    }
 
+
+    public function registerHidDevices(Request $request)
+    {
+        $devices = $request['devices'];
+        
+        //DEVICES ES UN OBJETO JSON QUE CONTIENE LA INFORMACIÓN DE LOS DISPOSITIVOS HID DETECTADOS POR EL SCRIPT PYTHON. ESTE OBJETO DEBERÍA SER ENVIADO DESDE EL SCRIPT PYTHON A TRAVÉS DE UNA SOLICITUD POST AL ENDPOINT DEFINIDO EN LAS RUTAS.
+        //GUARDA EL OBJETO JSON EN EL CACHE
+        cache(['hid_devices' => "devices: " . json_encode($devices)], now()->addMinutes(720)); // Guarda los dispositivos en el cache por 720 minutos (12 horas)
+        return response()->json(['message' => 'Dispositivos registrados correctamente']);
     }
 }

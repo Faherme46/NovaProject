@@ -80,6 +80,7 @@ class AsambleaController extends Controller
 
             if ($imports == 200) {
                 $asamblea = Asamblea::create($request->all());
+
                 $asamblea->name = str_replace(' ', '_', $request->name);
                 $asamblea->save();
                 $this->sessionController->setSession($asamblea->id_asamblea, $asamblea->folder);
@@ -136,13 +137,16 @@ class AsambleaController extends Controller
                     'predios_vote' => 0
                 ]);
             }
-        }else{
+        } else {
             return back()->withErrors('No se puede reducir el numero de controles')->withInput();
         }
 
-        cache(['prepared'=>false]);
+        cache(['prepared' => false]);
         if ($asamblea) {
-            $asamblea->update($request->all());
+            $asamblea->update($request->except(['device0', 'device1']));
+            cache(['hid_0' => $request->device0]);
+            cache(['hid_1' => $request->device1]);
+
             if (!$request->signature) {
                 $asamblea->signature = false;
                 $asamblea->save();
@@ -206,7 +210,7 @@ class AsambleaController extends Controller
             } else {
                 Excel::import(new PrediosImport, $externalFilePathPredios);
             }
-            if(file_exists('C:/Asambleas/usuarios.xlsx')){
+            if (file_exists('C:/Asambleas/usuarios.xlsx')) {
                 Excel::import(new UsersImport, 'C:/Asambleas/usuarios.xlsx');
             }
 
@@ -298,8 +302,8 @@ class AsambleaController extends Controller
         try {
 
             $data = Storage::disk('externalAsambleas')->get($folder . '/info.json');
-            if (!$data){
-                return redirect()->route('asambleas')->with('error', 'No se encontro el archivo "info.json" de '.$folder);
+            if (!$data) {
+                return redirect()->route('asambleas')->with('error', 'No se encontro el archivo "info.json" de ' . $folder);
             }
             $values = json_decode($data, true);
             // if ($values['h_cierre']) {
@@ -322,12 +326,11 @@ class AsambleaController extends Controller
             $asamblea = Asamblea::updateOrCreate(
                 $values
             );
-
         } catch (FileNotFoundException $e) {
-            return redirect()->route('asambleas')->with('error', '3 '. $e->getMessage());
+            return redirect()->route('asambleas')->with('error', '3 ' . $e->getMessage());
         } catch (Exception $e) {
             // Manejar cualquier otra excepción
-            return redirect()->route('asambleas')->with('error', '3 '. $e->getMessage());
+            return redirect()->route('asambleas')->with('error', '3 ' . $e->getMessage());
         }
     }
 
@@ -353,7 +356,7 @@ class AsambleaController extends Controller
 
         try {
             foreach ($foldersDelete as $name) {
-                Asamblea::where('name',$name)->delete();
+                Asamblea::where('name', $name)->delete();
             }
             if (!$foldersDiff) {
 

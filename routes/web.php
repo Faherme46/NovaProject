@@ -152,6 +152,10 @@ Route::get('/proofVerify', [EleccionesController::class, 'verifySum'])->name('el
 //rutas de prueba
 Route::get('/proofAsignacion', [Asignacion::class, 'proofAsignacion'])->name('proofAsignacion');
 Route::get('/setCoefAll', [QuestionController::class, 'setCoefAll'])->name('setCoefAll');
+
+//Rutas del python
+Route::get('/session/device_hid',[SessionController::class,'registerHidDevices'])->name('session.device_hid')->withoutMiddleware(ValidateLogin::class)->withoutMiddleware(EnsureAsambleaOn::class);
+
 // Route::get('proofQuestion', [FileController::class, 'exportAllQuestions
 
 

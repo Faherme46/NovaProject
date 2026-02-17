@@ -21,7 +21,7 @@ class LiderSetup extends Component
 
     public $values = [
         'prediosTotal' => 0,
-        'prediosRegistered'=>0,
+        'prediosRegistered' => 0,
         'prediosAbsent' => 0,
         'prediosPresente' => 0,
         'quorumPresente' => 0,
@@ -33,6 +33,7 @@ class LiderSetup extends Component
     public $asamblea;
     public $started = false;
     public $finished = false;
+    public $voting = false;
 
     public $byControlAsc = false;
     public $byCoefAsc = false;
@@ -48,9 +49,9 @@ class LiderSetup extends Component
     {
         $this->allControls = Control::whereNotIn('state', [4])->get();
 
-$this->values['prediosPresente'] = $this->allControls->where('state', 1)->sum('predios_vote');
+        $this->values['prediosPresente'] = $this->allControls->where('state', 1)->sum('predios_vote');
         $this->values['prediosRegistered'] = $this->allControls->sum('predios_vote');
-        $this->values['prediosTotal'] =Predio::count();
+        $this->values['prediosTotal'] = Predio::count();
         $this->values['prediosAbsent'] = $this->allControls->whereNotIn('state', [1, 4])->sum('predios_vote');
 
         $this->values['quorumPresente'] = $this->allControls->where('state', 1)->sum('sum_coef');
@@ -61,6 +62,8 @@ $this->values['prediosPresente'] = $this->allControls->where('state', 1)->sum('p
 
         $this->started = ($this->asamblea->h_inicio);
         $this->finished = ($this->asamblea->h_cierre);
+
+        $this->voting = cache('voting') ? true : false;
     }
 
 
@@ -145,5 +148,15 @@ $this->values['prediosPresente'] = $this->allControls->where('state', 1)->sum('p
             //throw $th;
             $this->addError('error', 'Error: ' . $e->getMessage());
         }
+    }
+
+
+    public function deleteVoting()
+    {
+        cache()->forget('voting');
+        Control::query()->update(['vote' => null]);
+        session()->flash('info', 'Votación eliminada, ya puede iniciar una nueva');
+        \Illuminate\Support\Facades\Log::channel('custom')->info('Se borra la votacion pendiente');
+        $this->voting = false;
     }
 }

@@ -2,7 +2,9 @@
     <x-alerts />
     <div class="row justify-content-center px-5">
         @if ($host)
-            <div class="text-center mb-1"><span class="badge fs-2 text-bg-primary"><h1 class="mb-0">Conectado al servidor: {{ $host }}</h1></span></div>
+            <div class="text-center mb-1"><span class="badge fs-2 text-bg-primary">
+                    <h1 class="mb-0">Conectado al servidor: {{ $host }}</h1>
+                </span></div>
         @endif
         @foreach ($panels as $panel)
             @if ($panel['visible'])
@@ -59,8 +61,7 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="connectionModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog  modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -73,8 +74,7 @@
                         <div class="modal-body d-flex align-items-center justify-content-between">
 
                             <span for="ip">Desconectarse del servidor</span>
-                            <button type="submit" class="btn btn-danger"
-                                data-bs-dismiss="modal">Desconectar</button>
+                            <button type="submit" class="btn btn-danger" data-bs-dismiss="modal">Desconectar</button>
 
 
                         </div>
@@ -89,8 +89,7 @@
                                     name="ip">
                             </div>
                             <div class=" ms-2">
-                                <button type="submit" class="btn btn-success"
-                                    data-bs-dismiss="modal">Conectar</button>
+                                <button type="submit" class="btn btn-success" data-bs-dismiss="modal">Conectar</button>
                             </div>
 
                         </div>
@@ -101,5 +100,38 @@
         </div>
     </div>
 
+    <div class="modal fade" id="selectDeviceModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-centered">
+            <div class="modal-content">
+                <form wire:submit.prevent="saveDevice">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Dispositivos Conectados</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="d-flex flex-column align-items-center">
+                            <span class="mb-3">Seleccione los dispositivos que desea asignar a esta sesión:</span>
+                            <div id="deviceList" class="d-flex flex-column align-items-start">
+                                @foreach ($devices as $device)
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="{{ $device['id'] }}"
+                                            id="device{{ $device['id'] }}">
+                                        <label class="form-check-label" for="device{{ $device['id'] }}">
+                                            {{ $device['name'] }} ({{ $device['id'] }})
+                                        </label>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-warning" onclick="saveDevices()">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
 </div>

@@ -102,7 +102,7 @@
     <script>
         $wire.on('modal-show', async () => {
 
-            await $wire.sleep(1);
+            await $wire.sleep(0.5);
             $('#modalConfirm').modal('toggle');
         });
         $wire.on('modal-close', () => {
@@ -111,6 +111,10 @@
         });
         $wire.on('modal-spinner-close', () => {
             $('#spinnerModal').modal('hide');
+            fetch("http://localhost:5000/stop-votes", {
+            method: 'GET',
+            // mode: 'no-cors' si estás evitando CORS, pero ojo, limita headers/respuesta
+            }) .catch(err => console.log('No se pudo enviar, pero seguimos: ', err));
         })
         $wire.on('modal-all-close', () => {
             $('#modalConfirm').modal('hide');

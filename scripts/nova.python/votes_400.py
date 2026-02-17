@@ -75,7 +75,7 @@ def split_number(number):
 
     return {
         'vote': vote_string,
-        'number': last4_decimal
+        'number': last4_decimal+400
     }
 
 def handleReport(data, id) :
@@ -91,8 +91,6 @@ def handleReport(data, id) :
 
 vid = 4292  # Reemplazar con tu vendor_id
 pid = 6169  # Reemplazar con tu product_id
-REPORT_ID = 0x46
-REPORT_LEN = 64
 def connect(controls, serialHid):
     try:
         device = None
@@ -102,7 +100,7 @@ def connect(controls, serialHid):
                     device = hid.device()
                     device.open_path(d['path'])  
             if device is None:
-                print(f"No se encontró el dispositivo HID con el serial {serialHid}. Conectándose al primer dispositivo disponible.")
+                print(f"1: No se encontró el dispositivo HID con el serial {serialHid}. Conectándose al primer dispositivo disponible.")
                 device = hid.device()
                 device.open(vid, pid)
 
@@ -125,11 +123,16 @@ def connect(controls, serialHid):
         print(f"Error al conectar con el dispositivo HID: {e}")
         return False
 
+
+    except OSError as e:
+        print(f"Error al conectar con el dispositivo HID: {e} ")
+        return False
+
 def sendComands(device):
 
     commands = [
-                [0x03, 0x46, 0x0a, 0x01],
                 [0x03, 0x70, 0x99, 0xe9],
+                [0x00, 0x02, 0x78, 0x9a],
                 [0x03, 0x55, 0x80, 0xd5],
                 [0x0b, 0x5e, 0x80, 0xde, 0xb2, 0xb0, 0xb0, 0xb2, 0xb0, 0xb1, 0xb1, 0xb7],
                 [0x06, 0x35, 0x96, 0x02, 0x10, 0x00, 0x10],
@@ -173,7 +176,7 @@ def setProcessId():
         f.write(str(os.getpid()))
 
 VID = 4292   # <-- cambia esto
-PID = 6169   # <-- cambia esto
+PID = 6000   # <-- cambia esto
 
 def find_com_port(vid, pid):
     for port in serial.tools.list_ports.comports():
@@ -181,14 +184,20 @@ def find_com_port(vid, pid):
             return port.device
     return None
 
-
-def main(controls, serialHid):
+REPORT_ID = 0x46
+REPORT_LEN = 64
+def main(numControls, serialHid):
     try:
         print('Estableciendo Conexión con el Dispositivo y la BD...')
         cursor,conn = connectDB()
-        device=connect(controls, serialHid)
+        device=connect(numControls, serialHid)
         if device:
+            
+            
+            com_port = find_com_port(VID, PID)
+            time.sleep(.5)
             sendComands(device)
+            # El buffer DEBE incluir el Report ID como primer byte
 
             myFlag=0
             ignoreSecond = False
@@ -198,8 +207,10 @@ def main(controls, serialHid):
             caso=0
             while True:
 
-                data = device.read(64)  # Leer un bloque de datos de 64 bytes
+                
 
+                data = device.read(64)  # Leer un bloque de datos de 64 bytes
+                time.sleep(.5)
                 if data and myFlag:
                     print(data[:4])
                     reportId=data[0]
@@ -261,7 +272,7 @@ def main(controls, serialHid):
                     print(dataResult,caso)
 
 
-                    if dataResult['vote'] in ['A', 'B', 'C', 'D', 'E', 'F'] and dataResult['control_id']<=400:
+                    if dataResult['vote'] in ['A', 'B', 'C', 'D', 'E', 'F'] and dataResult['control_id']<=800:
 
                         sql = """UPDATE controls
                                 SET `vote` = %s
@@ -280,7 +291,7 @@ def main(controls, serialHid):
 
     except KeyboardInterrupt:
         print("Interrupción recibida 1, deteniendo el script.")
-        sendComandsToClose(device)
+        # sendComandsToClose(device)
 
 
     except Exception as e:
@@ -303,3 +314,4 @@ if __name__ == "__main__":
     flag=1
     while flag:
         flag=main(controls, serialHid)
+    # flag=main()

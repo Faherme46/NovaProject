@@ -56,8 +56,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
     function validateMultipleOf50(input) {
 
         let value = parseFloat(input.value);
-        if (value>400) {
-            return input.value=400;
+        if (value>800) {
+            return input.value=800;
         }
         // Si el campo está vacío, no hacer nada
         if (isNaN(value)) {

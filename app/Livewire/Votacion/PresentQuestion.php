@@ -51,8 +51,15 @@ class PresentQuestion extends Component
     public $isEditting = false;
     public function mount($questionId, $plancha = false)
     {
-
-        $response = $this->handleVoting(action: 'run-votes');
+        $numcontrols = cache('asamblea')['controles'];
+        $args = [
+            'numControls' => $numcontrols
+        ];
+        if ($numcontrols > 400) {
+            $args['hid_1'] = cache('hid_1', '0');
+            $args['hid_0'] = cache('hid_0', '0');
+        }
+        $response = $this->handleVoting('run-votes', $args);
         if (!$response) {
             return session()->flash('error', 'Problemas para conectar al servidor python');
         }
@@ -63,7 +70,7 @@ class PresentQuestion extends Component
 
             $this->question = Question::find($questionId);
             $this->isPlancha = $plancha;
-            
+
             $this->setSizePresentation();
             if (!$this->question) {
                 return redirect()->route('votacion')->with('error', 'La pregunta no fue encontrada');
@@ -155,21 +162,22 @@ class PresentQuestion extends Component
     public function store()
     {
 
+        $numcontrols = cache('asamblea')['controles'];
         $this->dispatch('closeModal');
         $this->playPause(true);
-        if ($this->handleVoting('stop-votes')) {
-            $questionController = new QuestionController($this->question->id);
-            try {
-                if (is_array($questionController->createResults())) {
-                    $this->chartCoef = $questionController->createResults()[0];
-                    $this->chartNom = $questionController->createResults()[1];
-                    cache(['toExportVotes' => true]);
-                };
-            } catch (Throwable $th) {
-                return back()->withErrors('error', $th->getMessage());
-            }
-            $this->inResults();
+
+        $questionController = new QuestionController($this->question->id);
+        try {
+            $listResults = $questionController->createResults();
+            if (is_array($listResults)) {
+                $this->chartCoef = $listResults[0];
+                $this->chartNom = $listResults[1];
+                cache(['toExportVotes' => true]);
+            };
+        } catch (Throwable $th) {
+            return back()->withErrors('error', $th->getMessage());
         }
+        $this->inResults();
     }
 
     public function stopVote()
@@ -230,16 +238,21 @@ class PresentQuestion extends Component
     {
         $this->votes = Control::whereNotNull('vote')->pluck('id')->toArray();
     }
-    public function handleVoting($action)
+    public function handleVoting($action, $args = array())
     {
 
         $pythonUrl = env('PYTHON_PATH', 'http://127.0.0.1:5000');
         try {
-            $response = Http::get($pythonUrl . '/' . $action);
-            if ($response->status() == 400) {
-                $this->addError('error', 'Error Conectando al dispositivo hid');
-                $this->dispatch('modal-all-close');
-                return False;
+            if ($action == 'stop-votes') {
+
+                $response = Http::async()->get($pythonUrl . '/' . $action . '', $args);
+            } else {
+                $response = Http::get($pythonUrl . '/' . $action . '', $args);
+                if ($response->status() == 400) {
+                    $this->addError('error', 'Error Conectando al dispositivo hid');
+                    $this->dispatch('modal-all-close');
+                    return False;
+                }
             }
             return True;
         } catch (Throwable $th) {
@@ -251,7 +264,7 @@ class PresentQuestion extends Component
 
     public function getOut()
     {
-
+        cache()->forget('voting');
         Control::query()->update(['vote' => null]);
         return redirect()->route('votacion')->with('success', 'Resultado almacenado correctamente');
     }
@@ -315,61 +328,60 @@ class PresentQuestion extends Component
         $this->calculatePlazas();
     }
 
-        public function calculatePlazas()
-        {
-            $total = 0;
-            
-            
-            foreach ($this->options as $op) {
-                if ($this->question[$op] != 'EN BLANCO') {
-                    $total += $this->resultToUse[$op];
-                }
+    public function calculatePlazas()
+    {
+        $total = 0;
+
+
+        foreach ($this->options as $op) {
+            if ($this->question[$op] != 'EN BLANCO') {
+                $total += $this->resultToUse[$op];
             }
-            
-            $umbral = $total / $this->question->plancha->plazas;
-            
-            if ($total <= 0) {
-                foreach ($this->options as $option) {
-                    if ($this->question[$option] !== 'EN BLANCO') {
-                        $this->question->plancha[$option] = 0;
-                    }
-                }
-                
-            } else {
-                $sumTotal=0;
-                foreach ($this->options as $option) {
-                    if ($this->question[$option] !== 'EN BLANCO') {
-                        $plazas=floor($this->resultToUse[$option] / $umbral);
-                        $this->question->plancha[$option] = $plazas;
-                        $sumTotal+=$plazas;
-                    } else {
-                        $this->question->plancha[$option] = 0;
-                    }
-                }
-
-
-                // Calcular residuos y asignar curules adicionales
-                $residuos = [];
-                $plazasRestantes = $this->question->plancha->plazas - $sumTotal;
-
-                foreach ($this->options as $option) {
-                    if ($this->question[$option] !== 'EN BLANCO') {
-                        $residuos[$option] = $this->resultToUse[$option] - $umbral * $this->question->plancha[$option];
-                    }
-                }
-                // Ordenar opciones por residuos
-                arsort($residuos);
-                foreach (array_keys($residuos) as $option) {
-                    if ($plazasRestantes > 0) {
-                        $this->question->plancha[$option] += 1;
-                        $plazasRestantes--;
-                    }
-                }
-            }
-            // $this->valuesPlanchas['total'] = $total;
-            $this->question->plancha->umbral = round($umbral, 4);
-            $this->question->plancha->save();
         }
+
+        $umbral = $total / $this->question->plancha->plazas;
+
+        if ($total <= 0) {
+            foreach ($this->options as $option) {
+                if ($this->question[$option] !== 'EN BLANCO') {
+                    $this->question->plancha[$option] = 0;
+                }
+            }
+        } else {
+            $sumTotal = 0;
+            foreach ($this->options as $option) {
+                if ($this->question[$option] !== 'EN BLANCO') {
+                    $plazas = floor($this->resultToUse[$option] / $umbral);
+                    $this->question->plancha[$option] = $plazas;
+                    $sumTotal += $plazas;
+                } else {
+                    $this->question->plancha[$option] = 0;
+                }
+            }
+
+
+            // Calcular residuos y asignar curules adicionales
+            $residuos = [];
+            $plazasRestantes = $this->question->plancha->plazas - $sumTotal;
+
+            foreach ($this->options as $option) {
+                if ($this->question[$option] !== 'EN BLANCO') {
+                    $residuos[$option] = $this->resultToUse[$option] - $umbral * $this->question->plancha[$option];
+                }
+            }
+            // Ordenar opciones por residuos
+            arsort($residuos);
+            foreach (array_keys($residuos) as $option) {
+                if ($plazasRestantes > 0) {
+                    $this->question->plancha[$option] += 1;
+                    $plazasRestantes--;
+                }
+            }
+        }
+        // $this->valuesPlanchas['total'] = $total;
+        $this->question->plancha->umbral = round($umbral, 4);
+        $this->question->plancha->save();
+    }
 
 
     public function editting()

@@ -29,7 +29,7 @@
                                 <td class="text-end ">Predios totales:</td>
                                 <td class="text-start text-info">{{ $values['prediosTotal'] }}</td>
                             </tr>
-                            
+
                             <tr>
                                 <td class="text-end">Quorum Inicial:</td>
                                 <td>{{ cache('quorum_init') }} </td>
@@ -49,7 +49,7 @@
                             </tr>
                             <tr>
                                 <td class="text-end">Predios Ausentes:</td>
-                                <td class="text-start">{{ $values['prediosAbsent']}}</td>
+                                <td class="text-start">{{ $values['prediosAbsent'] }}</td>
                             </tr>
                             <tr>
                                 <td class="text-end">Quorum Inicial:</td>
@@ -57,26 +57,32 @@
                             </tr>
                             <tr>
                                 <td class="text-end">Quorum Registrado:</td>
-                                <td class="text-start">{{ round($values['quorumTotal'],6) }}</td>
+                                <td class="text-start">{{ round($values['quorumTotal'], 6) }}</td>
                             </tr>
                             <tr>
                                 <td class="text-end">Quorum Presente:</td>
-                                <td class="text-start">{{ round($values['quorumPresente'],6) }}</td>
+                                <td class="text-start">{{ round($values['quorumPresente'], 6) }}</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
                 <div class="card-footer d-flex align-items-center justify-content-center py-2">
 
-                    <button type="button" class="btn {{(!$started)?'btn-outline-success':'btn-success'}} fs-5 px-4  me-2"
+                    <button type="button"
+                        class="btn {{ !$started ? 'btn-outline-success' : 'btn-success' }} fs-5 px-4  me-2"
                         wire:click='iniciar' @disabled($started || $finished)>
                         Iniciar
                     </button>
 
-                    <button type="button" class="btn {{(!$finished)?'btn-outline-warning':'btn-warning'}} fs-5 "
+                    <button type="button" class="btn {{ !$finished ? 'btn-outline-warning' : 'btn-warning' }} fs-5 "
                         data-bs-toggle="modal" data-bs-target="#modalTerminar" @disabled(!$started || $finished)>
                         Terminar
                     </button>
+                    @if ($voting)
+                        <button type="button" class="btn btn-outline-danger fs-5 ms-2" id="btnDelete" wire:click='deleteVoting' data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Eliminar votación en curso">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    @endif
                     <br>
 
                 </div>
@@ -111,21 +117,22 @@
                             @forelse ($allControls as $control)
 
                                 <tr>
-                                    <td class="text-center  " >{{ $control->id }}</td>
+                                    <td class="text-center  ">{{ $control->id }}</td>
                                     @if ($asamblea['registro'])
-                                        <td class="text-wrap" width="30%">{{ $control->persona->nombre }} {{ $control->persona->apellido }}</td>
+                                        <td class="text-wrap" width="30%">{{ $control->persona->nombre }}
+                                            {{ $control->persona->apellido }}</td>
                                     @endif
                                     {{--  --}}
                                     </td>
-                                    <td >
+                                    <td>
                                         @foreach ($control->predios as $predio)
                                             <p class="mb-0 @if (!$predio->vota) text-danger @endif">
                                                 {{ $predio->getFullName() }}
                                             </p>
                                         @endforeach
                                     </td>
-                                    <td>{{ round($control->sum_coef,6) }}</td>
-                                    <td>{{ round($control->sum_coef_can,6) }}</td>
+                                    <td>{{ round($control->sum_coef, 6) }}</td>
+                                    <td>{{ round($control->sum_coef_can, 6) }}</td>
                                     <td>
                                         <span
                                             class="badge p-1 fs-6 {{ $colors[$control->state] }}">{{ $control->getStateTxt() }}</span>
@@ -158,8 +165,7 @@
                     <h5 class="modal-title">
                         Terminar la asamblea
                     </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     Asegurese de que la asamblea ha finalizado, a partir de este punto no se puede modificar

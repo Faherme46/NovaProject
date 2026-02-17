@@ -82,8 +82,8 @@ class Votacion extends Component
         $this->prediosVote = Control::whereIn('state', [1, 2])->sum('predios_vote');
         $this->controlsRegistered = Control::whereIn('state', [1, 2])->count();
         $this->controlsVote = Control::where('sum_coef_can', '!=', 0)->count();
-        $this->quorumVote = round(Control::whereNotIn('state', [4])->sum('sum_coef_can'),5);
-        $this->quorumRegistered = round(Control::whereNotIn('state', [4])->sum('sum_coef'),5);
+        $this->quorumVote = round(Control::whereNotIn('state', [4])->sum('sum_coef_can'), 5);
+        $this->quorumRegistered = round(Control::whereNotIn('state', [4])->sum('sum_coef'), 5);
     }
 
     public function setQuestion($questionId)
@@ -146,7 +146,7 @@ class Votacion extends Component
 
     public function updatedQuestionType($value)
     {
-        
+
         $this->resetErrorBag();
         $this->reset(['questionOptions', 'questionWhite']);
         $this->questionWhite = false;
@@ -263,6 +263,19 @@ class Votacion extends Component
     }
     public function createQuestion()
     {
+
+        if (cache('voting')) {
+            $this->addError('error', 'Ya hay una votacion en curso, por favor espere a que termine para iniciar una nueva');
+            return;
+        }
+        $asamblea = cache('asamblea');
+        if ($asamblea['controles'] > 400) {
+            if (cache('hid_0', 0) != 0 && cache('hid_1', 0) != 0) {
+            } else {
+                $this->addError('error', 'Se requiere conectar el dispositivo HID para iniciar la votacion');
+                return;
+            }
+        }
         $this->resetErrorBag();
         if (!$this->verifyDevice()) {
             return;
@@ -289,7 +302,7 @@ class Votacion extends Component
         $questionsFiltered = array_filter($this->questionOptions, function ($valor) {
             return $valor !== null && $valor !== '';
         });
-        if(count($questionsFiltered) !== count(array_unique($questionsFiltered))){
+        if (count($questionsFiltered) !== count(array_unique($questionsFiltered))) {
             $this->addError('error', 'No pueden haber opciones iguales');
             $error = 1;
         }
@@ -301,7 +314,7 @@ class Votacion extends Component
         } elseif ($this->plazas < 0 || !is_int($this->plazas)) {
             $this->addError('error', 'El numero de plazas no es valido');
         }
-        $controlesRegistrados=Control::whereNot('state', 4)->get();
+        $controlesRegistrados = Control::whereNot('state', 4)->get();
         $quorum = $controlesRegistrados->sum('sum_coef  ');
         if ($controlesRegistrados->isEmpty()) {
             $this->addError('error', 'No se han registrado asistentes');
@@ -319,14 +332,14 @@ class Votacion extends Component
         $forbidden = ['/', "\\", "*", '?', '"', ':', "<", ">", "|"];
         //'No se han registrado controles'
         $newTitle = str_replace($forbidden, "", $this->questionTitle);
-        $newTitle=strtoupper($newTitle);
-        $newTitle=str_replace(['á','é','í','ó','ú'], ['Á','É','Í','Ó','U'], subject: $newTitle);
+        $newTitle = strtoupper($newTitle);
+        $newTitle = str_replace(['á', 'é', 'í', 'ó', 'ú'], ['Á', 'É', 'Í', 'Ó', 'U'], subject: $newTitle);
 
         try {
             Control::query()->update(['vote' => null]);
             $predios = Control::whereNot('state', 4)->sum('predios_total');
             $question = Question::create([
-                'title' =>$newTitle,
+                'title' => $newTitle,
                 'optionA' => ($this->questionOptions['A']) ? strtoupper(rtrim($this->questionOptions['A'])) : null,
                 'optionB' => ($this->questionOptions['B']) ? strtoupper(rtrim($this->questionOptions['B'])) : null,
                 'optionC' => ($this->questionOptions['C']) ? strtoupper(rtrim($this->questionOptions['C'])) : null,
@@ -341,16 +354,17 @@ class Votacion extends Component
                 'seconds' => $seconds,
                 'type' => $this->questionType
             ]);
-            
+
             if ($this->plancha) {
-                Plancha::create(['question_id'=>$question->id,'plazas'=>$this->plazas]);
+                Plancha::create(['question_id' => $question->id, 'plazas' => $this->plazas]);
             }
 
             $parametros = ['questionId' => $question->id];
             if ($this->plancha) {
                 $parametros['plancha'] = $this->plancha;
             }
-            \Illuminate\Support\Facades\Log::channel('custom')->info('Se Inicia una votacion', ['id'=>$question->id,'quorum' => $quorum, 'predios'=> $predios]);
+            cache(['voting' => true], now()->addMinutes(30));
+            \Illuminate\Support\Facades\Log::channel('custom')->info('Se Inicia una votacion', ['id' => $question->id, 'quorum' => $quorum, 'predios' => $predios]);
             return redirect()->route('questions.show', $parametros);
         } catch (Throwable $th) {
 
@@ -376,15 +390,30 @@ class Votacion extends Component
         $pythonUrl = General::where('key', 'PYTHON_URL')->first();
         $pythonUrl = ($pythonUrl) ? $pythonUrl : 'http://127.0.0.1:5000';
         try {
-            $response = Http::get($pythonUrl . '/verify-device');
-            if ($response->status() != 200) {
-                $this->addError('Error', 'El dispositivo HID no se encontro conectado al servidor, por favor conectelo e inicie Quiz Freedom');
-                return false;
-            };
+            $numControls = cache('asamblea')['controles'];
+            if ($numControls <= 400) {
+                $response = Http::get($pythonUrl . '/verify-device');
+                if ($response->status() != 200) {
+                    $this->addError('Error', 'El dispositivo HID no se encontro conectado al servidor');
+                    return false;
+                };
+            } else {
+                $hid_0 = cache('hid_0', 0);
+                $hid_1 = cache('hid_1', 0);
+                //enviar los hid como argumentos 
+                $response = Http::get($pythonUrl . '/verify-device', [
+                    'hid_0' => $hid_0,
+                    'hid_1' => $hid_1
+                ]);
+                if ($response->status() != 200) {
+                    $this->addError('Error', 'Los dispositivos HID no se encontraron conectados al servidor');
+                    return false;
+                };
+            }
 
             return True;
         } catch (Throwable $th) {
-            $this->addError('Error', 'Error al conectar con el servidor python ');
+            $this->addError('Error', 'Error al conectar con el servidor python: ' . $th->getMessage());
         }
     }
 

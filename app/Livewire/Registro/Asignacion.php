@@ -64,7 +64,7 @@ class Asignacion extends Component
                 $this->addError('error', 'Predio ya asignado al control ' . $predio['id']);
             } else {
                 if($predio['group']) {
-                    $prediosGruop = Predio::where('group',$predio['group'])->get()->toArray();
+                    $prediosGruop = Predio::where('group',$predio['group'])->where('control_id',null)->get()->toArray();
                     foreach ($prediosGruop as $p) {
                         $this->addPredioToList($p);
                     }
@@ -92,12 +92,12 @@ class Asignacion extends Component
     public function addPredioToList($predio)
     {
 
-        if ($predio['control_id']) {
-            $this->control = $predio['control_id'];
-            $this->updatedControl();
-        } else {
+        // if ($predio['control_id']) {
+        //     $this->control = $predio['control_id'];
+        //     $this->updatedControl();
+        // } else {
             $this->predioSelected[$predio['id']] = $predio;
-        }
+        // }
 
     }
 

@@ -9,7 +9,10 @@ use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Support\Facades\Http;
+use Exception;
+use Symfony\Component\HttpFoundation\Request;
+use Throwable;
 class Main extends Component
 {
 
@@ -19,6 +22,7 @@ class Main extends Component
 
     public $panels;
     public $host;
+    public $devices=[];
 
     public function mount()
     {
@@ -169,9 +173,20 @@ class Main extends Component
     }
 
 
-    public function verifyDevice(){
+   
 
+
+
+
+    public function updateDevices(){
+        $jsondevices=cache('hid_devices',"[]");
+        $lisdevices=json_decode($jsondevices,true);
+        foreach ($lisdevices as $device) {
+            $this->devices[]=[
+                'id'=>$device['id'],
+                'name'=>$device['name'],
+            ];
+        }
+        // $this->devices=json_decode($jsondevices,true);
     }
-
-
 }
