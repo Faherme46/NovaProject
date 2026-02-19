@@ -1,35 +1,59 @@
-import matplotlib.pyplot as plt
 
-# Datos de ejemplo con muchas categorías
-import matplotlib.pyplot as plt
+import serial.tools.list_ports
+import hid
+import time
 
-# Datos de ejemplo (puedes agregar más valores)
-categorias = ['Producto A', 'Producto B', 'Producto C', 'Producto D', 'Producto E', 'Producto F']
-valores = [120, 85, 95, 130, 75, 110]
+vid = 4292  # Reemplazar con tu vendor_id
+pid = 6169  # Reemplazar con tu product_id
+i=0
+REPORT_ID = 0x41
+REPORT_LEN = 64
+for device in hid.enumerate(vid, pid):
+    print(f"Device :{device['serial_number']} ")
+    device = hid.device()
+    device.open(vid, pid)  
+    device.set_nonblocking(1)  # Configurar modo no bloqueante
+    time.sleep(.5)
+    data = device.get_feature_report(REPORT_ID, REPORT_LEN + 1)
+    
+    print(f"data :{data}")
+    data = [0x50, 0x00, 0x00, 0x70, 0x80, 0x00, 0x00, 0x03, 0x00]
 
-# Ordenar los datos de mayor a menor
-categorias, valores = zip(*sorted(zip(categorias, valores), key=lambda x: x[1], reverse=False))
+    device.send_feature_report(data)
+    device.get_feature_report(0x41,REPORT_LEN + 1)
+    i += 1
 
-# Ajustar tamaño de la figura dinámicamente según la cantidad de datos
-fig, ax = plt.subplots(figsize=(8, 0.5 * len(categorias) + 2))
+# import subprocess
+# import json
 
-# Crear gráfico de barras horizontales
-ax.barh(categorias, valores, color='#34495E', edgecolor='black', height=0.6)
+# def get_devices():
+#     command = [
+#         "powershell",
+#         "-Command",
+#         """
+#         Get-PnpDevice -PresentOnly |
+#         Where-Object {$_.InstanceId -like "*VID_10C4&PID_1819*"} |
+#         ForEach-Object {
+#             $dev = $_
+#             $props = Get-PnpDeviceProperty -InstanceId $dev.InstanceId -KeyName 'DEVPKEY_Device_InstallDate'
+#             [PSCustomObject]@{
+#                 InstanceId = $dev.InstanceId
+#                 InstallDate = $props.Data
+#             }
+#         } | ConvertTo-Json
+#         """
+#     ]
 
-# Agregar valores al final de cada barra
-for i, v in enumerate(valores):
-    ax.text(v + max(valores) * 0.02, i, str(v), ha='left', va='center', fontsize=10, color='black')
+#     result = subprocess.run(command, capture_output=True, text=True)
+#     return json.loads(result.stdout)
 
-# Mejoras en la presentación
-ax.set_xlabel("Cantidad", fontsize=12)
-ax.set_title("Rendimiento de Productos", fontsize=14, fontweight='bold')
+# devices = get_devices()
 
-# Quitar bordes innecesarios para un diseño más limpio
-ax.spines['top'].set_visible(False)
-ax.spines['right'].set_visible(False)
+# for d in devices:
+#     print(d)
 
-# Ajustar el espaciado
-plt.tight_layout()
+# # Ordenar por fecha
+# devices_sorted = sorted(devices, key=lambda x: x['InstallDate'])
 
-# Mostrar gráfico
-plt.show()
+# print("\nÚltimo conectado:")
+# print(devices_sorted[-1])
