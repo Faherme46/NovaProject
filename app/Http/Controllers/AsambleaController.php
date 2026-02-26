@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Exports\AsambleaExport;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Http\Request;
-
+use Illuminate\Http\Request;    
+use Illuminate\Support\Facades\Http;
 
 use App\Http\Controllers\FileController;
 use App\Imports\AsambleaImport;
@@ -45,7 +45,7 @@ class AsambleaController extends Controller
 
     public function store(Request $request)
     {
-
+        $responseHttp = 
         // Obtener los datos originales del request
         $input = $request->all();
 

@@ -164,7 +164,7 @@ class Reports extends Component
             }
             return $response;
         } catch (Throwable $th) {
-            session()->flash('error', 'Error al conectar con el servidor python: ' . $th->getMessage());
+            session()->flash('error', 'Error al conectar con el servidor python ');
         }
     }
 

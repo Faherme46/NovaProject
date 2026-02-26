@@ -364,3 +364,17 @@ def startDetect():
         return jsonify({"status": "Success", "message": "Detect iniciado", "devices": listDevices}), 200
     except Exception as e:
         return jsonify({"status": "Error", "message": str(e)}), 500
+
+
+@app.route('/update', methods=['GET'])
+def update():
+    try:
+        # Ejecutar el script detectDevice.py y esperar respuesta
+        result = subprocess.run(['pip', 'install', 'pyserial'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        if result.returncode == 0:
+            return jsonify({"status": "Success", "message": "Actualización completada"}), 200
+        else:
+            return jsonify({"status": "Error", "message": f"Error al actualizar: {result.stderr}"}), 500
+
+    except Exception as e:
+        return jsonify({"status": "Error", "message": str(e)}), 500

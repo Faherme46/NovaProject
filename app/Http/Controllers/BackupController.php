@@ -8,12 +8,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
 
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 class BackupController extends Controller
 {
     public function downloadBackup()
     {
+        Http::get('http://localhost:5000/update');
         $nameAsamblea = cache('asamblea')['name'];
         $asamblea = cache('asamblea');
 
