@@ -38,6 +38,15 @@ class Reports extends Component
     public $device0 = 0;
     public $device1 = 0;
 
+    public $options = [
+        'optionA' => '',
+        'optionB' => '',
+        'optionC' => '',
+        'optionD' => '',
+        'optionE' => '',
+        'optionF' => '',
+    ];
+
     public function mount()
     {
 
@@ -83,6 +92,16 @@ class Reports extends Component
         $this->questionIsCoefChart = (bool) $this->question->coefGraph;
         $this->questionIsValid = (bool) $this->question->isValid;
         $this->questionTitle = $this->question->title;
+
+
+        $this->options = [
+            'optionA' => $this->question->optionA,
+            'optionB' => $this->question->optionB,
+            'optionC' => $this->question->optionC,
+            'optionD' => $this->question->optionD,
+            'optionE' => $this->question->optionE,
+            'optionF' => $this->question->optionF,
+        ];
     }
     public function saveOrdenDia()
     {
@@ -125,6 +144,12 @@ class Reports extends Component
         $this->question->resultTxt = ($this->questionResultTxt) ? strtoupper($this->questionResultTxt) : null;
         $this->question->coefGraph = (bool) $this->questionIsCoefChart;
         $this->question->isValid = (bool) $this->questionIsValid;
+        $this->question->optionA = $this->options['optionA'];
+        $this->question->optionB = $this->options['optionB'];
+        $this->question->optionC = $this->options['optionC'];
+        $this->question->optionD = $this->options['optionD'];
+        $this->question->optionE = $this->options['optionE'];
+        $this->question->optionF = $this->options['optionF'];
         $this->question->save();
 
         session()->flash('success', 'Cambios Guardados');
@@ -178,7 +203,6 @@ class Reports extends Component
             }
             $hid_0 = $listDevices[0] == $value ? $listDevices[1] : $listDevices[0];
             $this->device0 = $hid_0;
-
         } catch (Throwable $th) {
         }
     }

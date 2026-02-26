@@ -3,7 +3,7 @@
     <x-alerts />
     <div class="mt-5">
         <div class="row ">
-            <p class="text-center mb-0 form-control form-control-plaintext p-0 small">NOVA 1.2
+            <p class="text-center mb-0 form-control form-control-plaintext p-0 small">NOVA 1.3
             </p>
         </div>
         <div class="row d-flex justify-content-center align-items-center ">

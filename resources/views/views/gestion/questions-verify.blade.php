@@ -20,8 +20,7 @@
 
 
                     @foreach ($questions as $q)
-                        <tr
-                            class="list-group-item list-group-item-action d-flex  @if ($q->id == $question->id) active @endif"
+                        <tr class="list-group-item list-group-item-action d-flex  @if ($q->id == $question->id) active @endif"
                             wire:click='selectQuestion({{ $q->id }})'>
                             <td class="text-end align-middle me-1">{{ $q->id }}</td>
                             <td class="ps-1 lines-text-2">{{ $q->title }}</td>
@@ -42,8 +41,8 @@
                             <div class="row mb-2">
                                 <div class="col-12">
 
-                                    <textarea type="text" class="form-control " placeholder="Titulo"
-                                        wire:model='questionTitle' name="title" id="resultValue">
+                                    <textarea type="text" class="form-control " placeholder="Titulo" wire:model='questionTitle' name="title"
+                                        id="resultValue">
                                     </textarea>
                                 </div>
                             </div>
@@ -52,11 +51,11 @@
                                     <input type="hidden" name="question_id" value="{{ $question->id }}" id="resultId">
                                     <input type="text" class="form-control " placeholder="Resultado"
                                         wire:model='questionResultTxt' name="result" id="resultValue"
-                                        @readonly($question->type==1 || $question->type==5)>
+                                        @readonly($question->type == 1 || $question->type == 5)>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-3">
+                            <div class="d-flex align-items-center px-2 mb-2 justify-content-between">
+                                <div class="w-auto">
                                     <div class="btn-group" role="group">
                                         <input type="radio" class="btn-check" name="radioCoef" value="0"
                                             wire:model='questionIsCoefChart' id="radioNom">
@@ -68,7 +67,7 @@
                                         <label class="btn btn-outline-primary" for="radioCoef">Coeficiente</label>
                                     </div>
                                 </div>
-                                <div class="col-4 d-flex align-items-center">
+                                <div class="w-auto d-flex align-items-center">
                                     <div class="form-check form-check-reverse form-switch">
                                         <input class="form-check-input scaled-switch-15 " type="checkbox"
                                             wire:model='questionIsValid' id="reverseCheck1">
@@ -77,7 +76,7 @@
                                         </label>
                                     </div>
                                 </div>
-                                <div class="col-2 offset-3 d-flex justify-content-end">
+                                <div class="w-auto d-flex justify-content-end">
                                     <button type="submit" class="btn btn-success" wire:click='setQuestionsVerified'>
                                         Guardar
                                     </button>
@@ -85,85 +84,96 @@
                             </div>
 
 
+
+
+                            <div class="row px-2">
+
+
+                                <table class="table table-bordered">
+                                    <thead class="table-active">
+                                        <tr>
+                                            <th>Descripcion</th>
+                                            <th>Votos</th>
+                                            <th>Coeficiente</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @php
+                                            $options = [
+                                                'optionA',
+                                                'optionB',
+                                                'optionC',
+                                                'optionD',
+                                                'optionE',
+                                                'optionF',
+                                            ];
+
+                                        @endphp
+                                        @foreach ($options as $op)
+                                            @if ($question[$op])
+                                                <tr>
+                                                    <td>
+                                                        <input type="text" id="{{ $op }}" name="{{$op}}" class="form-control form-control-sm"
+                                                             wire:model="options.{{ $op }}" @readonly($question->type !=2 && $question->type != 6) >
+                                                    </td>
+                                                    <td>
+                                                        {{ $question->resultNom ? $question->resultNom[$op] : 'Sin resultado' }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $question->resultCoef ? $question->resultCoef[$op] : 'Sin resultado' }}
+                                                    </td>
+                                                </tr>
+                                            @endif
+                                        @endforeach
+
+                                        <tr>
+                                            <td>
+                                                {{ 'Abstencion' }}
+                                            </td>
+                                            <td>
+                                                {{ $question->resultNom ? $question->resultNom['abstainted'] : 'Sin resultado' }}
+                                            </td>
+                                            <td>
+                                                {{ $question->resultCoef ? $question->resultCoef['abstainted'] : 'Sin resultado' }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                {{ 'Ausente' }}
+                                            </td>
+                                            <td>
+                                                {{ $question->resultNom ? $question->resultNom['absent'] : 'Sin resultado' }}
+                                            </td>
+                                            <td>
+                                                {{ $question->resultCoef ? $question->resultCoef['absent'] : 'Sin resultado' }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                {{ 'Nulos' }}
+                                            </td>
+                                            <td>
+                                                {{ $question->resultNom ? $question->resultNom['nule'] : 'Sin resultado' }}
+                                            </td>
+                                            <td>
+                                                {{ $question->resultCoef ? $question->resultCoef['nule'] : 'Sin resultado' }}
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="table-active">
+                                            <th class="text-end">Total:</th>
+                                            <th>{{ $question->resultNom ? $question->resultNom['total'] : 'Sin resultado' }}
+                                            </th>
+                                            <th>{{ $question->resultCoef ? $question->resultCoef['total'] : 'Sin resultado' }}
+                                            </th>
+                                        </tr>
+                                    </tfoot>
+
+                                </table>
+                            </div>
                         </form>
-
-                        <div class="row px-2">
-
-
-                            <table class="table table-bordered">
-                                <thead class="table-active">
-                                    <tr>
-                                        <th>Descripcion</th>
-                                        <th>Votos</th>
-                                        <th>Coeficiente</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @php
-                                        $options = ['optionA', 'optionB', 'optionC', 'optionD', 'optionE', 'optionF'];
-
-                                    @endphp
-                                    @foreach ($options as $op)
-                                        @if ($question[$op])
-                                            <tr>
-                                                <td>
-                                                    {{ $question[$op] }}
-                                                </td>
-                                                <td>
-                                                    {{ $question->resultNom ? $question->resultNom[$op] : 'Sin resultado' }}
-                                                </td>
-                                                <td>
-                                                    {{ $question->resultCoef ? $question->resultCoef[$op] : 'Sin resultado' }}
-                                                </td>
-                                            </tr>
-                                        @endif
-                                    @endforeach
-
-                                    <tr>
-                                        <td>
-                                            {{ 'Abstencion' }}
-                                        </td>
-                                        <td>
-                                            {{ $question->resultNom ? $question->resultNom['abstainted'] : 'Sin resultado' }}
-                                        </td>
-                                        <td>
-                                            {{ $question->resultCoef ? $question->resultCoef['abstainted'] : 'Sin resultado' }}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            {{ 'Ausente' }}
-                                        </td>
-                                        <td>
-                                            {{ $question->resultNom ? $question->resultNom['absent'] : 'Sin resultado' }}
-                                        </td>
-                                        <td>
-                                            {{ $question->resultCoef ? $question->resultCoef['absent'] : 'Sin resultado' }}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            {{ 'Nulos' }}
-                                        </td>
-                                        <td>
-                                            {{ $question->resultNom ? $question->resultNom['nule'] : 'Sin resultado' }}
-                                        </td>
-                                        <td>
-                                            {{ $question->resultCoef ? $question->resultCoef['nule'] : 'Sin resultado' }}
-                                        </td>
-                                    </tr>
-
-                                </tbody>
-                                <tfoot>
-                                    <tr class="table-active">
-                                        <th class="text-end">Total:</th>
-                                        <th>{{ $question->resultNom ? $question->resultNom['total'] : 'Sin resultado' }}</th>
-                                        <th>{{ $question->resultCoef ? $question->resultCoef['total'] : 'Sin resultado' }}</th>
-                                    </tr>
-                                </tfoot>
-
-                            </table>
-                        </div>
                         <div class="row">
                             @if ($question->resultCoef && $question->resultNom)
                                 <div class="col-6 text-center">
