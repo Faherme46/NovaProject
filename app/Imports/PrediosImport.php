@@ -28,7 +28,7 @@ class PrediosImport implements ToModel, WithHeadingRow
             'numeral1' => ($row['numeral1']&&$row['numeral1']!='-')?$row['numeral1']:'',
             'descriptor2' => $row['descriptor2'],
             'numeral2' => $row['numeral2'],
-            'coeficiente' => round($row['coeficiente'],5),
+            'coeficiente' => round($row['coeficiente'],3),
             'vota' => !$row['novota'],
             'group'=> (array_key_exists('grupo', $row))?$row['grupo']:null,
         ];

@@ -181,7 +181,7 @@ class QuestionController extends Controller
         foreach ($this->options as $option) {
             if ($this->question->$option !== null) {
                 $labels[] = $this->question->$option;
-                $values[] = round($result->$option,5);
+                $values[] = round($result->$option,3);
             }
         }
         $six = count($labels) == 6;
@@ -206,7 +206,7 @@ class QuestionController extends Controller
 
         foreach ($additionalOptions as $key => $label) {
             $labels[] = $label;
-            $values[] =  round($result->$key,5);
+            $values[] =  round($result->$key,3);
             
         }
 

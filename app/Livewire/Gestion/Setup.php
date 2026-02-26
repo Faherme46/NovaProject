@@ -49,27 +49,57 @@ class Setup extends Component
             'id' => '6'
 
         ],
+        
         [
             'color' => 'Vinotinto',
             'rgb' => '#842029',
             'id' => '7'
 
         ],
+        [
+            'color' => 'Cian Oscuro',
+            'rgb' => 'rgb(5.2, 80.8, 96)',
+            'id' => '8'
 
+        ],
+        [
+            'color' => 'Coral Oscuro',
+            'rgb' => '#8e003d',
+            'id' => '9'
+
+        ],
+        [
+            'color' => 'Verde Oscuro',
+            'rgb' => '#002d02',
+            'id' => '10'
+
+        ],
+        [
+            'color' => 'Gris',
+            'rgb' => '#343a40',
+            'id' => '11'
+
+        ],
+        [
+            'color' => 'Negro',
+            'rgb' => '#000000',
+            'id' => '12'
+
+        ],
 
     ];
 
     public $selectedQuestion =
     [
         'id' => 0,
-        'title'=>'',
-        'optionA'=>'',
-        'optionB'=>'',
-        'optionC'=>'',
-        'optionD'=>'',
-        'optionE'=>'',
-        'optionF'=>'',
-        'type'=>2
+        'title' => '',
+        'optionA' => '',
+        'optionB' => '',
+        'optionC' => '',
+        'optionD' => '',
+        'optionE' => '',
+        'optionF' => '',
+        'type' => 2
     ];
     public $questionsPrefab;
     public $questionTypes;
@@ -81,7 +111,7 @@ class Setup extends Component
         2 => 'Preguntas Prediseñadas'
     ];
 
-    public $options=['optionA', 'optionB', 'optionC', 'optionD', 'optionE', 'optionF', ];
+    public $options = ['optionA', 'optionB', 'optionC', 'optionD', 'optionE', 'optionF',];
 
     public function mount()
     {
@@ -110,16 +140,16 @@ class Setup extends Component
     public function setQuestion($questionId)
     {
         $question = QuestionsPrefab::find($questionId);
-        $this->selectedQuestion=[
+        $this->selectedQuestion = [
             'id' => $question->id,
-            'title'=>$question->title,
-            'optionA'=>$question->optionA,
-            'optionB'=>$question->optionB,
-            'optionC'=>$question->optionC,
-            'optionD'=>$question->optionD,
-            'optionE'=>$question->optionE,
-            'optionF'=>$question->optionF,
-            'type'=>$question->type
+            'title' => $question->title,
+            'optionA' => $question->optionA,
+            'optionB' => $question->optionB,
+            'optionC' => $question->optionC,
+            'optionD' => $question->optionD,
+            'optionE' => $question->optionE,
+            'optionF' => $question->optionF,
+            'type' => $question->type
         ];
         $this->dispatch('$refresh');
         $this->dispatch('set-question', question: $this->selectedQuestion);
@@ -128,62 +158,59 @@ class Setup extends Component
     public function newQuestion()
     {
         $this->reset('selectedQuestion');
-
-
     }
     public function deleteQuestion()
     {
-        $idQuestion=$this->selectedQuestion['id'];
+        $idQuestion = $this->selectedQuestion['id'];
         QuestionsPrefab::destroy($idQuestion);
         $this->reset('selectedQuestion');
         $this->dispatch('$refresh');
         $this->dispatch('close-delete-modal');
-        session()->flash('success','Prtgunta Eliminada');
+        session()->flash('success', 'Prtgunta Eliminada');
     }
 
-    public function changeType($type){
+    public function changeType($type)
+    {
 
-        $types=[
-            '1'=>[],
-            '2'=>[],
-            '3'=>['optionD'=>'APROBADO','optionE'=>'APROBADO'],
-            '4'=>['optionA'=>'Si','optionB'=>'NO'],
-            '5'=>['optionA'=>'VOTO PUBLICO','optionB'=>'VOTO PRIVADO']
+        $types = [
+            '1' => [],
+            '2' => [],
+            '3' => ['optionD' => 'APROBADO', 'optionE' => 'APROBADO'],
+            '4' => ['optionA' => 'Si', 'optionB' => 'NO'],
+            '5' => ['optionA' => 'VOTO PUBLICO', 'optionB' => 'VOTO PRIVADO']
         ];
         foreach ($this->options as $op) {
-            $this->selectedQuestion[$op]='';
+            $this->selectedQuestion[$op] = '';
         }
-        foreach ($types[$type] as $key=> $option) {
-            $this->selectedQuestion[$key]=$option;
+        foreach ($types[$type] as $key => $option) {
+            $this->selectedQuestion[$key] = $option;
         }
-        $this->selectedQuestion['type']=$type;
+        $this->selectedQuestion['type'] = $type;
     }
 
-    public function storeQuestion(){
-        if(!$this->selectedQuestion['title']){
-            $this->addError('error','La pregunta debe tener un titulo');
+    public function storeQuestion()
+    {
+        if (!$this->selectedQuestion['title']) {
+            $this->addError('error', 'La pregunta debe tener un titulo');
         };
 
-        
-        $this->selectedQuestion['coefGraph']=1;
-        try {
-            if($this->selectedQuestion['id']!=0){
-                $id=$this->selectedQuestion['id'];
-                array_diff($this->selectedQuestion, array('id'));
-                QuestionsPrefab::where('id',$id)->update($this->selectedQuestion);
-                session()->flash('success','Pregunta actualizada con exito');
-            }else{
-                $question=QuestionsPrefab::create($this->selectedQuestion);
-            if($question){
-                session()->flash('success','Pregunta creada con exito');
-            }
-            }
 
+        $this->selectedQuestion['coefGraph'] = 1;
+        try {
+            if ($this->selectedQuestion['id'] != 0) {
+                $id = $this->selectedQuestion['id'];
+                array_diff($this->selectedQuestion, array('id'));
+                QuestionsPrefab::where('id', $id)->update($this->selectedQuestion);
+                session()->flash('success', 'Pregunta actualizada con exito');
+            } else {
+                $question = QuestionsPrefab::create($this->selectedQuestion);
+                if ($question) {
+                    session()->flash('success', 'Pregunta creada con exito');
+                }
+            }
         } catch (\Throwable $th) {
-            $this->addError('error','Error al crear la pregunta: '.$th->getMessage());
+            $this->addError('error', 'Error al crear la pregunta: ' . $th->getMessage());
         }
         $this->reset('selectedQuestion');
     }
-
-
 }

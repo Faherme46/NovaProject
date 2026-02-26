@@ -110,7 +110,51 @@
                 }
             </style>
         @break
-
+@case(8)
+            <link rel="stylesheet" href="{{ asset('assets/scss/darkcyan.css') }}">
+            <style>
+                :root {
+                    --first-color: #00192d;
+                    --first-color-light: #009dc1;
+                }
+            </style>
+        @break
+        @case(9)
+            <link rel="stylesheet" href="{{ asset('assets/scss/darkcoral.css') }}">
+            <style>
+                :root {
+                    --first-color: #750033;
+                    --first-color-light: #ff0088;
+                }
+            </style>
+        @break
+        @case(10)
+            <link rel="stylesheet" href="{{ asset('assets/scss/darkgreen.css') }}">
+            <style>
+                :root {
+                    --first-color: #002d02;
+                    --first-color-light: #52b65c;
+                }
+            </style>
+        @break
+        @case(11)
+            <link rel="stylesheet" href="{{ asset('assets/scss/gray.css') }}">
+            <style>
+                :root {
+                    --first-color: #2d2f32;
+                    --first-color-light: #8b8b8b;
+                }
+            </style>
+        @break
+        @case(12)
+            <link rel="stylesheet" href="{{ asset('assets/scss/black.css') }}">
+            <style>
+                :root {
+                    --first-color: #2d2929;
+                    --first-color-light: #7e7e7e;
+                }
+            </style>
+        @break
 
         @default
     @endswitch

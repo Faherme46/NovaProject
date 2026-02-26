@@ -57,11 +57,11 @@
                             </tr>
                             <tr>
                                 <td class="text-end">Quorum Registrado:</td>
-                                <td class="text-start">{{ round($values['quorumTotal'], 6) }}</td>
+                                <td class="text-start">{{ round($values['quorumTotal'], 3) }}</td>
                             </tr>
                             <tr>
                                 <td class="text-end">Quorum Presente:</td>
-                                <td class="text-start">{{ round($values['quorumPresente'], 6) }}</td>
+                                <td class="text-start">{{ round($values['quorumPresente'], 3) }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -131,8 +131,8 @@
                                             </p>
                                         @endforeach
                                     </td>
-                                    <td>{{ round($control->sum_coef, 6) }}</td>
-                                    <td>{{ round($control->sum_coef_can, 6) }}</td>
+                                    <td>{{ round($control->sum_coef, 3) }}</td>
+                                    <td>{{ round($control->sum_coef_can, 3) }}</td>
                                     <td>
                                         <span
                                             class="badge p-1 fs-6 {{ $colors[$control->state] }}">{{ $control->getStateTxt() }}</span>

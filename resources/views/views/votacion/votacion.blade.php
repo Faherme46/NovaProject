@@ -12,7 +12,7 @@
                     <div class="card-header d-flex align-items-center py-3 ">
 
                         <div class="dropdown me-2">
-                            <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                            <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
                                 aria-expanded="false">
                                 Preguntas
                             </button>

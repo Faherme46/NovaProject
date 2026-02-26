@@ -45,7 +45,6 @@
                     </div>
                     <div class="col-2  pe-3 justify-content-end d-flex">
                         <img src="/storage/images/loguito.png" style="width: 3.5rem;" alt="logo">
-                        <img src="/storage/images/letras.png" style="width: 10.5rem;" alt="logo">
                     </div>
                 </div>
                 <div class="card-body d-flex justify-content-center">
