@@ -15,7 +15,12 @@ class BackupController extends Controller
 {
     public function downloadBackup()
     {
-        Http::get('http://localhost:5000/update');
+        try {
+            Http::get('http://localhost:5000/update');
+        } catch (\Throwable $th) {
+            session()->flash('error', 'Error Al obtener la respuesta del servidor de python: ');
+        }
+        
         $nameAsamblea = cache('asamblea')['name'];
         $asamblea = cache('asamblea');
 

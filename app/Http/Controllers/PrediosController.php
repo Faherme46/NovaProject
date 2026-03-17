@@ -41,9 +41,9 @@ class PrediosController extends Controller
 
         if (cache('asamblea')['registro']) {
             $request->validate(['propietario' => ['required']], ['propietario.required' => 'El id del propietario es requerido']);
-            $propietario=Persona::find($request->input('propietario'));
-            if(!$propietario){
-                return back()->with('error','El propietario no esta registrado en la base de datos');
+            $propietario = Persona::find($request->input('propietario'));
+            if (!$propietario) {
+                return back()->with('error', 'El propietario no esta registrado en la base de datos');
             }
         }
 
@@ -53,9 +53,9 @@ class PrediosController extends Controller
             $predio = Predio::create([
                 'coeficiente' => $coef,
                 'votos' => $request->votos,
-                'descriptor1' => ($request->descriptor1)?$request->descriptor1:'',
-                'descriptor2' => ($request->descriptor2)?$request->descriptor2:'',
-                'numeral1' => ($request->numeral1)?$request->numeral1:'',
+                'descriptor1' => ($request->descriptor1) ? $request->descriptor1 : '',
+                'descriptor2' => ($request->descriptor2) ? $request->descriptor2 : '',
+                'numeral1' => ($request->numeral1) ? $request->numeral1 : '',
                 'numeral2' => $request->numeral2,
                 'vota' => (bool) $request->vota
             ]);
@@ -109,7 +109,7 @@ class PrediosController extends Controller
         }
     }
 
-    
+
     public function export($route = null)
     {
         $asambleaName = cache('asamblea')['name'];
@@ -132,19 +132,23 @@ class PrediosController extends Controller
 
     public function repairPredios()
     {
-        
+
         $asamblea =  cache('asamblea');
 
         if (!$asamblea) {
             return redirect()->route('home')->with('error', 'No existe una asamblea');
         }
         $controles = Control::all();
+        $numPredios = 0;
+        $coefPredios = 0;
         foreach ($controles as $control) {
 
             if (strtotime($asamblea->h_inicio) < strtotime($control->h_entrega)) {
                 $control->predios()->update(['quorum_start' => false]);
             } else {
                 $control->predios()->update(['quorum_start' => true]);
+                $numPredios += $control->predios_total;
+                $coefPredios += $control->sum_coef;
             };
             if (strtotime($asamblea->h_fin) < strtotime($control->h_recibe)) {
                 $control->predios()->update(['quorum_end' => true]);
@@ -152,8 +156,9 @@ class PrediosController extends Controller
                 $control->predios()->update(['quorum_end' => false]);
             };
         }
+        cache(['predios_init' =>  $numPredios]);
+        cache(['quorum_init' => $coefPredios]);
 
-        
         $predios = Predio::whereNotNull('control_id')->get();
         try {
             foreach ($predios as $predio) {
@@ -171,15 +176,15 @@ class PrediosController extends Controller
         cache(['prepared' => true]);
         return back()->with('success', 'Se han preparado los predios');
     }
-    public function exportPrediosControles(){
+    public function exportPrediosControles()
+    {
         try {
             $asambleaName = cache('asamblea')['name'];
-            $prediosControlExport= new PrediosControlExport();
+            $prediosControlExport = new PrediosControlExport();
             Excel::store($prediosControlExport, $asambleaName . '/Tablas/predios_controles.xlsx', 'externalAsambleas');
             return back()->with('success', 'Archivo exportado correctamente');
         } catch (\Throwable $th) {
             return back()->with('error', $th->getMessage());
         }
-        
     }
 }

@@ -85,6 +85,7 @@ class LiderSetup extends Component
                 \Illuminate\Support\Facades\Log::channel('custom')->notice('Se Inicia la asamblea', ['HORA' => $time]);
                 session()->flash('info', 'Se ha iniciado la asamblea en: ' . $time);
             } else {
+                \Illuminate\Support\Facades\Log::channel('custom')->notice('Ya se establecio el inicio en: ' . $this->asamblea->h_inicio);
                 session()->flash('warning', 'Ya se establecio el inicio en: ' . $this->asamblea->h_inicio);
             }
         } catch (\Exception $e) {
