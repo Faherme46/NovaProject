@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Votacion;
 
+
+
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 
@@ -315,7 +317,7 @@ class Votacion extends Component
             $this->addError('error', 'El numero de plazas no es valido');
         }
         $controlesRegistrados = Control::whereNot('state', 4)->get();
-        $quorum = $controlesRegistrados->sum('sum_coef  ');
+        $quorum = $controlesRegistrados->sum('sum_coef');
         if ($controlesRegistrados->isEmpty()) {
             $this->addError('error', 'No se han registrado asistentes');
             $error = 1;
@@ -354,6 +356,16 @@ class Votacion extends Component
                 'seconds' => $seconds,
                 'type' => $this->questionType
             ]);
+
+            
+            if(!$question || $question == null){
+
+                $this->addError('error', 'Error al crear la pregunta');
+                return;
+            }
+            
+
+
 
             if ($this->plancha) {
                 Plancha::create(['question_id' => $question->id, 'plazas' => $this->plazas]);

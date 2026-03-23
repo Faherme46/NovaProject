@@ -44,14 +44,16 @@ def hello_world():
 @app.route('/run-votes', methods=['GET'])
 def run_script():
     global processList
-    numControls = request.args.get('numControls', '400')  
+    numControls = request.args.get('numControls', '400')
     serialHid1 = request.args.get('hid_1', '0')
     serialHid0 = request.args.get('hid_0', '0')
+    controlsNum = int(numControls) if numControls.isdigit() else 400
+        
     if processList[0] is None or processList[0].poll() is not None:
     
         try:
             # Inicia el script en segundo plano
-            if numControls>'400':
+            if controlsNum > 400:
                 if serialHid1 != '0' and serialHid0 != '0':
                     process1=subprocess.Popen(['python', 'votes.py', numControls, serialHid0])
                     process2=subprocess.Popen(['python', 'votes_400.py', numControls, serialHid1])
@@ -63,9 +65,9 @@ def run_script():
             else:
                 process1=subprocess.Popen(['python', 'votes.py', numControls])
                 processList=[process1]
-            return jsonify({"status": "Success","message":"Proceso ejecutado"}), 200
+            return jsonify({"status": "Success","message":"Procesos ejecutados"}), 200
         except Exception as e:
-            return jsonify({"status": "Error", "message": str(e)}), 500
+            return jsonify({"status": "Error", "message": str(e) }), 500
 
     try:
         # Inicia el script en segundo plano

@@ -2,6 +2,9 @@
 
 namespace App\Livewire\Votacion;
 
+error_reporting(E_ALL);
+error_log("error_log.txt");
+
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 
@@ -61,21 +64,26 @@ class PresentQuestion extends Component
         }
         $response = $this->handleVoting('run-votes', $args);
         if (!$response) {
-            return session()->flash('error', 'Problemas para conectar al servidor python');
+            
+            return redirect()->route('votacion')->with('error', 'Problemas para conectar al servidor python');
         }
-        $this->reset('inVoting', 'seconds', 'countdown', 'votes', 'inCoefResult', 'votes',);
+        $this->reset('inVoting', 'seconds', 'countdown', 'votes', 'inCoefResult', 'votes');
         $this->step = 1;
         // $this->question = Question::find(19);
-        if (!$this->question) {
+
+        if (!$this->question || $this->question == null) {
 
             $this->question = Question::find($questionId);
             $this->isPlancha = $plancha;
 
             $this->setSizePresentation();
-            if (!$this->question) {
+            if (!$this->question || $this->question == null) {
+                \Illuminate\Support\Facades\Log::channel('custom')->info('Se Inicia una votacionnnnnnn');
                 return redirect()->route('votacion')->with('error', 'La pregunta no fue encontrada');
             }
         }
+
+
         $this->newTitle = $this->question->title;
         $this->controls = Control::all()->pluck('id')->toArray();
         $this->inCoefResult = $this->question->coefGraph;
