@@ -14,6 +14,7 @@ use App\Models\Predio;
 use setasign\Fpdi\Fpdi;
 use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Storage;
 use setasign\Fpdi\PdfParser\StreamReader;
 
 class ReportController extends Controller
@@ -26,7 +27,7 @@ class ReportController extends Controller
     public $predios;
     public function __construct()
     {
-        ini_set('memory_limit', '1024M');
+        ini_set('memory_limit', '2048M');
         $this->variables['date'] = Carbon::now()->locale('es')->isoFormat('MMMM YYYY');
         $this->variables['quorum'] = Control::whereNotIn('state', [4])->sum('sum_coef');
         $this->asamblea = Asamblea::find(cache('asamblea')['id_asamblea']);
@@ -34,22 +35,22 @@ class ReportController extends Controller
         $meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
         $dateString = $date[2] . ' de ' . $meses[(int)$date[1] - 1] . ' de ' . $date[0];
         // $this->predios = Predio::where('id', '<', 177)->get();
-        $this->predios = Predio::with(['personas','apoderado'])->get()->map(function ($predio) {
+        $this->predios = Predio::with(['personas', 'apoderado'])->get()->map(function ($predio) {
             return [
                 'id' => $predio->id,
                 'nombre' => $predio->getFullName(),
-                'numeral1'=>$predio->numeral1,
-                'numeral2'=>$predio->numeral2,
-                'control_id'=>$predio->control_id,
-                'coeficiente'=>$predio->coeficiente,
-                'personas' => $predio->personas->map(function($persona){
-                    return ['id'=>$persona->id,'nombre'=>$persona->fullName()];
+                'numeral1' => $predio->numeral1,
+                'numeral2' => $predio->numeral2,
+                'control_id' => $predio->control_id,
+                'coeficiente' => $predio->coeficiente,
+                'personas' => $predio->personas->map(function ($persona) {
+                    return ['id' => $persona->id, 'nombre' => $persona->fullName()];
                 })->toArray(),
                 'apoderado' => $predio->apoderado ? $predio->apoderado->toArray() : null,
-                'quorum_start'=>$predio->quorum_start,
-                'quorum_end'=>$predio->quorum_end,
-                'h_entrega'=>($predio->control)?$predio->control->h_entrega:false,
-                'h_recibe'=>($predio->control)?$predio->control->h_recibe:false,
+                'quorum_start' => $predio->quorum_start,
+                'quorum_end' => $predio->quorum_end,
+                'h_entrega' => ($predio->control) ? $predio->control->h_entrega : false,
+                'h_recibe' => ($predio->control) ? $predio->control->h_recibe : false,
             ];
         })->toArray();
 
@@ -79,7 +80,7 @@ class ReportController extends Controller
             if (!cache('inRegistro')) {
 
                 $response = $this->exportQuestions();
-                if ($response->getStatusCode()!=200) {
+                if ($response->getStatusCode() != 200) {
                     return redirect()->route('gestion.report')->with('error', $response->getContent());
                 }
                 $this->variables += [
@@ -88,27 +89,27 @@ class ReportController extends Controller
                 $this->createDocument('index-votacion');
             } else {
 
-                $response=$this->exportPersonas();
-                if ($response->getStatusCode()==500) {
+                $response = $this->exportPersonas();
+                if ($response->getStatusCode() == 500) {
                     return redirect()->route('gestion.report')->with('error', $response->getContent());
-                } else if ($response->getStatusCode()==423) {
-                    return redirect()->route('gestion.report')->with('error', 'Error exportando el archivo: "'.$response->getContent().'". Verifique que no se este usando');
-                }else if($response->getStatusCode()!=200){
+                } else if ($response->getStatusCode() == 423) {
+                    return redirect()->route('gestion.report')->with('error', 'Error exportando el archivo: "' . $response->getContent() . '". Verifique que no se este usando');
+                } else if ($response->getStatusCode() != 200) {
                     return redirect()->route('gestion.report')->with('error', 'Error desconocido');
                 }
                 $anexos = ($this->asamblea->ordenDia) ?
-                [
-                    'Listado de Personas Citadas a la Asamblea ',
-                    'Asistencia Para Quorum',
-                    'Listado Total de Participantes en la Asamblea',
-                    'Orden del Día',
-                    'Informe Resultado de Votaciones'
-                ] : [
-                    'Listado de Personas Citadas a la Asamblea ',
-                    'Asistencia Para Quorum',
-                    'Listado Total de Participantes en la Asamblea',
-                    'Informe Resultado de Votaciones'
-                ];
+                    [
+                        'Listado de Personas Citadas a la Asamblea ',
+                        'Asistencia Para Quorum',
+                        'Listado Total de Participantes en la Asamblea',
+                        'Orden del Día',
+                        'Informe Resultado de Votaciones'
+                    ] : [
+                        'Listado de Personas Citadas a la Asamblea ',
+                        'Asistencia Para Quorum',
+                        'Listado Total de Participantes en la Asamblea',
+                        'Informe Resultado de Votaciones'
+                    ];
                 $this->variables['anexos'] = $anexos;
                 $this->createDocument('index-registro');
                 $this->variables['index'] = 0;
@@ -119,7 +120,7 @@ class ReportController extends Controller
                 $this->createDocument('participantes-asamblea');
                 $this->variables['index'] = 3;
 
-                if($this->asamblea->ordenDia){
+                if ($this->asamblea->ordenDia) {
                     $this->variables['ordenDia'] = json_decode($this->asamblea->ordenDia, false);
                     $this->createDocument('orden-dia');
                 }
@@ -133,15 +134,11 @@ class ReportController extends Controller
                 mkdir($filePath, 0755, true);
             }
             $output = $this->mergePdf();
-            $fileController->exportPdf($this->asamblea->name . '/Informe/Informe.pdf', $output);
-
-
-            return response($output, 200)
-                ->header('Content-Type', 'application/pdf')
-                ->header('Content-Disposition', 'inline; filename="Informe.pdf"');
+            ini_set('memory_limit', '1024M');
+            return redirect()->route('gestion.report')->with('success', 'Informe generado correctamente');
         } catch (\Throwable $th) {
 
-            return redirect()->route('gestion.report')->with('error',$th->getMessage());
+            return redirect()->route('gestion.report')->with('error', $th->getMessage());
         }
     }
     public function createDocument($name)
@@ -155,39 +152,58 @@ class ReportController extends Controller
             'isPhpEnabled' => true,
         ]);
         $fileController = new FileController();
+        $relativePath = $this->asamblea->name . '/Informe/' . $name . '.pdf';
+        $fullPath = Storage::disk('externalAsambleas')->path($relativePath);
         $pdf->setPaper('A4', 'portrait');
-        $fileController->exportPdf($this->asamblea->name . '/Informe/'.$name.'.pdf', $pdf->output());
-        $this->docs[$name] = $pdf->output();
+        // 👉 SOLO UNA VEZ
+        $output = $pdf->output();
+        $fileController->exportPdf($relativePath, $output);
+        $this->docs[$name] = $fullPath;
+
+        // 👉 liberar memoria
+        unset($pdf, $output);
+        gc_collect_cycles();
     }
     function mergePdf()
     {
         // Crear una nueva instancia de FPDI
         $pdf = new Fpdi();
-
+        $bandera = 0;
         // Recorrer el array de PDFs
-        foreach ($this->docs as $pdfStr) {
+        foreach ($this->docs as $pdfUrl) {
+
+
+
+            $pageCount = $pdf->setSourceFile($pdfUrl);
             // Añadir una nueva página para cada PDF
-            $pageCount = $pdf->setSourceFile(StreamReader::createByString($pdfStr));
 
-            for ($i = 1; $i <= $pageCount; $i++) {
-                // Importar cada página del PDF
-                $templateId = $pdf->importPage($i);
-                $pdf->AddPage();
+            for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
 
-                // Usar la plantilla (imported page)
-                $pdf->useTemplate($templateId);
+                $template = $pdf->importPage($pageNo);
+                $size = $pdf->getTemplateSize($template);
+
+                $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
+                $pdf->useTemplate($template);
             }
+
+            // 👉 liberar por cada archivo
+            unset($template);
         }
+        $fileController = new FileController();
+        $fileController->exportPdf($this->asamblea->name . '/Informe/Informe.pdf', $pdf->Output('S'));
 
+        unset($pdf);
+        gc_collect_cycles();
 
-        return $pdf->output('S');
+        $finalPath = Storage::disk('externalAsambleas')->path($this->asamblea->name . '/Informe/Informe.pdf');
+        return $finalPath;
     }
 
     public function exportQuestions()
     {
         $asambleaName = cache('asamblea')['name'];
         $export4 = new QuestionsExport($this->questions);
-        $responseExcel4= Excel::store($export4, $asambleaName . '/Informe/Votaciones.xlsx', 'externalAsambleas');
+        $responseExcel4 = Excel::store($export4, $asambleaName . '/Informe/Votaciones.xlsx', 'externalAsambleas');
         if (!$responseExcel4) {
             return response()->json('Votaciones.xlsx', 423);
         }
@@ -204,13 +220,13 @@ class ReportController extends Controller
             if (!$responseExcel1) {
                 return response()->json('Personas_citadas.xlsx', 423);
             }
-            $prediosQuorum=Predio::where('quorum_start',true)->whereNotNull('control_id')->get();
+            $prediosQuorum = Predio::where('quorum_start', true)->whereNotNull('control_id')->get();
             $export2 = new AsistenciaQuorum($prediosQuorum, 1);
             $responseExcel2 = Excel::store($export2, $asambleaName . '/Informe/Asistencia_Quorum.xlsx', 'externalAsambleas');
             if (!$responseExcel2) {
                 return response()->json('Asistencia_Quorum.xlsx', 423);
             }
-            $prediosQuorum=Predio::whereNotNull('control_id')->get();
+            $prediosQuorum = Predio::whereNotNull('control_id')->get();
             $export3 = new AsistenciaQuorum($predios, 1);
             $responseExcel3 = Excel::store($export3, $asambleaName . '/Informe/Asistencia_Total.xlsx', 'externalAsambleas');
             if (!$responseExcel3) {
@@ -220,10 +236,7 @@ class ReportController extends Controller
 
             return response()->json(['success' => 'Archivos Exportados correctamente'], 200);
         } catch (\Throwable $th) {
-            return response()->json('Falla en la exportacion de excel: '.$th->getMessage(), 500);
+            return response()->json('Falla en la exportacion de excel: ' . $th->getMessage(), 500);
         }
     }
-
-
-
 }
