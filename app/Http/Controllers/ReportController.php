@@ -33,7 +33,7 @@ class ReportController extends Controller
         $this->asamblea = Asamblea::find(cache('asamblea')['id_asamblea']);
         $date = explode('-', $this->asamblea->fecha);
         $meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-        $dateString = $date[2] . ' de ' . $meses[(int)$date[1] - 1] . ' de ' . $date[0];
+        $dateString = $date[2] . ' de ' . $meses[(int) $date[1] - 1] . ' de ' . $date[0];
         // $this->predios = Predio::where('id', '<', 177)->get();
         $this->predios = Predio::with(['personas', 'apoderado'])->get()->map(function ($predio) {
             return [
@@ -212,20 +212,26 @@ class ReportController extends Controller
     }
     public function exportPersonas()
     {
+        $state = "";
         $asambleaName = cache('asamblea')['name'];
         $predios = Predio::with('personas')->with('apoderado')->get();
         try {
+            $state = "1";
             $export1 = new PersonasCitadas($predios);
+            $state = "1.1";
             $responseExcel1 = Excel::store($export1, $asambleaName . '/Informe/Personas_citadas.xlsx', 'externalAsambleas');
+            $state = "1.2";
             if (!$responseExcel1) {
                 return response()->json('Personas_citadas.xlsx', 423);
             }
+            $state = "2";
             $prediosQuorum = Predio::where('quorum_start', true)->whereNotNull('control_id')->get();
             $export2 = new AsistenciaQuorum($prediosQuorum, 1);
             $responseExcel2 = Excel::store($export2, $asambleaName . '/Informe/Asistencia_Quorum.xlsx', 'externalAsambleas');
             if (!$responseExcel2) {
                 return response()->json('Asistencia_Quorum.xlsx', 423);
             }
+            $state = "3";
             $prediosQuorum = Predio::whereNotNull('control_id')->get();
             $export3 = new AsistenciaQuorum($predios, 1);
             $responseExcel3 = Excel::store($export3, $asambleaName . '/Informe/Asistencia_Total.xlsx', 'externalAsambleas');
@@ -236,7 +242,7 @@ class ReportController extends Controller
 
             return response()->json(['success' => 'Archivos Exportados correctamente'], 200);
         } catch (\Throwable $th) {
-            return response()->json('Falla en la exportacion de excel: ' . $th->getMessage(), 500);
+            return response()->json('Falla en la exportacion de excel : ' . $th->getMessage() , 500);
         }
     }
 }

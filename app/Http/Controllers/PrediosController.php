@@ -133,7 +133,7 @@ class PrediosController extends Controller
     public function repairPredios()
     {
 
-        $asamblea =  cache('asamblea');
+        $asamblea = cache('asamblea');
 
         if (!$asamblea) {
             return redirect()->route('home')->with('error', 'No existe una asamblea');
@@ -149,14 +149,23 @@ class PrediosController extends Controller
                 $control->predios()->update(['quorum_start' => true]);
                 $numPredios += $control->predios_total;
                 $coefPredios += $control->sum_coef;
-            };
-            if (strtotime($asamblea->h_fin) < strtotime($control->h_recibe)) {
+            }
+            ;
+
+
+            if (strtotime($asamblea->h_cierre) < strtotime($control->h_recibe)) {
                 $control->predios()->update(['quorum_end' => true]);
             } else {
-                $control->predios()->update(['quorum_end' => false]);
-            };
+                if ($control->h_recibe == null && $control->state == '1') {
+                    $control->update(['h_recibe' => ($asamblea->h_cierre)]);
+                    $control->predios()->update(['quorum_end' => true]);
+                }else{
+                    $control->predios()->update(['quorum_end' => false]);
+                    }
+            }
+            ;
         }
-        cache(['predios_init' =>  $numPredios]);
+        cache(['predios_init' => $numPredios]);
         cache(['quorum_init' => $coefPredios]);
 
         $predios = Predio::whereNotNull('control_id')->get();

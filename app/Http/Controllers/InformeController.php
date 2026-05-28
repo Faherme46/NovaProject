@@ -26,7 +26,7 @@ class InformeController extends Controller
     public $predios;
     public function __construct()
     {
-        
+
         $this->variables['date'] = Carbon::now()->locale('es')->isoFormat('MMMM YYYY');
 
         $this->asamblea = Asamblea::find(cache('asamblea')['id_asamblea']);
@@ -82,7 +82,7 @@ class InformeController extends Controller
             $this->variables += [
                 'anexos' => $anexos,
             ];
-            
+
             $this->variables['torres'] = Torre::with('candidatos')->get()->toArray();
             foreach ($this->variables['torres'] as $key=> $torre) {
                 $this->variables['torres'][$key]['coefTotal'] = Control::where('vote', $torre['name'])->sum('sum_coef');
@@ -202,12 +202,12 @@ class InformeController extends Controller
             if (!$responseExcel4) {
                 return response()->json('Votos_publicos.xlsx', 423);
             }
-            
+
 
 
             return response()->json(['success' => 'Archivos Exportados correctamente'], 200);
         } catch (\Throwable $th) {
-            return response()->json('Falla en la exportacion de excel: ' . $th->getMessage(), 500);
+            return response()->json('Fallo en la exportacion de excel: ' . $th->getMessage(), 500);
         }
     }
 }
