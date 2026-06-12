@@ -1,4 +1,4 @@
-<div class="">
+    <div class="">
     <x-alerts />
     <div class="row mt-3 g-3 w-100">
         <div class="col-8 align-items-center ">
@@ -16,7 +16,7 @@
                                 aria-expanded="false">
                                 Preguntas
                             </button>
-                            <ul class="dropdown-menu">
+                            <ul class="dropdown-menu dropdown-scroll">
                                 @foreach ($questionsPrefab as $question)
                                     <li>
                                         <a class="dropdown-item d-flex align-items-center
@@ -24,7 +24,12 @@
                                             wire:click='setQuestion({{ $question->id }})'>{{ $question->title }}</a>
                                     </li>
                                 @endforeach
-
+                                <hr class="dropdown-divider">
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center" wire:click='setQuestionExpand()'>
+                                        Selección Extendida
+                                    </a>
+                                </li>
                             </ul>
                         </div>
 
@@ -79,14 +84,15 @@
                                 @disabled(!$isQuestion) wire:model.number.live='questionCoefChart'>
                             <label class="btn btn-outline-primary" for="radioCoef">Coeficiente</label>
                         </div>
-                        <div class="form-check form-switch mb-0 align-items-center ">
+                        {{-- <div class="form-check form-switch mb-0 align-items-center ">
 
                             <input class="form-check-input scaled-switch-15 me-2" type="checkbox" role="switch"
                                 id="switchBlanco" wire:model.change='questionWhite' @disabled(!$questionType || $questionType == 1 || $questionType == 5)>
                             <label class="form-check-label fw-bolder fs-5 ms-3" for="switchBlanco">En blanco</label>
-                        </div>
+                        </div> --}}
                     </div>
-                    <div class="card-body d-flex p-0">
+                    <div class="card-body  p-0 tab-pane fade {{ $isSelExt == 1 || $isSelExt == 0 ? 'show active' : '' }}"
+                        id="tab-ronda1" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
                         <table class="table table-bordered mb-0">
                             <tr>
                                 <td class="text-center p-0">
@@ -94,9 +100,9 @@
                                         value="A" disabled>
                                 </td>
                                 <td class="py-0">
-                                    <input type="text" class="custom-input  resettable w-100" id="optionA" maxlength='254'
-                                        wire:model.live='questionOptions.A' rows="1"
-                                        @readonly(!in_array($questionType, [2, 6])||in_array('optionA',$blockFields))>
+                                    <input type="text" class="custom-input  resettable w-100" id="optionA"
+                                        maxlength='254' wire:model.live='questionOptions.A' rows="1"
+                                        @readonly(!in_array($questionType, [2, 6]) || in_array('optionA', $blockFields))>
                                     </input>
                                 </td>
                             </tr>
@@ -107,8 +113,7 @@
                                 </th>
                                 <td class="py-0">
                                     <input type="text" class="custom-input  resettable w-100" id="optionB"
-                                        wire:model.live='questionOptions.B' max="2"
-                                        @readonly(!in_array($questionType, [2, 6])||in_array('optionB',$blockFields))>
+                                        wire:model.live='questionOptions.B' max="2" @readonly(!in_array($questionType, [2, 6]) || in_array('optionB', $blockFields))>
                                     </input>
                                 </td>
                             </tr>
@@ -119,8 +124,7 @@
                                 </th>
                                 <td class="py-0">
                                     <input type="text" class="custom-input  resettable w-100" id="optionC"
-                                        wire:model.live='questionOptions.C' max="2"
-                                        @readonly(!in_array($questionType, [2, 6])||in_array('optionC',$blockFields))>
+                                        wire:model.live='questionOptions.C' max="2" @readonly(!in_array($questionType, [2, 6]) || in_array('optionC', $blockFields))>
                                     </input>
                                 </td>
                             </tr>
@@ -131,8 +135,7 @@
                                 </th>
                                 <td class="py-0">
                                     <input type="text" class="custom-input resettable w-100" id="optionD"
-                                        wire:model.live='questionOptions.D' max="2"
-                                        @readonly(!in_array($questionType, [2, 6])||in_array('optionD',$blockFields))></input>
+                                        wire:model.live='questionOptions.D' max="2" @readonly(!in_array($questionType, [2, 6]) || in_array('optionD', $blockFields))></input>
                                 </td>
                             </tr>
                             <tr>
@@ -142,8 +145,7 @@
                                 </th>
                                 <td class="py-0">
                                     <input type="text" class="custom-input  resettable w-100" id="optionE"
-                                        wire:model.live='questionOptions.E' max="2"
-                                        @readonly(!in_array($questionType, [2, 6])||in_array('optionE',$blockFields))></input>
+                                        wire:model.live='questionOptions.E' max="2" @readonly(!in_array($questionType, [2, 6]) || in_array('optionE', $blockFields))></input>
                                 </td>
                             </tr>
                             <tr>
@@ -153,16 +155,230 @@
                                 </th>
                                 <td class="py-0">
                                     <input type="text" class="custom-input w-100 resettable w-100" id="optionF"
-                                        wire:model.live='questionOptions.F' max="2"
-                                        @readonly(!in_array($questionType, [2, 6])||in_array('optionF',$blockFields))
+                                        wire:model.live='questionOptions.F' max="2" @readonly(!in_array($questionType, [2, 6]) || in_array('optionF', $blockFields))
                                         wire:keydown='disableWhite'></input>
                                 </td>
                             </tr>
                         </table>
-
                     </div>
 
+                    <div class="card-body p-0 tab-pane fade {{ $isSelExt == 2 ? 'show active' : '' }}" id="tab-ronda2"
+                        role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+                    <table class="table table-bordered mb-0">
+                            <tr>
+                                <td class="text-center p-0">
+                                    <input type="text" class="custom-input text-center " size="1"
+                                        value="A" disabled>
+                                </td>
+                                <td class="py-0">
+                                    <input type="text" class="custom-input  resettable w-100" id="option2A"
+                                        maxlength='254' wire:model.live='questionOptionsRondas.2.A' rows="1">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-center p-0">
+                                    <input type="text" class="custom-input text-center text-center" size="1"
+                                        value="B" disabled>
+                                </th>
+                                <td class="py-0">
+                                    <input type="text" class="custom-input  resettable w-100" id="option2B"
+                                        wire:model.live='questionOptionsRondas.2.B' max="2">
+                                    </input>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-center p-0">
+                                    <input type="text" class="custom-input text-center " size="1"
+                                        value="C" disabled>
+                                </th>
+                                <td class="py-0">
+                                    <input type="text" class="custom-input  resettable w-100" id="option2C"
+                                        wire:model.live='questionOptionsRondas.2.C' max="2" >
+                                    </input>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-center p-0">
+                                    <input type="text" class="custom-input text-center " size="1"
+                                        value="D" disabled>
+                                </th>
+                                <td class="py-0">
+                                    <input type="text" class="custom-input resettable w-100" id="option2D"
+                                        wire:model.live='questionOptionsRondas.2.D' max="2" >
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-center p-0">
+                                    <input type="text" class="custom-input text-center" size="1"
+                                        value="E" disabled>
+                                </th>
+                                <td class="py-0">
+                                    <input type="text" class="custom-input  resettable w-100" id="option2E"
+                                        wire:model.live='questionOptionsRondas.2.E' max="2">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-center p-0">
+                                    <input type="text" class="custom-input text-center " size="1"
+                                        value="F" disabled>
+                                </th>
+                                <td class="py-0">
+                                    <input type="text" class="custom-input w-100 resettable w-100" id="option2F"
+                                        wire:model.live='questionOptionsRondas.2.F' max="2"
+                                        wire:keydown='disableWhite'></input>
+                                </td>
+                            </tr>
+                        </table></div>
+                    <div class="card-body p-0 tab-pane fade {{ $isSelExt == 3 ? 'show active' : '' }}" id="tab-ronda3"
+                        role="tabpanel" aria-labelledby="contact-tab" tabindex="0" >
+                    <table class="table table-bordered mb-0">
+                            <tr>
+                                <td class="text-center p-0">
+                                    <input type="text" class="custom-input text-center " size="1"
+                                        value="A" disabled>
+                                </td>
+                                <td class="py-0">
+                                    <input type="text" class="custom-input  resettable w-100" id="option3A"
+                                        maxlength='254' wire:model.live='questionOptionsRondas.3.A' rows="1">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-center p-0">
+                                    <input type="text" class="custom-input text-center text-center" size="1"
+                                        value="B" disabled>
+                                </th>
+                                <td class="py-0">
+                                    <input type="text" class="custom-input  resettable w-100" id="option3B"
+                                        wire:model.live='questionOptionsRondas.3.B' max="2">
+                                    </input>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-center p-0">
+                                    <input type="text" class="custom-input text-center " size="1"
+                                        value="C" disabled>
+                                </th>
+                                <td class="py-0">
+                                    <input type="text" class="custom-input  resettable w-100" id="option3C"
+                                        wire:model.live='questionOptionsRondas.3.C' max="2" >
+                                    </input>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-center p-0">
+                                    <input type="text" class="custom-input text-center " size="1"
+                                        value="D" disabled>
+                                </th>
+                                <td class="py-0">
+                                    <input type="text" class="custom-input resettable w-100" id="option3D"
+                                        wire:model.live='questionOptionsRondas.3.D' max="2" >
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-center p-0">
+                                    <input type="text" class="custom-input text-center" size="1"
+                                        value="E" disabled>
+                                </th>
+                                <td class="py-0">
+                                    <input type="text" class="custom-input  resettable w-100" id="option3E"
+                                        wire:model.live='questionOptionsRondas.3.E' max="2">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-center p-0">
+                                    <input type="text" class="custom-input text-center " size="1"
+                                        value="F" disabled>
+                                </th>
+                                <td class="py-0">
+                                    <input type="text" class="custom-input w-100 resettable w-100" id="option3F"
+                                        wire:model.live='questionOptionsRondas.3.F' max="2"
+                                        wire:keydown='disableWhite'></input>
+                                </td>
+                            </tr>
+                        </table></div>
+                    <div class="card-body p-0 tab-pane fade {{ $isSelExt == 4 ? 'show active' : '' }}" id="tab-ronda4"
+                        role="tabpanel" aria-labelledby="disabled-tab" tabindex="0" >
+                    <table class="table table-bordered mb-0">
+                            <tr>
+                                <td class="text-center p-0">
+                                    <input type="text" class="custom-input text-center " size="1"
+                                        value="A" disabled>
+                                </td>
+                                <td class="py-0">
+                                    <input type="text" class="custom-input  resettable w-100" id="option4A"
+                                        maxlength='254' wire:model.live='questionOptionsRondas.4.A' rows="1">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-center p-0">
+                                    <input type="text" class="custom-input text-center text-center" size="1"
+                                        value="B" disabled>
+                                </th>
+                                <td class="py-0">
+                                    <input type="text" class="custom-input  resettable w-100" id="option4B"
+                                        wire:model.live='questionOptionsRondas.4.B' max="2">
+                                    </input>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-center p-0">
+                                    <input type="text" class="custom-input text-center " size="1"
+                                        value="C" disabled>
+                                </th>
+                                <td class="py-0">
+                                    <input type="text" class="custom-input  resettable w-100" id="option4C"
+                                        wire:model.live='questionOptionsRondas.4.C' max="2" >
+                                    </input>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-center p-0">
+                                    <input type="text" class="custom-input text-center " size="1"
+                                        value="D" disabled>
+                                </th>
+                                <td class="py-0">
+                                    <input type="text" class="custom-input resettable w-100" id="option4D"
+                                        wire:model.live='questionOptionsRondas.4.D' max="2" >
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-center p-0">
+                                    <input type="text" class="custom-input text-center" size="1"
+                                        value="E" disabled>
+                                </th>
+                                <td class="py-0">
+                                    <input type="text" class="custom-input  resettable w-100" id="option4E"
+                                        wire:model.live='questionOptionsRondas.4.E' max="2">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-center p-0">
+                                    <input type="text" class="custom-input text-center " size="1"
+                                        value="F" disabled>
+                                </th>
+                                <td class="py-0">
+                                    <input type="text" class="custom-input w-100 resettable w-100" id="option4F"
+                                        wire:model.live='questionOptionsRondas.4.F' max="2"
+                                        wire:keydown='disableWhite'></input>
+                                </td>
+                            </tr>
+                        </table></div>
                 </div>
+                @if ($isSelExt > 0)
+                    <div class="nav nav-tabs inverse border-0 flex-row justify-content-start" id="nav-tab"
+                        role="tablist">
+                        @for ($i = 1; $i < 5; $i++)
+                            <button class="nav-link border-primary-subtle {{ $isSelExt == $i ? 'active' : '' }}"
+                                id="nav-ronda{{ $i }}-tab" data-bs-toggle="tab"
+                                wire:click='loadRonda({{ $i }})'
+                                data-bs-target="#tab-ronda{{ $i }}" type="button" role="tab"
+                                aria-controls="nav-home" aria-selected="true">
+                                Ronda {{ $i }}
+                            </button>
+                        @endfor
+                    </div>
+                @endif
+
 
                 <div class="modal fade" tabindex="-1" id="modalPresentQuestion" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
@@ -202,14 +418,13 @@
                             </div>
                         </div>
                         @if ($plancha)
+                            <div class="card-body d-flex align-items-center justify-content-center">
+                                <div class="input-group">
+                                    <span class="input-group-text">Plazas</span>
+                                    <input type="number" step="1" class="form-control" wire:model='plazas'>
+                                </div>
 
-                        <div class="card-body d-flex align-items-center justify-content-center">
-                            <div class="input-group">
-                                <span class="input-group-text" >Plazas</span>
-                                <input type="number" class="form-control" wire:model='plazas'>
-                              </div>
-
-                        </div>
+                            </div>
                         @endif
                     </div>
                 @endif
@@ -339,10 +554,16 @@
 
         $wire.on('setWhite', (event) => {
             let id = event.myId
-            input = document.getElementById('option' + id);
-            console.log(id);
 
-            $wire.questionOptions[id] = 'En blanco'
+            if($wire.isSelExt > 1){
+                input = document.getElementById('option' + $wire.isSelExt + id);
+                $wire.questionOptionsRondas[$wire.isSelExt][id] = 'En blanco'
+            }else{
+                $wire.questionOptions[id] = 'En blanco'
+
+                input = document.getElementById('option' + id);
+            }
+
             input.value = 'En blanco'
         });
         $wire.on('setNone', (event) => {
@@ -351,5 +572,6 @@
             $wire.questionOptions[id] = ''
             input.value = null
         });
+
     </script>
 @endscript

@@ -41,7 +41,9 @@
                             id="title" style="font-size: {{ $sizeTitle }}rem;">
                             {{ $question->title }}
                         </h1>
-
+                        @if ($inRondas)
+                                <h4 class="mb-0 text-center text-primary">Ronda {{ $currentRonda }}</h4>
+                        @endif
                     </div>
                     <div class="col-2  pe-3 justify-content-end d-flex">
                         <img src="/storage/images/loguito.png" style="width: 3.5rem;" alt="logo">

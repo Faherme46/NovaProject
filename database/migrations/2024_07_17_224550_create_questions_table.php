@@ -27,9 +27,13 @@ return new class extends Migration
             $table->integer('seconds')->default(0);
             $table->string('resultTxt')->nullable();
             $table->boolean('coefGraph')->default(1);
+            $table->unsignedBigInteger('parent_id')->nullable();
+            $table->integer('idRonda')->nullable();
+
             $table->timestamps();
 
             $table->foreign('type')->references('id')->on('question_types');
+            $table->foreign('parent_id')->references('id')->on('questions');
         });
     }
 

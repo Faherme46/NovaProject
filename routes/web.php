@@ -75,7 +75,9 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
 
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Admin|Lider')]], function () {
 
-    Route::get('asambleas', LoadAsamblea::class)->name('asambleas')->middleware(    EnsureAsambleaOff::class)->withoutMiddleware(EnsureAsambleaOn::class);
+    Route::get('asambleas', LoadAsamblea::class)
+
+    ->name('asambleas')->middleware(    EnsureAsambleaOff::class)->withoutMiddleware(EnsureAsambleaOn::class);
     Route::get('asambleas/programar', ProgramarAsamblea::class)->name('asambleas.programar')->withoutMiddleware(EnsureAsambleaOn::class);
     Route::get('asambleas/load', [AsambleaController::class, 'loadAsambleas'])->name('asambleas.load')->withoutMiddleware(EnsureAsambleaOn::class)->middleware(EnsureAsambleaOff::class);
     Route::get('predios/export/controles', [PrediosController::class,'exportPrediosControles'])->name('predio.export.controles');
@@ -87,7 +89,7 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::get('gestion/asamblea', LiderSetup::class)->name('gestion.asamblea');
     Route::get('desterminar', [LiderSetup::class, 'desterminar'])->name('desterminar');
     Route::get('votacion', Votacion::class)->name('votacion')->middleware(isAsambleaEnd::class);
-    Route::get('questions/show/{questionId}/{plancha?}', PresentQuestion::class)->name('questions.show');
+    Route::get('questions/show/{questionId}/{plancha?}/{inRondas?}', PresentQuestion::class)->name('questions.show');
     Route::get('questions/view/{questionId}', ViewQuestion::class)->name('questions.view');
     Route::get('elecciones/programar', Programar::class)->name('elecciones.programar')->withoutMiddleware(EnsureAsambleaOn::class);
     Route::get('elecciones/gestion', Manager::class)->name('elecciones.gestion');
@@ -124,8 +126,8 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::get('elecciones/registrar', Registro::class)->name('elecciones.registrar');
     Route::get('elecciones/resultados', Resultados::class)->name('elecciones.resultados');
     Route::get('elecciones/terminales', Terminales::class)->name('elecciones.terminales');
-    
-    
+
+
     Route::get('asistencia/asignacion', Asignacion::class)->name('asistencia.asignacion')->middleware(isAsambleaEnd::class);
     Route::get('asistencia/firmas', Signs::class)->name('asistencia.signs')->middleware(isAsambleaEnd::class);
     Route::get('asistencia/firmando', Signing::class)->name('asistencia.signing')->middleware(isAsambleaEnd::class);
@@ -134,7 +136,7 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::get('consulta', Consulta::class)->name('consulta');
     Route::get('entregar', Entregar::class)->name('entregar');
     Route::get('quorum', QuorumFull::class)->name('quorum.show');
-    
+
     Route::post('gestion/saveSign', [FileController::class, 'saveSignImg'])->name('gestion.sign.save')->middleware(isAsambleaEnd::class);
 });
 //rutas para terminales

@@ -21,7 +21,7 @@ def connectHid(pid,vid):
         device.set_nonblocking(1)  # Configurar modo no bloqueante
         return device
 
-    except OSError as e: 
+    except OSError as e:
         print(f"Error al conectar con el dispositivo HID: {e} Reinicie el servicio")
         return False
 
@@ -48,9 +48,9 @@ def run_script():
     serialHid1 = request.args.get('hid_1', '0')
     serialHid0 = request.args.get('hid_0', '0')
     controlsNum = int(numControls) if numControls.isdigit() else 400
-        
+
     if processList[0] is None or processList[0].poll() is not None:
-    
+
         try:
             # Inicia el script en segundo plano
             if controlsNum > 400:
@@ -58,7 +58,7 @@ def run_script():
                     process1=subprocess.Popen(['python', 'votes.py', numControls, serialHid0])
                     process2=subprocess.Popen(['python', 'votes_400.py', numControls, serialHid1])
                     processList=[process1,process2]
-                    
+
                     return jsonify({"status": "Success","message":"Proceso ejecutado"}), 200
                 else:
                     return jsonify({"status": "Error", "message": "Faltan los seriales de los dispositivos HID para ejecutar con mas de 400 controles"}), 400
@@ -79,8 +79,8 @@ def run_script():
 
 @app.route('/verify-device', methods=['GET'])
 def verify_device():
-    vid = 4292  
-    pid = 6169  
+    vid = 4292
+    pid = 6169
     try:
         #obtener los seriales de los dispositivos HID desde los argumentos
         hid_0 = request.args.get('hid_0', '0')
@@ -276,12 +276,12 @@ def create_plot_elecciones(title,labels,values,output_path,nameAsamblea,delegado
     # Ajustar tamaño de la figura dinámicamente según la cantidad de datos
     fig, ax = plt.subplots(figsize=(14, 0.5 * len(labels) + 2))
     ax.set_xlim(0, limite_x)
-    
+
 
     # Crear gráfico de barras horizontales
     ax.barh(labels, values, color=colores, edgecolor='black', height=0.6)
 
-    
+
     # Agregar values al final de cada barra
     for i, v in enumerate(values):
         ax.text(v + limite_x  * 0.02, i, str(v), ha='left', va='center', fontsize=10, color='black')
@@ -323,9 +323,186 @@ def create_plot_elecciones(title,labels,values,output_path,nameAsamblea,delegado
 @app.route('/create-plot-elecciones',methods=['POST'])
 def createPlotElecciones():
     data = request.get_json()
-    
+
     create_plot_elecciones(data['title'], data['labels'], data['values'], data['output'],data['nameAsamblea'],data['delegados'],data['blanco'])
     return "200"
+
+
+def create_plot_rondas(data):
+
+    title = data['title']
+    output_path = data['output']
+    nameAsamblea = data['nameAsamblea']
+    candidatos = []
+
+
+
+    print(data['values'])
+    # Agregar candidatos de todas las rondas
+    candidatos = []
+    especiales = []
+
+    for ronda in data['values'].values():
+
+        for clave, valor in ronda.items():
+
+            item = {
+                'nombre': valor['name'],
+                'porcentaje': round(
+                    float(valor['value'])  ,
+                    2
+                )
+            }
+
+            if clave in ('abstainted', 'absent'):
+                especiales.append(item)
+            else:
+                candidatos.append(item)
+
+    # Ordenar únicamente los candidatos
+    candidatos.sort(
+        key=lambda x: x['porcentaje'],
+        reverse=True
+    )
+
+    # Agregar abstención y ausentes al final
+    candidatos.extend(especiales)
+
+    labels = [c['nombre'] for c in candidatos]
+    values = [c['porcentaje'] for c in candidatos]
+
+    # Evitar error si todos son 0
+    max_valor = max(values) if values else 100
+
+    # Margen del 10% a la derecha
+    limite_x = max(max_valor * 1.10, 10)
+
+    # Colores
+    colores = []
+
+    for label in labels:
+        if label == 'ABSTENCIÓN':
+            colores.append('#FFA500')  # naranja
+        elif label == 'AUSENTES':
+            colores.append('#808080')  # gris
+        else:
+            colores.append('#318CE7')  # azul
+
+    # Tamaño dinámico
+    fig, ax = plt.subplots(
+        figsize=(14, max(4, len(labels) * 0.6))
+    )
+
+    # Barras horizontales
+    barras = ax.barh(
+        labels,
+        values,
+        color=colores,
+        edgecolor='black',
+        height=0.6
+    )
+
+    # Mayor porcentaje arriba
+    ax.invert_yaxis()
+
+    # Eje X inicia en 0
+    ax.set_xlim(0, limite_x)
+
+    # Mostrar porcentaje al final de cada barra
+    for barra in barras:
+        ancho = barra.get_width()
+
+        ax.text(
+            ancho + (limite_x * 0.01),
+            barra.get_y() + barra.get_height() / 2,
+            f'{ancho:.2f}%',
+            ha='left',
+            va='center',
+            fontsize=10,
+            color='black'
+        )
+
+    # Ajustar posición del gráfico
+    ax.set_position([0.2, 0.1, 0.6, 0.8])
+
+    # Título
+    ax.set_title(
+        title.upper(),
+        fontsize=14,
+        loc='center'
+    )
+
+    # Marca de agua
+    try:
+        img = mpimg.imread(
+            'C:/xampp/htdocs/nova/scripts/nova.python/watermark2.png'
+        )
+
+        ax_img = fig.add_axes(
+            [0.87, 0.02, 0.12, 0.12],
+            zorder=0
+        )
+
+        ax_img.imshow(
+            img,
+            extent=[0, 10, 0, 10],
+            aspect='auto',
+            alpha=0.8
+        )
+
+        ax_img.axis('off')
+
+    except Exception:
+        pass
+
+    # Estilo
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+
+
+    ax.tick_params(
+        axis='both',
+        which='major',
+        labelsize=12
+    )
+
+    # Ajustar etiquetas largas
+    wrapped_labels = [
+        textwrap.fill(str(label)[:40], width=30)
+        for label in labels
+    ]
+
+    ax.set_yticks(range(len(labels)))
+    ax.set_yticklabels(
+        wrapped_labels,
+        fontsize=10
+    )
+
+    # Cuadrícula vertical
+    ax.grid(
+        axis='x',
+        linestyle='--',
+        alpha=0.4
+    )
+
+    plt.tight_layout()
+
+    plt.savefig(
+        output_path,
+        dpi=300,
+        bbox_inches='tight'
+    )
+
+    plt.close(fig)
+
+@app.route('/create-plot-rondas',methods=['POST'])
+def createPlotRondas():
+    data = request.get_json()
+
+    create_plot_rondas(data)
+
+    return "200"
+
 
 processDetect = None
 @app.route('/stop-detect', methods=['GET'])
@@ -348,8 +525,8 @@ def stop_script_detect():
 
 
 
-vid = 4292  
-pid = 6169  
+vid = 4292
+pid = 6169
 @app.route('/start-detect', methods=['GET'])
 def startDetect():
     global processDetect
@@ -357,12 +534,12 @@ def startDetect():
         # Ejecutar el script detectDevice.py y esperar respuesta
 
         listDevices=[]
-        for device in hid.enumerate(vid, pid):          
+        for device in hid.enumerate(vid, pid):
             listDevices.append(
                 {'name':device['product_string'],'vendor_id':device['vendor_id'],'product_id':device['product_id'],'path':device['path'].decode('utf-8'), 'serial':device['serial_number']})
-        
-        
-        
+
+
+
         return jsonify({"status": "Success", "message": "Detect iniciado", "devices": listDevices}), 200
     except Exception as e:
         return jsonify({"status": "Error", "message": str(e)}), 500

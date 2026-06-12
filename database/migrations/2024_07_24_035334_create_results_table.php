@@ -24,11 +24,13 @@ return new class extends Migration
             $table->double('abstainted');
             $table->double('absent');
             $table->double('nule');
+            $table->unsignedBigInteger('parent_id')->nullable();
             $table->boolean('isCoef');
             $table->string('chartPath')->nullable();
             $table->timestamps();
 
             $table->foreign('question_id')->references('id')->on('questions');
+            $table->foreign('parent_id')->references('id')->on('results');
         });
     }
 

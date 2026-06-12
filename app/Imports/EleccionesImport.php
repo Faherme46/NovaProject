@@ -23,13 +23,13 @@ class EleccionesImport implements ToModel, WithHeadingRow
         if ($row['candidato']) {
 
             if ($row['cc_propietario']) {
-                $persona = Persona::find($row['cc_propietario']);
+                $persona = Persona::find($row['cc_propietario'], ['*']);
             }
             if ($persona) {
                 $torre = Torre::where('name', $row['candidato'])->first();
                 // dd($row['candidato']);
                 if ($torre) {
-                    $torre->candidatos()->syncWithoutDetaching($persona->id);
+                    $torre->candidatos()->syncWithoutDetaching([$persona->id]);
                     $torre->save();
                 }
             }

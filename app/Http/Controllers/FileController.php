@@ -62,9 +62,14 @@ class FileController extends Controller
         return $asambleaFolderPath;
     }
 
-    public function getOnlyQuestionPath($questionId, $title): string
+    public function getOnlyQuestionPath($questionId, $title, $parent_id = null): string
     {
-        $questionName = ($questionId);
+        if ($parent_id) {
+            $questionName = ($parent_id);
+        } else {
+            $questionName = ($questionId);
+        }
+
         $parentFolderName = cache('asamblea')['name'];
         $newFolderPath = $parentFolderName . '/Preguntas/' . $questionName;
         return $newFolderPath;
@@ -121,11 +126,11 @@ class FileController extends Controller
         }
     }
 
-    public function exportVotes( $questionId, $title)
+    public function exportVotes( $questionId, $title,$parent_id=null)
     {
-        $path = $this->getOnlyQuestionPath($questionId, $title);
+        $path = $this->getOnlyQuestionPath($questionId, $title, $parent_id);
         $export = new VotesExport();
-        Excel::store($export, $path . '/votos.xlsx', 'externalAsambleas');
+        Excel::store($export, $path . '/votos_' .( $parent_id?($questionId-$parent_id+1):'' ) . '.xlsx', 'externalAsambleas');
         return;
     }
 

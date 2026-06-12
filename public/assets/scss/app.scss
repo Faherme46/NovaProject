@@ -2,9 +2,6 @@
 @import url('./_tables.scss');
 @import url('../fonts/fonts.css');
 
-
-
-
 *,
 ::before,
 ::after {
@@ -74,13 +71,10 @@ a {
     color: var(--white-color-txt);
 }
 
-
-
 .bx {
     font-size: 20px !important;
     cursor: pointer !important;
 }
-
 
 .nav_logo,
 .nav_link {
@@ -132,11 +126,9 @@ a {
     color: var(--white-color-txt)
 }
 
-
 .height-100 {
     padding-top: 1rem;
 }
-
 
 @media screen and (min-width: 768px) {
 
@@ -166,18 +158,13 @@ a {
         padding-left: calc(var(--nav-width) ) !important
     }
 
-
 }
 
 @media screen {
 
-
-
-
     .body-pd {
         padding-left: 0 !important
     }
-
 
 }
 
@@ -294,8 +281,6 @@ a {
     /* Aumenta el tamaño al pasar el cursor */
 }
 
-
-
 .w-5 {
     width: 5% !important;
 }
@@ -348,7 +333,6 @@ a {
     width: 95% !important;
 }
 
-
 .non-disabled {
     pointer-events: none;
     /* Evita la interacción del usuario */
@@ -372,8 +356,34 @@ a {
     border-bottom: 3px solid var(--black-color);
 }
 
-
 .pointer{
     cursor: pointer !important;
 }
 
+.dropdown-scroll {
+    max-height: 50vh;
+    overflow-y: auto;
+}
+
+.nav-link.active{
+    background-color: var(--first-color) !important;
+    color: var(--white-color-txt) !important;
+}
+.nav-tabs.inverse .nav-link {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: var(--bs-nav-tabs-border-radius);
+    border-bottom-right-radius: var(--bs-nav-tabs-border-radius);
+    border-bottom: 1px solid !important;
+    margin-bottom: 0px  !important;
+}
+
+.tab-pane:not(.show) {
+    display: none;
+    height: 0;
+    overflow-y: hidden;
+}
+
+.underline {
+    text-decoration: underline !important;
+}

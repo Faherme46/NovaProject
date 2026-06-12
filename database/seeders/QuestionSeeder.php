@@ -17,10 +17,12 @@ class QuestionSeeder extends Seeder
     {
         QuestionType::create(['name' => 'Quórum']);
         QuestionType::create(['name' => 'Seleccion']);
+
         QuestionType::create(['name' => 'Aprobacion']);
         QuestionType::create(['name' => 'SI/NO']);
         QuestionType::create(['name' => 'TD']);
         QuestionType::create(['name' => 'Plancha']);
+        
 
         QuestionsPrefab::create([
             'title' => 'Aprobacion de estados Financieros',
@@ -62,7 +64,7 @@ class QuestionSeeder extends Seeder
             'optionF' => '',
             'type' => 3
         ]);
-        
+
         QuestionsPrefab::create([
             'title' => 'Aprobacion del Acta',
            'optionA' => '',
@@ -93,7 +95,7 @@ class QuestionSeeder extends Seeder
             'optionF' => '',
             'type' => 2
         ]);
-        
+
         QuestionsPrefab::create([
             'title' => 'Comite de Verificación del Acta',
             'optionA' => '',

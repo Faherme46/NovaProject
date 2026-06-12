@@ -29,8 +29,14 @@ class Votacion extends Component
         'E' => '',
         'F' => '',
     ];
+    public $questionOptionsRondas = [
+        2 => ['A' => '', 'B' => '', 'C' => '', 'D' => '', 'E' => '', 'F' => ''],
+        3 => ['A' => '', 'B' => '', 'C' => '', 'D' => '', 'E' => '', 'F' => ''],
+        4 => ['A' => '', 'B' => '', 'C' => '', 'D' => '', 'E' => '', 'F' => '']
+    ];
 
     public $plancha = false;
+
     public $plazas = 0;
     public $numPlazasPlancha = 0;
     public $questionType = 0;
@@ -46,8 +52,9 @@ class Votacion extends Component
     public $controlsRegistered = 0;
     public $controlsVote = 0;
     public $quorumVote = 0;
-    public $quorumRegistered = 0;
 
+    public $quorumRegistered = 0;
+    public $isSelExt = 0;
     public $mins = 2;
     public $secs = 0;
     public $blockFields = [
@@ -63,7 +70,8 @@ class Votacion extends Component
         $this->questionsPrefab = QuestionsPrefab::all();
         $this->getValues();
         $this->questionTitle = '';
-        $this->stopIfVoting();
+        //FIXEND
+            $this->stopIfVoting();
     }
 
     #[Layout('layout.full-page')]
@@ -76,16 +84,16 @@ class Votacion extends Component
 
     public function getValues()
     {
-        $this->prediosRegistered = Control::whereIn('state', [1, 2])
+        $this->prediosRegistered = Control::whereIn('state', [1])
             ->withCount('predios')
             ->get()
             ->sum('predios_count');
 
-        $this->prediosVote = Control::whereIn('state', [1, 2])->sum('predios_vote');
-        $this->controlsRegistered = Control::whereIn('state', [1, 2])->count();
+        $this->prediosVote = Control::whereIn('state', [1])->sum('predios_vote');
+        $this->controlsRegistered = Control::whereIn('state', [1])->count();
         $this->controlsVote = Control::where('sum_coef_can', '!=', 0)->count();
-        $this->quorumVote = round(Control::whereNotIn('state', [4])->sum('sum_coef_can'), 3);
-        $this->quorumRegistered = round(Control::whereNotIn('state', [4])->sum('sum_coef'), 3);
+        $this->quorumVote = round(Control::where('state', 1)->sum('sum_coef_can'), 3);
+        $this->quorumRegistered = round(Control::where('state', 1)->sum('sum_coef'), 3);
     }
 
     public function setQuestion($questionId)
@@ -106,6 +114,30 @@ class Votacion extends Component
             'E' => $selectedQuestion->optionE,
             'F' => $selectedQuestion->optionF,
         ];
+        $this->isSelExt = 0;
+        $this->dispatch('$refresh');
+        $this->dispatch('setInputs');
+    }
+
+    public function setQuestionExpand()
+    {
+        $this->resetErrorBag();
+        $this->reset('questionWhite');
+
+        $this->isQuestion = true;
+        $this->questionTitle = "Elección extendida";
+        $this->questionId = "0";
+        $this->questionType = "2";
+        $this->questionCoefChart = 1;
+        $this->isSelExt = 1;
+        $this->questionOptions = [
+            'A' => "",
+            'B' => "",
+            'C' => "",
+            'D' => "",
+            'E' => "",
+            'F' => "",
+        ];
         $this->dispatch('$refresh');
         $this->dispatch('setInputs');
     }
@@ -123,7 +155,7 @@ class Votacion extends Component
         if ($this->questionWhite) {
             if (in_array($this->questionType, [2, 6, 7])) {
 
-                $id = $options[$count];
+                $id = $options[$count ? ($count - 1) : 0];
             } elseif ($this->questionType == 3) {
                 $id = 'F';
             } elseif ($this->questionType == 4) {
@@ -132,9 +164,18 @@ class Votacion extends Component
             $this->dispatch('setWhite', myId: $id);
         } else {
             if ($this->questionType == 2 || $this->questionType == 6) {
-                foreach ($this->questionOptions as $key => $value) {
-                    if ($value == 'En blanco') {
-                        $id = $key;
+                $id = '';
+                if ($this->isSelExt > 1) {
+                    foreach ($this->questionOptionsRondas[$this->isSelExt] as $key => $value) {
+                        if ($value == 'En blanco') {
+                            $id = $key;
+                        }
+                    }
+                } else {
+                    foreach ($this->questionOptions as $key => $value) {
+                        if ($value == 'En blanco') {
+                            $id = $key;
+                        }
                     }
                 }
             } elseif ($this->questionType == 3) {
@@ -270,6 +311,8 @@ class Votacion extends Component
             $this->addError('error', 'Ya hay una votacion en curso, por favor espere a que termine para iniciar una nueva');
             return;
         }
+
+        //FIXEND
         $asamblea = cache('asamblea');
         if ($asamblea['controles'] > 400) {
             if (cache('hid_0', 0) != 0 && cache('hid_1', 0) != 0) {
@@ -279,9 +322,11 @@ class Votacion extends Component
             }
         }
         $this->resetErrorBag();
-        if (!$this->verifyDevice()) {
-            return;
-        }
+        // if (!$this->verifyDevice()) {
+        //     return;
+        // }
+
+
         //Se requiere un titulo a la pregunta'
         $error = 0;
         if (!$this->questionTitle) {
@@ -304,17 +349,40 @@ class Votacion extends Component
         $questionsFiltered = array_filter($this->questionOptions, function ($valor) {
             return $valor !== null && $valor !== '';
         });
-        if (count($questionsFiltered) !== count(array_unique($questionsFiltered))) {
-            $this->addError('error', 'No pueden haber opciones iguales');
+        if (count($questionsFiltered) !== count(array_unique($questionsFiltered)) || count(array_unique($questionsFiltered))==1) {
+            $this->addError('error', 'Debe haber al menos dos opciones diferentes' );
             $error = 1;
         }
+        $rondasExtra = [];
+        if ($this->isSelExt > 0) {
+            foreach ($this->questionOptionsRondas as $key => $options) {
+                foreach ($options as $option) {
+                    if ($option) {
+                        $rondasExtra[$key] = $key;
+                    }
+                }
+                $questionsFiltered = array_filter($this->questionOptions, function ($valor) {
+                    return $valor !== null && $valor !== '';
+                });
+                if (count($questionsFiltered) !== count(array_unique($questionsFiltered))) {
+                    $this->addError('error', 'No puede haber opciones iguales en la ronda ' . $key);
+                    $error = 1;
+                }
+                if (count(array_unique($questionsFiltered))==1) {
+                    $this->addError('error', 'Debe haber al menos dos opciones diferentes en la ronda ' . $key);
+                    $error = 1;
+                }
+            }
+        }
+
 
         //si hay plancha se requiere el numero de plazas
         if ($this->plancha && !$this->plazas) {
-            $this->addError('error', 'Se requiere el numero de plazas');
+            $this->addError('error', 'Se requiere el número de plazas');
             $error = 1;
-        } elseif ($this->plazas < 0 || !is_int($this->plazas)) {
-            $this->addError('error', 'El numero de plazas no es valido');
+        } else if ($this->plazas < 0 || !filter_var($this->plazas, FILTER_VALIDATE_INT)) {
+            $this->addError('error', 'El número de plazas no es valido' );
+            $error = 1;
         }
         $controlesRegistrados = Control::whereNot('state', 4)->get();
         $quorum = $controlesRegistrados->sum('sum_coef');
@@ -338,7 +406,7 @@ class Votacion extends Component
         $newTitle = str_replace(['á', 'é', 'í', 'ó', 'ú'], ['Á', 'É', 'Í', 'Ó', 'U'], subject: $newTitle);
 
         try {
-            Control::query()->update(['vote' => null]);
+            Control::query()->update(['vote' => null, 'voted' => null]);
             $predios = Control::whereNot('state', 4)->sum('predios_total');
             $question = Question::create([
                 'title' => $newTitle,
@@ -348,39 +416,70 @@ class Votacion extends Component
                 'optionD' => ($this->questionOptions['D']) ? strtoupper(rtrim($this->questionOptions['D'])) : null,
                 'optionE' => ($this->questionOptions['E']) ? strtoupper(rtrim($this->questionOptions['E'])) : null,
                 'optionF' => ($this->questionOptions['F']) ? strtoupper(rtrim($this->questionOptions['F'])) : null,
-
+                'idRonda' => !empty($rondasExtra) ? 1 : null,
                 'isValid' => ($this->questionType == 6) ? 0 : 1,
-                'coefGraph' => (bool)$this->questionCoefChart,
+                'coefGraph' => (bool) $this->questionCoefChart,
                 'quorum' => $quorum,
                 'predios' => $predios,
                 'seconds' => $seconds,
                 'type' => $this->questionType
             ]);
-
-            
-            if(!$question || $question == null){
-
+            if (!$question || $question == null) {
                 $this->addError('error', 'Error al crear la pregunta');
                 return;
             }
-            
+
+            if (!empty($rondasExtra)) {
+                $i=1;
+                foreach ($rondasExtra as $id => $idRonda) {
+                    $i++;
+                    $questionRonda = Question::create([
+                        'title' => $newTitle,
+                        'optionA' => ($this->questionOptionsRondas[$idRonda]['A']) ? strtoupper(rtrim($this->questionOptionsRondas[$idRonda]['A'])) : null,
+                        'optionB' => ($this->questionOptionsRondas[$idRonda]['B']) ? strtoupper(rtrim($this->questionOptionsRondas[$idRonda]['B'])) : null,
+                        'optionC' => ($this->questionOptionsRondas[$idRonda]['C']) ? strtoupper(rtrim($this->questionOptionsRondas[$idRonda]['C'])) : null,
+                        'optionD' => ($this->questionOptionsRondas[$idRonda]['D']) ? strtoupper(rtrim($this->questionOptionsRondas[$idRonda]['D'])) : null,
+                        'optionE' => ($this->questionOptionsRondas[$idRonda]['E']) ? strtoupper(rtrim($this->questionOptionsRondas[$idRonda]['E'])) : null,
+                        'optionF' => ($this->questionOptionsRondas[$idRonda]['F']) ? strtoupper(rtrim($this->questionOptionsRondas[$idRonda]['F'])) : null,
+                        'parent_id' => $question->id,
+                        'idRonda' => $i,
+                        'isValid' => 0,
+                        'coefGraph' => (bool) $this->questionCoefChart,
+                        'quorum' => $quorum,
+                        'predios' => $predios,
+                        'seconds' => $seconds,
+                        'type' => $this->questionType
+                    ]);
+                    $rondasExtra[$id] = $questionRonda->id;
+                }
+            }
 
 
 
             if ($this->plancha) {
                 Plancha::create(['question_id' => $question->id, 'plazas' => $this->plazas]);
+                foreach ($rondasExtra as $id => $idRonda) {
+                    Plancha::create(['question_id' => $idRonda, 'plazas' => $this->plazas]);
+                }
             }
 
             $parametros = ['questionId' => $question->id];
+            $parametros['plancha'] = 0;
             if ($this->plancha) {
-                $parametros['plancha'] = $this->plancha;
+                $parametros['plancha'] = 1;
+            }
+            if(count($rondasExtra) > 0){
+                $parametros['inRondas'] = true;
+                $parametros['numRondas'] = count($rondasExtra)+1;
+                $parametros['mainQuestion'] =$question->id;
+                $parametros['currentQuestion'] = 1;
             }
             cache(['voting' => true], now()->addMinutes(30));
             \Illuminate\Support\Facades\Log::channel('custom')->info('Se Inicia una votacion', ['id' => $question->id, 'quorum' => $quorum, 'predios' => $predios]);
             return redirect()->route('questions.show', $parametros);
         } catch (Throwable $th) {
 
-            return $this->addError('questionCreate', $th->getMessage());
+            return $this->addError('questionCreate', 'x'. $th->getMessage() .PHP_EOL. $th->getFile() .'-->'.$th->getLine());
         }
     }
 
@@ -408,11 +507,12 @@ class Votacion extends Component
                 if ($response->status() != 200) {
                     $this->addError('Error', 'El dispositivo HID no se encontro conectado al servidor');
                     return false;
-                };
+                }
+                ;
             } else {
                 $hid_0 = cache('hid_0', 0);
                 $hid_1 = cache('hid_1', 0);
-                //enviar los hid como argumentos 
+                //enviar los hid como argumentos
                 $response = Http::get($pythonUrl . '/verify-device', [
                     'hid_0' => $hid_0,
                     'hid_1' => $hid_1
@@ -420,7 +520,8 @@ class Votacion extends Component
                 if ($response->status() != 200) {
                     $this->addError('Error', 'Los dispositivos HID no se encontraron conectados al servidor');
                     return false;
-                };
+                }
+                ;
             }
 
             return True;
@@ -429,7 +530,7 @@ class Votacion extends Component
         }
     }
 
-    public function  updatedPlancha($value)
+    public function updatedPlancha($value)
     {
         $this->plancha = $value;
         $this->questionOptions = [
@@ -460,4 +561,12 @@ class Votacion extends Component
         if ($this->questionType == 2) {
         }
     }
+
+    public function loadRonda($ronda)
+    {
+        $this->isSelExt = $ronda;
+
+    }
+
+
 }

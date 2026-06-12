@@ -26,7 +26,14 @@ return new class extends Migration
             $table->string('h_recibe')->nullable();//recibe el operario
             $table->string('t_publico')->default(0);
             $table->string('vote')->nullable();
+            $table->boolean('voted')->default(false);
             $table->timestamps();
+
+            $table->index('state');
+            $table->index('cc_asistente');
+            $table->index('vote');
+            $table->index('voted');
+
             $table->foreign('state')->references('id')->on('states');
             $table->foreign('cc_asistente')->references('id')->on('personas');
         });

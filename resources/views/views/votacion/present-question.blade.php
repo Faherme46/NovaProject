@@ -36,6 +36,7 @@
                         @if ($isEditting)
                             <textarea class="mb-0 text-uppercase  w-100 " style="font-size: {{ $sizeTitle }}rem;" wire:model="newTitle"></textarea>
                         @else
+
                             <h1 class="mb-0 text-uppercase text-center
                                 @if ($sizeTitle < 2) lines-text-4
                                 @elseif ($sizeTitle < 3) lines-text-3
@@ -43,6 +44,10 @@
                                 id="title" style="font-size: {{ $sizeTitle }}rem;">
                                 {{ $question->title }}
                             </h1>
+
+                           @if ($inRondas)
+                                <h4 class="mb-0 text-center text-primary">Ronda {{ $dataRondas['currentRonda'] }} de {{ $dataRondas['numRondas'] }}</h4>
+                            @endif
                         @endif
 
                     </div>
@@ -63,7 +68,7 @@
                             @disabled($isEditting)>
                             VOTAR
                         </button>
-                        
+
                     </div>
                 </div>
 

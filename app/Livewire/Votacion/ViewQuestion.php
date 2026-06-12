@@ -13,9 +13,13 @@ class ViewQuestion extends Component
     public $sizeOptions = 7;
     public $sizeHeads = 7;
     public $sizeTitle = 3.5;
+    public $inRondas = false;
+    public $currentRonda = 1;
     public $options = ['optionA', 'optionB', 'optionC', 'optionD', 'optionE', 'optionF'];
     public function mount($questionId){
         $this->question=Question::find($questionId);
+        $this->inRondas = request()->query('inRondas',false);
+        $this->currentRonda = request()->query('currentRonda',0);
         $this->setSizePresentation();
     }
 

@@ -12,7 +12,7 @@ class Question extends Model
     use HasFactory;
     protected $guarded = [];
 
-    
+
     public function resultCoef(){
         return $this->hasOne(Result::class)->where('isCoef',1);
     }
@@ -22,6 +22,14 @@ class Question extends Model
 
     public function results(){
         return $this->hasMany(Result::class);
+    }
+
+    public function rondas(){
+        return $this->hasMany(Question::class,'parent_id');
+    }
+
+    public function parent(){
+        return $this->belongsTo(Question::class,'parent_id');
     }
 
     public function getAvailableOptions(){

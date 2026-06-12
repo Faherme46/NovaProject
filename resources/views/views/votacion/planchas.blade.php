@@ -18,8 +18,7 @@
             <label class="btn btn-outline-primary" for="btnradio1">Nominal</label>
 
             <input type="radio" class="btn-check" wire:model.change='plazasCoef' value="1" id="btnradio2"
-             wire:change='updatePlazasCoef(1)'
-                checked>
+                wire:change='updatePlazasCoef(1)' checked>
             <label class="btn btn-outline-primary" for="btnradio2">Coeficiente</label>
         </div>
     </div>
@@ -49,7 +48,7 @@
 
                         <tr class="">
                             <td colspan="4" class="text-center">
-                                <h2 class="mb-0">COCIENTE ELECTORAL: {{$question->plancha['umbral']}}</h2>
+                                <h2 class="mb-0">COCIENTE ELECTORAL: {{ $question->plancha['umbral'] }}</h2>
                             </td>
                         </tr>
                         <tr class="table-active">
@@ -63,8 +62,15 @@
                                 <h1 class="mb-0">PLAZAS</h1>
                             </td>
                         </tr>
+                        @if ($inRondas)
+                            <tr class="">
+                                <td colspan="4" class="text-center text-primary">
+                                    <h2 class="mb-0">RONDA 1</h2>
+                                </td>
+                            </tr>
+                        @endif
                         @foreach ($options as $op)
-                            @if ($question['option' . $op] && $question['option' . $op]!=='EN BLANCO')
+                            @if ($question['option' . $op] && $question['option' . $op] !== 'EN BLANCO')
                                 <tr class=" p-0">
                                     <td class="bg-primary text-light text-center">
                                         <h1 class="mb-0  ">
@@ -77,7 +83,7 @@
                                         </h1>
                                     </td>
                                     <td class="text-center">
-                                        <h1 class="mb-0  ">{{ $resultToUse['option' . $op] }}</h1>
+                                        <h1 class="mb-0  ">{{ ($resultToUse['option' . $op])..( $inCoefResult?'%':'')  }}</h1>
                                     </td>
                                     <td class="text-center">
                                         <h1 class="mb-0  ">{{ $question->plancha['option' . $op] }}</h1>
@@ -85,7 +91,39 @@
                                 </tr>
                             @endif
                         @endforeach
-
+                        @if ($inRondas)
+                            @foreach ($rondasExtra as $ronda)
+                                <tr class="">
+                                <td colspan="4" class="text-center text-primary">
+                                    <h2 class="mb-0">RONDA {{ $ronda['idRonda'] }}</h2>
+                                </td>
+                            </tr>
+                                @foreach ($options as $op)
+                                    @if ($ronda['option' . $op] && $ronda['option' . $op] !== 'EN BLANCO')
+                                        <tr class=" p-0">
+                                            <td class="bg-primary text-light text-center">
+                                                <h1 class="mb-0  ">
+                                                    {{ $op }}
+                                                </h1>
+                                            </td>
+                                            <td class="text-center">
+                                                <h1 class="text-uppercase lines-text-2 mb-0 ">
+                                                    {{ $ronda['option' . $op] }}
+                                                </h1>
+                                            </td>
+                                            <td class="text-center">
+                                                <h1 class="mb-0">
+                                                    {{ ($inCoefResult?$ronda->resultCoef['option' . $op]:$ronda->resultNom['option' . $op]) .( $inCoefResult?'%':'') }}
+                                                </h1>
+                                            </td>
+                                            <td class="text-center">
+                                                <h2 class="mb-0  ">{{ $ronda->plancha['option' . $op] }} </h2>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                            @endforeach
+                        @endif
                     </tbody>
                     <tfoot>
                         <tr class="table-active">
@@ -94,7 +132,7 @@
                             </th>
                             <th class="text-center">
                                 <h1 class="mb-0">
-                                     {{$resultToUse['total']-$resultToUse['absent']-$resultToUse['abstainted']-$resultToUse['nule']}} 
+                                    {{ $resultToUse['total'] - $resultToUse['absent'] - $resultToUse['abstainted'] - $resultToUse['nule'] }}
                                 </h1>
                             </th>
                             <th class="text-center">

@@ -26,6 +26,10 @@ return new class extends Migration
             $table->boolean('quorum_end')->default(false);
             $table->unsignedBigInteger('cc_apoderado')->nullable();
             $table->timestamps();
+
+            $table->index('control_id');
+            $table->index('quorum_start');
+            $table->index('quorum_end');
             $table->foreign('cc_apoderado')->references('id')->on('personas');
             $table->foreign('control_id')->references('id')->on('controls');
         });
