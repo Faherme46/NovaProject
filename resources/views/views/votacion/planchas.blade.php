@@ -83,7 +83,7 @@
                                         </h1>
                                     </td>
                                     <td class="text-center">
-                                        <h1 class="mb-0  ">{{ ($resultToUse['option' . $op])..( $inCoefResult?'%':'')  }}</h1>
+                                        <h1 class="mb-0  ">{{ ($resultToUse['option' . $op])}}{{ ( $inCoefResult?'%':'')  }}</h1>
                                     </td>
                                     <td class="text-center">
                                         <h1 class="mb-0  ">{{ $question->plancha['option' . $op] }}</h1>

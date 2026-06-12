@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('h_recibe')->nullable();//recibe el operario
             $table->string('t_publico')->default(0);
             $table->string('vote')->nullable();
-            $table->boolean('voted')->default(false);
+            $table->boolean('voted')->nullable();
             $table->timestamps();
 
             $table->index('state');
