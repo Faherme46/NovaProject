@@ -380,7 +380,7 @@ class Votacion extends Component
         if ($this->plancha && !$this->plazas) {
             $this->addError('error', 'Se requiere el número de plazas');
             $error = 1;
-        } else if ($this->plazas < 0 || !filter_var($this->plazas, FILTER_VALIDATE_INT)) {
+        } else if ($this->plazas <) 0 || !filter_var($this->plazas, FILTER_VALIDATE_INT)) {
             $this->addError('error', 'El número de plazas no es valido' );
             $error = 1;
         }
