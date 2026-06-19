@@ -71,7 +71,7 @@ class Votacion extends Component
         $this->getValues();
         $this->questionTitle = '';
         //FIXEND
-            $this->stopIfVoting();
+        $this->stopIfVoting();
     }
 
     #[Layout('layout.full-page')]
@@ -349,8 +349,8 @@ class Votacion extends Component
         $questionsFiltered = array_filter($this->questionOptions, function ($valor) {
             return $valor !== null && $valor !== '';
         });
-        if (count($questionsFiltered) !== count(array_unique($questionsFiltered)) || count(array_unique($questionsFiltered))==1) {
-            $this->addError('error', 'Debe haber al menos dos opciones diferentes' );
+        if (count($questionsFiltered) !== count(array_unique($questionsFiltered)) || count(array_unique($questionsFiltered)) == 1) {
+            $this->addError('error', 'Debe haber al menos dos opciones diferentes');
             $error = 1;
         }
         $rondasExtra = [];
@@ -368,7 +368,7 @@ class Votacion extends Component
                     $this->addError('error', 'No puede haber opciones iguales en la ronda ' . $key);
                     $error = 1;
                 }
-                if (count(array_unique($questionsFiltered))==1) {
+                if (count(array_unique($questionsFiltered)) == 1) {
                     $this->addError('error', 'Debe haber al menos dos opciones diferentes en la ronda ' . $key);
                     $error = 1;
                 }
@@ -377,12 +377,12 @@ class Votacion extends Component
 
 
         //si hay plancha se requiere el numero de plazas
-        if ($this->plancha && !$this->plazas) {
-            $this->addError('error', 'Se requiere el número de plazas');
-            $error = 1;
-        } else if ($this->plazas < 0 || !filter_var($this->plazas, FILTER_VALIDATE_INT)) {
-            $this->addError('error', 'El número de plazas no es valido' );
-            $error = 1;
+        if ($this->plancha) {
+
+            if (!$this->plazas || $this->plazas < 0 || !filter_var($this->plazas, FILTER_VALIDATE_INT)) {
+                $this->addError('error', 'El número de plazas no es valido');
+                $error = 1;
+            }
         }
         $controlesRegistrados = Control::whereNot('state', 4)->get();
         $quorum = $controlesRegistrados->sum('sum_coef');
@@ -430,7 +430,7 @@ class Votacion extends Component
             }
 
             if (!empty($rondasExtra)) {
-                $i=1;
+                $i = 1;
                 foreach ($rondasExtra as $id => $idRonda) {
                     $i++;
                     $questionRonda = Question::create([
@@ -468,10 +468,10 @@ class Votacion extends Component
             if ($this->plancha) {
                 $parametros['plancha'] = 1;
             }
-            if(count($rondasExtra) > 0){
+            if (count($rondasExtra) > 0) {
                 $parametros['inRondas'] = true;
-                $parametros['numRondas'] = count($rondasExtra)+1;
-                $parametros['mainQuestion'] =$question->id;
+                $parametros['numRondas'] = count($rondasExtra) + 1;
+                $parametros['mainQuestion'] = $question->id;
                 $parametros['currentQuestion'] = 1;
             }
             cache(['voting' => true], now()->addMinutes(30));
@@ -479,7 +479,7 @@ class Votacion extends Component
             return redirect()->route('questions.show', $parametros);
         } catch (Throwable $th) {
 
-            return $this->addError('questionCreate', 'x'. $th->getMessage() .PHP_EOL. $th->getFile() .'-->'.$th->getLine());
+            return $this->addError('questionCreate', 'x' . $th->getMessage() . PHP_EOL . $th->getFile() . '-->' . $th->getLine());
         }
     }
 
