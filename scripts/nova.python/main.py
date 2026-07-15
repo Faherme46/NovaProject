@@ -411,11 +411,15 @@ def create_plot_rondas(data):
     # Mostrar porcentaje al final de cada barra
     for barra in barras:
         ancho = barra.get_width()
-
+        porcentaje= ""
+        if(output_path.find('nominal')!=-1):
+            porcentaje = f'{ancho}'
+        else:
+            porcentaje = f'{ancho:.2f}%'
         ax.text(
             ancho + (limite_x * 0.01),
             barra.get_y() + barra.get_height() / 2,
-            f'{ancho:.2f}%',
+            porcentaje,
             ha='left',
             va='center',
             fontsize=10,

@@ -379,107 +379,107 @@ class Votacion extends Component
         //si hay plancha se requiere el numero de plazas
         if ($this->plancha) {
 
-            if (!$this->plazas || $this->plazas < 0 || !filter_var($this->plazas, FILTER_VALIDATE_INT)) {
-                $this->addError('error', 'El número de plazas no es valido');
+            if (!$this->plazas || $this->plazas <= 0 || !filter_var($this->plazas, FILTER_VALIDATE_INT)) {
+                $this->addError('error', 'El número de plazas no es válido');
                 $error = 1;
             }
-        }
-        $controlesRegistrados = Control::whereNot('state', 4)->get();
-        $quorum = $controlesRegistrados->sum('sum_coef');
-        if ($controlesRegistrados->isEmpty()) {
-            $this->addError('error', 'No se han registrado asistentes');
-            $error = 1;
-        }
-        $seconds = $this->secs + ($this->mins * 60);
-        if ($seconds <= 0) {
-            $this->addError('error', 'El tiempo debe ser mayor a 0');
-            $error = 1;
-        }
+            $controlesRegistrados = Control::whereNot('state', 4)->get();
+            $quorum = $controlesRegistrados->sum('sum_coef');
+            if ($controlesRegistrados->isEmpty()) {
+                $this->addError('error', 'No se han registrado asistentes');
+                $error = 1;
+            }
+            $seconds = $this->secs + ($this->mins * 60);
+            if ($seconds <= 0) {
+                $this->addError('error', 'El tiempo debe ser mayor a 0');
+                $error = 1;
+            }
 
-        if ($error) {
-            return;
-        }
-        $forbidden = ['/', "\\", "*", '?', '"', ':', "<", ">", "|"];
-        //'No se han registrado controles'
-        $newTitle = str_replace($forbidden, "", $this->questionTitle);
-        $newTitle = strtoupper($newTitle);
-        $newTitle = str_replace(['á', 'é', 'í', 'ó', 'ú'], ['Á', 'É', 'Í', 'Ó', 'U'], subject: $newTitle);
-
-        try {
-            Control::query()->update(['vote' => null, 'voted' => null]);
-            $predios = Control::whereNot('state', 4)->sum('predios_total');
-            $question = Question::create([
-                'title' => $newTitle,
-                'optionA' => ($this->questionOptions['A']) ? strtoupper(rtrim($this->questionOptions['A'])) : null,
-                'optionB' => ($this->questionOptions['B']) ? strtoupper(rtrim($this->questionOptions['B'])) : null,
-                'optionC' => ($this->questionOptions['C']) ? strtoupper(rtrim($this->questionOptions['C'])) : null,
-                'optionD' => ($this->questionOptions['D']) ? strtoupper(rtrim($this->questionOptions['D'])) : null,
-                'optionE' => ($this->questionOptions['E']) ? strtoupper(rtrim($this->questionOptions['E'])) : null,
-                'optionF' => ($this->questionOptions['F']) ? strtoupper(rtrim($this->questionOptions['F'])) : null,
-                'idRonda' => !empty($rondasExtra) ? 1 : null,
-                'isValid' => ($this->questionType == 6) ? 0 : 1,
-                'coefGraph' => (bool) $this->questionCoefChart,
-                'quorum' => $quorum,
-                'predios' => $predios,
-                'seconds' => $seconds,
-                'type' => $this->questionType
-            ]);
-            if (!$question || $question == null) {
-                $this->addError('error', 'Error al crear la pregunta');
+            if ($error) {
                 return;
             }
+            $forbidden = ['/', "\\", "*", '?', '"', ':', "<", ">", "|"];
+            //'No se han registrado controles'
+            $newTitle = str_replace($forbidden, "", $this->questionTitle);
+            $newTitle = strtoupper($newTitle);
+            $newTitle = str_replace(['á', 'é', 'í', 'ó', 'ú'], ['Á', 'É', 'Í', 'Ó', 'U'], subject: $newTitle);
 
-            if (!empty($rondasExtra)) {
-                $i = 1;
-                foreach ($rondasExtra as $id => $idRonda) {
-                    $i++;
-                    $questionRonda = Question::create([
-                        'title' => $newTitle,
-                        'optionA' => ($this->questionOptionsRondas[$idRonda]['A']) ? strtoupper(rtrim($this->questionOptionsRondas[$idRonda]['A'])) : null,
-                        'optionB' => ($this->questionOptionsRondas[$idRonda]['B']) ? strtoupper(rtrim($this->questionOptionsRondas[$idRonda]['B'])) : null,
-                        'optionC' => ($this->questionOptionsRondas[$idRonda]['C']) ? strtoupper(rtrim($this->questionOptionsRondas[$idRonda]['C'])) : null,
-                        'optionD' => ($this->questionOptionsRondas[$idRonda]['D']) ? strtoupper(rtrim($this->questionOptionsRondas[$idRonda]['D'])) : null,
-                        'optionE' => ($this->questionOptionsRondas[$idRonda]['E']) ? strtoupper(rtrim($this->questionOptionsRondas[$idRonda]['E'])) : null,
-                        'optionF' => ($this->questionOptionsRondas[$idRonda]['F']) ? strtoupper(rtrim($this->questionOptionsRondas[$idRonda]['F'])) : null,
-                        'parent_id' => $question->id,
-                        'idRonda' => $i,
-                        'isValid' => 0,
-                        'coefGraph' => (bool) $this->questionCoefChart,
-                        'quorum' => $quorum,
-                        'predios' => $predios,
-                        'seconds' => $seconds,
-                        'type' => $this->questionType
-                    ]);
-                    $rondasExtra[$id] = $questionRonda->id;
+            try {
+                Control::query()->update(['vote' => null, 'voted' => null]);
+                $predios = Control::whereNot('state', 4)->sum('predios_total');
+                $question = Question::create([
+                    'title' => $newTitle,
+                    'optionA' => ($this->questionOptions['A']) ? strtoupper(rtrim($this->questionOptions['A'])) : null,
+                    'optionB' => ($this->questionOptions['B']) ? strtoupper(rtrim($this->questionOptions['B'])) : null,
+                    'optionC' => ($this->questionOptions['C']) ? strtoupper(rtrim($this->questionOptions['C'])) : null,
+                    'optionD' => ($this->questionOptions['D']) ? strtoupper(rtrim($this->questionOptions['D'])) : null,
+                    'optionE' => ($this->questionOptions['E']) ? strtoupper(rtrim($this->questionOptions['E'])) : null,
+                    'optionF' => ($this->questionOptions['F']) ? strtoupper(rtrim($this->questionOptions['F'])) : null,
+                    'idRonda' => !empty($rondasExtra) ? 1 : null,
+                    'isValid' => ($this->questionType == 6) ? 0 : 1,
+                    'coefGraph' => (bool) $this->questionCoefChart,
+                    'quorum' => $quorum,
+                    'predios' => $predios,
+                    'seconds' => $seconds,
+                    'type' => $this->questionType
+                ]);
+                if (!$question || $question == null) {
+                    $this->addError('error', 'Error al crear la pregunta');
+                    return;
                 }
-            }
 
-
-
-            if ($this->plancha) {
-                Plancha::create(['question_id' => $question->id, 'plazas' => $this->plazas]);
-                foreach ($rondasExtra as $id => $idRonda) {
-                    Plancha::create(['question_id' => $idRonda, 'plazas' => $this->plazas]);
+                if (!empty($rondasExtra)) {
+                    $i = 1;
+                    foreach ($rondasExtra as $id => $idRonda) {
+                        $i++;
+                        $questionRonda = Question::create([
+                            'title' => $newTitle,
+                            'optionA' => ($this->questionOptionsRondas[$idRonda]['A']) ? strtoupper(rtrim($this->questionOptionsRondas[$idRonda]['A'])) : null,
+                            'optionB' => ($this->questionOptionsRondas[$idRonda]['B']) ? strtoupper(rtrim($this->questionOptionsRondas[$idRonda]['B'])) : null,
+                            'optionC' => ($this->questionOptionsRondas[$idRonda]['C']) ? strtoupper(rtrim($this->questionOptionsRondas[$idRonda]['C'])) : null,
+                            'optionD' => ($this->questionOptionsRondas[$idRonda]['D']) ? strtoupper(rtrim($this->questionOptionsRondas[$idRonda]['D'])) : null,
+                            'optionE' => ($this->questionOptionsRondas[$idRonda]['E']) ? strtoupper(rtrim($this->questionOptionsRondas[$idRonda]['E'])) : null,
+                            'optionF' => ($this->questionOptionsRondas[$idRonda]['F']) ? strtoupper(rtrim($this->questionOptionsRondas[$idRonda]['F'])) : null,
+                            'parent_id' => $question->id,
+                            'idRonda' => $i,
+                            'isValid' => 0,
+                            'coefGraph' => (bool) $this->questionCoefChart,
+                            'quorum' => $quorum,
+                            'predios' => $predios,
+                            'seconds' => $seconds,
+                            'type' => $this->questionType
+                        ]);
+                        $rondasExtra[$id] = $questionRonda->id;
+                    }
                 }
-            }
 
-            $parametros = ['questionId' => $question->id];
-            $parametros['plancha'] = 0;
-            if ($this->plancha) {
-                $parametros['plancha'] = 1;
-            }
-            if (count($rondasExtra) > 0) {
-                $parametros['inRondas'] = true;
-                $parametros['numRondas'] = count($rondasExtra) + 1;
-                $parametros['mainQuestion'] = $question->id;
-                $parametros['currentQuestion'] = 1;
-            }
-            cache(['voting' => true], now()->addMinutes(30));
-            \Illuminate\Support\Facades\Log::channel('custom')->info('Se Inicia una votacion', ['id' => $question->id, 'quorum' => $quorum, 'predios' => $predios]);
-            return redirect()->route('questions.show', $parametros);
-        } catch (Throwable $th) {
 
-            return $this->addError('questionCreate', 'x' . $th->getMessage() . PHP_EOL . $th->getFile() . '-->' . $th->getLine());
+
+                if ($this->plancha) {
+                    Plancha::create(['question_id' => $question->id, 'plazas' => $this->plazas]);
+                    foreach ($rondasExtra as $id => $idRonda) {
+                        Plancha::create(['question_id' => $idRonda, 'plazas' => $this->plazas]);
+                    }
+                }
+
+                $parametros = ['questionId' => $question->id];
+                $parametros['plancha'] = 0;
+                if ($this->plancha) {
+                    $parametros['plancha'] = 1;
+                }
+                if (count($rondasExtra) > 0) {
+                    $parametros['inRondas'] = true;
+                    $parametros['numRondas'] = count($rondasExtra) + 1;
+                    $parametros['mainQuestion'] = $question->id;
+                    $parametros['currentQuestion'] = 1;
+                }
+                cache(['voting' => true], now()->addMinutes(30));
+                \Illuminate\Support\Facades\Log::channel('custom')->info('Se Inicia una votacion', ['id' => $question->id, 'quorum' => $quorum, 'predios' => $predios]);
+                return redirect()->route('questions.show', $parametros);
+            } catch (Throwable $th) {
+
+                return $this->addError('questionCreate', 'x' . $th->getMessage() . PHP_EOL . $th->getFile() . '-->' . $th->getLine());
+            }
         }
     }
 
@@ -533,14 +533,14 @@ class Votacion extends Component
     public function updatedPlancha($value)
     {
         $this->plancha = $value;
-        $this->questionOptions = [
-            'A' => 'Plancha 1',
-            'B' => 'Plancha 2',
-            'C' => '',
-            'D' => '',
-            'E' => '',
-            'F' => '',
-        ];
+        // $this->questionOptions = [
+        //     'A' => 'Plancha 1',
+        //     'B' => 'Plancha 2',
+        //     'C' => '',
+        //     'D' => '',
+        //     'E' => '',
+        //     'F' => '',
+        // ];
         $this->blockFields = [
             'optionD',
             'optionE',
