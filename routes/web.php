@@ -13,6 +13,7 @@ use App\Http\Controllers\SessionController;
 use App\Http\Controllers\AsambleaController;
 use App\Http\Controllers\BackupController;
 use App\Http\Controllers\EleccionesController;
+use App\Http\Controllers\EleccionesV2Controller;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\InformeController;
 use App\Http\Controllers\UsersController;
@@ -58,6 +59,15 @@ use App\Livewire\Elecciones\Programar;
 use App\Livewire\Elecciones\Resultados;
 use App\Livewire\Elecciones\Terminale;
 use App\Livewire\Elecciones\Terminales;
+use App\Livewire\EleccionesV2\Registro as RegistroEleccionesV2;
+use App\Livewire\EleccionesV2\Candidatos as CandidatosEleccionesV2;
+use App\Livewire\EleccionesV2\Elecciones as EleccionesV2Home;
+use App\Livewire\EleccionesV2\Informe as InformeEleccionesV2;
+use App\Livewire\EleccionesV2\Manager as ManagerEleccionesV2;
+use App\Livewire\EleccionesV2\Programar as ProgramarEleccionesV2;
+use App\Livewire\EleccionesV2\Resultados as ResultadosEleccionesV2;
+use App\Livewire\EleccionesV2\Terminale as TerminaleEleccionesV2;
+use App\Livewire\EleccionesV2\Terminales as TerminalesEleccionesV2;
 
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Admin')]], function () {
     Route::get('gestion/informes/Informe', [ReportController::class, 'createReport'])->name('gestion.report.docs');
@@ -65,6 +75,7 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::get('graficas/all', [QuestionController::class, 'fixAllgraficas'])->name('graficas.all');
 
     Route::get('elecciones/report/create', [InformeController::class, 'createReport'])->name('elecciones.report.create');
+    Route::get('elecciones-v2/report/create', [InformeController::class, 'createReport'])->name('elecciones-v2.report.create');
     Route::get('question/importAll', [QuestionController::class, 'importVotesAll'])->name('question.import.all');
     Route::post('question/import', [QuestionController::class, 'importarVotos'])->name('question.import');
     Route::post('question/chart', [QuestionController::class, 'crearGrafica'])->name('question.createChart');
@@ -99,6 +110,14 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::get('elecciones/desterminar', [Manager::class,'desterminar'])->name('elecciones.desterminar');
     Route::get('elecciones/resultados/grafica', [EleccionesController::class,'generarGraficas'])->name('elecciones.resultados.grafica');
     Route::get('elecciones/informe', Informe::class)->name('elecciones.informe');
+    Route::get('elecciones-v2/programar', ProgramarEleccionesV2::class)->name('elecciones-v2.programar')->withoutMiddleware(EnsureAsambleaOn::class);
+    Route::get('elecciones-v2/gestion', ManagerEleccionesV2::class)->name('elecciones-v2.gestion');
+    Route::get('elecciones-v2/candidatos', CandidatosEleccionesV2::class)->name('elecciones-v2.candidatos');
+    Route::get('elecciones-v2/candidatos/import', [EleccionesV2Controller::class,'importCandidatos'])->name('elecciones-v2.candidatos.import');
+    Route::get('elecciones-v2/desiniciar', [ManagerEleccionesV2::class,'desiniciar'])->name('elecciones-v2.desiniciar');
+    Route::get('elecciones-v2/desterminar', [ManagerEleccionesV2::class,'desterminar'])->name('elecciones-v2.desterminar');
+    Route::get('elecciones-v2/resultados/grafica', [EleccionesV2Controller::class,'generarGraficas'])->name('elecciones-v2.resultados.grafica');
+    Route::get('elecciones-v2/informe', InformeEleccionesV2::class)->name('elecciones-v2.informe');
 
     Route::post('asambleas/store', [AsambleaController::class, 'store'])->name('asambleas.store')->withoutMiddleware(EnsureAsambleaOn::class);
     Route::post('predios/import', [PrediosController::class, 'import'])->name('predios.import');
@@ -113,6 +132,9 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::post('elecciones/torres/create', [EleccionesController::class, 'createTorres'])->name('elecciones.torres.create');
     Route::post('elecciones/store', [EleccionesController::class, 'store'])->name('elecciones.store')->withoutMiddleware([EnsureAsambleaOn::class]);
     Route::post('elecciones/update', [EleccionesController::class, 'updateElecciones'])->name('elecciones.update')->withoutMiddleware([EnsureAsambleaOn::class]);
+    Route::post('elecciones-v2/torres/create', [EleccionesV2Controller::class, 'createTorres'])->name('elecciones-v2.torres.create');
+    Route::post('elecciones-v2/store', [EleccionesV2Controller::class, 'store'])->name('elecciones-v2.store')->withoutMiddleware([EnsureAsambleaOn::class]);
+    Route::post('elecciones-v2/update', [EleccionesV2Controller::class, 'updateElecciones'])->name('elecciones-v2.update')->withoutMiddleware([EnsureAsambleaOn::class]);
 
 
     Route::delete('session/destroy', [SessionController::class, 'destroyAll'])->name('session.destroy');
@@ -126,6 +148,10 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::get('elecciones/registrar', Registro::class)->name('elecciones.registrar');
     Route::get('elecciones/resultados', Resultados::class)->name('elecciones.resultados');
     Route::get('elecciones/terminales', Terminales::class)->name('elecciones.terminales');
+    Route::get('elecciones-v2',  EleccionesV2Home::class)->name('home.elecciones-v2')->withoutMiddleware(EnsureAsambleaOn::class);
+    Route::get('elecciones-v2/registrar', RegistroEleccionesV2::class)->name('elecciones-v2.registrar');
+    Route::get('elecciones-v2/resultados', ResultadosEleccionesV2::class)->name('elecciones-v2.resultados');
+    Route::get('elecciones-v2/terminales', TerminalesEleccionesV2::class)->name('elecciones-v2.terminales');
 
 
     Route::get('asistencia/asignacion', Asignacion::class)->name('asistencia.asignacion')->middleware(isAsambleaEnd::class);
@@ -142,6 +168,7 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
 //rutas para terminales
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('Terminal')]], function () {
     Route::get('/terminal', Terminale::class)->name('terminal')->withoutMiddleware(EnsureAsambleaOn::class)->middleware(NoEleccionesMiddleware::class);
+    Route::get('/terminal-v2', TerminaleEleccionesV2::class)->name('terminal-v2')->withoutMiddleware(EnsureAsambleaOn::class)->middleware(NoEleccionesMiddleware::class);
 });
 
 Route::post('/session/connect',[SessionController::class,'sessionConnect'])->name('session.connect')->withoutMiddleware(ValidateLogin::class)->withoutMiddleware(EnsureAsambleaOn::class);
@@ -162,3 +189,4 @@ Route::get('/session/device_hid',[SessionController::class,'registerHidDevices']
 
 
 //Route::get('proofExport',[PrediosController::class,'export']);
+

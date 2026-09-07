@@ -106,6 +106,13 @@ class Main extends Component
                 'visible'=> true,
                 'enabled'=>($this->role!='Operario'&&(cache('asamblea',false))),
             ], [
+                "directives"=> 'onclick=location.href="/elecciones-v2";',
+                'icon'=> 'bi-person-badge',
+                'title'=> 'Elecciones',
+                'body'=> 'Gestionar elecciones de la asamblea',
+                'visible'=> (cache('asamblea',false)),
+                'enabled'=>(cache('asamblea',false)),
+            ], [
                 "directives"=> 'onclick=location.href="/asistencia/registrar";',
                 'icon'=> 'bi-person-check',
                 'title'=> 'Registrar',
