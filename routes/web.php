@@ -52,13 +52,14 @@ use App\Livewire\Votacion\Votacion;
 
 use App\Livewire\Elecciones\Registro;
 use App\Livewire\Elecciones\Candidatos;
-use App\Livewire\Elecciones\Elecciones;
 use App\Livewire\Elecciones\Informe;
 use App\Livewire\Elecciones\Manager;
 use App\Livewire\Elecciones\Programar;
 use App\Livewire\Elecciones\Resultados;
 use App\Livewire\Elecciones\Terminale;
 use App\Livewire\Elecciones\Terminales;
+use App\Livewire\Elecciones\Elecciones;
+use App\Livewire\EleccionesV2\Eleccion;
 use App\Livewire\EleccionesV2\Registro as RegistroEleccionesV2;
 use App\Livewire\EleccionesV2\Candidatos as CandidatosEleccionesV2;
 use App\Livewire\EleccionesV2\Elecciones as EleccionesV2Home;
@@ -148,7 +149,7 @@ Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::usi
     Route::get('elecciones/registrar', Registro::class)->name('elecciones.registrar');
     Route::get('elecciones/resultados', Resultados::class)->name('elecciones.resultados');
     Route::get('elecciones/terminales', Terminales::class)->name('elecciones.terminales');
-    Route::get('elecciones-v2',  EleccionesV2Home::class)->name('home.elecciones-v2')->withoutMiddleware(EnsureAsambleaOn::class);
+    Route::get('elecciones-v2',  Eleccion::class)->name('home.elecciones-v2')->withoutMiddleware(EnsureAsambleaOn::class);
     Route::get('elecciones-v2/registrar', RegistroEleccionesV2::class)->name('elecciones-v2.registrar');
     Route::get('elecciones-v2/resultados', ResultadosEleccionesV2::class)->name('elecciones-v2.resultados');
     Route::get('elecciones-v2/terminales', TerminalesEleccionesV2::class)->name('elecciones-v2.terminales');
