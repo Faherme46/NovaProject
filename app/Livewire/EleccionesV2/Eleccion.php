@@ -12,6 +12,10 @@ use Livewire\WithPagination;
 
 class Eleccion extends Component
 {
+    use WithPagination;
+
+    protected $paginationTheme = 'bootstrap';
+
     public $questionTitle = '';
     public $search = '';
     public $candidatos = [];
